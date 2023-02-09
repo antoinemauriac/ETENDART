@@ -10,9 +10,161 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_09_150633) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_09_172617) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "academies", force: :cascade do |t|
+    t.string "name"
+    t.bigint "manager_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["manager_id"], name: "index_academies_on_manager_id"
+  end
+
+  create_table "academy_enrollments", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "academy_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academy_id"], name: "index_academy_enrollments_on_academy_id"
+    t.index ["student_id"], name: "index_academy_enrollments_on_student_id"
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.string "name"
+    t.text "days"
+    t.bigint "camp_id", null: false
+    t.bigint "category_id", null: false
+    t.bigint "coach_id", null: false
+    t.integer "min_capcity"
+    t.integer "max_capacity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_id"], name: "index_activities_on_camp_id"
+    t.index ["category_id"], name: "index_activities_on_category_id"
+    t.index ["coach_id"], name: "index_activities_on_coach_id"
+  end
+
+  create_table "activity_enrollments", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "activity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_activity_enrollments_on_activity_id"
+    t.index ["student_id"], name: "index_activity_enrollments_on_student_id"
+  end
+
+  create_table "camp_enrollments", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "camp_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
+    t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
+  end
+
+  create_table "camps", force: :cascade do |t|
+    t.string "name"
+    t.date "starts_at"
+    t.date "ends_at"
+    t.bigint "school_period_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_period_id"], name: "index_camps_on_school_period_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "coach_academies", force: :cascade do |t|
+    t.bigint "academy_id", null: false
+    t.bigint "coach_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academy_id"], name: "index_coach_academies_on_academy_id"
+    t.index ["coach_id"], name: "index_coach_academies_on_coach_id"
+  end
+
+  create_table "coach_camps", force: :cascade do |t|
+    t.bigint "camp_id", null: false
+    t.bigint "coach_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_id"], name: "index_coach_camps_on_camp_id"
+    t.index ["coach_id"], name: "index_coach_camps_on_coach_id"
+  end
+
+  create_table "coach_categories", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.bigint "coach_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_coach_categories_on_category_id"
+    t.index ["coach_id"], name: "index_coach_categories_on_coach_id"
+  end
+
+  create_table "course_enrollments", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "course_id", null: false
+    t.boolean "present", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_enrollments_on_course_id"
+    t.index ["student_id"], name: "index_course_enrollments_on_student_id"
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.bigint "activity_id", null: false
+    t.bigint "manager_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_courses_on_activity_id"
+    t.index ["manager_id"], name: "index_courses_on_manager_id"
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.string "content"
+    t.bigint "student_id", null: false
+    t.bigint "coach_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coach_id"], name: "index_feedbacks_on_coach_id"
+    t.index ["student_id"], name: "index_feedbacks_on_student_id"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "address"
+    t.bigint "academy_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academy_id"], name: "index_locations_on_academy_id"
+  end
+
+  create_table "school_periods", force: :cascade do |t|
+    t.string "name"
+    t.bigint "academy_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academy_id"], name: "index_school_periods_on_academy_id"
+  end
+
+  create_table "students", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.date "date_of_birth"
+    t.string "address"
+    t.string "parent_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "username"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -26,4 +178,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_150633) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "academies", "users", column: "manager_id"
+  add_foreign_key "academy_enrollments", "academies"
+  add_foreign_key "academy_enrollments", "students"
+  add_foreign_key "activities", "camps"
+  add_foreign_key "activities", "categories"
+  add_foreign_key "activities", "users", column: "coach_id"
+  add_foreign_key "activity_enrollments", "activities"
+  add_foreign_key "activity_enrollments", "students"
+  add_foreign_key "camp_enrollments", "camps"
+  add_foreign_key "camp_enrollments", "students"
+  add_foreign_key "camps", "school_periods"
+  add_foreign_key "coach_academies", "academies"
+  add_foreign_key "coach_academies", "users", column: "coach_id"
+  add_foreign_key "coach_camps", "camps"
+  add_foreign_key "coach_camps", "users", column: "coach_id"
+  add_foreign_key "coach_categories", "categories"
+  add_foreign_key "coach_categories", "users", column: "coach_id"
+  add_foreign_key "course_enrollments", "courses"
+  add_foreign_key "course_enrollments", "students"
+  add_foreign_key "courses", "activities"
+  add_foreign_key "courses", "users", column: "manager_id"
+  add_foreign_key "feedbacks", "students"
+  add_foreign_key "feedbacks", "users", column: "coach_id"
+  add_foreign_key "locations", "academies"
+  add_foreign_key "school_periods", "academies"
 end
