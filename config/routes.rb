@@ -5,4 +5,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  namespace :managers do
+    resources :courses, only: %i[index show]
+  end
 end
