@@ -8,4 +8,6 @@ class Activity < ApplicationRecord
 
   has_many :activity_enrollments
   has_many :students, through: :activity_enrollments
+
+  serialize :days, Hash
 end

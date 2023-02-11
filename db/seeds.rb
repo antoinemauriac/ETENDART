@@ -6,15 +6,16 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-
 Course.destroy_all
 Activity.destroy_all
+Category.destroy_all
 CoachCamp.destroy_all
 Camp.destroy_all
 SchoolPeriod.destroy_all
 CoachAcademy.destroy_all
 Location.destroy_all
 Academy.destroy_all
+Feedback.destroy_all
 User.destroy_all
 Student.destroy_all
 
@@ -38,8 +39,8 @@ student1 = Student.create!(first_name: 'student', last_name: '1')
 student2 = Student.create!(first_name: 'student', last_name: '2')
 student3 = Student.create!(first_name: 'student', last_name: '3')
 
-djoko = Academy.create!(name: 'Djoko', manager: manager1)
-rudy = Academy.create!(name: 'Rudy', manager: manager1)
+djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
+rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager1)
 angers = Academy.create!(name: 'Angers', manager: manager2)
 
 location1 = Location.create!(address: '1 rue de la paix Clichy', academy: djoko)
@@ -48,11 +49,11 @@ location3 = Location.create!(address: '3 rue de la paix Levallois', academy: rud
 location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rudy)
 
 
-djoko_avril_23 = SchoolPeriod.create!(name: 'djoko_avril_23', academy: djoko)
-djoko_ete_23 = SchoolPeriod.create!(name: 'djoko_ete_23', academy: djoko)
-rudy_avril_23 = SchoolPeriod.create!(name: 'rudy_avril_23', academy: rudy)
-rudy_ete_23 = SchoolPeriod.create!(name: 'rudy_ete_23', academy: rudy)
-angers_avril_23 = SchoolPeriod.create!(name: 'angers_avril_23', academy: angers)
+djoko_avril_23 = SchoolPeriod.create!(name: 'djoko_avril_23', year: 2023, academy: djoko)
+djoko_ete_23 = SchoolPeriod.create!(name: 'djoko_ete_23', year: 2023, academy: djoko)
+rudy_avril_23 = SchoolPeriod.create!(name: 'rudy_avril_23', year: 2023, academy: rudy)
+rudy_ete_23 = SchoolPeriod.create!(name: 'rudy_ete_23', year: 2023, academy: rudy)
+angers_avril_23 = SchoolPeriod.create!(name: 'angers_avril_23', year: 2023, academy: angers)
 
 week1_d = Camp.create!(name: 'semaine1', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2021, 4, 21))
 week2_d = Camp.create!(name: 'semaine2', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))

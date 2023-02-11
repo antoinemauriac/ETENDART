@@ -1,0 +1,14 @@
+<h1>Les périodes scolaires</h1>
+<% @academy.school_periods.each do |period| %>
+  <%= link_to managers_school_period_path(@academy, period) do %>
+    <p> Période scolaire : <%= period.name %> <%= period.year %></p>
+  <% end %>
+  <p>Stages : </p>
+  <ul>
+    <% period.camps.each do |camp| %>
+      <li><%= camp.name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to "Ajouter une période scolaire", new_managers_academy_school_period_path(@academy) %>

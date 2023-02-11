@@ -1,0 +1,9 @@
+<h1>Période : <%= @school_period.name %> </h1>
+<p>Stages : </p>
+<ul>
+  <% @school_period.camps.each do |camp| %>
+  <%= link_to managers_camp_path(camp) do %>
+    <li><%= camp.name %></li>
+    <% end %>
+  <% end %>
+</ul>

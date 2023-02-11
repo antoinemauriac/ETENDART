@@ -5,7 +5,20 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+
   namespace :managers do
-    resources :courses, only: %i[index show]
+    resources :academies, except: %i[destroy] do
+      resources :school_periods, shallow: true do
+        resources :camps, shallow: true do
+          resources :activities, shallow: true do
+            resources :courses
+          end
+        end
+      end
+    end
+  end
+
+  namespace :managers do
+    resources :courses, only: %i[index show edit update destroy]
   end
 end

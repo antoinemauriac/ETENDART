@@ -1,58 +1,61 @@
-<button id="clear-filters">Effacer les filtres</button>
-<table>
-  <thead>
-    <tr>
-      <th>Nom</th>
-      <th>Jour</th>
-      <th>Heure de début</th>
-      <th>Heure de fin</th>
-    </tr>
-    <tr>
-      <td>
-        <select id="filter-name">
-          <option value="">Tous</option>
-          <% @courses.map{ |course| course.activity.name }.uniq.each do |name| %>
-            <option value="<%= name %>"><%= name %></option>
-          <% end %>
-        </select>
-      </td>
-      <td>
-        <select id="filter-day">
-          <option value="">Tous</option>
-          <% @courses.map{ |course| course.starts_at.strftime("%A %e %B") }.uniq.each do |day| %>
-            <option value="<%= day %>"><%= day %></option>
-          <% end %>
-        </select>
-      </td>
-      <td>
-        <select id="filter-start-time">
-          <option value="">Tous</option>
-          <% @courses.map{ |course| course.starts_at.strftime("%H:%M") }.uniq.each do |start_time| %>
-            <option value="<%= start_time %>"><%= start_time %></option>
-          <% end %>
-        </select>
-      </td>
-      <td>
-        <select id="filter-end-time">
-          <option value="">Tous</option>
-          <% @courses.map{ |course| course.ends_at.strftime("%H:%M") }.uniq.each do |end_time| %>
-            <option value="<%= end_time %>"><%= end_time %></option>
-          <% end %>
-        </select>
-      </td>
-    </tr>
-  </thead>
-  <tbody id="courses">
+<div class="container">
+  <button id="clear-filters" class="btn btn-primary">Effacer les filtres</button>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Jour</th>
+        <th>Heure de début</th>
+        <th>Heure de fin</th>
+      </tr>
+      <tr>
+        <td>
+          <select id="filter-name" class="form-control">
+            <option value="">Tous</option>
+            <% @courses.map{ |course| course.activity.name }.uniq.each do |name| %>
+              <option value="<%= name %>"><%= name %></option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <select id="filter-day" class="form-control">
+            <option value="">Tous</option>
+            <% @courses.map{ |course| course.starts_at.strftime("%A %e %B") }.uniq.each do |day| %>
+              <option value="<%= day %>"><%= day %></option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <select id="filter-start-time" class="form-control">
+            <option value="">Tous</option>
+            <% @courses.map{ |course| course.starts_at.strftime("%H:%M") }.uniq.each do |start_time| %>
+              <option value="<%= start_time %>"><%= start_time %></option>
+            <% end %>
+          </select>
+        </td>
+        <td>
+          <select id="filter-end-time" class="form-control">
+            <option value="">Tous</option>
+            <% @courses.map{ |course| course.ends_at.strftime("%H:%M") }.uniq.each do |end_time| %>
+              <option value="<%= end_time %>"><%= end_time %></option>
+            <% end %>
+          </select>
+        </td>
+      </tr>
+    </thead>
+    <tbody id="courses">
     <% @courses.each do |course|%>
-    <tr>
-      <td class="name"><%= course.activity.name %></td>
-      <td class="day"><%= course.starts_at.strftime("%A %e %B") %></td>
-      <td class="start"><%= course.starts_at.strftime("%H:%M") %></td>
-      <td class="end"><%= course.ends_at.strftime("%H:%M") %></td>
-    </tr>
+      <tr class="clickable-tr"onclick="window.location.href='<%= managers_course_path(course) %>'">
+        <td class="name"><%= course.activity.name %></td>
+        <td class="day"><%= course.starts_at.strftime("%A %e %B") %></td>
+        <td class="start"><%= course.starts_at.strftime("%H:%M") %></td>
+        <td class="end"><%= course.ends_at.strftime("%H:%M") %></td>
+      </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+  <%= link_to "first course", managers_course_path(Course.first) %>
+</div>
 
 <script>
 const courses = <%= @courses.to_json.html_safe %>;

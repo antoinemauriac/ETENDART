@@ -1,0 +1,7 @@
+<%= form_with(model: @school_period, url: "managers_academy_school_periods_path", method: :post) do |form| %>
+  <%= form.label :name, "Nom :" %>
+  <%= form.text_field :name, class: "form-control" %>
+  <%= form.label :year, "Année :" %>
+  <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control" } %>
+  <%= form.submit "Valider", class: "btn btn-primary" %>
+<% end %>

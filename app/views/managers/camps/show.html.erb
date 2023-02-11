@@ -1,0 +1,11 @@
+<p>Nom : <%= @camp.name %> </p>
+<p>Activités : </p>
+<ul>
+  <% @camp.activities.each do |activity| %>
+  <li>
+    <%= link_to activity.name, managers_activity_path(activity) %>
+  </li>
+  <% end %>
+</ul>
+
+<%= link_to "Ajouter une activité", new_managers_camp_activity_path(@camp) %>
