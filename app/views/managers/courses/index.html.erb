@@ -1,6 +1,6 @@
 <div class="container">
-  <button id="clear-filters">Effacer les filtres</button>
-  <table>
+  <button id="clear-filters" class="btn btn-primary">Effacer les filtres</button>
+  <table class="table table-bordered">
     <thead>
       <tr>
         <th>Nom</th>
@@ -10,7 +10,7 @@
       </tr>
       <tr>
         <td>
-          <select id="filter-name">
+          <select id="filter-name" class="form-control">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.activity.name }.uniq.each do |name| %>
               <option value="<%= name %>"><%= name %></option>
@@ -18,7 +18,7 @@
           </select>
         </td>
         <td>
-          <select id="filter-day">
+          <select id="filter-day" class="form-control">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.starts_at.strftime("%A %e %B") }.uniq.each do |day| %>
               <option value="<%= day %>"><%= day %></option>
@@ -26,7 +26,7 @@
           </select>
         </td>
         <td>
-          <select id="filter-start-time">
+          <select id="filter-start-time" class="form-control">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.starts_at.strftime("%H:%M") }.uniq.each do |start_time| %>
               <option value="<%= start_time %>"><%= start_time %></option>
@@ -34,7 +34,7 @@
           </select>
         </td>
         <td>
-          <select id="filter-end-time">
+          <select id="filter-end-time" class="form-control">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.ends_at.strftime("%H:%M") }.uniq.each do |end_time| %>
               <option value="<%= end_time %>"><%= end_time %></option>
@@ -44,16 +44,17 @@
       </tr>
     </thead>
     <tbody id="courses">
-      <% @courses.each do |course|%>
-      <tr>
+    <% @courses.each do |course|%>
+      <tr class="clickable-tr"onclick="window.location.href='<%= managers_course_path(course) %>'">
         <td class="name"><%= course.activity.name %></td>
         <td class="day"><%= course.starts_at.strftime("%A %e %B") %></td>
         <td class="start"><%= course.starts_at.strftime("%H:%M") %></td>
         <td class="end"><%= course.ends_at.strftime("%H:%M") %></td>
       </tr>
-      <% end %>
+    <% end %>
     </tbody>
   </table>
+  <%= link_to "first course", managers_course_path(Course.first) %>
 </div>
 
 <script>

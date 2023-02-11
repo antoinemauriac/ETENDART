@@ -1,0 +1,15 @@
+<%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post do |f| %>
+  <%= f.input :name %>
+
+  <%= f.input :days, as: :check_boxes, collection: %w[Lundi Mardi Mercredi Jeudi Vendredi], label_method: :to_s, value_method: :to_s %>
+
+  <%= f.input :category_id, as: :select, collection: Category.all, label_method: :name, value_method: :id %>
+
+  <%= f.input :coach_id, as: :select, collection: User.all, label_method: :email, value_method: :id %>
+
+  <%= f.input :min_capacity %>
+
+  <%= f.input :max_capacity %>
+
+  <%= f.button :submit, class: "btn btn-primary" %>
+<% end %>
