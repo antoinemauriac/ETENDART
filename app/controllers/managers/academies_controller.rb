@@ -22,19 +22,19 @@ class Managers::AcademiesController < ApplicationController
     @academy = Academy.find(params[:id])
   end
 
-  def edit
-    @academy = Academy.find(params[:id])
-  end
+  # def edit
+  #   @academy = Academy.find(params[:id])
+  # end
 
-  def update
-    @academy = Academy.find(params[:id])
-    if @academy.update(academy_params)
-      redirect_to managers_academy_path(@academy)
-      flash[:notice] = "Academie mise à jour"
-    else
-      render :edit, status: :unprocessable_entity
-    end
-  end
+  # def update
+  #   @academy = Academy.find(params[:id])
+  #   if @academy.update(academy_params)
+  #     redirect_to managers_academy_path(@academy)
+  #     flash[:notice] = "Academie mise à jour"
+  #   else
+  #     render :edit, status: :unprocessable_entity
+  #   end
+  # end
 
   private
 

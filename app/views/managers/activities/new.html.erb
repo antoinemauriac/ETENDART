@@ -1,15 +1,24 @@
 <%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post do |f| %>
   <%= f.input :name %>
-
-  <%= f.input :days, as: :check_boxes, collection: %w[Lundi Mardi Mercredi Jeudi Vendredi], label_method: :to_s, value_method: :to_s %>
-
   <%= f.input :category_id, as: :select, collection: Category.all, label_method: :name, value_method: :id %>
-
   <%= f.input :coach_id, as: :select, collection: User.all, label_method: :email, value_method: :id %>
 
-  <%= f.input :min_capacity %>
+  <%= f.fields_for :days do |day_form| %>
+    <% days = { Monday: { start_time: nil, end_time: nil },
+               Tuesday: { start_time: nil, end_time: nil },
+               Wednesday: { start_time: nil, end_time: nil },
+               Thursday: { start_time: nil, end_time: nil },
+               Friday: { start_time: nil, end_time: nil } } %>
 
-  <%= f.input :max_capacity %>
+    <% days.each do |day, times| %>
+    <li>
+      <%= day_form.check_box :day_of_week, { multiple: true }, day.to_s, nil %>
+      <%= day_form.label :day_of_week, day.to_s %>
+      <%= day_form.time_field :"start_time_#{day}", value: times[:start_time] %>
+      <%= day_form.time_field :"end_time_#{day}", value: times[:end_time] %>
+    </li>
+    <% end %>
+  <% end %>
 
-  <%= f.button :submit, class: "btn btn-primary" %>
+  <%= f.submit "Save Activity" %>
 <% end %>
