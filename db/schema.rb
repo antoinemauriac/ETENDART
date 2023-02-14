@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_11_202756) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_14_205110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,7 +33,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_11_202756) do
 
   create_table "activities", force: :cascade do |t|
     t.string "name"
-    t.text "days"
     t.bigint "camp_id", null: false
     t.bigint "category_id", null: false
     t.bigint "coach_id", null: false
@@ -41,6 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_11_202756) do
     t.integer "max_capacity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "days"
     t.index ["camp_id"], name: "index_activities_on_camp_id"
     t.index ["category_id"], name: "index_activities_on_category_id"
     t.index ["coach_id"], name: "index_activities_on_coach_id"
@@ -128,6 +128,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_11_202756) do
     t.index ["manager_id"], name: "index_courses_on_manager_id"
   end
 
+  create_table "days", force: :cascade do |t|
+    t.string "day_of_week"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.bigint "activity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_days_on_activity_id"
+  end
+
   create_table "feedbacks", force: :cascade do |t|
     t.string "content"
     t.bigint "student_id", null: false
@@ -200,6 +210,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_11_202756) do
   add_foreign_key "course_enrollments", "students"
   add_foreign_key "courses", "activities"
   add_foreign_key "courses", "users", column: "manager_id"
+  add_foreign_key "days", "activities"
   add_foreign_key "feedbacks", "students"
   add_foreign_key "feedbacks", "users", column: "coach_id"
   add_foreign_key "locations", "academies"

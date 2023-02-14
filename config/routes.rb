@@ -7,18 +7,20 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   namespace :managers do
-    resources :academies, except: %i[destroy] do
-      resources :school_periods, shallow: true do
-        resources :camps, shallow: true do
-          resources :activities, shallow: true do
-            resources :courses
-          end
-        end
-      end
-    end
-  end
-
-  namespace :managers do
     resources :courses, only: %i[index show edit update destroy]
+    resources :activities, only: %i[show]
+    resources :school_periods, only: %i[show]
+
+    resources :academies, only: %i[show index] do
+      resources :school_periods, only: %i[new create]
+    end
+
+    resources :school_periods, only: %i[show] do
+      resources :camps, only: %i[new create]
+    end
+
+    resources :camps, only: %i[show] do
+      resources :activities, only: %i[new create]
+    end
   end
 end

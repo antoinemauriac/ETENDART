@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-controller="hello">
   <button id="clear-filters" class="btn btn-primary">Effacer les filtres</button>
   <table class="table table-bordered">
     <thead>
@@ -58,7 +58,6 @@
 </div>
 
 <script>
-const courses = <%= @courses.to_json.html_safe %>;
 
 document.addEventListener('DOMContentLoaded', () => {
   const selectors = document.querySelectorAll('select');
