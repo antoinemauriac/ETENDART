@@ -1,7 +1,6 @@
 class Managers::ActivitiesController < ApplicationController
   def new
     @activity = Activity.new
-    @activity.days.build
     @camp = Camp.find(params[:camp_id])
   end
 
@@ -10,7 +9,7 @@ class Managers::ActivitiesController < ApplicationController
     @camp = Camp.find(params[:camp_id])
     @activity.camp = @camp
     if @activity.save
-      redirect_to managers_camp_activity_path(@activity)
+      redirect_to managers_activity_path(@activity)
       flash[:notice] = "Activité créée"
     else
       render :new, status: :unprocessable_entity
@@ -19,6 +18,6 @@ class Managers::ActivitiesController < ApplicationController
 
   private
   def activity_params
-    params.require(:activity).permit(:name, :category_id, :coach_id, days: [:start_time, :end_time])
+    params.require(:activity).permit(:name, :category_id, :coach_id, courses_attributes: [:id, :starts_at, :ends_at])
   end
 end
