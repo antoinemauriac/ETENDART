@@ -1,11 +1,11 @@
 class Activity < ApplicationRecord
 
   DAYS = {
-    Lundi: { start_time: Time.parse("10:00"), end_time: Time.parse("12:00") },
-    Mardi: { start_time: Time.parse("10:00"), end_time: Time.parse("12:00") },
-    Mercredi: { start_time: Time.parse("10:00"), end_time: Time.parse("12:00") },
-    Jeudi: { start_time: Time.parse("10:00"), end_time: Time.parse("12:00") },
-    Vendredi: { start_time: Time.parse("10:00"), end_time: Time.parse("12:00") }
+    Monday: { start_time: nil, end_time: nil },
+    Tuesday: { start_time: nil, end_time: nil },
+    Wednesday: { start_time: nil, end_time: nil },
+    Thursday: { start_time: nil, end_time: nil },
+    Friday: { start_time: nil, end_time: nil }
   }
 
   belongs_to :camp

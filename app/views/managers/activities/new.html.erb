@@ -5,21 +5,37 @@
 
   <ul>
     <li>
-      <%= f.simple_fields_for :description do |day_form| %>
-        <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, "Lundi".to_s %>
-        <%= day_form.label :day_of_week, "Lundi".to_s %>
-        <%= day_form.time_field :start_time, value: Activity::DAYS[:Lundi][:start_time], data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' } %>
-        <%= day_form.time_field :end_time, value: Activity::DAYS[:Lundi][:end_time], data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' } %>
-      <% end %>
+      <%= f.simple_fields_for :days do |day_form| %>
+        <div class="row align-items-center">
+          <div class="col-sm-2">
+            <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, "Monday".to_s %>
+            <%= day_form.label :day_of_week, "Monday".to_s %>
+          </div>
+          <div class="col-sm-2">
+           <%= day_form.time_field :start_time_Monday, value: Activity::DAYS[:Monday][:start_time], data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' }, class: "form-control" %>
+          </div>
+          <div class="col-sm-2">
+            <%= day_form.time_field :end_time_Monday, value: Activity::DAYS[:Monday][:end_time], data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "form-control" %>
+          </div>
+        </div>
+        <% end %>
     </li>
 
-    <% Activity::DAYS.except(:Lundi).each do |day, times| %>
-      <li class="other-days">
-        <%= f.simple_fields_for :description do |day_form| %>
-          <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, day.to_s %>
-          <%= day_form.label :day_of_week, day.to_s %>
-          <%= day_form.time_field :"start_time_#{day}", value: times[:start_time], data: { activity_form_target: 'startTime' } %>
-          <%= day_form.time_field :"end_time_#{day}", value: times[:end_time], data: { activity_form_target: 'endTime' } %>
+    <% Activity::DAYS.except(:Monday).each do |day, times| %>
+      <li>
+        <%= f.simple_fields_for :days do |day_form| %>
+          <div class="row align-items-center">
+            <div class="col-sm-2">
+              <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, day.to_s %>
+              <%= day_form.label :day_of_week, day.to_s %>
+            </div>
+            <div class="col-sm-2">
+              <%= day_form.time_field :"start_time_#{day}", value: times[:start_time], data: { activity_form_target: 'startTime' }, class: "form-control" %>
+            </div>
+            <div class="col-sm-2">
+              <%= day_form.time_field :"end_time_#{day}", value: times[:end_time], data: { activity_form_target: 'endTime' }, class: "form-control" %>
+            </div>
+          </div>
         <% end %>
       </li>
     <% end %>
