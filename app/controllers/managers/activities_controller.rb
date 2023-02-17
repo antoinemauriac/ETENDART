@@ -2,8 +2,6 @@ class Managers::ActivitiesController < ApplicationController
   def new
     @activity = Activity.new
     @camp = Camp.find(params[:camp_id])
-    @starts_at = @camp.starts_at
-    @ends_at = @camp.ends_at
   end
 
   def create
@@ -39,7 +37,7 @@ class Managers::ActivitiesController < ApplicationController
         Course.create!(activity: @activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user)
       end
 
-      redirect_to managers_activity_path(@activity)
+      redirect_to managers_camp_path(@camp)
       flash[:notice] = "Activité créée"
     else
       render :new, status: :unprocessable_entity
