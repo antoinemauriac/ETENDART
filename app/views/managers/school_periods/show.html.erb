@@ -7,3 +7,17 @@
     <% end %>
   <% end %>
 </ul>
+
+<div data-controller="hidden-forms">
+  <button class="btn btn-primary" id="add-camp-btn">Ajouter une semaine</button>
+  <%= form_with(model: @camp, url: managers_school_period_camps_path(@school_period), method: :post, class: "hidden-form", id: "camp-form") do |form| %>
+    <%= form.label :name, "Nom :" %>
+    <%= form.text_field :name, class: "form-control" %>
+    <%= form.label :starts_at, "Date de début :" %>
+    <%= form.date_field :starts_at, class: "form-control" %>
+    <%= form.label :ends_at, "Date de fin :" %>
+    <%= form.date_field :ends_at, class: "form-control" %>
+    <%= form.submit "Valider", class: "btn btn-primary" %>
+    <button class="btn btn-primary" id="cancel-camp-btn" type="button">Annuler</button>
+  <% end %>
+</div>

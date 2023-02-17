@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :courses, only: %i[index show edit update destroy]
     resources :activities, only: %i[show]
     resources :school_periods, only: %i[show]
+    resources :categories, only: %i[index create]
 
     resources :academies, only: %i[show index] do
       resources :school_periods, only: %i[new create]

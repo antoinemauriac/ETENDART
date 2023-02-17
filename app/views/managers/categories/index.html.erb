@@ -1,0 +1,18 @@
+<h1>Les catégories d'activité</h1>
+<ul>
+<% @categories.each do |category| %>
+  <li>
+    <%= category.name %>
+  </li>
+<% end %>
+</ul>
+
+<div data-controller="hidden-forms">
+  <button class="btn btn-primary" id="add-category-btn">Ajouter une categorie</button>
+  <%= form_with(model: @category, url: managers_categories_path, method: :post, class: "hidden-form", id: "category-form") do |form| %>
+    <%= form.label :name, "Nom :" %>
+    <%= form.text_field :name, class: "form-control" %>
+    <%= form.submit "Valider", class: "btn btn-primary" %>
+    <button class="btn btn-primary" id="cancel-category-btn" type="button">Annuler</button>
+  <% end %>
+</div>

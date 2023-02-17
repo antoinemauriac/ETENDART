@@ -20,6 +20,7 @@ class Managers::AcademiesController < ApplicationController
 
   def show
     @academy = Academy.find(params[:id])
+    @school_period = SchoolPeriod.new
   end
 
   # def edit

@@ -1,9 +1,5 @@
 class Managers::SchoolPeriodsController < ApplicationController
 
-  def new
-    @academy = Academy.find(params[:academy_id])
-    @school_period = SchoolPeriod.new
-  end
 
   def create
     @academy = Academy.find(params[:academy_id])
@@ -19,6 +15,7 @@ class Managers::SchoolPeriodsController < ApplicationController
 
   def show
     @school_period = SchoolPeriod.find(params[:format])
+    @camp = Camp.new
   end
 
 

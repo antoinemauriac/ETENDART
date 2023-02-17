@@ -5,15 +5,18 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-
+CourseEnrollment.destroy_all
 Course.destroy_all
+ActivityEnrollment.destroy_all
 Activity.destroy_all
 Category.destroy_all
 CoachCamp.destroy_all
+CampEnrollment.destroy_all
 Camp.destroy_all
 SchoolPeriod.destroy_all
 CoachAcademy.destroy_all
 Location.destroy_all
+AcademyEnrollment.destroy_all
 Academy.destroy_all
 Feedback.destroy_all
 User.destroy_all
@@ -38,6 +41,8 @@ coachs = [coach1, coach2, coach3]
 student1 = Student.create!(first_name: 'student', last_name: '1')
 student2 = Student.create!(first_name: 'student', last_name: '2')
 student3 = Student.create!(first_name: 'student', last_name: '3')
+
+students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
 rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager1)
@@ -91,5 +96,29 @@ weeks.each do |week|
       ending_at = starting_at + rand(1..3).hours
       Course.create!(starts_at: starting_at, ends_at: ending_at, activity: Activity.last, manager: manager1)
     end
+  end
+
+end
+
+students.each do |student|
+  AcademyEnrollment.create!(student: student, academy: djoko)
+  CampEnrollment.create!(student: student, camp: week1_d)
+  CampEnrollment.create!(student: student, camp: week2_d)
+  ActivityEnrollment.create!(student: student, activity: week1_d.activities.first)
+  ActivityEnrollment.create!(student: student, activity: week1_d.activities.second)
+  ActivityEnrollment.create!(student: student, activity: week2_d.activities.first)
+  ActivityEnrollment.create!(student: student, activity: week2_d.activities.second)
+
+  week1_d.activities.first.courses.each do |course|
+    CourseEnrollment.create!(student: student, course: course)
+  end
+  week1_d.activities.second.courses.each do |course|
+    CourseEnrollment.create!(student: student, course: course)
+  end
+  week2_d.activities.first.courses.each do |course|
+    CourseEnrollment.create!(student: student, course: course)
+  end
+  week2_d.activities.second.courses.each do |course|
+    CourseEnrollment.create!(student: student, course: course)
   end
 end
