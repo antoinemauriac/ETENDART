@@ -15,7 +15,7 @@ class Managers::CoursesController < ApplicationController
   def update
     @course = Course.find(params[:id])
     if @course.update(course_params)
-      redirect_to managers_course_path(@course)
+      redirect_to managers_activity_path(@course.activity)
       flash[:notice] = "Cours mis à jour"
     else
       render :edit, status: :unprocessable_entity

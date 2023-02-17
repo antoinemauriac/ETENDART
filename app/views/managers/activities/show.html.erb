@@ -1,6 +1,14 @@
 <% @courses.each do |course| %>
 <li>
-  <%= course.starts_at %>
-  <%= course.ends_at %>
+    <p class="card-text">Jour : <%= course.starts_at.strftime("%A %e %B") %></p>
+    <%= form_with(model: course, url: managers_course_path(course), method: :patch) do |form| %>
+      <%= form.label :starts_at, "De" %>
+      <%= form.time_field :starts_at, minute_step: 15, class: "form-control" %>
+
+      <%= form.label :ends_at, "A" %>
+      <%= form.time_field :ends_at, minute_step: 15, class: "form-control" %>
+
+      <%= form.submit "Mettre à jour les horaires", class: "btn btn-primary mt-3" %>
+    <% end %>
 </li>
 <% end %>
