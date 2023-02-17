@@ -43,3 +43,22 @@
 
   <%= f.submit "Save Activity" %>
 <% end %>
+
+<% if @activity.errors.include?(:base) %>
+  <div class="modal fade" id="error-modal" tabindex="-1" aria-labelledby="error-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-bottom-0">
+          <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="fs-5">L'heure de fin ne peut pas être antérieure à l'heure de début.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var errorModal = new bootstrap.Modal(document.getElementById('error-modal'), {})
+    errorModal.show()
+  </script>
+<% end %>

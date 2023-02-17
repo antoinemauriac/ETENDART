@@ -9,3 +9,11 @@
   justify-content: space-between;
   margin: 20px;
 }
+
+.error {
+  border-color: red;
+}
+
+.field_with_errors {
+  background-color: #ffcccc; /* couleur de fond en rouge */
+}

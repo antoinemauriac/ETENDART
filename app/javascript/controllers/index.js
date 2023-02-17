@@ -9,3 +9,6 @@ application.register("activity-form", ActivityFormController)
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import SidebarController from "./sidebar_controller"
+application.register("sidebar", SidebarController)
