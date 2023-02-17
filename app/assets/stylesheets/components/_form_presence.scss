@@ -1,10 +1,28 @@
-.presence-sheet-form {
-  display: flex;
-  justify-content: space-evenly;
-  width: 300px;
-  padding-left: 0;
-}
+// .presence-sheet-form {
+//   display: flex;
+//   justify-content: space-evenly;
+//   width: 300px;
+//   padding-left: 0;
+// }
 
 .test {
   display: flex;
+}
+
+
+.form-check-label {
+  width: 300px;
+  text-align: right;
+}
+
+.form-switch .form-check-input {
+  margin-left: 0;
+}
+
+.form-check-input {
+  margin-top: 4px;
+}
+
+.form-switch {
+  margin-bottom: 10px;
 }
