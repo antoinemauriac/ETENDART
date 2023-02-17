@@ -6,6 +6,7 @@ class Managers::CoursesController < ApplicationController
 
   def show
     @course = Course.find(params[:id])
+    @enrollments = @course.course_enrollments.sort_by { |enrollment| enrollment.student.last_name }
   end
 
   def edit
@@ -29,6 +30,15 @@ class Managers::CoursesController < ApplicationController
     flash[:notice] = "Cours supprimé"
   end
 
+  def update_enrollments
+    enrollments_params = params[:enrollments]
+    enrollments_params.each do |enrollment_params|
+      enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
+      enrollment.update(present: enrollment_params[1][:present].to_i)
+    end
+    redirect_to managers_course_path(params[:id])
+    flash[:notice] = "Appel mis à jour"
+  end
 
   private
 
