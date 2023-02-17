@@ -7,7 +7,12 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   namespace :managers do
-    resources :courses, only: %i[index show edit update destroy]
+    resources :courses, only: %i[index show edit update destroy] do
+      member do
+        put :update_enrollments
+      end
+    end
+
     resources :activities, only: %i[show]
     resources :school_periods, only: %i[show]
     resources :categories, only: %i[index create]

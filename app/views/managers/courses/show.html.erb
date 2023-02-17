@@ -25,3 +25,29 @@
     <%= link_to "Retour", managers_courses_path, class: "btn btn-primary" %>
   </div>
 </div>
+
+
+<%= form_with(url: update_enrollments_managers_course_path(@course), method: :put) do |form| %>
+  <% @enrollments.each do |enrollment| %>
+      <div class="form-check form-switch presence-sheet-form">
+        <%= form.label "Student #{enrollment.student.id}", nil, class: "form-check-label" %>
+        <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
+        <span class="absent-text d-none">absent</span>
+      </div>
+  <% end %>
+  <%= form.submit "Valider", class: "btn btn-primary mt-3" %>
+<% end %>
+
+<script>
+  const checkboxes = document.querySelectorAll(".presence-sheet-form input[type='checkbox']");
+  checkboxes.forEach(function(checkbox) {
+    const absentText = checkbox.parentElement.querySelector(".absent-text");
+    checkbox.addEventListener("change", function() {
+      if (this.checked) {
+        absentText.classList.add("d-none");
+      } else {
+        absentText.classList.remove("d-none");
+      }
+    });
+  });
+</script>
