@@ -3,7 +3,7 @@ class Managers::SchoolPeriodsController < ApplicationController
 
   def create
     @academy = Academy.find(params[:academy_id])
-    @school_period = SchoolPeriod.new(school_period_params)
+    @school_period = @academy.school_periods.build(school_period_params)
     @school_period.academy = @academy
     if @school_period.save
       redirect_to managers_academy_path(@academy)

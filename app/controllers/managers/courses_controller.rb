@@ -1,31 +1,28 @@
 class Managers::CoursesController < ApplicationController
+  before_action course, only: %i[edit show update destroy]
 
   def index
-    @courses = Course.where(manager: current_user).where('ends_at >= ?', 12.hours.ago).sort_by(&:starts_at)
+    @courses = current_user.courses.where(ends_at: 12.hours.ago..).sort_by(&:starts_at)
   end
 
   def show
-    @course = Course.find(params[:id])
-    @enrollments = @course.course_enrollments.sort_by { |enrollment| enrollment.student.last_name }
+    @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
   end
 
-  def edit
-    @course = Course.find(params[:id])
-  end
+  def edit; end
 
   def update
-    @course = Course.find(params[:id])
-    if @course.update(course_params)
+    if course.update(course_params)
       redirect_to managers_activity_path(@course.activity)
       flash[:notice] = "Cours mis à jour"
     else
+      # ajouter un flash[:error] = ...
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @course = Course.find(params[:id])
-    @course.destroy
+    course.destroy
     redirect_to managers_courses_path
     flash[:notice] = "Cours supprimé"
   end
@@ -41,6 +38,10 @@ class Managers::CoursesController < ApplicationController
   end
 
   private
+
+  def course
+    @course ||= Course.find(params[:id])
+  end
 
   def course_params
     params.require(:course).permit(:starts_at, :ends_at)
