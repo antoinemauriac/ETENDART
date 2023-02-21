@@ -1,0 +1,28 @@
+<%= link_to 'Ajouter un coach', new_managers_coach_path, class: 'btn btn-primary' %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Categorie 1</th>
+      <th>Categorie 2</th>
+      <th>Académie 1</th>
+      <th>Académie 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @coaches.each do |coach| %>
+      <tr>
+        <td><%= link_to coach.first_name, managers_coach_path(coach) %></td>
+        <td><%= coach.last_name %></td>
+        <td><%= coach.email %></td>
+        <td><%= coach.categories[0].name %></td>
+        <td><%= coach.categories[1].name if coach.categories[1] %></td>
+        <td><%= coach.academies_as_coach.first.name %></td>
+        <td><%= coach.academies_as_coach.second.name if coach.academies_as_coach.second %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

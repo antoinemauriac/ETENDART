@@ -1,23 +1,17 @@
 <div class="card mb-3">
   <div class="card-body">
-
     <p class="card-text">Academie : <%= @course.academy.name %></p>
     <p class="card-text">Période : <%= @course.school_period.name.upcase %></p>
     <p class="card-text">Stage : <%= @course.camp.name %></p>
     <p class="card-text">Cours : <%= @course.activity.name %></p>
-    <div>
     <p class="card-text">Jour : <%= @course.starts_at.strftime("%A %e %B") %></p>
     <%= form_with(model: @course, url: managers_course_path(@course), method: :patch) do |form| %>
       <%= form.label :starts_at, "De" %>
       <%= form.time_select :starts_at, minute_step: 15, class: "form-control" %>
-
       <%= form.label :ends_at, "A" %>
       <%= form.time_select :ends_at, minute_step: 15, class: "form-control" %>
-
-    </div>
       <%= form.submit "Mettre à jour les horaires", class: "btn btn-primary mt-3" %>
     <% end %>
-
   </div>
   <div class="card-footer text-center">
     <%= link_to "Modifier", edit_managers_course_path(@course), class: "btn btn-primary" %>
@@ -27,6 +21,7 @@
 </div>
 
 
+<h1>Feuille de présence</h1>
 <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
   <% @enrollments.each do |enrollment| %>
       <div class="form-switch">

@@ -13,7 +13,7 @@ class Managers::CoursesController < ApplicationController
 
   def update
     if course.update(course_params)
-      redirect_to managers_activity_path(@course.activity)
+      redirect_to managers_course_path(course)
       flash[:notice] = "Cours mis à jour"
     else
       # ajouter un flash[:error] = ...

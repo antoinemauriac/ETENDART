@@ -1,15 +1,19 @@
-<h1>Les périodes scolaires</h1>
+<h1>Les stages à venir</h1>
 <% @academy.school_periods.each do |period| %>
   <%= link_to managers_school_period_path(@academy, period) do %>
     <p> Période scolaire : <%= period.name %> <%= period.year %></p>
+    <ul>
+      <% period.camps.each do |camp| %>
+        <li>
+          <%= camp.name %>
+        </li>
+      <% end %>
+    </ul>
   <% end %>
 <% end %>
 
-
-
 <div data-controller="hidden-forms">
   <button class="btn btn-primary" id="add-school-period-btn">Ajouter une période scolaire</button>
-
   <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form", id: "school-period-form") do |form| %>
     <%= form.label :name, "Nom :" %>
     <%= form.text_field :name, class: "form-control" %>
@@ -19,3 +23,47 @@
     <button class="btn btn-primary" id="cancel-school-period-btn" type="button">Annuler</button>
   <% end %>
 </div>
+
+<h1><%= link_to "Les coachs", managers_coaches_path %></h1>
+<ul>
+  <% @coaches.each do |coach| %>
+    <li>
+      <%= coach.email %>
+      <% coach.categories.each do |category| %>
+        <li>
+          <%= category.name %>
+        </li>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<h1>Les adresses</h1>
+<ul>
+  <% @locations.each do |location| %>
+    <li>
+      <%= location.address %>
+    </li>
+  <% end %>
+</ul>
+
+<div data-controller="hidden-forms">
+  <button class="btn btn-primary" id="add-location-btn">Ajouter une adresse</button>
+  <%= form_with(model: @location, url: managers_academy_locations_path(@academy), method: :post, class: "hidden-form", id: "location-form") do |form| %>
+    <%= form.label :name, "Nom :" %>
+    <%= form.text_field :name, class: "form-control" %>
+    <%= form.label :address, "Adresse :" %>
+    <%= form.text_field :address, class: "form-control"  %>
+    <%= form.submit "Valider", class: "btn btn-primary" %>
+    <button class="btn btn-primary" id="cancel-location-btn" type="button">Annuler</button>
+  <% end %>
+</div>
+
+<h1>Les élèves</h1>
+<ul>
+  <% @students.each do |student| %>
+    <li>
+      <%= "#{student.first_name} #{student.last_name}" %>
+    </li>
+  <% end %>
+</ul>
