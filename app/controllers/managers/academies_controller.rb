@@ -20,6 +20,13 @@ class Managers::AcademiesController < ApplicationController
 
   def show
     @academy = Academy.find(params[:id])
+    @coaches = @academy.coaches
+
+    @locations = @academy.locations
+    @location = Location.new
+
+    @students = @academy.students
+    @camps = @academy.camps.where(starts_at: Date.today..Date.today + 1.year)
     @school_period = SchoolPeriod.new
   end
 

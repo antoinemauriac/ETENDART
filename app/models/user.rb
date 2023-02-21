@@ -18,4 +18,7 @@ class User < ApplicationRecord
   has_many :activities, foreign_key: :coach_id
 
   has_many :feedbacks, foreign_key: :coach_id
+
+  has_many :user_roles
+  has_many :roles, through: :user_roles
 end
