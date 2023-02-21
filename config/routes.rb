@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
+  post '/managers/students/import', to: 'managers/students#import'
+
   namespace :managers do
     resources :courses, only: %i[index show edit update destroy] do
       member do
@@ -14,6 +16,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :students
     resources :activities, only: %i[show]
     resources :school_periods, only: %i[show]
     resources :categories, only: %i[index create]
