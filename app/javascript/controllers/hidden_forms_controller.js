@@ -54,5 +54,22 @@ export default class extends Controller {
         categoryForm.classList.add("hidden-form");
       });
     }
+
+    // location FORM
+    const addLocationBtn = document.getElementById("add-location-btn");
+    const cancelLocationBtn = document.getElementById("cancel-location-btn");
+    const locationForm = document.getElementById("location-form");
+
+    if (addLocationBtn) {
+      addLocationBtn.addEventListener("click", function(event) {
+        console.log("hello");
+        event.preventDefault();
+        locationForm.classList.remove("hidden-form");
+      });
+      cancelLocationBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        locationForm.classList.add("hidden-form");
+      });
+    }
   }
 }
