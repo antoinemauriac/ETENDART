@@ -21,3 +21,10 @@
     <button class="btn btn-primary" id="cancel-camp-btn" type="button">Annuler</button>
   <% end %>
 </div>
+
+
+<%= form_with(url: managers_students_import_path, method: :post) do |form| %>
+  <%= form.hidden_field :school_period_id, value: @school_period.id %>
+  <%= form.file_field :csv_file, accept: '.csv' %>
+  <%= form.submit 'Importer' %>
+<% end %>

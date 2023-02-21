@@ -54,7 +54,7 @@ student3 = Student.create!(first_name: 'student', last_name: '3')
 students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
-rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager2)
+rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager1)
 angers = Academy.create!(name: 'Angers', manager: manager2)
 
 coach1.academies_as_coach << djoko
