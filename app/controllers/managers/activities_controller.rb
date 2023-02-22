@@ -1,22 +1,21 @@
 class Managers::ActivitiesController < ApplicationController
+  before_action camp, only: %i[new create]
+
   def new
     @activity = Activity.new
-    @camp = Camp.find(params[:camp_id])
   end
 
   def create
-    @activity = Activity.new(activity_params)
-    @camp = Camp.find(params[:camp_id])
-    @activity.camp = @camp
-
+    @activity = camp.activities.build(activity_params)
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
 
-    # Validate start time and end time
+    # Validate start time and end time 
+    # A mettre dans le modèle
     validate_start_time_before_end_time
 
+    # Plus besoin de ceci car le modèle va se charger de remonter l'erreur dans if @activity.save
     if @activity.errors.any?
-      render :new, status: :unprocessable_entity
-      return
+      return render :new, status: :unprocessable_entity
     end
 
     if @activity.save
@@ -40,6 +39,7 @@ class Managers::ActivitiesController < ApplicationController
       redirect_to managers_camp_path(@camp)
       flash[:notice] = "Activité créée"
     else
+      # ajouter un flash[:error]
       render :new, status: :unprocessable_entity
     end
   end
@@ -55,6 +55,11 @@ class Managers::ActivitiesController < ApplicationController
     params.require(:activity).permit(:name, :category_id, :coach_id)
   end
 
+  def camp
+    @camp ||= Camp.find(params[:camp_id])
+  end
+
+  # Les validations sont plutôt à ajouter dans le modèle si elles sont toujours appliqués 
   def validate_start_time_before_end_time
     Activity::DAYS.each do |day, times|
       start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
