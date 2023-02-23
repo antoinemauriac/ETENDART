@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="hidden-forms"
 export default class extends Controller {
   connect() {
-    console.log("hello from controller")
+    console.log("helo")
 
     // School Period Form
     const addSchoolPeriodBtn = document.getElementById("add-school-period-btn");
@@ -28,7 +28,6 @@ export default class extends Controller {
 
     if (addCampBtn) {
       addCampBtn.addEventListener("click", function(event) {
-        console.log("hello");
         event.preventDefault();
         campForm.classList.remove("hidden-form");
       });
@@ -45,7 +44,6 @@ export default class extends Controller {
 
     if (addCategoryBtn) {
       addCategoryBtn.addEventListener("click", function(event) {
-        console.log("hello");
         event.preventDefault();
         categoryForm.classList.remove("hidden-form");
       });
@@ -62,7 +60,6 @@ export default class extends Controller {
 
     if (addLocationBtn) {
       addLocationBtn.addEventListener("click", function(event) {
-        console.log("hello");
         event.preventDefault();
         locationForm.classList.remove("hidden-form");
       });
