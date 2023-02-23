@@ -1,5 +1,5 @@
 <div data-controller="enrollment-form">
-  <%= form_with model: @enrollment, url: managers_enrollments_path, local: true do |form| %>
+  <%= form_with url: managers_enrollments_path, local: true do |form| %>
     <div class="form-group">
       <%= form.hidden_field :student_id, value: @student.id %>
 

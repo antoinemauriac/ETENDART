@@ -27,7 +27,6 @@ class Managers::StudentsController < ApplicationController
   def show
     @student = Student.find(params[:id])
     @academies = @student.academies
-    @enrollment = Enrollment.new
     @school_periods_json = SchoolPeriod.all.to_json(include: :academy)
     @camps_json = Camp.all.to_json(include: :school_period)
     @activities_json = Activity.all.to_json(include: :camp)
