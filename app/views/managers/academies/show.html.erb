@@ -1,3 +1,4 @@
+
 <h1>Les stages à venir</h1>
 <% @academy.school_periods.each do |period| %>
   <%= link_to managers_school_period_path(@academy, period) do %>
@@ -47,33 +48,19 @@
   <% end %>
 </ul>
 
+<button class="btn btn-primary" id="add-location-btn">Ajouter une adresse</button>
 <div data-controller="hidden-forms">
-  <button class="btn btn-primary" id="add-location-btn">Ajouter une adresse</button>
-
-  <%= form_with(model: @location, url: managers_academy_locations_path(@academy), method: :post, class: "hidden-form", id: "location-form") do |form| %>
+  <%= simple_form_for(@location, method: :post, :url => managers_academy_locations_path(@academy), html: {id: "location-form", class: "hidden-form"}) do |form| %>
     <div class="form-group">
-      <%= form.label :name, "Nom :" %>
-      <%= form.text_field :name, class: "form-control", required: true %>
+      <%= form.input :name, class: "form-control", required: true %>
     </div>
 
     <div class="form-group">
-      <%= form.label :address, "Adresse :" %>
-      <%= form.text_field :address, class: "form-control", required: true %>
-    </div>
-
-    <div class="form-group">
-      <%= form.label :city, "Ville :" %>
-      <%= form.text_field :city, class: "form-control", required: true %>
-    </div>
-
-    <div class="form-group">
-      <%= form.label :zipcode, "Code Postal :" %>
-      <%= form.text_field :zipcode, class: "form-control", required: true %>
-    </div>
-
-    <div class="form-group">
-      <%= form.label :country, "Pays :" %>
-      <%= form.text_field :country, class: "form-control", required: true %>
+      <%= form.input :address,
+        input_html: {data: {address_autocomplete_target: "address"}, class: "d-none form-control"},
+        placeholder: 'Tape une adresse',
+        wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV['MAPBOX_API_KEY']}}
+      %>
     </div>
 
     <div class="form-group">
@@ -82,6 +69,7 @@
     </div>
   <% end %>
 </div>
+
 
 <h1>Les élèves</h1>
 <ul>
