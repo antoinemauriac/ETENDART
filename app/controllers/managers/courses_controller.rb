@@ -1,5 +1,5 @@
 class Managers::CoursesController < ApplicationController
-  before_action course, only: %i[edit show update destroy]
+  before_action :course, only: %i[edit show update destroy]
 
   def index
     @courses = current_user.courses.where(ends_at: 12.hours.ago..).sort_by(&:starts_at)

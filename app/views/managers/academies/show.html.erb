@@ -49,13 +49,37 @@
 
 <div data-controller="hidden-forms">
   <button class="btn btn-primary" id="add-location-btn">Ajouter une adresse</button>
+
   <%= form_with(model: @location, url: managers_academy_locations_path(@academy), method: :post, class: "hidden-form", id: "location-form") do |form| %>
-    <%= form.label :name, "Nom :" %>
-    <%= form.text_field :name, class: "form-control" %>
-    <%= form.label :address, "Adresse :" %>
-    <%= form.text_field :address, class: "form-control"  %>
-    <%= form.submit "Valider", class: "btn btn-primary" %>
-    <button class="btn btn-primary" id="cancel-location-btn" type="button">Annuler</button>
+    <div class="form-group">
+      <%= form.label :name, "Nom :" %>
+      <%= form.text_field :name, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :address, "Adresse :" %>
+      <%= form.text_field :address, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :city, "Ville :" %>
+      <%= form.text_field :city, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :zipcode, "Code Postal :" %>
+      <%= form.text_field :zipcode, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :country, "Pays :" %>
+      <%= form.text_field :country, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= form.submit "Valider", class: "btn btn-primary" %>
+      <button class="btn btn-secondary" id="cancel-location-btn" type="button">Annuler</button>
+    </div>
   <% end %>
 </div>
 

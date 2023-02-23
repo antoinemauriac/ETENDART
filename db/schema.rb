@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_21_125329) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_23_075337) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -154,6 +154,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_21_125329) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.string "city"
+    t.string "zipcode"
+    t.string "country"
+    t.decimal "lat", precision: 9, scale: 6
+    t.decimal "lng", precision: 9, scale: 6
     t.index ["academy_id"], name: "index_locations_on_academy_id"
   end
 

@@ -19,13 +19,10 @@ class Activity < ApplicationRecord
   validates :name, presence: true
   validates :category_id, presence: true
   validates :coach_id, presence: true
-  # validate :start_time_must_be_before_end_time
-
-  # has_many :days
-  # accepts_nested_attributes_for :days
 
   has_many :activity_enrollments
   has_many :students, through: :activity_enrollments
-
+  # has_many :days
+  # accepts_nested_attributes_for :days
 
 end
