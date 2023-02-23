@@ -1,6 +1,6 @@
 class Managers::AcademiesController < ApplicationController
   def index
-    @academies = current_user.academies
+    @academies = current_user.academies_as_manager
   end
 
   # def new

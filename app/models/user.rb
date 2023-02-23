@@ -21,4 +21,6 @@ class User < ApplicationRecord
 
   has_many :user_roles
   has_many :roles, through: :user_roles
+
+  has_many :courses, foreign_key: :manager_id
 end
