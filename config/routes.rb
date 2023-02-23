@@ -16,12 +16,13 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :students
+    resources :students, only: %i[index show new create]
     resources :activities, only: %i[show]
     resources :school_periods, only: %i[show]
     resources :categories, only: %i[index create]
     resources :locations, only: %i[show]
     resources :coaches
+    resources :enrollments, only: %i[new create]
 
     resources :academies, only: %i[show index] do
       resources :school_periods, only: %i[new create]
