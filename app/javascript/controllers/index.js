@@ -10,6 +10,12 @@ application.register("activity-form", ActivityFormController)
 import AddressAutocompleteController from "./address_autocomplete_controller"
 application.register("address-autocomplete", AddressAutocompleteController)
 
+import AlgoliaController from "./algolia_controller"
+application.register("algolia", AlgoliaController)
+
+import EnrollmentFormController from "./enrollment_form_controller"
+application.register("enrollment-form", EnrollmentFormController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

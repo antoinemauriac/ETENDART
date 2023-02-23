@@ -11,35 +11,39 @@ class Managers::ActivitiesController < ApplicationController
 
     # Validate start time and end time
     # # A mettre dans le modèle
-    # validate_start_time_before_end_time
 
     # Plus besoin de ceci car le modèle va se charger de remonter l'erreur dans if @activity.save
-    # if @activity.errors.any?
-    #   return render :new, status: :unprocessable_entity
-    # end
+    if @activity.errors.any?
+      return render :new, status: :unprocessable_entity
+    end
 
-    if @activity.save && validate_start_time_before_end_time
-      days.each do |day|
-        start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
-        end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
+    if validate_start_time_before_end_time
+      if @activity.save
+        days.each do |day|
+          start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
+          end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
 
-        # Trouver la date correspondant au jour de la semaine donné
-        date = @camp.starts_at
-        while date.strftime("%A").downcase != day.downcase
-          date += 1
+          # Trouver la date correspondant au jour de la semaine donné
+          date = @camp.starts_at
+          while date.strftime("%A").downcase != day.downcase
+            date += 1
+          end
+
+          # Calculer la date et heure de début et de fin en utilisant les dates starts_at et ends_at du camp
+          start_datetime = DateTime.new(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec, start_time.utc_offset)
+          end_datetime = DateTime.new(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec, end_time.utc_offset)
+
+          Course.create!(activity: @activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user)
         end
 
-        # Calculer la date et heure de début et de fin en utilisant les dates starts_at et ends_at du camp
-        start_datetime = DateTime.new(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec, start_time.utc_offset)
-        end_datetime = DateTime.new(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec, end_time.utc_offset)
-
-        Course.create!(activity: @activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user)
+        redirect_to managers_camp_path(@camp)
+        flash[:notice] = "Activité créée"
+      else
+        flash[:alert] = "Une erreur est survenue"
+        render :new, status: :unprocessable_entity
       end
-
-      redirect_to managers_camp_path(@camp)
-      flash[:notice] = "Activité créée"
     else
-      flash[:error] = "Une erreur est survenue"
+      flash[:alert] = "L'heure de début doit être avant l'heure' de fin"
       render :new, status: :unprocessable_entity
     end
   end
@@ -61,6 +65,7 @@ class Managers::ActivitiesController < ApplicationController
 
   # Les validations sont plutôt à ajouter dans le modèle si elles sont toujours appliqués
   def validate_start_time_before_end_time
+    no_error = true
     Activity::DAYS.each do |day, times|
       start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
       end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
@@ -70,8 +75,9 @@ class Managers::ActivitiesController < ApplicationController
 
       # Vérifier que le temps de début est inférieur au temps de fin
       if start_time >= end_time
-        flash[:error] = "L'heure de début doit être avant l'heure' de fin"
+        no_error = false
       end
     end
+    no_error
   end
 end
