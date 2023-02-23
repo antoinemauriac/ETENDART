@@ -70,8 +70,7 @@
   <% end %>
 </div>
 
-
-<h1>Les élèves</h1>
+<h1><%= link_to "Les élèves", managers_students_path %></h1>
 <ul>
   <% @students.each do |student| %>
     <li>

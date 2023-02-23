@@ -1,0 +1,8 @@
+<%= link_to "Ajouter un élève", new_managers_student_path, class: "btn btn-primary" %>
+<% @students.each do |student| %>
+<ul>
+  <li>
+    <%= "#{student.first_name} #{student.last_name}" %>
+  </li>
+</ul>
+<% end %>

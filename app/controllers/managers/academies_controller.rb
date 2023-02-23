@@ -3,21 +3,6 @@ class Managers::AcademiesController < ApplicationController
     @academies = current_user.academies_as_manager
   end
 
-  # def new
-  #   @academy = Academy.new
-  # end
-
-  # def create
-  #   @academy = Academy.new(academy_params)
-  #   @academy.manager = current_user
-  #   if @academy.save
-  #     redirect_to managers_academy_path(@academy)
-  #     flash[:notice] = "Academie créée"
-  #   else
-  #     render :new, status: :unprocessable_entity
-  #   end
-  # end
-
   def show
     @academy = Academy.find(params[:id])
     @coaches = @academy.coaches

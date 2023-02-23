@@ -1,6 +1,34 @@
 class Managers::StudentsController < ApplicationController
   require 'csv'
 
+  def index
+    @students = Student.joins(academy_enrollments: :academy)
+                       .where(academies: { manager_id: current_user.id })
+                       .distinct
+  end
+
+  def new
+    @student = Student.new
+  end
+
+  def create
+    @student = Student.new(student_params)
+    @student.academies << Academy.find(params[:student][:academy1_id])
+    @student.academies << Academy.find(params[:student][:academy2_id])
+    if @student.save
+      redirect_to managers_student_path(@student)
+      flash[:notice] = "Élève ajouté"
+    else
+      flash[:error] = "Une erreur est survenue"
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def show
+    @student = Student.find(params[:id])
+  end
+
+
   def import
     school_period = SchoolPeriod.find(params[:school_period_id])
     file = params[:csv_file]
@@ -17,7 +45,7 @@ class Managers::StudentsController < ApplicationController
         student.save
         student.academies << school_period.academy
       else
-        student.update(student_params(row))
+        student.update(student_params_upload(row))
       end
 
       academy = school_period.academy
@@ -44,7 +72,11 @@ class Managers::StudentsController < ApplicationController
 
   private
 
-  def student_params(row)
+  def student_params
+    params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender)
+  end
+
+  def student_params_upload(row)
     row = row.transform_keys { |key| key == 'prénom' ? 'first_name' : key == 'nom' ? 'last_name' : key == 'date-naissance' ? 'date_of_birth' : key == 'genre' ? 'gender' : key}
     ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth)
   end

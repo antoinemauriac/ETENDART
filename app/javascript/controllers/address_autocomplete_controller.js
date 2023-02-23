@@ -8,10 +8,13 @@ export default class extends Controller {
   static targets = ["address"]
 
   connect() {
-    console.log("AddressAutocompleteController connected")
     this.geocoder = new MapboxGeocoder({
       accessToken: this.apiKeyValue,
-      types: "country,region,place,postcode,locality,neighborhood,address"
+      types: "country,region,place,postcode,locality,neighborhood,address",
+      countries: 'FR',
+      container: "address-container", // ID of the container where you want to render the geocoder control
+      placeholder: "Tape une adresse", // Placeholder text for the geocoder control
+      className: "form-control",
     })
       this.geocoder.addTo(this.element)
 

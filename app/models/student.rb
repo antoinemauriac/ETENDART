@@ -12,4 +12,12 @@ class Student < ApplicationRecord
   has_many :courses, through: :course_enrollments
 
   has_many :feedbacks
+
+  def past_courses_count
+    courses.where('ends_at < ?', Time.now).count
+  end
+
+  def unattended_courses_count
+    courses.where('ends_at < ? && present = ?', Time.now, false).count
+  end
 end
