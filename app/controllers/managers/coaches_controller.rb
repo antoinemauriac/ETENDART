@@ -25,6 +25,7 @@ class Managers::CoachesController < ApplicationController
       @coach.academies_as_coach << Academy.find(params[:user][:academy_2_id]) if params[:user][:academy_2_id].present?
       @coach.categories << Category.find(params[:user][:category_1_id])
       @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
+      CoachMailer.confirm_email(@coach).deliver_now
       flash[:notice] = "Coach ajouté avec succès."
       redirect_to managers_coaches_path
     else
@@ -44,8 +45,6 @@ class Managers::CoachesController < ApplicationController
     @category2 = @coach.categories.second ? @coach.categories.second.id : ""
   end
 
-
-
   def update
     @coach = User.find(params[:id])
     @coach.academies_as_coach.clear
@@ -56,6 +55,17 @@ class Managers::CoachesController < ApplicationController
     @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
     flash[:notice] = "Coach mis à jour."
     redirect_to managers_coaches_path
+  end
+
+  def change_password
+    @coach = User.find_by(confirmation_token: params[:token])
+    if @coach
+      # afficher le formulaire de changement de mot de passe
+      render :change_password
+    else
+      # coach non trouvé, rediriger vers la page d'accueil
+      redirect_to root_path
+    end
   end
 
   private

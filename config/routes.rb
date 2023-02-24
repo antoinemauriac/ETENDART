@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { registrations: "users/registrations" }
+  devise_for :users, controllers: { registrations: "users/registrations", passwords: 'devise/passwords' }
 
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   post '/managers/students/import', to: 'managers/students#import'
+  get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
 
   namespace :managers do
     resources :courses, only: %i[index show edit update destroy] do
@@ -37,4 +38,9 @@ Rails.application.routes.draw do
       resources :activities, only: %i[new create]
     end
   end
+
+  namespace :coaches do
+    resources :courses, only: %i[index show]
+  end
+
 end
