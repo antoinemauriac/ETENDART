@@ -209,28 +209,28 @@
   font-size: 12px;
 }
 
-@media (max-width: 500px) {
-  .sidebar {
-    width: 78px;
-  }
-  .sidebar.close {
-    width: 0;
-  }
+// @media (max-width: 500px) {
+//   .sidebar .close {
+//     width: 78px;
+//   }
+//   // .sidebar.close {
+//   //   width: 0;
+//   // }
 
-  .sidebar .logo-details .logo_name {
-    display: none;
-  }
+//   .sidebar .logo-details .logo_name {
+//     display: none;
+//   }
 
-  .sidebar.close .profile-details{
-    width: 78px;
-  }
-  // .home-section {
-  //   left: 78px;
-  //   width: calc(100% - 78px);
-  //   z-index: 100;
-  // }
-  // .sidebar.close ~ .home-section {
-  //   width: 100%;
-  //   left: 0;
-  // }
-}
+//   .sidebar.close .profile-details{
+//     width: 78px;
+//   }
+//   // .home-section {
+//   //   left: 78px;
+//   //   width: calc(100% - 78px);
+//   //   z-index: 100;
+//   // }
+//   // .sidebar.close ~ .home-section {
+//   //   width: 100%;
+//   //   left: 0;
+//   // }
+// }

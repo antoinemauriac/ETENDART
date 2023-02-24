@@ -13,16 +13,20 @@ class Activity < ApplicationRecord
   has_one :academy, through: :school_period
   belongs_to :category
   belongs_to :coach, class_name: 'User'
-  has_many :courses
+  has_many :courses, dependent: :destroy
   accepts_nested_attributes_for :courses
 
   validates :name, presence: true
   validates :category_id, presence: true
   validates :coach_id, presence: true
 
-  has_many :activity_enrollments
+  has_many :activity_enrollments, dependent: :destroy
   has_many :students, through: :activity_enrollments
   # has_many :days
   # accepts_nested_attributes_for :days
+
+  def students_count
+    students.count
+  end
 
 end

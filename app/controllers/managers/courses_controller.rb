@@ -2,7 +2,7 @@ class Managers::CoursesController < ApplicationController
   before_action :course, only: %i[edit show update destroy]
 
   def index
-    @courses = current_user.courses.where(ends_at: 12.hours.ago..).sort_by(&:starts_at)
+    @courses = current_user.courses.sort_by(&:starts_at)
   end
 
   def show

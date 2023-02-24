@@ -1,11 +1,24 @@
-<p>Nom : <%= @camp.name %> </p>
-<p>Activités : </p>
-<ul>
-  <% @camp.activities.each do |activity| %>
-  <li>
-    <%= link_to activity.name, managers_activity_path(activity) %>
-  </li>
-  <% end %>
-</ul>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Activité</th>
+      <th>Nombre d'élèves inscrits</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @camp.activities.each do |activity| %>
+      <tr>
+        <td><%= link_to activity.name, managers_activity_path(activity) %></td>
+        <td><%= activity.students_count %></td>
+        <td>
+          <%= link_to managers_activity_path(activity), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?"} do %>
+            <i class="fa-solid fa-trash"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <%= link_to "Ajouter une activité", new_managers_camp_activity_path(@camp), class: "btn btn-primary" %>

@@ -53,6 +53,13 @@ class Managers::ActivitiesController < ApplicationController
     @courses = @activity.courses.sort_by(&:starts_at)
   end
 
+  def destroy
+    activity = Activity.find(params[:id])
+    activity.destroy
+    redirect_to managers_camp_path(activity.camp)
+    flash[:notice] = "Activité supprimée"
+  end
+
   private
 
   def activity_params
