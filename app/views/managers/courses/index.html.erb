@@ -10,7 +10,7 @@
       </tr>
       <tr>
         <td>
-          <select id="filter-name" class="form-control">
+          <select id="filter-name" class="form-select">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.activity.name }.uniq.each do |name| %>
               <option value="<%= name %>"><%= name %></option>
@@ -18,7 +18,7 @@
           </select>
         </td>
         <td>
-          <select id="filter-day" class="form-control">
+          <select id="filter-day" class="form-select">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.starts_at.strftime("%A %e %B") }.uniq.each do |day| %>
               <option value="<%= day %>"><%= day %></option>
@@ -26,7 +26,7 @@
           </select>
         </td>
         <td>
-          <select id="filter-start-time" class="form-control">
+          <select id="filter-start-time" class="form-select">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.starts_at.strftime("%H:%M") }.uniq.each do |start_time| %>
               <option value="<%= start_time %>"><%= start_time %></option>
@@ -34,7 +34,7 @@
           </select>
         </td>
         <td>
-          <select id="filter-end-time" class="form-control">
+          <select id="filter-end-time" class="form-select">
             <option value="">Tous</option>
             <% @courses.map{ |course| course.ends_at.strftime("%H:%M") }.uniq.each do |end_time| %>
               <option value="<%= end_time %>"><%= end_time %></option>

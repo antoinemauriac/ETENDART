@@ -4,4 +4,9 @@ class Camp < ApplicationRecord
 
   has_many :camp_enrollments
   has_many :students, through: :camp_enrollments
+
+  def students_count
+    students.count
+  end
+
 end

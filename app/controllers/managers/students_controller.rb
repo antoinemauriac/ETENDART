@@ -26,7 +26,7 @@ class Managers::StudentsController < ApplicationController
 
   def show
     @student = Student.find(params[:id])
-    @academies = @student.academies
+    @academies = @student.academies.uniq
     @school_periods_json = SchoolPeriod.all.to_json(include: :academy)
     @camps_json = Camp.all.to_json(include: :school_period)
     @activities_json = Activity.all.to_json(include: :camp)
@@ -35,6 +35,7 @@ class Managers::StudentsController < ApplicationController
 
   def import
     school_period = SchoolPeriod.find(params[:school_period_id])
+    academy = school_period.academy
     file = params[:csv_file]
     file = File.open(file)
     csv = CSV.parse(file, headers: true, col_sep: ';')
@@ -43,29 +44,33 @@ class Managers::StudentsController < ApplicationController
       row = row.to_hash
 
       student = Student.find_or_initialize_by(username: row['username'])
-      student.assign_attributes(student_params(row))
+      student.assign_attributes(student_params_upload(row))
 
       if student.new_record?
         student.save
-        student.academies << school_period.academy
       else
         student.update(student_params_upload(row))
       end
 
-      academy = school_period.academy
-      student.academies << academy unless student.academies.exists?(academy.id)
+      student.academies << academy unless student.academies.include?(academy)
+      student.school_periods << school_period unless student.school_periods.include?(school_period)
 
       (1..4).each do |week_number|
         week_name = "semaine#{week_number}"
         if row[week_name] == "oui"
           week_camp = school_period.camps.find_by(name: week_name)
-          student.camps << week_camp unless student.camps.exists?(week_camp.id)
+          student.camps << week_camp unless student.camps.include?(week_camp)
 
           activity_name = row["activite_#{week_name}"]
           if activity_name.present?
             activity = week_camp.activities.find_by(name: activity_name)
-            student.activities << activity unless student.activities.exists?(activity.id)
-            student.courses << activity.courses
+            if activity.present?
+              student.activities << activity unless student.activities.include?(activity)
+              student.courses << activity.courses unless student.activities.include?(activity)
+            else
+              flash[:alert] = "Une erreur est survenue. L'activité #{activity_name} ne correspond pas à une activité créée"
+              redirect_to managers_school_period_path(school_period) and return
+            end
           end
         end
       end
@@ -73,6 +78,8 @@ class Managers::StudentsController < ApplicationController
 
     redirect_to managers_school_period_path(school_period), notice: "Le fichier CSV a été importé avec succès."
   end
+
+
 
   private
 

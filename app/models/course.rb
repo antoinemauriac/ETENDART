@@ -8,7 +8,7 @@ class Course < ApplicationRecord
 
   belongs_to :manager, class_name: 'User'
 
-  has_many :course_enrollments
+  has_many :course_enrollments, dependent: :destroy
   has_many :students, through: :course_enrollments
 
 

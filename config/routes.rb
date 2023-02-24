@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     end
 
     resources :students, only: %i[index show new create]
-    resources :activities, only: %i[show]
+    resources :activities, only: %i[show destroy]
     resources :school_periods, only: %i[show]
     resources :categories, only: %i[index create]
     resources :locations, only: %i[show]

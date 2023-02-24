@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_23_174425) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_24_084225) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -173,6 +173,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_174425) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "school_period_enrollments", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "school_period_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_period_id"], name: "index_school_period_enrollments_on_school_period_id"
+    t.index ["student_id"], name: "index_school_period_enrollments_on_student_id"
+  end
+
   create_table "school_periods", force: :cascade do |t|
     t.string "name"
     t.bigint "academy_id", null: false
@@ -243,6 +252,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_174425) do
   add_foreign_key "feedbacks", "students"
   add_foreign_key "feedbacks", "users", column: "coach_id"
   add_foreign_key "locations", "academies"
+  add_foreign_key "school_period_enrollments", "school_periods"
+  add_foreign_key "school_period_enrollments", "students"
   add_foreign_key "school_periods", "academies"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"

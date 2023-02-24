@@ -10,12 +10,8 @@ export default class extends Controller {
   }
 
   updateSchoolPeriods() {
-    console.log("Updating school periods");
-    console.log(this.schoolPeriodTarget);
     const academyId = this.academyTarget.value;
-    console.log(academyId);
     const schoolPeriods = JSON.parse(this.academyTarget.getAttribute("data-school-periods"));
-    console.log(schoolPeriods);
     const filteredSchoolPeriods = schoolPeriods.filter(schoolPeriod => schoolPeriod.academy_id == academyId);
     const options = filteredSchoolPeriods.map(schoolPeriod => `<option value="${schoolPeriod.id}">${schoolPeriod.name}</option>`);
 
@@ -24,7 +20,6 @@ export default class extends Controller {
   }
 
   updateCamps() {
-    console.log("Updating camps");
     const schoolPeriodId = this.schoolPeriodTarget.value;
     const camps = JSON.parse(this.schoolPeriodTarget.getAttribute("data-camps"));
 
@@ -36,7 +31,6 @@ export default class extends Controller {
   }
 
   updateActivities() {
-    console.log("Updating activities");
     const campId = this.campTarget.value;
     const activities = JSON.parse(this.campTarget.getAttribute("data-activities"));
 
