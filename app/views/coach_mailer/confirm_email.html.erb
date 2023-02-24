@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  <h1>Bienvenue dans l'application Coaching</h1>
+  <p>Bonjour <%= @coach.first_name %>,</p>
+  <p>Votre compte de coach a été créé avec succès.</p>
+  <p>Votre mot de passe temporaire est: <%= @coach.password %></p>
+  <p>Veuillez cliquer sur le lien ci-dessous pour changer votre mot de passe :</p>
+  <%= link_to "Changer le mot de passe", edit_user_password_url(reset_password_token: @coach.reset_password_token) %>
+</body>
+</html>
