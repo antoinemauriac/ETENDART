@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_24_084225) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_25_112156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -124,7 +124,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_084225) do
     t.bigint "manager_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "coach_id"
     t.index ["activity_id"], name: "index_courses_on_activity_id"
+    t.index ["coach_id"], name: "index_courses_on_coach_id"
     t.index ["manager_id"], name: "index_courses_on_manager_id"
   end
 
@@ -247,6 +249,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_084225) do
   add_foreign_key "course_enrollments", "courses"
   add_foreign_key "course_enrollments", "students"
   add_foreign_key "courses", "activities"
+  add_foreign_key "courses", "users", column: "coach_id"
   add_foreign_key "courses", "users", column: "manager_id"
   add_foreign_key "days", "activities"
   add_foreign_key "feedbacks", "students"

@@ -78,7 +78,7 @@ rudy_avril_23 = SchoolPeriod.create!(name: 'rudy_avril_23', year: 2023, academy:
 rudy_ete_23 = SchoolPeriod.create!(name: 'rudy_ete_23', year: 2023, academy: rudy)
 angers_avril_23 = SchoolPeriod.create!(name: 'angers_avril_23', year: 2023, academy: angers)
 
-week1_d = Camp.create!(name: 'semaine1', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2021, 4, 21))
+week1_d = Camp.create!(name: 'semaine1', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
 week2_d = Camp.create!(name: 'semaine2', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
 week1_r = Camp.create!(name: 'semaine1', school_period: rudy_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
 week2_r = Camp.create!(name: 'semaine2', school_period: rudy_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
@@ -93,12 +93,14 @@ days = [days1, days2, days3]
 weeks.each do |week|
   3.times do |i|
     jours = days.sample
+    coach = coaches.sample
     Activity.create!(name: "activité #{i}",
                      days: jours,
-                     coach: coaches.sample,
+                     coach: coach,
                      camp: week,
                      category: categories.sample)
 
+    coach.camps << week unless coach.camps.include?(week)
     starts_at = week.starts_at
 
     date_array = jours.map do |day|
@@ -112,7 +114,7 @@ weeks.each do |week|
     date_array.each do |date|
       starting_at = Time.new(date.year, date.month, date.day, rand(1..10), 0, 0)
       ending_at = starting_at + rand(1..3).hours
-      Course.create!(starts_at: starting_at, ends_at: ending_at, activity: Activity.last, manager: manager1)
+      Course.create!(starts_at: starting_at, ends_at: ending_at, activity: Activity.last, manager: manager1, coach: coach)
     end
   end
 

@@ -22,7 +22,7 @@
 
 
 <h1>Feuille de présence</h1>
-<%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
+<%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }) do |form| %>
   <% @enrollments.each do |enrollment| %>
       <div class="form-switch">
         <%= form.label "Student #{enrollment.student.id}", nil, class: "form-check-label" %>
@@ -32,15 +32,3 @@
   <% end %>
   <%= form.submit "Valider", class: "btn btn-primary mt-3" %>
 <% end %>
-
-<script>
-  const checkboxes = document.querySelectorAll(".presence-sheet-form input[type='checkbox']");
-  checkboxes.forEach(function(checkbox) {
-    const statusTexts = checkbox.parentElement.querySelectorAll(".status-text");
-    checkbox.addEventListener("change", function() {
-      statusTexts.forEach(function(statusText) {
-        statusText.classList.toggle("d-none");
-      });
-    });
-  });
-</script>

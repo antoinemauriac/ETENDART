@@ -8,6 +8,7 @@ class Managers::ActivitiesController < ApplicationController
   def create
     @activity = camp.activities.build(activity_params)
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
+    coach = User.find(params[:activity][:coach_id])
 
     # Validate start time and end time
     # # A mettre dans le modèle
@@ -19,6 +20,7 @@ class Managers::ActivitiesController < ApplicationController
 
     if validate_start_time_before_end_time
       if @activity.save
+        coach.camps << @camp unless coach.camps.include?(@camp)
         days.each do |day|
           start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
           end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
@@ -33,7 +35,7 @@ class Managers::ActivitiesController < ApplicationController
           start_datetime = DateTime.new(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec, start_time.utc_offset)
           end_datetime = DateTime.new(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec, end_time.utc_offset)
 
-          Course.create!(activity: @activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user)
+          Course.create!(activity: @activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach)
         end
 
         redirect_to managers_camp_path(@camp)

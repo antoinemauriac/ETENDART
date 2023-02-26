@@ -7,6 +7,14 @@ class Managers::StudentsController < ApplicationController
                        .distinct
   end
 
+  def show
+    @student = Student.find(params[:id])
+    @academies = @student.academies.uniq
+    @school_periods_json = SchoolPeriod.all.to_json(include: :academy)
+    @camps_json = Camp.all.to_json(include: :school_period)
+    @activities_json = Activity.all.to_json(include: :camp)
+  end
+
   def new
     @student = Student.new
   end
@@ -23,15 +31,6 @@ class Managers::StudentsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-
-  def show
-    @student = Student.find(params[:id])
-    @academies = @student.academies.uniq
-    @school_periods_json = SchoolPeriod.all.to_json(include: :academy)
-    @camps_json = Camp.all.to_json(include: :school_period)
-    @activities_json = Activity.all.to_json(include: :camp)
-  end
-
 
   def import
     school_period = SchoolPeriod.find(params[:school_period_id])
@@ -65,10 +64,10 @@ class Managers::StudentsController < ApplicationController
           if activity_name.present?
             activity = week_camp.activities.find_by(name: activity_name)
             if activity.present?
-              student.activities << activity unless student.activities.include?(activity)
               student.courses << activity.courses unless student.activities.include?(activity)
+              student.activities << activity unless student.activities.include?(activity)
             else
-              flash[:alert] = "Une erreur est survenue. L'activité #{activity_name} ne correspond pas à une activité créée"
+              flash[:alert] = "Une erreur est survenue. L'activité #{activity_name} ne correspond pas à une activité créée sur l'application"
               redirect_to managers_school_period_path(school_period) and return
             end
           end
@@ -79,8 +78,6 @@ class Managers::StudentsController < ApplicationController
     redirect_to managers_school_period_path(school_period), notice: "Le fichier CSV a été importé avec succès."
   end
 
-
-
   private
 
   def student_params
@@ -89,7 +86,7 @@ class Managers::StudentsController < ApplicationController
 
   def student_params_upload(row)
     row = row.transform_keys { |key| key == 'prénom' ? 'first_name' : key == 'nom' ? 'last_name' : key == 'date-naissance' ? 'date_of_birth' : key == 'genre' ? 'gender' : key}
-    ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth)
+    ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender)
   end
 
 end
