@@ -1,0 +1,23 @@
+<h1>Mes prochains cours</h1>
+
+<% @camps.each do |camp| %>
+  <h2><%= "#{camp.academy.name} - #{camp.school_period.name} - #{camp.name}" %></h2>
+
+  <% camp.activities.where(coach: @coach).each do |activity| %>
+    <% upcoming_courses = activity.courses.where(coach: @coach).upcoming(2.hours) %>
+
+    <% unless upcoming_courses.empty? %>
+      <h4><%= activity.name %></h4>
+
+      <ul>
+        <% upcoming_courses.each do |course| %>
+          <%= link_to coaches_course_path(course) do %>
+            <li><%= course.starts_at_formatted  %></li>
+          <% end %>
+        <% end %>
+      </ul>
+    <% end %>
+
+  <% end %>
+
+<% end %>

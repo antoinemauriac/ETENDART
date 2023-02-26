@@ -40,7 +40,12 @@ Rails.application.routes.draw do
   end
 
   namespace :coaches do
-    resources :courses, only: %i[index show]
+    resources :courses, only: %i[index show] do
+      member do
+        put :update_enrollments
+      end
+    end
+    resources :student_profiles, only: %i[show]
+    resources :feedbacks, only: %i[new create]
   end
-
 end

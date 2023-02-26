@@ -1,0 +1,8 @@
+<p>Nom : <%= @student.last_name %></p>
+<p>Prénom : <%= @student.first_name %></p>
+
+<h3>Feedbacks</h3>
+<% @feedbacks.each do |feedback| %>
+  <p><%= feedback.created_at%> - <%= feedback.content %></p>
+<% end %>
+<%= link_to "Ajouter un feedback", new_coaches_feedback_path(params: { student_id: @student.id }), class: "btn btn-primary" %>

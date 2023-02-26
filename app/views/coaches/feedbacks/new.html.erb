@@ -1,0 +1,12 @@
+<h1>Ajouter un feedback</h1>
+
+<%= form_with(model: @feedback, url: coaches_feedbacks_path, local: true) do |form| %>
+  <%= form.hidden_field :student_id, value: params[:student_id] %>
+
+  <div class="form-group">
+    <%= form.label :content, "Contenu du feedback" %>
+    <%= form.text_area :content, class: "form-control" %>
+  </div>
+
+  <%= form.submit "Enregistrer", class: "btn btn-primary" %>
+<% end %>

@@ -1,0 +1,13 @@
+<h1>Feuille de présence</h1>
+<%= form_with(url: update_enrollments_coaches_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }) do |form| %>
+  <% @enrollments.each do |enrollment| %>
+      <div class="form-switch">
+        <%= link_to coaches_student_profile_path(enrollment.student) do %>
+          <%= form.label "#{enrollment.student.last_name} - #{enrollment.student.first_name}", nil, class: "form-check-label" %>
+        <% end %>
+        <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
+        <span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span>
+      </div>
+  <% end %>
+  <%= form.submit "Valider", class: "btn btn-primary mt-3" %>
+<% end %>

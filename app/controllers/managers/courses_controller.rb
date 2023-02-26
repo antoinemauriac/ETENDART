@@ -2,7 +2,7 @@ class Managers::CoursesController < ApplicationController
   before_action :course, only: %i[edit show update destroy]
 
   def index
-    @courses = current_user.courses.sort_by(&:starts_at)
+    @courses = current_user.courses_as_manager.sort_by(&:starts_at)
   end
 
   def show
@@ -16,7 +16,7 @@ class Managers::CoursesController < ApplicationController
       redirect_to managers_course_path(course)
       flash[:notice] = "Cours mis à jour"
     else
-      # ajouter un flash[:error] = ...
+      flash[:alert] = course.errors.full_messages
       render :edit, status: :unprocessable_entity
     end
   end
