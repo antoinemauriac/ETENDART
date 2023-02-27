@@ -555,6 +555,18 @@ cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+datatables.net@^1.13.2:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.13.2.tgz#48f7035b1696a29cb70909db1f2e0ebd5f946f3e"
+  integrity sha512-u5nOU+C9SBp1SyPmd6G+niozZtrBwo1E8xzdOk3JJaAkFYgX/KxF3Gd79R8YLbUfmIs2OLnLe5gaz/qs5U8UDA==
+  dependencies:
+    jquery ">=1.7"
+
+dayjs@^1.11.7:
+  version "1.11.7"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.7.tgz#4b296922642f70999544d1144a2c25730fce63e2"
+  integrity sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==
+
 decamelize-keys@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/decamelize-keys/-/decamelize-keys-1.1.1.tgz#04a2d523b2f18d80d0158a43b895d56dff8d19d8"
@@ -584,6 +596,11 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
+
+diff-dom@5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/diff-dom/-/diff-dom-5.0.3.tgz#2a53ad83800156087b1632642858a7340b2220ca"
+  integrity sha512-/gOPP7yBrZpaVW96L4Iye6nmKcd884WwibSj66Vqo8vx5bMxXsAL0FOomTDhRsR1Mg9an0PPXWKYM8jxiYwcIQ==
 
 electron-to-chromium@^1.4.284:
   version "1.4.292"
@@ -843,6 +860,11 @@ jest-worker@^27.4.5:
     "@types/node" "*"
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
+
+jquery@>=1.7, jquery@^3.6.3:
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.3.tgz#23ed2ffed8a19e048814f13391a19afcdba160e6"
+  integrity sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==
 
 js-tokens@^4.0.0:
   version "4.0.0"
@@ -1210,6 +1232,14 @@ shebang-regex@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
+
+simple-datatables@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/simple-datatables/-/simple-datatables-7.1.2.tgz#ec4faab65fa3f813a41fa8f54290b08521cf74b0"
+  integrity sha512-7YW8oBGx+Jj75FSLM/WBe5kZVqMh7NHgBYfttZ79+wRJoL+miz/flS4NHGz0LzcM822tSEccweyfcAlb5bgWgw==
+  dependencies:
+    dayjs "^1.11.7"
+    diff-dom "5.0.3"
 
 source-map-support@~0.5.20:
   version "0.5.21"

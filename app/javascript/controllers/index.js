@@ -24,3 +24,6 @@ application.register("presence-sheet", PresenceSheetController)
 
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)
+
+import StudentTableController from "./student_table_controller"
+application.register("student-table", StudentTableController)

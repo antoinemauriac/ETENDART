@@ -1,5 +1,12 @@
 <div class="container" data-controller="hello">
-  <button id="clear-filters" class="btn btn-primary">Effacer les filtres</button>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <input type="text" id="searchInput" placeholder="Rechercher...">
+    </div>
+    <div class="col-md-6 mb-3">
+      <button id="clear-filters" class="btn btn-primary float-end">Effacer les filtres</button>
+    </div>
+  </div>
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -45,7 +52,7 @@
     </thead>
     <tbody id="courses">
     <% @courses.each do |course|%>
-      <tr class="clickable-tr"onclick="window.location.href='<%= managers_course_path(course) %>'">
+      <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
         <td class="name"><%= course.activity.name %></td>
         <td class="day"><%= course.starts_at.strftime("%A %e %B") %></td>
         <td class="start"><%= course.starts_at.strftime("%H:%M") %></td>
@@ -54,49 +61,4 @@
     <% end %>
     </tbody>
   </table>
-  <%= link_to "first course", managers_course_path(Course.first) %>
 </div>
-
-<script>
-
-document.addEventListener('DOMContentLoaded', () => {
-  const selectors = document.querySelectorAll('select');
-  const tableRows = document.querySelectorAll('tbody tr');
-
-  document.querySelector('#clear-filters').addEventListener('click', () => {
-  selectors.forEach((selector) => {
-    selector.value = '';
-  });
-  tableRows.forEach((row) => {
-    row.style.display = 'table-row';
-  });
-});
-
-  selectors.forEach((selector) => {
-    selector.addEventListener('change', () => {
-      const nameFilter = document.querySelector('#filter-name').value;
-      const dayFilter = document.querySelector('#filter-day').value;
-      const startFilter = document.querySelector('#filter-start-time').value;
-      const endFilter = document.querySelector('#filter-end-time').value;
-
-      tableRows.forEach((row) => {
-        const name = row.querySelector('td:nth-child(1)').innerText;
-        const day = row.querySelector('td:nth-child(2)').innerText;
-        const start = row.querySelector('td:nth-child(3)').innerText;
-        const end = row.querySelector('td:nth-child(4)').innerText;
-
-        if (
-          (!nameFilter || name.indexOf(nameFilter) !== -1) &&
-          (!dayFilter || day.indexOf(dayFilter) !== -1) &&
-          (!startFilter || start.indexOf(startFilter) !== -1) &&
-          (!endFilter || end.indexOf(endFilter) !== -1)
-        ) {
-          row.style.display = 'table-row';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    });
-  });
-});
-</script>
