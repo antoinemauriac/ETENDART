@@ -26,7 +26,6 @@ export default class extends Controller {
     };
 
     const applyFilters = () => {
-      console.log("c'est parti");
       tableRows.forEach((row) => {
         let showRow = true;
         for (let i = 0; i < columns.length; i++) {
