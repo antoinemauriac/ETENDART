@@ -1,10 +1,37 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
+import $ from "jquery";
+import "datatables.net";
 
 export default class extends Controller {
   connect() {
     console.log("toto");
+    $("#courses").DataTable({
+      language: {
+        url: "https://cdn.datatables.net/plug-ins/1.11.3/i18n/fr_fr.json",
+      },
+      order: [[0, "asc"]],
+      columnDefs: [
+        {
+          targets: 0,
+          orderable: true,
+        },
+        {
+          targets: 1,
+          orderable: true,
+        },
+        {
+          targets: 2,
+          orderable: true,
+        },
+        {
+          targets: 3,
+          orderable: true,
+        },
+      ],
+    });
+
     const selectors = document.querySelectorAll('select');
-    const tableRows = document.querySelectorAll('tbody tr');
+    const tableRows = document.querySelectorAll('table tbody tr');
     const filters = ['name', 'day', 'start-time', 'end-time'];
     const columns = tableRows[0].querySelectorAll('td');
 
@@ -26,6 +53,7 @@ export default class extends Controller {
     };
 
     const applyFilters = () => {
+      console.log("c'est parti");
       tableRows.forEach((row) => {
         let showRow = true;
         for (let i = 0; i < columns.length; i++) {
