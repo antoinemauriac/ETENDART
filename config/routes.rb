@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   post '/managers/students/import', to: 'managers/students#import'
+  get '/managers/coaches/:categoryId/category_coaches', to: 'managers/coaches#category_coaches'
   get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
 
   namespace :managers do
@@ -20,7 +21,7 @@ Rails.application.routes.draw do
     resources :students, only: %i[index show new create]
     resources :activities, only: %i[show destroy]
     resources :school_periods, only: %i[show]
-    resources :categories, only: %i[index create]
+    resources :categories, only: %i[index create edit update destroy]
     resources :locations, only: %i[show]
     resources :coaches
     resources :enrollments, only: %i[new create]

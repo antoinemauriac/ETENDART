@@ -2,7 +2,6 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   connect() {
-    console.log("SidebarController connected");
     const arrows = [...document.querySelectorAll(".arrow")];
     arrows.forEach((arrow) => {
       arrow.addEventListener("click", (e) => {

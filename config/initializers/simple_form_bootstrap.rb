@@ -15,6 +15,8 @@ SimpleForm.setup do |config|
   # Default class for buttons
   config.button_class = 'btn'
 
+  config.browser_validations = true
+
   # Define the default class of the input wrapper of the boolean input.
   config.boolean_label_class = 'form-check-label'
 

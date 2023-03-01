@@ -2,22 +2,22 @@
 
 <%= form_with(model: @coach, url: managers_coaches_path, method: :post, class: "form") do |form| %>
   <%= form.label :email, "Email :" %>
-  <%= form.email_field :email, class: "form-control" %>
-
-  <%= form.label :first_name, "Prénom :" %>
-  <%= form.text_field :first_name, class: "form-control" %>
+  <%= form.email_field :email, required: true, class: "form-control" %>
 
   <%= form.label :last_name, "Nom :" %>
-  <%= form.text_field :last_name, class: "form-control" %>
+  <%= form.text_field :last_name, required: true, class: "form-control" %>
+
+  <%= form.label :first_name, "Prénom :" %>
+  <%= form.text_field :first_name, required: true, class: "form-control" %>
 
   <%= form.label :academy_1_id, "Académie 1 :" %>
-  <%= form.collection_select :academy_1_id, @academies, :id, :name, { include_blank: true }, {class: "form-control"} %>
+  <%= form.collection_select :academy_1_id, @academies, :id, :name, { include_blank: true }, { required: true, class: "form-control", :validate => ["not_blank"] } %>
 
   <%= form.label :academy_2_id, "Académie 2 (optionnel) :" %>
   <%= form.collection_select :academy_2_id, @academies, :id, :name, { include_blank: true }, {class: "form-control"} %>
 
   <%= form.label :category_1_id, "Catégorie 1 :" %>
-  <%= form.collection_select :category_1_id, @categories, :id, :name, { include_blank: true }, {class: "form-control"} %>
+  <%= form.collection_select :category_1_id, @categories, :id, :name, { include_blank: true }, { required: true, class: "form-control", :validate => ["not_blank"] } %>
 
   <%= form.label :category_2_id, "Catégorie 2 (optionnel) :" %>
   <%= form.collection_select :category_2_id, @categories, :id, :name, { include_blank: true }, {class: "form-control"} %>

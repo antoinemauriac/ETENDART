@@ -21,4 +21,6 @@ class Managers::EnrollmentsController < ApplicationController
       flash[:notice] = "Inscription validée"
     end
   end
+
+
 end

@@ -1,11 +1,27 @@
 <h1>Les catégories d'activité</h1>
-<ul>
-<% @categories.each do |category| %>
-  <li>
-    <%= category.name %>
-  </li>
-<% end %>
-</ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nom de la catégorie</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @categories.each do |category| %>
+      <tr>
+        <td><%= category.name %></td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Actions">
+            <%= link_to edit_managers_category_path(category), data: { turbolinks: false } do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 
 <div data-controller="hidden-forms">
   <button class="btn btn-primary" id="add-category-btn">Ajouter une categorie</button>
