@@ -2,15 +2,17 @@
   <table id="myTable" class="table table-striped table-bordered">
     <thead>
       <tr>
-        <th data-orderable="true" data-searchable="true" class="table-search-header">Nom</th>
-        <th data-orderable="true" data-searchable="true" class="table-search-header">Prénom</th>
-        <th data-orderable="true" data-searchable="true" class="table-search-header">Genre</th>
-        <th data-orderable="true" data-searchable="true" class="table-search-header">Date de naissance</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="academie">Academie</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="nom">Nom</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="prenom">Prénom</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="genre">Genre</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="datenaissance">Date de naissance</th>
       </tr>
     </thead>
     <tbody>
       <% @students.each do |student| %>
         <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
+          <td><%= student.activities.first.name %></td>
           <td><%= student.last_name %></td>
           <td><%= student.first_name %></td>
           <td><%= student.gender %></td>
