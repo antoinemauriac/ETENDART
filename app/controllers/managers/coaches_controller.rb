@@ -68,6 +68,12 @@ class Managers::CoachesController < ApplicationController
     end
   end
 
+  def category_coaches
+    category = Category.find(params[:categoryId])
+    coaches = category.coaches
+    render json: coaches.select(:id, :first_name, :last_name, :email)
+  end
+
   private
 
   def coach_params

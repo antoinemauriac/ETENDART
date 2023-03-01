@@ -1,7 +1,7 @@
 <%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post, data: { controller: 'activity-form' } do |f| %>
-  <%= f.input :name %>
-  <%= f.input :category_id, as: :select, collection: Category.all, label_method: :name, value_method: :id %>
-  <%= f.input :coach_id, as: :select, collection: User.all, label_method: :email, value_method: :id %>
+  <%= f.input :name, label: "Nom" %>
+  <%= f.input :category_id, as: :select, collection: Category.all, label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", action: 'change->activity-form#onCategoryChange' } } %>
+  <%= f.input :coach_id, as: :select, collection: User.all, label_method: ->(user) { "#{user.first_name} #{user.last_name}" }, value_method: :id, input_html: { data: { activity_form_target: "coach"} } %>
 
   <ul>
     <li>

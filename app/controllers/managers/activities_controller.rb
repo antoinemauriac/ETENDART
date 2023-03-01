@@ -45,7 +45,7 @@ class Managers::ActivitiesController < ApplicationController
         render :new, status: :unprocessable_entity
       end
     else
-      flash[:alert] = "L'heure de début doit être avant l'heure' de fin"
+      flash[:alert] = "L'heure de début doit être avant l'heure de fin"
       render :new, status: :unprocessable_entity
     end
   end

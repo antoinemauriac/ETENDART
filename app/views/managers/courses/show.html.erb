@@ -4,19 +4,13 @@
     <p class="card-text">Période : <%= @course.school_period.name.upcase %></p>
     <p class="card-text">Stage : <%= @course.camp.name %></p>
     <p class="card-text">Cours : <%= @course.activity.name %></p>
-    <p class="card-text">Jour : <%= @course.starts_at.strftime("%A %e %B") %></p>
-    <%= form_with(model: @course, url: managers_course_path(@course), method: :patch) do |form| %>
-      <%= form.label :starts_at, "De" %>
-      <%= form.time_select :starts_at, minute_step: 15, class: "form-control" %>
-      <%= form.label :ends_at, "A" %>
-      <%= form.time_select :ends_at, minute_step: 15, class: "form-control" %>
-      <%= form.submit "Mettre à jour les horaires", class: "btn btn-primary mt-3" %>
-    <% end %>
+    <p class="card-text">Date : <%= l(@course.starts_at, format: :default) %></p>
+
   </div>
   <div class="card-footer text-center">
     <%= link_to "Modifier", edit_managers_course_path(@course), class: "btn btn-primary" %>
-    <%= link_to 'Supprimer', managers_course_path(@course), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: "btn btn-primary"  %>
-    <%= link_to "Retour", managers_courses_path, class: "btn btn-primary" %>
+    <%= link_to 'Supprimer', managers_course_path(@course), data: {turbo_method: :delete, turbo_confirm: 'Êtes vous '}, class: "btn btn-primary"  %>
+    <%= link_to "Retour", managers_activity_path(@course.activity), class: "btn btn-primary" %>
   </div>
 </div>
 

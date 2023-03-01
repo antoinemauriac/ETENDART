@@ -1,16 +1,16 @@
 <%= form_with(model: @coach, url: managers_coach_path(@coach), method: :put, class: "form") do |form| %>
 
   <%= form.label :academy_1_id, "Académie 1 :" %>
-  <%= form.collection_select :academy_1_id, @academies, :id, :name, { selected: @academy1 }, {class: "form-control"} %>
+  <%= form.collection_select :academy_1_id, @academies, :id, :name, { selected: @academy1, include_blank: true }, {class: "form-control"} %>
 
   <%= form.label :academy_2_id, "Académie 2 (optionnel) :" %>
-  <%= form.collection_select :academy_2_id, @academies, :id, :name, { selected: @academy2.present? ? @academy2 : nil }, { class: "form-control" } %>
+  <%= form.collection_select :academy_2_id, @academies, :id, :name, { selected: @academy2, include_blank: true }, { class: "form-control" } %>
 
   <%= form.label :category_1_id, "Catégorie 1 :" %>
-  <%= form.collection_select :category_1_id, @categories, :id, :name, { selected: @category1 }, {class: "form-control"} %>
+  <%= form.collection_select :category_1_id, @categories, :id, :name, { selected: @category1, include_blank: true }, {class: "form-control"} %>
 
   <%= form.label :category_2_id, "Catégorie 2 (optionnel) :" %>
-  <%= form.collection_select :category_2_id, @categories, :id, :name, { selected: @category2.present? ? @category2 : nil }, { class: "form-control" } %>
+  <%= form.collection_select :category_2_id, @categories, :id, :name, { selected: @category2, include_blank: true }, { class: "form-control" } %>
 
   <%= form.submit "Mettre à jour", class: "btn btn-primary" %>
 <% end %>

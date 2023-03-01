@@ -44,4 +44,8 @@ class Student < ApplicationRecord
   def camps_count
     camps.count
   end
+
+  def next_activities
+    activities.where('ends_at > ?', Time.now).first
+  end
 end
