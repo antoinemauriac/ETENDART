@@ -9,6 +9,11 @@ Rails.application.routes.draw do
 
   post '/managers/students/import', to: 'managers/students#import'
   get '/managers/coaches/:categoryId/category_coaches', to: 'managers/coaches#category_coaches'
+
+  get '/managers/enrollments/:academy_id/update_school_periods', to: 'managers/enrollments#update_school_periods'
+  get '/managers/enrollments/:school_period_id/update_camps', to: 'managers/enrollments#update_camps'
+  get '/managers/enrollments/:camp_id/update_activities', to: 'managers/enrollments#update_activities'
+
   get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
 
   namespace :managers do

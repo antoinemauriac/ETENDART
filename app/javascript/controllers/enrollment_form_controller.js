@@ -5,38 +5,60 @@ export default class extends Controller {
   static targets = ["academy", "schoolPeriod", "camp", "activity"];
 
   connect() {
-    console.log("EnrollmentFormController connected");
-    this.updateSchoolPeriods();
+    console.log("toto");
   }
 
   updateSchoolPeriods() {
-    const academyId = this.academyTarget.value;
-    const schoolPeriods = JSON.parse(this.academyTarget.getAttribute("data-school-periods"));
-    const filteredSchoolPeriods = schoolPeriods.filter(schoolPeriod => schoolPeriod.academy_id == academyId);
-    const options = filteredSchoolPeriods.map(schoolPeriod => `<option value="${schoolPeriod.id}">${schoolPeriod.name}</option>`);
+    const academy_id = this.academyTarget.value
+    const url = `/managers/enrollments/${academy_id}/update_school_periods`
 
-    this.schoolPeriodTarget.innerHTML = options.join("");
-    this.updateCamps();
+    fetch(url)
+      .then(response => response.json())
+      .then(schoolPeriods => {
+        this.schoolPeriodTarget.innerHTML = ''
+        this.schoolPeriodTarget.insertAdjacentHTML('beforeend', '<option value=""></option>');
+        schoolPeriods.forEach(schoolPeriod => {
+          const option = document.createElement('option')
+          option.value = schoolPeriod.id
+          option.textContent = `${schoolPeriod.name}`
+          this.schoolPeriodTarget.appendChild(option)
+        })
+      })
   }
 
   updateCamps() {
-    const schoolPeriodId = this.schoolPeriodTarget.value;
-    const camps = JSON.parse(this.schoolPeriodTarget.getAttribute("data-camps"));
+    const school_period_id = this.schoolPeriodTarget.value
+    const url = `/managers/enrollments/${school_period_id}/update_camps`
 
-    const filteredCamps = camps.filter(camp => camp.school_period_id == schoolPeriodId);
-    const options = filteredCamps.map(camp => `<option value="${camp.id}">${camp.name}</option>`);
-
-    this.campTarget.innerHTML = options.join("");
-    this.updateActivities();
+    fetch(url)
+      .then(response => response.json())
+      .then(camps => {
+        this.campTarget.innerHTML = ''
+        this.campTarget.insertAdjacentHTML('beforeend', '<option value=""></option>');
+        camps.forEach(camp => {
+          const option = document.createElement('option')
+          option.value = camp.id
+          option.textContent = `${camp.name}`
+          this.campTarget.appendChild(option)
+        })
+      })
   }
 
   updateActivities() {
-    const campId = this.campTarget.value;
-    const activities = JSON.parse(this.campTarget.getAttribute("data-activities"));
+    const camp_id = this.campTarget.value
+    const url = `/managers/enrollments/${camp_id}/update_activities`
 
-    const filteredActivities = activities.filter(activity => activity.camp_id == campId);
-    const options = filteredActivities.map(activity => `<option value="${activity.id}">${activity.name}</option>`);
-
-    this.activityTarget.innerHTML = options.join("");
+    fetch(url)
+      .then(response => response.json())
+      .then(activities => {
+        this.activityTarget.innerHTML = ''
+        this.activityTarget.insertAdjacentHTML('beforeend', '<option value=""></option>');
+        activities.forEach(activity => {
+          const option = document.createElement('option')
+          option.value = activity.id
+          option.textContent = `${activity.name}`
+          this.activityTarget.appendChild(option)
+        })
+      })
   }
 }

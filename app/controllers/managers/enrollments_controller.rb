@@ -22,5 +22,22 @@ class Managers::EnrollmentsController < ApplicationController
     end
   end
 
+  def update_school_periods
+    academy = Academy.find(params[:academy_id])
+    school_periods = academy.school_periods
+    render json: school_periods.select(:id, :name)
+  end
+
+  def update_camps
+    school_period = SchoolPeriod.find(params[:school_period_id])
+    camps = school_period.camps
+    render json: camps.select(:id, :name)
+  end
+
+  def update_activities
+    camp = Camp.find(params[:camp_id])
+    activities = camp.activities
+    render json: activities.select(:id, :name)
+  end
 
 end
