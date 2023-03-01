@@ -11,13 +11,13 @@
       <%= form.hidden_field :student_id, value: @student.id %>
 
       <%= form.label :academy, "Académie" %>
-      <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'academy', action: "change->enrollment-form#updateSchoolPeriods", "school-periods": @school_periods_json } } %>
+      <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'academy', action: "change->enrollment-form#updateSchoolPeriods" } } %>
 
       <%= form.label :school_period, "Période" %>
-      <%= form.collection_select :school_period, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'schoolPeriod', action: "change->enrollment-form#updateCamps", "camps": @camps_json } } %>
+      <%= form.collection_select :school_period, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'schoolPeriod', action: "change->enrollment-form#updateCamps" } } %>
 
       <%= form.label :camp, "Stage" %>
-      <%= form.collection_select :camp, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'camp', action: "change->enrollment-form#updateActivities", "activities": @activities_json  } } %>
+      <%= form.collection_select :camp, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'camp', action: "change->enrollment-form#updateActivities" } } %>
 
       <%= form.label :activity, "Activité" %>
       <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
