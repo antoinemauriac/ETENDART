@@ -3,10 +3,12 @@ class Managers::ActivitiesController < ApplicationController
 
   def new
     @activity = Activity.new
+    authorize([:managers, Activity.new])
   end
 
   def create
     @activity = camp.activities.build(activity_params)
+    authorize([:managers, @activity])
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
     coach = User.find(params[:activity][:coach_id])
 
@@ -52,11 +54,13 @@ class Managers::ActivitiesController < ApplicationController
 
   def show
     @activity = Activity.find(params[:id])
+    authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
   end
 
   def destroy
     activity = Activity.find(params[:id])
+    authorize([:managers, activity])
     activity.destroy
     redirect_to managers_camp_path(activity.camp)
     flash[:notice] = "Activité supprimée"

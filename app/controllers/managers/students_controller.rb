@@ -5,21 +5,26 @@ class Managers::StudentsController < ApplicationController
     @students = Student.joins(academy_enrollments: :academy)
                        .where(academies: { manager_id: current_user.id })
                        .distinct
+    skip_policy_scope
+    authorize([:managers, @students], policy_class: Managers::StudentPolicy)
   end
 
   def show
     @student = Student.find(params[:id])
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @academies = @student.academies.uniq
   end
 
   def new
     @student = Student.new
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
   end
 
   def create
     @student = Student.new(student_params)
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @student.academies << Academy.find(params[:student][:academy1_id])
-    @student.academies << Academy.find(params[:student][:academy2_id])
+    @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
     if @student.save
       redirect_to managers_student_path(@student)
       flash[:notice] = "Élève ajouté"
@@ -31,6 +36,7 @@ class Managers::StudentsController < ApplicationController
 
   def import
     school_period = SchoolPeriod.find(params[:school_period_id])
+    authorize([:managers, @school_period], policy_class: Managers::StudentPolicy)
     academy = school_period.academy
     file = params[:csv_file]
     file = File.open(file)

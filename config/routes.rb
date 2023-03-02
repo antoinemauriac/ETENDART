@@ -4,17 +4,20 @@ Rails.application.routes.draw do
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
-
+  # import student from csv
   post '/managers/students/import', to: 'managers/students#import'
-  get '/managers/coaches/:categoryId/category_coaches', to: 'managers/coaches#category_coaches'
 
+  # coach stiumulus controller
+  get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'
+
+  # création compte coach
+  get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
+
+  # enrollment stiumulus controller
   get '/managers/enrollments/:academy_id/update_school_periods', to: 'managers/enrollments#update_school_periods'
   get '/managers/enrollments/:school_period_id/update_camps', to: 'managers/enrollments#update_camps'
   get '/managers/enrollments/:camp_id/update_activities', to: 'managers/enrollments#update_activities'
 
-  get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
 
   namespace :managers do
     resources :courses, only: %i[index show edit update destroy] do
@@ -25,7 +28,9 @@ Rails.application.routes.draw do
 
     resources :students, only: %i[index show new create]
     resources :activities, only: %i[show destroy]
-    resources :school_periods, only: %i[show]
+    resources :school_periods, only: %i[show] do
+      resources :camps, only: %i[new create]
+    end
     resources :categories, only: %i[index create edit update destroy]
     resources :locations, only: %i[show]
     resources :coaches
@@ -34,10 +39,6 @@ Rails.application.routes.draw do
     resources :academies, only: %i[show index] do
       resources :school_periods, only: %i[new create]
       resources :locations, only: %i[create]
-    end
-
-    resources :school_periods, only: %i[show] do
-      resources :camps, only: %i[new create]
     end
 
     resources :camps, only: %i[show] do

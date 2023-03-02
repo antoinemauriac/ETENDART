@@ -21,7 +21,7 @@
 
   <div class="form-group">
     <%= form.label :gender, "Genre" %>
-    <%= form.select :gender, options_for_select(["garçon", "fille"]), {}, class: "form-control", required: true %>
+    <%= form.select :gender, options_for_select(["Garçon", "Fille"]), {}, class: "form-control", required: true %>
   </div>
 
   <div class="form-group">
@@ -31,7 +31,7 @@
 
   <div class="form-group">
     <%= form.label :academy2_id, "Academie 2 (optionnel)" %>
-    <%= form.collection_select :academy2_id, current_user.academies_as_manager, :id, :name, {}, {class: "form-control", required: true} %>
+    <%= form.collection_select :academy2_id, current_user.academies_as_manager, :id, :name, {include_blank: true}, {class: "form-control"} %>
   </div>
 
   <div class="form-group">

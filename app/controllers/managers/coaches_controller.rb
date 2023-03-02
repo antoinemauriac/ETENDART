@@ -2,22 +2,27 @@ class Managers::CoachesController < ApplicationController
 
   def index
     academy_ids = current_user.academies_as_manager.pluck(:id)
-    @coaches =  User.joins(:coach_academies).where(coach_academies: { academy_id: academy_ids })
-                    .joins(:roles).where(roles: { name: "coach" }).uniq
+    @coaches = User.joins(:coach_academies).where(coach_academies: { academy_id: academy_ids })
+                   .joins(:roles).where(roles: { name: "coach" }).distinct
+    skip_policy_scope
+    authorize([:managers, @coaches], policy_class: Managers::CoachPolicy)
   end
 
   def show
     @coach = User.find(params[:id])
+    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
   end
 
   def new
     @coach = User.new
+    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @academies = Academy.all
     @categories = Category.all
   end
 
   def create
     @coach = User.new(coach_params)
+    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @coach.password = Devise.friendly_token[0, 8]
     if @coach.save
       @coach.roles << Role.find_by(name: "coach")
@@ -37,6 +42,7 @@ class Managers::CoachesController < ApplicationController
 
   def edit
     @coach = User.find(params[:id])
+    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @academies = Academy.all
     @categories = Category.all
     @academy1 = @coach.academies_as_coach.first ? @coach.academies_as_coach.first.id : ""
@@ -47,6 +53,7 @@ class Managers::CoachesController < ApplicationController
 
   def update
     @coach = User.find(params[:id])
+    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @coach.academies_as_coach.clear
     @coach.academies_as_coach << Academy.find(params[:user][:academy_1_id])
     @coach.academies_as_coach << Academy.find(params[:user][:academy_2_id]) if params[:user][:academy_2_id].present?
@@ -69,7 +76,8 @@ class Managers::CoachesController < ApplicationController
   end
 
   def category_coaches
-    category = Category.find(params[:categoryId])
+    category = Category.find(params[:category_id])
+    authorize([:managers, category])
     coaches = category.coaches
     render json: coaches.select(:id, :first_name, :last_name, :email)
   end

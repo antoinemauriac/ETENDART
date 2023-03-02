@@ -36,7 +36,9 @@ Role.create!(name: 'manager')
 Role.create!(name: 'coach')
 
 manager1 = User.create!(email: 'manager1@gmail.com', password: 123456)
+manager1.roles << Role.find_by(name: 'manager')
 manager2 = User.create!(email: 'manager2@gmail.com', password: 123456)
+manager2.roles << Role.find_by(name: 'manager')
 
 coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Toto", last_name: "Zizou")
 coach1.roles << Role.find_by(name: 'coach')

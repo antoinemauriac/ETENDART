@@ -4,7 +4,7 @@ class Managers::SchoolPeriodsController < ApplicationController
   def create
     @academy = Academy.find(params[:academy_id])
     @school_period = @academy.school_periods.build(school_period_params)
-    @school_period.academy = @academy
+    authorize([:managers, @school_period])
     if @school_period.save
       redirect_to managers_academy_path(@academy)
       flash[:notice] = "Période scolaire créée"
@@ -15,6 +15,7 @@ class Managers::SchoolPeriodsController < ApplicationController
 
   def show
     @school_period = SchoolPeriod.find(params[:format])
+    authorize([:managers, @school_period])
     @camp = Camp.new
   end
 
