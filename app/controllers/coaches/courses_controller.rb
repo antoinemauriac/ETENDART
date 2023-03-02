@@ -6,14 +6,18 @@ class Coaches::CoursesController < ApplicationController
     @coach = current_user
     @current_time = Time.now.in_time_zone('Paris')
     @camps = current_user.camps.where('ends_at >= ?', @current_time - 2.hour)
+    skip_policy_scope
+    authorize([:coaches, @camps], policy_class: Coaches::CoursePolicy)
   end
 
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
+    authorize([:coaches, @course], policy_class: Coaches::CoursePolicy)
   end
 
   def update_enrollments
     enrollments_params = params[:enrollments]
+    authorize([:coaches, @enrollments], policy_class: Coaches::CoursePolicy)
     enrollments_params.each do |enrollment_params|
       enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
       enrollment.update(present: enrollment_params[1][:present].to_i)
