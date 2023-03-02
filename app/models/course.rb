@@ -14,19 +14,11 @@ class Course < ApplicationRecord
 
   scope :upcoming, ->(time_window) { where('ends_at >= ?', Time.current.in_time_zone('Paris') - time_window) }
 
-  def starts_at_formatted
-    I18n.l(starts_at, format: '%A %e %B à %kh%M', locale: :fr)
-  end
-
-  def ends_at_formatted
-    I18n.l(ends_at, format: '%A %e %B à %kh%M', locale: :fr)
-  end
-
   private
 
   def starts_at_before_ends_at
     if starts_at.present? && ends_at.present? && starts_at >= ends_at
-      errors.add(:starts_at, "must be before end time")
+      errors.add(:starts_at, "L'heure de début doit être avant l'heure de fin")
     end
   end
 

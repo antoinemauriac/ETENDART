@@ -12,7 +12,7 @@
       <ul>
         <% upcoming_courses.each do |course| %>
           <%= link_to coaches_course_path(course) do %>
-            <li><%= course.starts_at_formatted  %></li>
+            <li><%= l(course.starts_at, format: :default)  %></li>
           <% end %>
         <% end %>
       </ul>

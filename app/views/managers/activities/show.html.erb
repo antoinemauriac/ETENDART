@@ -1,18 +1,40 @@
-<div class="row">
-  <% @courses.each do |course| %>
-    <div class="col-3">
-      <div class="card mb-3">
-        <div class="card-body">
-          <p class="card-text"><%= l(course.starts_at, format: :long) %></p>
-          <%= form_with(model: course, url: managers_course_path(course), method: :patch) do |form| %>
-            <%= form.label :starts_at, "De" %>
-            <%= form.time_field :starts_at, minute_step: 15, class: "form-control" %>
-            <%= form.label :ends_at, "A" %>
-            <%= form.time_field :ends_at, minute_step: 15, class: "form-control" %>
-            <%= form.submit "Mettre à jour les horaires", class: "btn btn-primary mt-3" %>
+<div class="row mt-3">
+  <div class="col">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Heure de début</th>
+            <th>Heure de fin</th>
+            <th>Modifier</th>
+            <th>Supprimer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @courses.each do |course| %>
+            <%= simple_form_for course, url: managers_course_path(course), method: :patch do |f| %>
+            <tr>
+              <td>
+                <%= link_to l(course.starts_at, format: :long), managers_course_path(course) %>
+              </td>
+              <td>
+                <%= f.input :starts_at, as: :time, label: false, minute_step: 15, input_html: { class: 'form-control' } %>
+              </td>
+              <td>
+                <%= f.input :ends_at, as: :time, label: false, minute_step: 15, input_html: { class: 'form-control' } %>
+              </td>
+              <td>
+                <%= f.submit "Mettre à jour l'horaire", class: 'btn btn-primary' %>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to "Supprimer", managers_course_path(course), class: "btn btn-primary", data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce cours ?"} %>
+              </td>
+            </tr>
           <% end %>
-        </div>
-      </div>
+        </tbody>
+      </table>
     </div>
-  <% end %>
+  </div>
 </div>

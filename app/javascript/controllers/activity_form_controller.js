@@ -24,8 +24,8 @@ export default class extends Controller {
   }
 
   loadCoaches() {
-    const categoryId = this.categoryTarget.value
-    const url = `/managers/coaches/${categoryId}/category_coaches`
+    const category_id = this.categoryTarget.value
+    const url = `/managers/coaches/${category_id}/category_coaches`
 
     fetch(url)
       .then(response => response.json())

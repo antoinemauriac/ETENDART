@@ -1,11 +1,14 @@
 class Managers::CategoriesController < ApplicationController
   def index
     @categories = Category.all
+    skip_policy_scope
+    authorize([:managers, @categories])
     @category = Category.new
   end
 
   def create
     @category = Category.new(category_params)
+    authorize([:managers, @category])
     if @category.save
       redirect_to managers_categories_path
       flash[:notice] = "Catégorie créée"
@@ -16,10 +19,12 @@ class Managers::CategoriesController < ApplicationController
 
   def edit
     @category = Category.find(params[:id])
+    authorize([:managers, @category])
   end
 
   def update
     @category = Category.find(params[:id])
+    authorize([:managers, @category])
     if @category.update(category_params)
       redirect_to managers_categories_path
       flash[:notice] = "Catégorie modifiée"
@@ -31,6 +36,7 @@ class Managers::CategoriesController < ApplicationController
 
   def destroy
     @category = Category.find(params[:id])
+    authorize([:managers, @category])
     @category.destroy
     redirect_to managers_categories_path
     flash[:notice] = "Catégorie supprimée"

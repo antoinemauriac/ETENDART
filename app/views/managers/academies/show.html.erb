@@ -12,9 +12,9 @@
   <button class="btn btn-primary" id="add-school-period-btn">Ajouter une période scolaire</button>
   <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form", id: "school-period-form") do |form| %>
     <%= form.label :name, "Nom :" %>
-    <%= form.text_field :name, class: "form-control" %>
+    <%= form.text_field :name, { class: "form-control", required: true } %>
     <%= form.label :year, "Année :" %>
-    <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control" } %>
+    <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
     <%= form.submit "Valider", class: "btn btn-primary" %>
     <button class="btn btn-secondary" id="cancel-school-period-btn" type="button">Annuler</button>
   <% end %>
@@ -60,6 +60,7 @@
   <% end %>
 </div>
 
+<%= link_to "Ajouter un élève", new_managers_student_path, class: "btn btn-primary" %>
 <h1><%= link_to "Les élèves", managers_students_path %></h1>
 <ul>
   <% @students.each do |student| %>

@@ -27,4 +27,12 @@ class User < ApplicationRecord
   has_many :courses_as_manager, class_name: 'Course', foreign_key: :manager_id
   has_many :courses_as_coach, class_name: 'Course', foreign_key: :coach_id
 
+  def manager?
+    roles.any? { |role| role.name == 'manager' }
+  end
+
+  def coach?
+    roles.any? { |role| role.name == 'coach' }
+  end
+
 end
