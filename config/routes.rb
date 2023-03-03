@@ -3,6 +3,13 @@ Rails.application.routes.draw do
     registrations: "users/registrations",
     passwords: "users/passwords",
   }
+
+  # Modifier le mot de passe
+  # Utilise les chemins fournis par Devise
+  devise_scope :user do
+    get 'edit_password', to: 'devise/passwords#edit', as: :edit_user_password
+    patch 'update_password', to: 'devise/passwords#update', as: :update_user_password
+  end
   # resources :users do
   #   put :change_password, on: :member
   # end
