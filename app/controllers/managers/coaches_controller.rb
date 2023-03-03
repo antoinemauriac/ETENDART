@@ -73,7 +73,7 @@ class Managers::CoachesController < ApplicationController
       render "managers/coaches/change_password"
     else
       # coach non trouvé, rediriger vers la page d'accueil
-      redirect_to root_path
+      redirect_to "https://www.google.com/"
       flash[:alert] = "Une erreur est survenue"
     end
   end
