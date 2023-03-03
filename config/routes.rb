@@ -11,7 +11,8 @@ Rails.application.routes.draw do
   get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'
 
   # création compte coach
-  get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
+  # get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
+  get 'coaches/change_password/:token', to: 'managers/coaches#change_password', as: :coaches_change_password
 
   # enrollment stiumulus controller
   get '/managers/enrollments/:academy_id/update_school_periods', to: 'managers/enrollments#update_school_periods'

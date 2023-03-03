@@ -37,6 +37,7 @@ class Managers::CoachesController < ApplicationController
       @academies = Academy.all
       @categories = Category.all
       render :new, status: :unprocessable_entity
+      flash[:alert] = "Une erreur est survenue"
     end
   end
 
@@ -66,12 +67,14 @@ class Managers::CoachesController < ApplicationController
 
   def change_password
     @coach = User.find_by(confirmation_token: params[:token])
+
     if @coach
-      # afficher le formulaire de changement de mot de passe
-      render :change_password
+      # rediriger vers la vue change_password.html.erb dans views/managers/coaches/
+      render "managers/coaches/change_password"
     else
       # coach non trouvé, rediriger vers la page d'accueil
       redirect_to root_path
+      flash[:alert] = "Une erreur est survenue"
     end
   end
 
