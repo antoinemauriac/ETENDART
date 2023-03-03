@@ -1,18 +1,9 @@
-Rails.application.routes.draw do
-  devise_for :users, controllers: {
-    registrations: "users/registrations",
-    passwords: "users/passwords",
-  }
+  Rails.application.routes.draw do
 
-  # Modifier le mot de passe
-  # Utilise les chemins fournis par Devise
-  # devise_scope :user do
-  #   get 'edit_password', to: 'devise/passwords#edit', as: :edit_user_password
-  #   patch 'update_password', to: 'devise/passwords#update', as: :update_user_password
-  # end
-  # resources :users do
-  #   put :change_password, on: :member
-  # end
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    passwords: 'users/passwords'
+  }
 
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -25,7 +16,7 @@ Rails.application.routes.draw do
 
   # création compte coach
   # get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
-  get 'coaches/change_password/:token', to: 'managers/coaches#change_password', as: :coaches_change_password
+  # get 'coaches/change_password/:token', to: 'managers/coaches#change_password', as: :coaches_change_password
 
   # enrollment stiumulus controller
   get '/managers/enrollments/:academy_id/update_school_periods', to: 'managers/enrollments#update_school_periods'
