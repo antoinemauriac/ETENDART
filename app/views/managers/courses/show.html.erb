@@ -14,15 +14,32 @@
   </div>
 </div>
 
-
-<h1>Feuille de présence</h1>
-<%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }) do |form| %>
-  <% @enrollments.each do |enrollment| %>
-      <div class="form-switch">
-        <%= form.label "Student #{enrollment.student.id}", nil, class: "form-check-label" %>
-        <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
-        <span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span>
-      </div>
-  <% end %>
+<div class="container">
+  <h1>Feuille de présence</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nom-Prénom</th>
+        <th>Présent</th>
+        <th>Absent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }) do |form| %>
+        <% @enrollments.each do |enrollment| %>
+          <tr>
+            <td><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student) %></td>
+            <td>
+              <div class="form-switch form-switch-lg">
+                <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
+                <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
+              </div>
+            </td>
+            <td><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
+          </tr>
+        <% end %>
+    </tbody>
+  </table>
   <%= form.submit "Valider", class: "btn btn-primary mt-3" %>
-<% end %>
+  <% end %>
+</div>

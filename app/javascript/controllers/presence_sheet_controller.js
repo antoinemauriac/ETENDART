@@ -2,18 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
-    console.log("PresenceSheetController connected");
-    const checkboxes = this.element.querySelectorAll(
-      ".presence-sheet-form input[type='checkbox']"
-    );
-    checkboxes.forEach((checkbox) => {
-      const statusTexts = checkbox.parentElement.querySelectorAll(
-        ".status-text"
-      );
+    console.log("zidane");
+    document.querySelectorAll(".form-switch-input").forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
-        statusTexts.forEach((statusText) => {
-          statusText.classList.toggle("d-none");
-        });
+        const statusText = checkbox.closest("tr").querySelector(".status-text");
+        statusText.classList.toggle("d-none");
       });
     });
   }
