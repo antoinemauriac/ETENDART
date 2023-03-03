@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: {
-    registrations: "users/registrations",
-    passwords: "managers/users/passwords",
-  }
-  resources :users do
-    put :change_password, on: :member
-  end
+  # devise_for :users, controllers: {
+  #   registrations: "users/registrations",
+  #   passwords: "users/passwords",
+  # }
+  # resources :users do
+  #   put :change_password, on: :member
+  # end
 
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
