@@ -81,6 +81,6 @@ test:
 #
 production:
   <<: *default
-  database: ETENDART_production
+  database: etendart_8082
   username: ETENDART
   password: <%= ENV["ETENDART_DATABASE_PASSWORD"] %>
