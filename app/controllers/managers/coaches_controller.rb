@@ -1,5 +1,5 @@
 class Managers::CoachesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:change_password]
+  # skip_before_action :authenticate_user!, only: [:change_password]
 
   def index
     academy_ids = current_user.academies_as_manager.pluck(:id)
