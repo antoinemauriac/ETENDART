@@ -2,6 +2,7 @@
   <%= f.input :name, label: "Nom" %>
   <%= f.input :category_id, as: :select, collection: Category.all, label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", action: 'change->activity-form#onCategoryChange' } } %>
   <%= f.input :coach_id, as: :select, collection: User.all, label_method: ->(user) { "#{user.first_name} #{user.last_name}" }, value_method: :id, input_html: { data: { activity_form_target: "coach"} } %>
+  <%= f.input :location_id, as: :select, collection: @locations, input_html: { include_blank: true } %>
 
   <ul>
     <li>

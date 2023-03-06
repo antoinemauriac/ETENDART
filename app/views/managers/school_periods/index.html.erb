@@ -1,13 +1,31 @@
 <%= render "shared/academy_header" %>
+<div class="yellow-title">Les stages</div>
 <div class="container">
-  <h1>Les prochaines périodes</h1>
-  <ul>
-    <% @school_periods.each do |period| %>
-      <li>
-        <%= link_to "#{period.name}", managers_school_period_path(@academy, period)%>
-      </li>
-    <% end %>
-  </ul>
+  <table class="table table-striped table-responsive">
+    <thead>
+      <tr>
+        <th>Académie</th>
+        <th>Stage</th>
+        <th>Année</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @school_periods.each do |period| %>
+      <tr class="clickable-tr" data-url="<%= managers_school_period_path(@academy, period) %>">
+        <td><%= period.academy.name %></td>
+        <td><%= period.name %></td>
+        <td><%= period.year %></td>
+        <td>
+          <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette période scolaire ?" } do %>
+            <i class="fas fa-trash"></i>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
 
   <button class="btn btn-primary" id="add-school-period-btn">Ajouter une période scolaire</button>
   <div data-controller="hidden-forms">
@@ -21,3 +39,16 @@
     <% end %>
   </div>
 </div>
+
+<script>
+document.querySelectorAll('.clickable-tr').forEach((row) => {
+  row.addEventListener('click', (event) => {
+    const target = event.target;
+    console.log(target);
+    if (target.classList.contains('fa-trash')) {
+      return; // Ajout du return ici pour empêcher l'exécution du reste de la fonction
+    }
+    window.location.href = row.getAttribute('data-url');
+  });
+});
+</script>

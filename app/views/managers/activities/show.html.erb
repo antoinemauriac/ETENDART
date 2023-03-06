@@ -13,7 +13,7 @@
         </thead>
         <tbody>
           <% @courses.each do |course| %>
-            <%= simple_form_for course, url: managers_course_path(course), method: :put do |f| %>
+            <%= simple_form_for course, url: managers_course_path(course), method: :put, data: { turbo: false } do |f| %>
             <tr>
               <td>
                 <%= link_to l(course.starts_at, format: :long), managers_course_path(course) %>
@@ -38,4 +38,3 @@
     </div>
   </div>
 </div>
-<%= link_to "home", "/" %>

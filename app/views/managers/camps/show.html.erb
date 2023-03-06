@@ -1,24 +1,26 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Activité</th>
-      <th>Nombre d'élèves inscrits</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @camp.activities.each do |activity| %>
+<div class="container">
+  <table class="table table-striped table-responsive">
+    <thead>
       <tr>
-        <td><%= link_to activity.name, managers_activity_path(activity) %></td>
-        <td><%= activity.students_count %></td>
-        <td>
-          <%= link_to managers_activity_path(activity), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?"} do %>
-            <i class="fa-solid fa-trash"></i>
-          <% end %>
-        </td>
+        <th>Activité</th>
+        <th>Catégorie</th>
+        <th>Lieu</th>
+        <th>Coach</th>
+        <th>Nombre d'élèves inscrits</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @camp.activities.each do |activity| %>
+        <tr class="clickable-tr" onclick="window.location.href='<%= managers_activity_path(activity) %>'">
+          <td><%= activity.name %></td>
+          <td><%= activity.category.name %></td>
+          <td><%= activity.location.name %></td>
+          <td><%= activity.coach.first_name %> <%= activity.coach.last_name %></td>
+          <td><%= activity.students_count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Ajouter une activité", new_managers_camp_activity_path(@camp), class: "btn btn-primary" %>
+  <%= link_to "Ajouter une activité", new_managers_camp_activity_path(@camp), class: "btn btn-primary" %>
+</div>

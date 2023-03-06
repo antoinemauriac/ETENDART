@@ -42,7 +42,7 @@
 
     resources :students, only: %i[show new create edit update]
     resources :activities, only: %i[show destroy]
-    resources :school_periods, only: %i[show] do
+    resources :school_periods, only: %i[show destroy] do
       resources :camps, only: %i[new create]
     end
     resources :categories, only: %i[index create edit update destroy]
