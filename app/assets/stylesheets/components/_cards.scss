@@ -1,0 +1,36 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.card-academy {
+  background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), image-url('home.jpeg');
+  background-size: cover;
+  background-position: center;
+  padding: 64px;
+  border-radius: 20px;
+  margin: 20px;
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 900;
+  height: 240px;
+  width: 80%; /* Utilisez une valeur relative en pourcentage */
+  max-width: 600px; /* Définissez une largeur maximale pour les cartes */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.cards a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}

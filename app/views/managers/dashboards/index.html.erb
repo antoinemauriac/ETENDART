@@ -1,7 +1,9 @@
-<ul>
+<div class="cards">
   <% @academies.each do |academy| %>
-    <li>
-      <%= academy.name %>
-    </li>
+    <%= link_to managers_academy_path(academy) do %>
+      <div class="card-academy">
+          <%= academy.name %>
+      </div>
+    <% end %>
   <% end %>
-</ul>
+</div>
