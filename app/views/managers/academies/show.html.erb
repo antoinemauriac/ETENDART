@@ -1,15 +1,15 @@
 
 <h1>Les prochaines périodes</h1>
 <ul>
-<% @academy.school_periods.each do |period| %>
-<li>
-  <%= link_to "#{period.name}", managers_school_period_path(@academy, period)%>
-</li>
-<% end %>
+  <% @academy.school_periods.each do |period| %>
+    <li>
+      <%= link_to "#{period.name}", managers_school_period_path(@academy, period)%>
+    </li>
+  <% end %>
 </ul>
 
+<button class="btn btn-primary" id="add-school-period-btn">Ajouter une période scolaire</button>
 <div data-controller="hidden-forms">
-  <button class="btn btn-primary" id="add-school-period-btn">Ajouter une période scolaire</button>
   <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form", id: "school-period-form") do |form| %>
     <%= form.label :name, "Nom :" %>
     <%= form.text_field :name, { class: "form-control", required: true } %>

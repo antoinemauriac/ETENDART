@@ -1,1 +1,13 @@
 // Specific CSS for your home-page
+
+#no-user {
+  background-image: url('assets/test.jpeg');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

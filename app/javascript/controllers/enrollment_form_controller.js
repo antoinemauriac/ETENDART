@@ -8,6 +8,40 @@ export default class extends Controller {
     console.log("toto");
   }
 
+
+  openModal() {
+    const modal = document.querySelector('#exampleModal');
+    modal.classList.add('show');
+    modal.style.display = 'block';
+    modal.removeAttribute('aria-hidden');
+    document.body.classList.add('modal-open');
+    modal.addEventListener('click', this.handleModalClick.bind(this));
+    window.addEventListener('click', this.handleWindowClick.bind(this));
+  }
+
+  closeModal() {
+    const modal = document.querySelector('#exampleModal');
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', true);
+    document.body.classList.remove('modal-open');
+    modal.removeEventListener('click', this.handleModalClick.bind(this));
+    window.removeEventListener('click', this.handleWindowClick.bind(this));
+  }
+
+  handleModalClick(event) {
+    if (event.target.getAttribute('data-dismiss') === 'modal') {
+      this.closeModal();
+    }
+  }
+
+  handleWindowClick(event) {
+    const modal = document.querySelector('#exampleModal');
+    if (event.target === modal) {
+      this.closeModal();
+    }
+  }
+
   updateSchoolPeriods() {
     const academy_id = this.academyTarget.value
     const url = `/managers/enrollments/${academy_id}/update_school_periods`

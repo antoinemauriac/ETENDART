@@ -1,0 +1,12 @@
+<%= simple_form_for @student, url: managers_student_path(@student), method: :put do |f| %>
+  <%= f.input :first_name, label: "Prénom" %>
+  <%= f.input :last_name, label: "Nom" %>
+  <%= f.input :gender, label: "Genre" %>
+  <%= f.input :gender, as: :select, collection: ["Garçon", "Fille"] %>
+  <%= f.input :phone_number, label: "Numéro de téléphone" %>
+  <%= f.input :address, label: "Adresse" %>
+  <%= f.input :zipcode, label: "Code postal" %>
+  <%= f.input :city, label: "Ville" %>
+
+  <%= f.button :submit, "Enregistrer", class: "btn btn-primary" %>
+<% end %>

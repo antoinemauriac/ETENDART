@@ -11,6 +11,10 @@ class Managers::StudentPolicy < ApplicationPolicy
     user.manager?
   end
 
+  def update?
+    user.manager? && record.academies.any? { |academy| academy.manager == user }
+  end
+
   def import?
     user.manager?
   end

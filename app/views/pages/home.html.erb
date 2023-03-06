@@ -1,14 +1,20 @@
-<h1>MANAGER</h1>
+<% if user_signed_in? %>
+  <h1>MANAGER</h1>
 
-<ul>
-<li><%= link_to "Les academies", managers_academies_path %></li>
-<li><%= link_to "Les cours", managers_courses_path %></li>
-<li><%= link_to "Les categories d'activité", managers_categories_path %></li>
-<li><%= link_to "Les coachs", managers_coaches_path %></li>
-</ul>
+  <ul>
+    <li><%= link_to "Les academies", managers_academies_path %></li>
+    <li><%= link_to "Les cours", managers_courses_path %></li>
+    <li><%= link_to "Les categories d'activité", managers_categories_path %></li>
+    <li><%= link_to "Les coachs", managers_coaches_path %></li>
+  </ul>
 
-<h1>COACH</h1>
+  <h1>COACH</h1>
 
-<ul>
-<li><%= link_to "Les cours", coaches_courses_path %></li>
-</ul>
+  <ul>
+    <li><%= link_to "Les cours", coaches_courses_path %></li>
+  </ul>
+<% else %>
+<div id="no-user">
+<%= link_to "Se connecter", user_session_path, class: "btn-etendart" %>
+</div>
+<% end %>

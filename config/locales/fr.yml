@@ -1,5 +1,9 @@
 fr:
   date:
+    order:
+      - :day
+      - :month
+      - :year
     formats:
       default: "%d/%m/%Y"
       short: "%d %b"
