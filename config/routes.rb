@@ -40,19 +40,21 @@
       end
     end
 
-    resources :students, only: %i[index show new create edit update]
+    resources :students, only: %i[show new create edit update]
     resources :activities, only: %i[show destroy]
     resources :school_periods, only: %i[show] do
       resources :camps, only: %i[new create]
     end
     resources :categories, only: %i[index create edit update destroy]
     resources :locations, only: %i[show]
-    resources :coaches
+    resources :coaches, except: %i[index]
     resources :enrollments, only: %i[new create]
 
     resources :academies, only: %i[show index] do
-      resources :school_periods, only: %i[new create]
-      resources :locations, only: %i[create]
+      resources :school_periods, only: %i[new create index]
+      resources :locations, only: %i[create index]
+      resources :students, only: %i[index]
+      resources :coaches, only: %i[index]
     end
 
     resources :camps, only: %i[show] do

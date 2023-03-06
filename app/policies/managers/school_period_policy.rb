@@ -1,4 +1,8 @@
 class Managers::SchoolPeriodPolicy < ApplicationPolicy
+  def index?
+    user.manager?
+  end
+
   def create?
     user.manager? && record.academy.manager == user
   end
