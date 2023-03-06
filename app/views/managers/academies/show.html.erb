@@ -1,71 +1,26 @@
-
-<h1>Les prochaines périodes</h1>
-<ul>
-  <% @academy.school_periods.each do |period| %>
-    <li>
-      <%= link_to "#{period.name}", managers_school_period_path(@academy, period)%>
-    </li>
-  <% end %>
-</ul>
-
-<button class="btn btn-primary" id="add-school-period-btn">Ajouter une période scolaire</button>
-<div data-controller="hidden-forms">
-  <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form", id: "school-period-form") do |form| %>
-    <%= form.label :name, "Nom :" %>
-    <%= form.text_field :name, { class: "form-control", required: true } %>
-    <%= form.label :year, "Année :" %>
-    <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
-    <%= form.submit "Valider", class: "btn btn-primary" %>
-    <button class="btn btn-secondary" id="cancel-school-period-btn" type="button">Annuler</button>
-  <% end %>
-</div>
-
-<h1><%= link_to "Les coachs", managers_coaches_path %></h1>
-<ul>
-  <% @coaches.each do |coach| %>
-    <li>
-      <%= coach.email %>
-    </li>
-  <% end %>
-</ul>
-
-<h1>Les adresses</h1>
-<ul>
-  <% @locations.each do |location| %>
-    <li>
-      <%= location.address %>
-    </li>
-  <% end %>
-</ul>
-
-<button class="btn btn-primary" id="add-location-btn">Ajouter une adresse</button>
-<div data-controller="hidden-forms">
-  <%= simple_form_for(@location, method: :post, :url => managers_academy_locations_path(@academy), html: {id: "location-form", class: "hidden-form"}) do |form| %>
-    <div class="form-group">
-      <%= form.input :name, class: "form-control", required: true %>
+<%= render "shared/academy_header" %>
+<div class="cards container">
+  <%= link_to managers_academy_school_periods_path(@academy) do %>
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students3.jpeg') %>')">
+      Vacances Scolaires
     </div>
+  <% end %>
 
-    <div class="form-group">
-      <%= form.input :address,
-        input_html: {data: {address_autocomplete_target: "address"}, class: "d-none form-control"},
-        placeholder: 'Tape une adresse',
-        wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV['MAPBOX_API_KEY']}}
-      %>
+  <%= link_to managers_academy_locations_path(@academy) do %>
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students2.jpeg') %>')">
+      Les Adresses
     </div>
+  <% end %>
 
-    <div class="form-group">
-      <%= form.submit "Valider", class: "btn btn-primary" %>
-      <button class="btn btn-secondary" id="cancel-location-btn" type="button">Annuler</button>
+  <%= link_to managers_academy_coaches_path(@academy) do %>
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students4.jpeg') %>')">
+      Les Coachs
+    </div>
+  <% end %>
+
+  <%= link_to managers_academy_students_path(@academy) do %>
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students.jpeg') %>')">
+      Les Élèves
     </div>
   <% end %>
 </div>
-
-<%= link_to "Ajouter un élève", new_managers_student_path, class: "btn btn-primary" %>
-<h1><%= link_to "Les élèves", managers_students_path %></h1>
-<ul>
-  <% @students.each do |student| %>
-    <li>
-      <%= "#{student.first_name} #{student.last_name}" %>
-    </li>
-  <% end %>
-</ul>

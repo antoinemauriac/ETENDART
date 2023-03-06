@@ -2,8 +2,9 @@ class Managers::StudentsController < ApplicationController
   require 'csv'
 
   def index
+    @academy = Academy.find(params[:academy_id])
     @students = Student.joins(academy_enrollments: :academy)
-                       .where(academies: { manager_id: current_user.id })
+                       .where(academies: @academy)
                        .distinct
     skip_policy_scope
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
@@ -12,7 +13,7 @@ class Managers::StudentsController < ApplicationController
   def show
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    @academies = @student.academies.uniq
+    @academies = Academy.all
   end
 
   def new

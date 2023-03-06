@@ -4,6 +4,9 @@ class Managers::EnrollmentsController < ApplicationController
     @student = Student.find(params[:student_id])
     authorize([:managers, @student], policy_class: Managers::EnrollmentPolicy)
 
+    academy = Academy.find(params[:academy])
+    @student.academies << academy unless @student.academies.include?(academy)
+
     school_period = SchoolPeriod.find(params[:school_period])
     @student.school_periods << school_period unless @student.school_periods.include?(school_period)
 

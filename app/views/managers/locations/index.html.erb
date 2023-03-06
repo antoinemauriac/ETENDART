@@ -1,0 +1,33 @@
+<%= render "shared/academy_header" %>
+<div class="container">
+  <h1>Les adresses</h1>
+  <ul>
+    <% @locations.each do |location| %>
+      <li>
+        <%= location.address %>
+      </li>
+    <% end %>
+  </ul>
+
+  <button class="btn btn-primary" id="add-location-btn">Ajouter une adresse</button>
+  <div data-controller="hidden-forms">
+    <%= simple_form_for(@location, method: :post, :url => managers_academy_locations_path(@academy), html: {id: "location-form", class: "hidden-form"}) do |form| %>
+      <div class="form-group">
+        <%= form.input :name, class: "form-control", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= form.input :address,
+          input_html: {data: {address_autocomplete_target: "address"}, class: "d-none form-control"},
+          placeholder: 'Tape une adresse',
+          wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV['MAPBOX_API_KEY']}}
+        %>
+      </div>
+
+      <div class="form-group">
+        <%= form.submit "Valider", class: "btn btn-primary" %>
+        <button class="btn btn-secondary" id="cancel-location-btn" type="button">Annuler</button>
+      </div>
+    <% end %>
+  </div>
+</div>

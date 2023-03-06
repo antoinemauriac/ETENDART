@@ -2,9 +2,8 @@ class Managers::CoachesController < ApplicationController
   # skip_before_action :authenticate_user!, only: [:change_password]
 
   def index
-    academy_ids = current_user.academies_as_manager.pluck(:id)
-    @coaches = User.joins(:coach_academies).where(coach_academies: { academy_id: academy_ids })
-                   .joins(:roles).where(roles: { name: "coach" }).distinct
+    @academy = Academy.find(params[:academy_id])
+    @coaches = @academy.coach_academies.includes(:coach).map(&:coach)
     skip_policy_scope
     authorize([:managers, @coaches], policy_class: Managers::CoachPolicy)
   end
@@ -36,7 +35,7 @@ class Managers::CoachesController < ApplicationController
       @coach.send_reset_password_instructions
 
       flash[:notice] = "Coach ajouté avec succès."
-      redirect_to managers_coaches_path
+      redirect_to managers_academy_coaches_path(@academy)
     else
       @academies = Academy.all
       @categories = Category.all
