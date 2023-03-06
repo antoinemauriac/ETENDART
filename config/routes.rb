@@ -5,7 +5,16 @@
     passwords: 'users/passwords'
   }
 
+  authenticated :user, ->(user) { user.manager? } do
+    root to: "managers/dashboards#index", as: :manager_root
+  end
+
+  authenticated :user, ->(user) { user.coach? } do
+    root to: "coaches/dashboards#index", as: :coach_root
+  end
+
   root to: "pages#home"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # import student from csv
