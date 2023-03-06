@@ -31,7 +31,7 @@
       end
     end
 
-    resources :students, only: %i[index show new create]
+    resources :students, only: %i[index show new create edit update]
     resources :activities, only: %i[show destroy]
     resources :school_periods, only: %i[show] do
       resources :camps, only: %i[new create]

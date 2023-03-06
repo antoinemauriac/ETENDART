@@ -34,6 +34,23 @@ class Managers::StudentsController < ApplicationController
     end
   end
 
+  def edit
+    @student = Student.find(params[:id])
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
+  end
+
+  def update
+    @student = Student.find(params[:id])
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
+    if @student.update(student_params)
+      redirect_to managers_student_path(@student)
+      flash[:notice] = "Informations modifiées avec succès"
+    else
+      flash[:error] = "Une erreur est survenue"
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def import
     school_period = SchoolPeriod.find(params[:school_period_id])
     authorize([:managers, @school_period], policy_class: Managers::StudentPolicy)
@@ -84,12 +101,33 @@ class Managers::StudentsController < ApplicationController
   private
 
   def student_params
-    params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender)
+    params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address)
   end
 
   def student_params_upload(row)
-    row = row.transform_keys { |key| key == 'prénom' ? 'first_name' : key == 'nom' ? 'last_name' : key == 'date-naissance' ? 'date_of_birth' : key == 'genre' ? 'gender' : key}
-    ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender)
+    row = row.transform_keys do |key|
+      case key
+      when 'prénom'
+        'first_name'
+      when 'nom'
+        'last_name'
+      when 'date-naissance'
+        'date_of_birth'
+      when 'genre'
+        'gender'
+      when 'tel'
+        'phone_number'
+      when 'ville'
+        'city'
+      when 'cp'
+        'zipcode'
+      when 'adresse'
+        'address'
+      else
+        key
+      end
+    end
+    ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address)
   end
 
 end

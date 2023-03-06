@@ -7,7 +7,7 @@ export default class extends Controller {
 
   connect() {
 
-    console.log("zozo");
+    console.log("titi");
     $('#myTable').DataTable({
       searchable: true,
       ordering: true,
@@ -57,47 +57,48 @@ export default class extends Controller {
       },
     });
 
-    const datanames = ['academie', 'nom', 'prenom', 'genre', 'datenaissance'];
-    const selects = {};
-    const selectValues = {};
+    // const datanames = ['academie', 'nom', 'prenom', 'genre', 'datenaissance'];
+    // const selects = {};
+    // const selectValues = {};
 
-    datanames.forEach(function(name) {
-      const query = `[data-name="${name}"] select`;
-      selects[name] = document.querySelector(query);
-      selectValues[name] = '';
-    });
+    // datanames.forEach(function(name) {
+    //   const query = `[data-name="${name}"] select`;
+    //   selects[name] = document.querySelector(query);
+    //   selectValues[name] = '';
+    // });
 
-    const dataArrays = {};
-    for (let i = 0; i < datanames.length; i++) {
-      const dataArray = $('#myTable').DataTable().column(i).data().toArray();
-      dataArrays[datanames[i]] = dataArray;
-    }
+    // const dataArrays = {};
+    // for (let i = 0; i < datanames.length; i++) {
+    //   const dataArray = $('#myTable').DataTable().column(i).data().toArray();
+    //   dataArrays[datanames[i]] = dataArray;
+    // }
 
-    Object.values(selects).forEach(function(select) {
-      select.addEventListener('change', function() {
-        const selectedOptionValue = $(this).val()
-        const columnName = select.parentElement.dataset.name;
-        const columnIndex = datanames.indexOf(columnName);
+    // Object.values(selects).forEach(function(select) {
+    //   select.addEventListener('change', function() {
+    //     const selectedOptionValue = $(this).val()
+    //     const columnName = select.parentElement.dataset.name;
+    //     const columnIndex = datanames.indexOf(columnName);
 
-        selectValues[columnName] = selectedOptionValue;
-        console.log(Object.values(selectValues));
+    //     selectValues[columnName] = selectedOptionValue;
+    //     console.log(Object.values(selectValues));
 
-        Object.keys(dataArrays).forEach(function(columnName) {
-          const filteredValues = dataArrays[columnName].filter(function(value, index, self) {
-            const correspondingSelectValue = dataArrays[datanames[columnIndex]][index];
-            const selectedValues = Object.values(selectValues);
-            const valueIsSelected = selectedValues.includes(correspondingSelectValue);
-            return valueIsSelected && self.indexOf(value) === index;
-          });
+    //     Object.keys(dataArrays).forEach(function(columnName) {
+    //       const filteredValues = dataArrays[columnName].filter(function(value, index, self) {
+    //         const correspondingSelectValue = dataArrays[datanames[columnIndex]][index];
+    //         const selectedValues = Object.values(selectValues);
+    //         const valueIsSelected = selectedValues.includes(correspondingSelectValue);
+    //         return valueIsSelected && self.indexOf(value) === index;
+    //       });
 
-          const select = selects[columnName];
-          select.innerHTML = '';
-          select.innerHTML += `<option value=""></option>`;
-          filteredValues.forEach(function(value) {
-            select.innerHTML += `<option value="${value}">${value}</option>`;
-          });
-        });
-      });
-    });
+    //       const select = selects[columnName];
+    //       if (select === this) return;
+    //       select.innerHTML = '';
+    //       select.innerHTML += `<option value=""></option>`;
+    //       filteredValues.forEach(function(value) {
+    //         select.innerHTML += `<option value="${value}">${value}</option>`;
+    //       });
+    //     });
+    //   });
+    // });
   }
 }

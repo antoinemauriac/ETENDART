@@ -2,21 +2,25 @@
   <table id="myTable" class="table table-striped table-bordered">
     <thead>
       <tr>
-        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="academie">Academie</th>
         <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="nom">Nom</th>
         <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="prenom">Prénom</th>
         <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="genre">Genre</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="email">Email</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="phone">Téléphone</th>
         <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="datenaissance">Date de naissance</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="city">Ville</th>
       </tr>
     </thead>
     <tbody>
       <% @students.each do |student| %>
         <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
-          <td><%= student.academies.first.name %></td>
           <td><%= student.last_name %></td>
           <td><%= student.first_name %></td>
           <td><%= student.gender %></td>
+          <td><%= student.email %></td>
+          <td><%= "+33#{student.phone_number}" %></td>
           <td><%= student.date_of_birth %></td>
+          <td><%= student.city %></td>
         </tr>
       <% end %>
     </tbody>

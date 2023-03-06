@@ -14,7 +14,8 @@ class Managers::CampsController < ApplicationController
       redirect_to managers_school_period_path(@camp.school_period)
       flash[:notice] = "Camp créé"
     else
-      render :new, status: :unprocessable_entity
+      redirect_to managers_school_period_path(@camp.school_period)
+      flash[:alert] = "Une erreur est survenue"
     end
   end
 

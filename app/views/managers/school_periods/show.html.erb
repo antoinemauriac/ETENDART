@@ -22,9 +22,10 @@
   <% end %>
 </div>
 
-
-<%= form_with(url: managers_students_import_path, method: :post) do |form| %>
-  <%= form.hidden_field :school_period_id, value: @school_period.id %>
-  <%= form.file_field :csv_file, accept: '.csv' %>
-  <%= form.submit 'Importer' %>
-<% end %>
+<div data-controller="import-csv">
+  <%= form_with(url: managers_students_import_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+    <%= form.hidden_field :school_period_id, value: @school_period.id %>
+    <%= form.file_field :csv_file, accept: '.csv', data: { import_csv_target: "csvFileInput" } %>
+    <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton" } %>
+  <% end %>
+</div>
