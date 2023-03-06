@@ -1,11 +1,11 @@
 <%= render "shared/academy_header" %>
 <div class="container">
   <%= link_to 'Ajouter un coach', new_managers_coach_path, class: 'btn btn-primary' %>
-  <table class="table">
+  <table class="table table-striped table-responsive">
     <thead>
       <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Nom</th>
+        <th>Prénom</th>
         <th>Email</th>
         <th>Categorie 1</th>
         <th>Categorie 2</th>
@@ -15,9 +15,9 @@
     </thead>
     <tbody>
       <% @coaches.each do |coach| %>
-        <tr>
-          <td><%= link_to coach.first_name, managers_coach_path(coach) %></td>
+        <tr class="clickable-tr" onclick="window.location.href='<%= managers_coach_path(coach) %>'">
           <td><%= coach.last_name %></td>
+          <td><%= coach.first_name %></td>
           <td><%= coach.email %></td>
           <td><%= coach.categories[0].name %></td>
           <td><%= coach.categories[1].name if coach.categories[1] %></td>

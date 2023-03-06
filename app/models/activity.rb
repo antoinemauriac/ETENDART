@@ -16,6 +16,8 @@ class Activity < ApplicationRecord
   has_many :courses, dependent: :destroy
   accepts_nested_attributes_for :courses
 
+  belongs_to :location
+
   validates :name, presence: true
   validates :category_id, presence: true
   validates :coach_id, presence: true

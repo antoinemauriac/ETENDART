@@ -25,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }) do |form| %>
+      <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }, data: { turbo: false }) do |form| %>
         <% @enrollments.each do |enrollment| %>
           <tr>
             <td><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student) %></td>

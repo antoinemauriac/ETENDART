@@ -2,10 +2,10 @@ class Managers::SchoolPeriodsController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy_id])
-    @school_periods = @academy.school_periods
+    @school_periods = @academy.school_periods.sort_by(&:year)
     @school_period = SchoolPeriod.new
     skip_policy_scope
-    authorize([:managers, @school_periods])
+    authorize([:managers, @school_periods], policy_class: Managers::SchoolPeriodPolicy)
   end
 
   def create
@@ -24,6 +24,15 @@ class Managers::SchoolPeriodsController < ApplicationController
     @school_period = SchoolPeriod.find(params[:format])
     authorize([:managers, @school_period])
     @camp = Camp.new
+  end
+
+  def destroy
+    @school_period = SchoolPeriod.find(params[:id])
+    @academy = @school_period.academy
+    authorize([:managers, @school_period])
+    @school_period.destroy
+    redirect_to managers_academy_school_periods_path(@academy)
+    flash[:notice] = "Période scolaire supprimée"
   end
 
 

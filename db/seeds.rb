@@ -68,10 +68,11 @@ coach3.academies_as_coach << rudy
 coach3.categories << categories.sample
 
 
-location1 = Location.create!(address: '1 rue de la paix Clichy', academy: djoko)
-location2 = Location.create!(address: '2 rue de la paix Clichy', academy: djoko)
-location3 = Location.create!(address: '3 rue de la paix Levallois', academy: rudy)
-location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rudy)
+location1 = Location.create!(address: '1 rue de la paix Clichy', academy: djoko, name: 'Clichy1')
+location2 = Location.create!(address: '2 rue de la paix Clichy', academy: djoko, name: 'Clichy2')
+location3 = Location.create!(address: '3 rue de la paix Levallois', academy: rudy, name: 'Levallois1')
+location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rudy, name: 'Levallois2')
+locations = [location1, location2, location3, location4]
 
 
 djoko_avril_23 = SchoolPeriod.create!(name: 'djoko_avril_23', year: 2023, academy: djoko)
@@ -100,7 +101,8 @@ weeks.each do |week|
                      days: jours,
                      coach: coach,
                      camp: week,
-                     category: categories.sample)
+                     category: categories.sample,
+                     location: locations.sample)
 
     coach.camps << week unless coach.camps.include?(week)
     starts_at = week.starts_at

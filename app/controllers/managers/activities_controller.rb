@@ -3,6 +3,7 @@ class Managers::ActivitiesController < ApplicationController
 
   def new
     @activity = Activity.new
+    @locations = camp.school_period.academy.locations
     authorize([:managers, Activity.new])
   end
 
@@ -69,7 +70,7 @@ class Managers::ActivitiesController < ApplicationController
   private
 
   def activity_params
-    params.require(:activity).permit(:name, :category_id, :coach_id)
+    params.require(:activity).permit(:name, :category_id, :coach_id, :location_id)
   end
 
   def camp

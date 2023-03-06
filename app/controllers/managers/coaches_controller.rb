@@ -22,6 +22,7 @@ class Managers::CoachesController < ApplicationController
 
   def create
     @coach = User.new(coach_params)
+    @academy = Academy.find(params[:user][:academy_1_id])
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @coach.password = Devise.friendly_token[0, 8]
     if @coach.save
@@ -65,7 +66,7 @@ class Managers::CoachesController < ApplicationController
     @coach.categories << Category.find(params[:user][:category_1_id])
     @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
     flash[:notice] = "Coach mis à jour."
-    redirect_to managers_coaches_path
+    redirect_to managers_coach_path(@coach)
   end
 
   def change_password

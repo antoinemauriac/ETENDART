@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_05_132600) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_06_141738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,9 +41,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_05_132600) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "days"
+    t.bigint "location_id"
     t.index ["camp_id"], name: "index_activities_on_camp_id"
     t.index ["category_id"], name: "index_activities_on_category_id"
     t.index ["coach_id"], name: "index_activities_on_coach_id"
+    t.index ["location_id"], name: "index_activities_on_location_id"
   end
 
   create_table "activity_enrollments", force: :cascade do |t|
@@ -236,6 +238,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_05_132600) do
   add_foreign_key "academy_enrollments", "students"
   add_foreign_key "activities", "camps"
   add_foreign_key "activities", "categories"
+  add_foreign_key "activities", "locations"
   add_foreign_key "activities", "users", column: "coach_id"
   add_foreign_key "activity_enrollments", "activities"
   add_foreign_key "activity_enrollments", "students"

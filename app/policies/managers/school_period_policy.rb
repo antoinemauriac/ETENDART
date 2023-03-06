@@ -11,6 +11,10 @@ class Managers::SchoolPeriodPolicy < ApplicationPolicy
     user.manager? && record.academy.manager == user
   end
 
+  def destroy?
+    user.manager? && record.academy.manager == user
+  end
+
   class Scope < Scope
     def resolve
       # scope.where(manager_id: user.id)
