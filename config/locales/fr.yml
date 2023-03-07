@@ -8,7 +8,7 @@ fr:
       default: "%d/%m/%Y"
       short: "%d %b"
       long: "%A %e %B %Y"
-      date: "%d/%m/%Y à %Hh%M"
+      date: "%d/%m/%Y"
     day_names: [Dimanche, Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi]
     abbr_day_names: [dim, lun, mar, mer, jeu, ven, sam]
     month_names: [~, janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre]

@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="hidden-forms"
 export default class extends Controller {
   connect() {
-    console.log("ziou")
+    console.log("zidane")
 
     // School Period Form
     const addSchoolPeriodBtn = document.getElementById("add-school-period-btn");

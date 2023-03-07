@@ -7,6 +7,10 @@ class Managers::CampPolicy < ApplicationPolicy
     user.manager? && record.school_period.academy.manager == user
   end
 
+  def destroy?
+    user.manager? && record.school_period.academy.manager == user
+  end
+
   class Scope < Scope
     def resolve
 

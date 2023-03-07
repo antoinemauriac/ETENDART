@@ -1,6 +1,7 @@
 class Managers::CampsController < ApplicationController
   def show
     @camp = Camp.find(params[:id])
+    @academy = @camp.school_period.academy
     authorize([:managers, @camp])
     @activities = @camp.activities
     @activity = Activity.new
@@ -17,6 +18,14 @@ class Managers::CampsController < ApplicationController
       redirect_to managers_school_period_path(@camp.school_period)
       flash[:alert] = "Une erreur est survenue"
     end
+  end
+
+  def destroy
+    @camp = Camp.find(params[:id])
+    authorize([:managers, @camp])
+    @camp.destroy
+    redirect_to managers_school_period_path(@camp.school_period)
+    flash[:notice] = "Semaine supprimée"
   end
 
   def camp_params

@@ -1,7 +1,21 @@
 .btn-etendart {
-  padding: 12px;
-  border-radius: 32px;
-  background-color: white;
-  border: 2px solid #FFC107;
+  padding: 8px;
+  border-radius: 12px;
+  background-color: $yellow;
   color: black;
+  border: none;
+  min-width: 160px;
+  font-size: 16px;
+}
+
+.btn {
+  margin: 4px 0px;
+}
+
+.btn-day {
+  background-color: $yellow;
+  color: black;
+  width: 220px;
+  text-align: center;
+  border: none;
 }

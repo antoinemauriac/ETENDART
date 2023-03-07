@@ -4,4 +4,8 @@ class SchoolPeriod < ApplicationRecord
 
   has_many :school_period_enrollments, dependent: :destroy
   has_many :students, through: :school_period_enrollments
+
+  def students
+    school_period_enrollments.map(&:student)
+  end
 end

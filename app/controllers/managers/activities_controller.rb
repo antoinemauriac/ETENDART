@@ -3,12 +3,17 @@ class Managers::ActivitiesController < ApplicationController
 
   def new
     @activity = Activity.new
-    @locations = camp.school_period.academy.locations
+    @school_period = camp.school_period
+    @academy = @school_period.academy
+    @locations = @academy.locations
     authorize([:managers, Activity.new])
   end
 
   def create
     @activity = camp.activities.build(activity_params)
+    @academy = camp.academy
+    @locations = @academy.locations
+    @school_period = camp.school_period
     authorize([:managers, @activity])
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
     coach = User.find(params[:activity][:coach_id])
@@ -55,6 +60,9 @@ class Managers::ActivitiesController < ApplicationController
 
   def show
     @activity = Activity.find(params[:id])
+    @academy = @activity.academy
+    @camp = @activity.camp
+    @school_period = @camp.school_period
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
   end

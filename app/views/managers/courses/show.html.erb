@@ -1,45 +1,40 @@
-<div class="card mb-3">
-  <div class="card-body">
-    <p class="card-text">Academie : <%= @course.academy.name %></p>
-    <p class="card-text">Période : <%= @course.school_period.name.upcase %></p>
-    <p class="card-text">Stage : <%= @course.camp.name %></p>
-    <p class="card-text">Cours : <%= @course.activity.name %></p>
-    <p class="card-text">Date : <%= l(@course.starts_at, format: :default) %></p>
-
-  </div>
-  <div class="card-footer text-center">
-    <%= link_to "Modifier", edit_managers_course_path(@course), class: "btn btn-primary" %>
-    <%= link_to 'Supprimer', managers_course_path(@course), data: {turbo_method: :delete, turbo_confirm: 'Êtes vous '}, class: "btn btn-primary"  %>
-    <%= link_to "Retour", managers_activity_path(@course.activity), class: "btn btn-primary" %>
-  </div>
-</div>
+<%= render "shared/academy_header" %>
+<div class="yellow-title">FEUILLE D'APPEL</div>
 
 <div class="container">
-  <h1>Feuille de présence</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nom-Prénom</th>
-        <th>Présent</th>
-        <th>Absent</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }, data: { turbo: false }) do |form| %>
-        <% @enrollments.each do |enrollment| %>
-          <tr>
-            <td><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student) %></td>
-            <td>
-              <div class="form-switch form-switch-lg">
-                <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
-                <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
-              </div>
-            </td>
-            <td><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
-          </tr>
-        <% end %>
-    </tbody>
-  </table>
-  <%= form.submit "Valider", class: "btn btn-primary mt-3" %>
-  <% end %>
+    <p><%= @course.academy.name %> > <%= @course.school_period.name.upcase %> > <%= @course.camp.name.upcase %> > <%= @course.activity.name %> - <%= l(@course.starts_at, format: :default) %></p>
+    <p>Status : ???????</p>
+</div>
+
+<div class="container flexy" data-controller="presence-sheet">
+  <div class="form-container">
+    <table class="table table-striped table-responsive">
+      <thead>
+        <tr>
+          <th>Nom-Prénom</th>
+          <th></th>
+          <th>Absent ?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { turbo: false }) do |form| %>
+          <% @enrollments.each do |enrollment| %>
+            <tr>
+              <td><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", managers_student_path(enrollment.student), class: "student-mr" %></td>
+              <td>
+                <div class="form-switch form-switch-lg">
+                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
+                  <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
+                </div>
+              </td>
+              <td><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
+            </tr>
+          <% end %>
+      </tbody>
+    </table>
+    <div class="flexy">
+      <%= form.submit "Valider", class: "btn btn-primary mt-3" %>
+    </div>
+    <% end %>
+  </div>
 </div>

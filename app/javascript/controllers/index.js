@@ -10,6 +10,9 @@ application.register("activity-form", ActivityFormController)
 import AddressAutocompleteController from "./address_autocomplete_controller"
 application.register("address-autocomplete", AddressAutocompleteController)
 
+import ClickableTableController from "./clickable_table_controller"
+application.register("clickable-table", ClickableTableController)
+
 import EnrollmentFormController from "./enrollment_form_controller"
 application.register("enrollment-form", EnrollmentFormController)
 

@@ -14,6 +14,11 @@ class Course < ApplicationRecord
 
   scope :upcoming, ->(time_window) { where('ends_at >= ?', Time.current.in_time_zone('Paris') - time_window) }
 
+
+  def student_presence(student)
+    course_enrollments.find_by(student: student).present
+  end
+
   private
 
   def starts_at_before_ends_at
@@ -21,6 +26,5 @@ class Course < ApplicationRecord
       errors.add(:starts_at, "L'heure de début doit être avant l'heure de fin")
     end
   end
-
 
 end

@@ -41,6 +41,7 @@
     end
 
     resources :students, only: %i[show new create edit update]
+    resources :activity_enrollments, only: %i[destroy]
     resources :activities, only: %i[show destroy]
     resources :school_periods, only: %i[show destroy] do
       resources :camps, only: %i[new create]
@@ -57,7 +58,7 @@
       resources :coaches, only: %i[index]
     end
 
-    resources :camps, only: %i[show] do
+    resources :camps, only: %i[show destroy] do
       resources :activities, only: %i[new create]
     end
   end

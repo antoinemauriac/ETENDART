@@ -53,10 +53,10 @@ class Managers::StudentsController < ApplicationController
   end
 
   def import
-    school_period = SchoolPeriod.find(params[:school_period_id])
+    school_period = SchoolPeriod.find(params[:school_period][:school_period_id])
     authorize([:managers, @school_period], policy_class: Managers::StudentPolicy)
     academy = school_period.academy
-    file = params[:csv_file]
+    file = params[:school_period][:csv_file]
     file = File.open(file)
     csv = CSV.parse(file, headers: true, col_sep: ';')
 

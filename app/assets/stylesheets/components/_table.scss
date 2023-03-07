@@ -3,6 +3,22 @@
 }
 
 .clickable-tr:hover {
-  background-color: #FCDA4B;
+  background-color: $yellow;
   cursor: pointer;
+}
+
+.table-center {
+  text-align: center;
+}
+
+.course_starts_at {
+  margin-bottom: 0 !important;
+}
+.course_ends_at {
+  margin-bottom: 0 !important;
+}
+
+.student-mr {
+  margin-right: 48px;
+  color: black;
 }

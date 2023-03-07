@@ -17,21 +17,37 @@ class Student < ApplicationRecord
   has_many :feedbacks
 
 
+  def courses_sorted
+    courses.order(starts_at: :asc)
+  end
+
+  def past_courses
+    courses.where('ends_at < ?', Time.now + 1.hour).order(starts_at: :asc)
+  end
+
+  def unattended_courses
+    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.now + 1.hour)
+  end
+
+  def next_courses
+    courses.where('starts_at > ?', Time.now + 1.hour).order(starts_at: :asc)
+  end
+
   def courses_count
     courses.count
   end
 
   def past_courses_count
-    courses.where('ends_at < ?', Time.now).count
+    courses.where('ends_at < ?', Time.now + 1.hour).count
   end
 
   def unattended_courses_count
-    courses.where('ends_at < ? AND present = ?', Time.now, false).count
+    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.now + 1.hour).count
   end
 
   def unattended_rate
-    if past_courses_count > 0
-      ((unattended_courses_count.to_f / past_courses_count.to_f * 100).round).to_i
+    if past_courses_count.positive?
+      (unattended_courses_count.to_f / past_courses_count * 100).round(2)
     else
       0
     end
@@ -43,6 +59,20 @@ class Student < ApplicationRecord
 
   def camps_count
     camps.count
+  end
+
+  def student_activities(camp)
+    activities.where(camp: camp)
+  end
+
+  def age
+    if date_of_birth
+    now = Time.now.utc.to_date
+    birthdate = date_of_birth.to_date
+    age = now.year - birthdate.year
+    age -= 1 if birthdate.strftime("%m%d").to_i > now.strftime("%m%d").to_i
+    age
+    end
   end
 
   def next_activities

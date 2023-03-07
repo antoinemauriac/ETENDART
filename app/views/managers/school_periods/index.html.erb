@@ -1,23 +1,25 @@
 <%= render "shared/academy_header" %>
-<div class="yellow-title">Les stages</div>
-<div class="container">
+<div class="yellow-title">LES STAGES</div>
+<div class="container" data-controller="clickable-table">
   <table class="table table-striped table-responsive">
     <thead>
       <tr>
         <th>Académie</th>
         <th>Stage</th>
         <th>Année</th>
+        <th>Élèves inscrits</th>
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
       <% @school_periods.each do |period| %>
-      <tr class="clickable-tr" data-url="<%= managers_school_period_path(@academy, period) %>">
+      <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_school_period_path(@academy, period) %>">
         <td><%= period.academy.name %></td>
         <td><%= period.name %></td>
         <td><%= period.year %></td>
+        <td></td>
         <td>
-          <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette période scolaire ?" } do %>
+          <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce stage ?" } do %>
             <i class="fas fa-trash"></i>
           <% end %>
         </td>
@@ -26,29 +28,17 @@
     </tbody>
   </table>
 
-
-  <button class="btn btn-primary" id="add-school-period-btn">Ajouter une période scolaire</button>
-  <div data-controller="hidden-forms">
-    <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form", id: "school-period-form") do |form| %>
-      <%= form.label :name, "Nom :" %>
-      <%= form.text_field :name, { class: "form-control", required: true } %>
-      <%= form.label :year, "Année :" %>
-      <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
-      <%= form.submit "Valider", class: "btn btn-primary" %>
-      <button class="btn btn-secondary" id="cancel-school-period-btn" type="button">Annuler</button>
-    <% end %>
+  <div class="flexy">
+    <button class="btn btn-primary" id="add-school-period-btn">Ajouter un stage</button>
+    <div data-controller="hidden-forms">
+      <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form form-container", id: "school-period-form") do |form| %>
+        <%= form.label :name, "Nom :" %>
+        <%= form.text_field :name, { class: "form-control", required: true } %>
+        <%= form.label :year, "Année :" %>
+        <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
+        <%= form.submit "Valider", class: "btn btn-primary" %>
+        <button class="btn btn-secondary" id="cancel-school-period-btn" type="button">Annuler</button>
+      <% end %>
+    </div>
   </div>
 </div>
-
-<script>
-document.querySelectorAll('.clickable-tr').forEach((row) => {
-  row.addEventListener('click', (event) => {
-    const target = event.target;
-    console.log(target);
-    if (target.classList.contains('fa-trash')) {
-      return; // Ajout du return ici pour empêcher l'exécution du reste de la fonction
-    }
-    window.location.href = row.getAttribute('data-url');
-  });
-});
-</script>

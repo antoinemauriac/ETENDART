@@ -1,60 +1,120 @@
-  <div>
-    <p><%= "Nom : #{@student.last_name}" %></p>
-    <p><%= "Prénom : #{@student.first_name}" %></p>
-    <p><%= "Genre : #{@student.gender}" %></p>
-    <p><%= "Email : #{@student.email}" %></p>
-    <p><%= "Tel : +33#{@student.phone_number}" %></p>
-    <p><%= "Adresse : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
-    <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn btn-primary" %>
+<div class="student-title"><%= @student.last_name %> - <%= @student.first_name %></div>
+<div class="row mt-3 justify-content-center align-items-stretch">
+  <div class="col-lg-4 col-sm-12 mt-3">
+    <div class="header-info">Informations</div>
+    <div class="content-info">
+      <p><%= "Nom : #{@student.last_name}" %></p>
+      <p><%= "Prénom : #{@student.first_name}" %></p>
+      <p><%= "#{@student.gender}" %></p>
+      <p><%= "Email : #{@student.email}" %></p>
+      <p><%= "Tel : 0#{@student.phone_number}" %></p>
+      <p><%= "Adresse : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
+      <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn btn-primary" %>
+    </div>
   </div>
 
-  <div>
-    <p><%= "Nombre total de stages : #{@student.camps_count}" %></p>
-    <p><%= "Nombre de cours passés: #{@student.past_courses_count}" %></p>
-    <p><%= "Nombre total d'absences : #{@student.unattended_courses_count}" %></p>
-    <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
-  </div>
-
-    <!-- Button trigger modal -->
-  <div data-controller="enrollment-form">
-    <button type="button" class="btn btn-primary" data-action="click->enrollment-form#openModal">
-      Inscrire à une activité
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
-            <i class="fas fa-times" data-action="click->enrollment-form#closeModal" style="cursor: pointer;"></i>
-          </div>
-          <div class="modal-body">
-            <%= form_with url: managers_enrollments_path, local: true do |form| %>
-              <div class="form-group">
-                <%= form.hidden_field :student_id, value: @student.id %>
-
-                <%= form.label :academy, "Académie" %>
-                <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'academy', action: "change->enrollment-form#updateSchoolPeriods" } } %>
-
-                <%= form.label :school_period, "Période" %>
-                <%= form.collection_select :school_period, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'schoolPeriod', action: "change->enrollment-form#updateCamps" } } %>
-
-                <%= form.label :camp, "Stage" %>
-                <%= form.collection_select :camp, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'camp', action: "change->enrollment-form#updateActivities" } } %>
-
-                <%= form.label :activity, "Activité" %>
-                <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
+  <div class="col-lg-4 col-sm-12 mt-3">
+    <div class="header-info">Historique</div>
+    <div class="content-info">
+      <div>
+        <p><%= "Nombre total de stages : #{@student.camps_count}" %></p>
+        <p><%= "Nombre de cours passés: #{@student.past_courses_count}" %></p>
+        <p><%= "Nombre total d'absences : #{@student.unattended_courses_count}" %></p>
+        <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
+      </div>
+      <div data-controller="enrollment-form">
+        <button type="button" class="btn btn-primary" data-action="click->enrollment-form#openModal" style="width:100%">
+          Inscrire à une activité
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
+                <i class="fas fa-times" data-action="click->enrollment-form#closeModal" style="cursor: pointer;"></i>
               </div>
-          </div>
-          <div class="modal-footer">
-            <div class="form-group">
-              <%= form.submit "Valider", class: "btn btn-primary" %>
-              <button class="btn btn-secondary" type="button" data-action="click->enrollment-form#closeModal">Annuler</button>
-            <% end %>
+              <div class="modal-body">
+                <%= form_with url: managers_enrollments_path, local: true do |form| %>
+                  <div class="form-group">
+                    <%= form.hidden_field :student_id, value: @student.id %>
+
+                    <%= form.label :academy, "Académie" %>
+                    <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'academy', action: "change->enrollment-form#updateSchoolPeriods" } } %>
+
+                    <%= form.label :school_period, "Période" %>
+                    <%= form.collection_select :school_period, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'schoolPeriod', action: "change->enrollment-form#updateCamps" } } %>
+
+                    <%= form.label :camp, "Stage" %>
+                    <%= form.collection_select :camp, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'camp', action: "change->enrollment-form#updateActivities" } } %>
+
+                    <%= form.label :activity, "Activité" %>
+                    <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <div class="form-group">
+                  <%= form.submit "Valider", class: "btn btn-primary" %>
+                  <button class="btn btn-secondary" type="button" data-action="click->enrollment-form#closeModal">Annuler</button>
+                <% end %>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="col-12 mt-3">
+    <div class="header-info">Cours à venir</div>
+    <div class="content-info">
+      <table class="table table-responsive table-center">
+        <thead>
+          <tr>
+            <th>Academie</th>
+            <th>Stage</th>
+            <th>Activité</th>
+            <th>Jour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @student.next_courses.each do |course| %>
+            <tr>
+              <td class="align-middle"><%= course.academy.name %></td>
+              <td class="align-middle"><%= course.school_period.name %></td>
+              <td class="align-middle"><%= course.activity.name %></td>
+              <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-12 mt-3">
+    <div class="header-info">Cours passés</div>
+    <div class="content-info">
+      <table class="table table-responsive table-center">
+        <thead>
+          <tr>
+            <th>Academie</th>
+            <th>Stage</th>
+            <th>Activité</th>
+            <th>Jour</th>
+            <th>Présent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @student.past_courses.each do |course| %>
+            <tr style="<%= course.student_presence(@student) ? '' : 'background-color: orange !important;' %>">
+              <td class="align-middle"><%= course.academy.name %></td>
+              <td class="align-middle"><%= course.school_period.name %></td>
+              <td class="align-middle"><%= course.activity.name %></td>
+              <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
+              <td class="align-middle"><%= course.student_presence(@student) ? 'présent' : 'absent' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
