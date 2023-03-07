@@ -1,12 +1,13 @@
 <%= render "shared/academy_header" %>
 <div class="yellow-title">Les stages</div>
-<div class="container">
+<div class="container" data-controller="clickable-table">
   <table class="table table-striped table-responsive">
     <thead>
       <tr>
         <th>Académie</th>
         <th>Stage</th>
         <th>Année</th>
+        <th>Élèves inscrits</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -16,6 +17,7 @@
         <td><%= period.academy.name %></td>
         <td><%= period.name %></td>
         <td><%= period.year %></td>
+        <td></td>
         <td>
           <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette période scolaire ?" } do %>
             <i class="fas fa-trash"></i>
@@ -39,16 +41,3 @@
     <% end %>
   </div>
 </div>
-
-<script>
-document.querySelectorAll('.clickable-tr').forEach((row) => {
-  row.addEventListener('click', (event) => {
-    const target = event.target;
-    console.log(target);
-    if (target.classList.contains('fa-trash')) {
-      return; // Ajout du return ici pour empêcher l'exécution du reste de la fonction
-    }
-    window.location.href = row.getAttribute('data-url');
-  });
-});
-</script>

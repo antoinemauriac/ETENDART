@@ -22,6 +22,7 @@ class Managers::SchoolPeriodsController < ApplicationController
 
   def show
     @school_period = SchoolPeriod.find(params[:format])
+    @academy = @school_period.academy
     authorize([:managers, @school_period])
     @camp = Camp.new
   end

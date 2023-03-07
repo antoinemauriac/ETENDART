@@ -19,6 +19,14 @@ class Managers::CampsController < ApplicationController
     end
   end
 
+  def destroy
+    @camp = Camp.find(params[:id])
+    authorize([:managers, @camp])
+    @camp.destroy
+    redirect_to managers_school_period_path(@camp.school_period)
+    flash[:notice] = "Semaine supprimée"
+  end
+
   def camp_params
     params.require(:camp).permit(:name, :starts_at, :ends_at)
   end

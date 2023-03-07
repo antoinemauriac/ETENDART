@@ -57,7 +57,7 @@
       resources :coaches, only: %i[index]
     end
 
-    resources :camps, only: %i[show] do
+    resources :camps, only: %i[show destroy] do
       resources :activities, only: %i[new create]
     end
   end
