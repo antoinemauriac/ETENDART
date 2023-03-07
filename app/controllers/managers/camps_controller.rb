@@ -1,6 +1,7 @@
 class Managers::CampsController < ApplicationController
   def show
     @camp = Camp.find(params[:id])
+    @academy = @camp.school_period.academy
     authorize([:managers, @camp])
     @activities = @camp.activities
     @activity = Activity.new

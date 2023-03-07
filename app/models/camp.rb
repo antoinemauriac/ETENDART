@@ -21,6 +21,12 @@ class Camp < ApplicationRecord
     students.count
   end
 
+  def students_with_activity_enrollment
+    students.joins(:activity_enrollments)
+            .where(activity_enrollments: { activity_id: activities })
+            .distinct
+  end
+
   private
 
   def starts_at_must_be_before_ends_at

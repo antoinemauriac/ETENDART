@@ -1,46 +1,55 @@
-<%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post, data: { controller: 'activity-form' } do |f| %>
-  <%= f.input :name, label: "Nom" %>
-  <%= f.input :category_id, as: :select, collection: Category.all, label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", action: 'change->activity-form#onCategoryChange' } } %>
-  <%= f.input :coach_id, as: :select, collection: User.all, label_method: ->(user) { "#{user.first_name} #{user.last_name}" }, value_method: :id, input_html: { data: { activity_form_target: "coach"} } %>
-  <%= f.input :location_id, as: :select, collection: @locations, input_html: { include_blank: true } %>
+<%= render "shared/academy_header" %>
+<div class="yellow-title"><%= @school_period.name.upcase %> - <%= @camp.name.upcase %></div>
+<div class="black-title">Ajouter une activité</div>
 
-  <ul>
-    <li>
-      <%= f.simple_fields_for :days do |day_form| %>
-        <div class="row align-items-center">
-          <div class="col-sm-2">
-            <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, "Monday".to_s %>
-            <%= day_form.label :day_of_week, "Monday".to_s %>
-          </div>
-          <div class="col-sm-2">
-           <%= day_form.time_field :start_time_Monday, value: Activity::DAYS[:Monday][:start_time], data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' }, class: "form-control" %>
-          </div>
-          <div class="col-sm-2">
-            <%= day_form.time_field :end_time_Monday, value: Activity::DAYS[:Monday][:end_time], data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "form-control" %>
-          </div>
-        </div>
-        <% end %>
-    </li>
+<div class="flexy">
+  <div class="container form-container">
+    <%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post, data: { controller: 'activity-form' } do |f| %>
+      <%= f.input :name, label: "Nom" %>
+      <%= f.input :category_id, as: :select, collection: Category.all, label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", action: 'change->activity-form#onCategoryChange' } } %>
+      <%= f.input :coach_id, as: :select, collection: User.all, label_method: ->(user) { "#{user.first_name} #{user.last_name}" }, value_method: :id, input_html: { data: { activity_form_target: "coach"} } %>
+      <%= f.input :location_id, as: :select, collection: @locations,  label: "Adresse", required: true %>
 
-    <% Activity::DAYS.except(:Monday).each do |day, times| %>
-      <li>
-        <%= f.simple_fields_for :days do |day_form| %>
-          <div class="row align-items-center">
-            <div class="col-sm-2">
-              <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, day.to_s %>
-              <%= day_form.label :day_of_week, day.to_s %>
+      <ul>
+        <li>
+          <%= f.simple_fields_for :days do |day_form| %>
+            <div class="row align-items-center">
+              <div class="col-4">
+                <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, "Monday".to_s %>
+                <%= day_form.label :day_of_week, "Monday".to_s %>
+              </div>
+              <div class="col-4">
+              <%= day_form.time_field :start_time_Monday, value: Activity::DAYS[:Monday][:start_time], data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' }, class: "form-control" %>
+              </div>
+              <div class="col-4">
+                <%= day_form.time_field :end_time_Monday, value: Activity::DAYS[:Monday][:end_time], data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "form-control" %>
+              </div>
             </div>
-            <div class="col-sm-2">
-              <%= day_form.time_field :"start_time_#{day}", value: times[:start_time], data: { activity_form_target: 'startTime' }, class: "form-control" %>
-            </div>
-            <div class="col-sm-2">
-              <%= day_form.time_field :"end_time_#{day}", value: times[:end_time], data: { activity_form_target: 'endTime' }, class: "form-control" %>
-            </div>
-          </div>
+            <% end %>
+        </li>
+
+        <% Activity::DAYS.except(:Monday).each do |day, times| %>
+          <li>
+            <%= f.simple_fields_for :days do |day_form| %>
+              <div class="row align-items-center">
+                <div class="col-4">
+                  <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, day.to_s %>
+                  <%= day_form.label :day_of_week, day.to_s %>
+                </div>
+                <div class="col-4">
+                  <%= day_form.time_field :"start_time_#{day}", value: times[:start_time], data: { activity_form_target: 'startTime' }, class: "form-control" %>
+                </div>
+                <div class="col-4">
+                  <%= day_form.time_field :"end_time_#{day}", value: times[:end_time], data: { activity_form_target: 'endTime' }, class: "form-control" %>
+                </div>
+              </div>
+            <% end %>
+          </li>
         <% end %>
-      </li>
+      </ul>
+      <div class="flexy">
+        <%= f.submit "Valider", class: "btn-etendart" %>
+      </div>
     <% end %>
-  </ul>
-
-  <%= f.submit "Save Activity", class: "btn btn-primary" %>
-<% end %>
+  </div>
+</div>

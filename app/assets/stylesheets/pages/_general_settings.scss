@@ -15,12 +15,24 @@ ul {
   padding: 0;
 }
 
+.row {
+  margin-left: 0!important;
+  margin-right: 0!important;
+}
+
 .flexy-wrap {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+.flexy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 // @media screen and (max-width: 599px) {

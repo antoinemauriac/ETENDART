@@ -9,6 +9,7 @@ class Managers::CoursesController < ApplicationController
 
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
+    @academy = course.activity.academy
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
   end
 

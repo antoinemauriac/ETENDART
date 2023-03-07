@@ -1,3 +1,13 @@
+
+.form-container {
+  max-width: 600px;
+  min-width: 300px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 20px;
+}
+
 .form-hour {
   width: 150px;
   margin-right: 5px;
@@ -16,12 +26,4 @@
 
 .field_with_errors {
   background-color: #ffcccc; /* couleur de fond en rouge */
-}
-
-.form-container {
-  max-width: 500px;
-  background-color: white;
-  padding: 20px;
-  border-radius: 20px;
-  margin: 20px;
 }

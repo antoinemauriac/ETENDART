@@ -31,4 +31,8 @@ class Activity < ApplicationRecord
     students.count
   end
 
+  def students
+    activity_enrollments.map(&:student)
+  end
+
 end
