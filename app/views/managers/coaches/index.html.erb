@@ -1,7 +1,7 @@
 <%= render "shared/academy_header" %>
-<div class="container">
-  <%= link_to 'Ajouter un coach', new_managers_coach_path, class: 'btn btn-primary' %>
-  <table class="table table-striped table-responsive">
+<div class="yellow-title">LES COACHS</div>
+<div class="container flexy">
+  <table class="table table-striped table-responsive table-center form-container">
     <thead>
       <tr>
         <th>Nom</th>
@@ -27,4 +27,5 @@
       <% end %>
     </tbody>
   </table>
+  <%= link_to 'Ajouter un coach', new_managers_coach_path, class: 'btn btn-primary' %>
 </div>

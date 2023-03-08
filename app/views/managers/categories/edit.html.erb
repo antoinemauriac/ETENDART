@@ -1,7 +1,14 @@
-<h3>Modifier le nom de l'activité</h3>
-<%= form_with(model: @category, url: managers_category_path, method: :put, id: "category-form") do |form| %>
-  <%= form.label :name, "Nom :" %>
-  <%= form.text_field :name, class: "form-control" %>
-  <%= form.submit "Valider", class: "btn btn-primary" %>
-  <%= link_to "Annuler", managers_categories_path, class: "btn btn-primary" %>
-<% end %>
+<%= render "shared/academy_header" %>
+<div class="yellow-title">Modifier le nom d'une catégorie</div>
+<div class="flexy">
+  <div class="form-container">
+    <%= form_with(model: @category, url: managers_category_path, method: :put, id: "category-form") do |form| %>
+      <%= form.label :name, "Nom :" %>
+      <%= form.text_field :name, class: "form-control" %>
+      <div class="flex-btn">
+        <%= form.submit "Valider", class: "btn btn-primary" %>
+        <%= link_to "Annuler", managers_categories_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

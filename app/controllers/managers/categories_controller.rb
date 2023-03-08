@@ -1,6 +1,7 @@
 class Managers::CategoriesController < ApplicationController
   def index
     @categories = Category.all
+    @academy = current_user.academies_as_manager.first
     skip_policy_scope
     authorize([:managers, @categories])
     @category = Category.new
@@ -19,6 +20,7 @@ class Managers::CategoriesController < ApplicationController
 
   def edit
     @category = Category.find(params[:id])
+    @academy = current_user.academies_as_manager.first
     authorize([:managers, @category])
   end
 

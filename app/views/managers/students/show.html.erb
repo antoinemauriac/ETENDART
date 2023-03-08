@@ -3,12 +3,12 @@
   <div class="col-lg-4 col-sm-12 mt-3">
     <div class="header-info">Informations</div>
     <div class="content-info">
-      <p><%= "Nom : #{@student.last_name}" %></p>
-      <p><%= "Prénom : #{@student.first_name}" %></p>
-      <p><%= "#{@student.gender}" %></p>
-      <p><%= "Email : #{@student.email}" %></p>
-      <p><%= "Tel : 0#{@student.phone_number}" %></p>
-      <p><%= "Adresse : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
+      <p><%= "NOM : #{@student.last_name}" %></p>
+      <p><%= "PRÉNOM : #{@student.first_name}" %></p>
+      <p><%= "#{@student.gender.upcase}" %> - <%= @student.age %> ans </p>
+      <p><%= "EMAIL: #{@student.email}" %></p>
+      <p><%= "TEL : 0#{@student.phone_number}" %></p>
+      <p><%= "ADRESSE : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
       <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn btn-primary" %>
     </div>
   </div>
@@ -17,9 +17,9 @@
     <div class="header-info">Historique</div>
     <div class="content-info">
       <div>
-        <p><%= "Nombre total de stages : #{@student.camps_count}" %></p>
-        <p><%= "Nombre de cours passés: #{@student.past_courses_count}" %></p>
-        <p><%= "Nombre total d'absences : #{@student.unattended_courses_count}" %></p>
+        <p><%= "Nombre de stages effectués : #{@student.camps_count}" %></p>
+        <p><%= "Nombre de cours passés : #{@student.past_courses_count}" %></p>
+        <p><%= "Nombre d'absences : #{@student.unattended_courses_count}" %></p>
         <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
       </div>
       <div data-controller="enrollment-form">
@@ -68,7 +68,7 @@
   <div class="col-12 mt-3">
     <div class="header-info">Cours à venir</div>
     <div class="content-info">
-      <table class="table table-responsive table-center">
+      <table class="table table-responsive table-striped table-center">
         <thead>
           <tr>
             <th>Academie</th>
@@ -93,7 +93,7 @@
   <div class="col-12 mt-3">
     <div class="header-info">Cours passés</div>
     <div class="content-info">
-      <table class="table table-responsive table-center">
+      <table class="table table-responsive table-striped table-center">
         <thead>
           <tr>
             <th>Academie</th>

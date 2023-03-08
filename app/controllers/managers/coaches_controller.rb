@@ -18,6 +18,7 @@ class Managers::CoachesController < ApplicationController
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @academies = Academy.all
     @categories = Category.all
+    @academy = current_user.academies_as_manager.first
   end
 
   def create

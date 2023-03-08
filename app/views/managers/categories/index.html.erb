@@ -1,34 +1,39 @@
-<h1>Les catégories d'activité</h1>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Nom de la catégorie</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @categories.each do |category| %>
+<%= render "shared/academy_header" %>
+<div class="yellow-title">Les catégories d'activité</div>
+<div class="container flexy">
+  <table class="table table-striped form-container table-center table-responsive">
+    <thead>
       <tr>
-        <td><%= category.name %></td>
-        <td>
-          <div class="btn-group" role="group" aria-label="Actions">
+        <th>Nom de la catégorie</th>
+        <th>Modifier</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @categories.each do |category| %>
+        <tr>
+          <td><%= category.name %></td>
+          <td>
             <%= link_to edit_managers_category_path(category), data: { turbolinks: false } do %>
               <i class="fas fa-edit"></i>
             <% end %>
-          </div>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
 
-<div data-controller="hidden-forms">
-  <button class="btn btn-primary" id="add-category-btn">Ajouter une categorie</button>
-  <%= form_with(model: @category, url: managers_categories_path, method: :post, class: "hidden-form", id: "category-form") do |form| %>
-    <%= form.label :name, "Nom :" %>
-    <%= form.text_field :name, class: "form-control" %>
-    <%= form.submit "Valider", class: "btn btn-primary" %>
-    <button class="btn btn-primary" id="cancel-category-btn" type="button">Annuler</button>
-  <% end %>
+  <div data-controller="hidden-forms">
+    <div class="flexy">
+      <button class="btn btn-primary" id="add-category-btn">Ajouter une categorie</button>
+      <%= form_with(model: @category, url: managers_categories_path, method: :post, class: "hidden-form form-container", id: "category-form") do |form| %>
+        <%= form.label :name, "Nom :" %>
+        <%= form.text_field :name, class: "form-control" %>
+        <div class="flex-btn">
+          <%= form.submit "Valider", class: "btn btn-primary" %>
+          <button class="btn btn-secondary" id="cancel-category-btn" type="button">Annuler</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

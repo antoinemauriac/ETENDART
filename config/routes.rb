@@ -53,7 +53,7 @@
 
     resources :academies, only: %i[show index] do
       resources :school_periods, only: %i[new create index]
-      resources :locations, only: %i[create index]
+      resources :locations, only: %i[create index edit update]
       resources :students, only: %i[index]
       resources :coaches, only: %i[index]
     end

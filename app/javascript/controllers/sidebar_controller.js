@@ -28,9 +28,11 @@ export default class extends Controller {
 
       // Vérifie la largeur de l'écran et la classe de la sidebar
       if (window.innerWidth < 800 && !sidebar.classList.contains("close")) {
-        content.style.display = "none";
+        content.classList.add("disappear");
+        sidebar.classList.add("big-sidebar");
       } else {
-        content.style.display = "block";
+        sidebar.classList.remove("big-sidebar");
+        content.classList.remove("disappear");
       }
     });
   }

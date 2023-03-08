@@ -1,7 +1,7 @@
 <%= render "shared/academy_header" %>
 <div class="yellow-title">LES STAGES</div>
 <div class="container" data-controller="clickable-table">
-  <table class="table table-striped table-responsive">
+  <table class="table table-striped table-responsive table-center form-container">
     <thead>
       <tr>
         <th>Académie</th>
@@ -20,7 +20,7 @@
         <td></td>
         <td>
           <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce stage ?" } do %>
-            <i class="fas fa-trash"></i>
+            <i class="fas fa-trash trash"></i>
           <% end %>
         </td>
       </tr>
@@ -28,16 +28,18 @@
     </tbody>
   </table>
 
-  <div class="flexy">
-    <button class="btn btn-primary" id="add-school-period-btn">Ajouter un stage</button>
-    <div data-controller="hidden-forms">
+  <div data-controller="hidden-forms">
+    <div class="flexy">
+      <button class="btn btn-primary" id="add-school-period-btn">Ajouter un stage</button>
       <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form form-container", id: "school-period-form") do |form| %>
         <%= form.label :name, "Nom :" %>
         <%= form.text_field :name, { class: "form-control", required: true } %>
         <%= form.label :year, "Année :" %>
         <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
-        <%= form.submit "Valider", class: "btn btn-primary" %>
-        <button class="btn btn-secondary" id="cancel-school-period-btn" type="button">Annuler</button>
+        <div class="flex-btn">
+          <%= form.submit "Valider", class: "btn btn-primary" %>
+          <button class="btn btn-secondary" id="cancel-school-period-btn" type="button">Annuler</button>
+        </div>
       <% end %>
     </div>
   </div>

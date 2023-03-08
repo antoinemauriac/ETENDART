@@ -47,7 +47,7 @@ class Student < ApplicationRecord
 
   def unattended_rate
     if past_courses_count.positive?
-      (unattended_courses_count.to_f / past_courses_count * 100).round(2)
+      (unattended_courses_count.to_f / past_courses_count * 100).round
     else
       0
     end

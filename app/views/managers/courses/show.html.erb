@@ -8,16 +8,16 @@
 
 <div class="container flexy" data-controller="presence-sheet">
   <div class="form-container">
-    <table class="table table-striped table-responsive">
-      <thead>
-        <tr>
-          <th>Nom-Prénom</th>
-          <th></th>
-          <th>Absent ?</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form", data: { turbo: false }) do |form| %>
+    <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
+      <table class="table table-striped table-responsive">
+        <thead>
+          <tr>
+            <th>Nom-Prénom</th>
+            <th></th>
+            <th>Absent ?</th>
+          </tr>
+        </thead>
+        <tbody>
           <% @enrollments.each do |enrollment| %>
             <tr>
               <td><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", managers_student_path(enrollment.student), class: "student-mr" %></td>
@@ -30,11 +30,9 @@
               <td><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
             </tr>
           <% end %>
-      </tbody>
-    </table>
-    <div class="flexy">
+        </tbody>
+      </table>
       <%= form.submit "Valider", class: "btn btn-primary mt-3" %>
-    </div>
     <% end %>
   </div>
 </div>

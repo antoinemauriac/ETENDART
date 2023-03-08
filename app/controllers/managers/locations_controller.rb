@@ -26,6 +26,28 @@ class Managers::LocationsController < ApplicationController
     end
   end
 
+  def edit
+    @location = Location.find(params[:id])
+    @academy = Academy.find(params[:academy_id])
+    authorize([:managers, @location])
+  end
+
+  def update
+    @location = Location.find(params[:id])
+    authorize([:managers, @location])
+    if Geocoder.search(@location.address).any?
+      @location.city = Geocoder.search(@location.address).first.city if Geocoder.search(@location.address).first.city
+      @location.zipcode = Geocoder.search(@location.address).first.postal_code if Geocoder.search(@location.address).first.postal_code
+      @location.country = Geocoder.search(@location.address).first.country if Geocoder.search(@location.address).first.country
+    end
+    if @location.update(location_params)
+      redirect_to managers_academy_locations_path(@location.academy)
+      flash[:notice] = "Adresse modifiée"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def location_params
