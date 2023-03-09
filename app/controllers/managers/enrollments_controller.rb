@@ -13,7 +13,6 @@ class Managers::EnrollmentsController < ApplicationController
     camp = Camp.find(params[:camp])
     @student.camps << camp unless @student.camps.include?(camp)
 
-
     activity = Activity.find(params[:activity])
     if @student.activities.include?(activity)
       redirect_to managers_student_path(@student)

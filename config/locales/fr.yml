@@ -9,13 +9,14 @@ fr:
       short: "%d %b"
       long: "%A %e %B %Y"
       date: "%d/%m/%Y"
+      date_hour: "%d/%m/%Y à %Hh"
     day_names: [Dimanche, Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi]
     abbr_day_names: [dim, lun, mar, mer, jeu, ven, sam]
     month_names: [~, janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre]
     abbr_month_names: [~, janv, févr, mars, avr, mai, juin, juil, août, sept, oct, nov, déc]
   time:
     formats:
-      default: "%d/%m/%Y à %H h"
+      default: "%d/%m/%Y à %Hh"
       short: "%d %b %Y"
       long: "%A %e %B %Y"
       date: "%d/%m/%Y"

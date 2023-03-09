@@ -41,6 +41,7 @@
     end
 
     resources :students, only: %i[show new create edit update]
+    resources :feedbacks, only: %i[new create]
     resources :activity_enrollments, only: %i[destroy]
     resources :activities, only: %i[show destroy]
     resources :school_periods, only: %i[show destroy] do

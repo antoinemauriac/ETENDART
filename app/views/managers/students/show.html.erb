@@ -1,11 +1,13 @@
 <div class="student-title"><%= @student.last_name %> - <%= @student.first_name %></div>
+
 <div class="row mt-3 justify-content-center align-items-stretch">
+
   <div class="col-lg-4 col-sm-12 mt-3">
     <div class="header-info">Informations</div>
     <div class="content-info">
       <p><%= "NOM : #{@student.last_name}" %></p>
       <p><%= "PRÉNOM : #{@student.first_name}" %></p>
-      <p><%= "#{@student.gender.upcase}" %> - <%= @student.age %> ans </p>
+      <p><%= "#{@student.gender}" %> - <%= @student.age %> ans </p>
       <p><%= "EMAIL: #{@student.email}" %></p>
       <p><%= "TEL : 0#{@student.phone_number}" %></p>
       <p><%= "ADRESSE : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
@@ -13,15 +15,44 @@
     </div>
   </div>
 
-  <div class="col-lg-4 col-sm-12 mt-3">
-    <div class="header-info">Historique</div>
+
+  <div class="col-lg-8 col-sm-12 mt-3">
+    <div class="header-info">Prochaines activités</div>
     <div class="content-info">
-      <div>
-        <p><%= "Nombre de stages effectués : #{@student.camps_count}" %></p>
-        <p><%= "Nombre de cours passés : #{@student.past_courses_count}" %></p>
-        <p><%= "Nombre d'absences : #{@student.unattended_courses_count}" %></p>
-        <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
+      <% if @student.next_activities.empty? %>
+      <div class="text-center">
+        Aucune activité à venir
       </div>
+      <% else %>
+      <div>
+        <table class="table table-striped table-responsive table-center">
+          <thead>
+            <tr>
+              <th>Académie</th>
+              <th>Stage</th>
+              <th>Semaine</th>
+              <th>Activité</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @student.next_activities.each do |activity| %>
+            <tr>
+              <td class="align-middle"><%= activity.academy.name %></td>
+              <td class="align-middle"><%= activity.school_period.name %></td>
+              <td class="align-middle"><%= activity.camp.name %></td>
+              <td class="align-middle"><%= activity.name %></td>
+              <td class="align-middle">
+                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>
+                  <i class="fas fa-trash trash"></i>
+                <% end %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% end %>
       <div data-controller="enrollment-form">
         <button type="button" class="btn btn-primary" data-action="click->enrollment-form#openModal" style="width:100%">
           Inscrire à une activité
@@ -36,7 +67,6 @@
               </div>
               <div class="modal-body">
                 <%= form_with url: managers_enrollments_path, local: true do |form| %>
-                  <div class="form-group">
                     <%= form.hidden_field :student_id, value: @student.id %>
 
                     <%= form.label :academy, "Académie" %>
@@ -50,14 +80,11 @@
 
                     <%= form.label :activity, "Activité" %>
                     <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                <div class="form-group">
-                  <%= form.submit "Valider", class: "btn btn-primary" %>
-                  <button class="btn btn-secondary" type="button" data-action="click->enrollment-form#closeModal">Annuler</button>
+                    <div class="d-flex justify-content-around mt-3">
+                      <%= form.submit "Valider", class: "btn btn-primary" %>
+                      <button class="btn btn-secondary" type="button" data-action="click->enrollment-form#closeModal">Annuler</button>
+                    </div>
                 <% end %>
-                </div>
               </div>
             </div>
           </div>
@@ -65,7 +92,48 @@
       </div>
     </div>
   </div>
-  <div class="col-12 mt-3">
+
+
+  <div class="col-lg-4 col-sm-12 mt-4">
+    <div class="header-info">Historique</div>
+    <div class="content-info">
+      <div>
+        <p><%= "Nb total stages : #{@student.camps_count}" %></p>
+        <p><%= "Nb de cours passés : #{@student.past_courses_count}" %></p>
+        <p><%= "Nb absences : #{@student.unattended_courses_count}" %></p>
+        <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8 col-sm-12 mt-4">
+    <div class="header-info">Feedbacks</div>
+    <div class="content-info">
+      <div>
+        <table class="table table-striped table-responsive table-center">
+          <thead>
+            <tr>
+              <th>Auteur</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @student.feedbacks.each do |feedback| %>
+            <tr>
+              <td class="align-middle"><%= feedback.coach.email %></td>
+              <td class="align-middle"><%= feedback.content %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <%= link_to "Ajouter un feedback", new_managers_feedback_path(params: { student_id: @student.id }), class: "btn btn-primary", style:"width:100%" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 mt-4">
     <div class="header-info">Cours à venir</div>
     <div class="content-info">
       <table class="table table-responsive table-striped table-center">
@@ -73,6 +141,7 @@
           <tr>
             <th>Academie</th>
             <th>Stage</th>
+            <th>Semaine</th>
             <th>Activité</th>
             <th>Jour</th>
           </tr>
@@ -82,15 +151,16 @@
             <tr>
               <td class="align-middle"><%= course.academy.name %></td>
               <td class="align-middle"><%= course.school_period.name %></td>
+              <td class="align-middle"><%= course.camp.name %></td>
               <td class="align-middle"><%= course.activity.name %></td>
-              <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
+              <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   </div>
-  <div class="col-12 mt-3">
+  <div class="col-12 mt-4">
     <div class="header-info">Cours passés</div>
     <div class="content-info">
       <table class="table table-responsive table-striped table-center">

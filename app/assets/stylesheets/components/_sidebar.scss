@@ -4,6 +4,7 @@
 
 .content {
   flex-grow: 1;
+  transition: all 0.5s ease;
 }
 
 .sidebar{
@@ -17,16 +18,16 @@
 
 .sidebar.close{
   width: 78px;
-  transition: all 0.5s ease;
+  // transition: all 0.5s ease;
 }
 
 .big-sidebar {
   width: 100%;
-  transition: all 0.5s ease;
+  // transition: all 0.5s ease;
 }
 
 .disappear {
-  width: 0;
+ display: none;
   transition: all 0.5s ease;
 }
 

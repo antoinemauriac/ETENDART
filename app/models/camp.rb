@@ -5,13 +5,13 @@ class Camp < ApplicationRecord
   has_many :coach_academies, through: :academy
   has_many :coaches, through: :coach_academies
 
-  has_many :activities
+  has_many :activities, dependent: :destroy
   has_many :courses, through: :activities
 
-  has_many :camp_enrollments
+  has_many :camp_enrollments, dependent: :destroy
   has_many :students, through: :camp_enrollments
 
-  has_many :coach_camps
+  has_many :coach_camps, dependent: :destroy
   has_many :coaches, through: :coach_camps
 
   validates :name, presence: true
@@ -25,6 +25,7 @@ class Camp < ApplicationRecord
     students.joins(:activity_enrollments)
             .where(activity_enrollments: { activity_id: activities })
             .distinct
+            .order(:last_name)
   end
 
   private

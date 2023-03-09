@@ -1,12 +1,20 @@
 .btn-etendart {
-  padding: 8px;
-  border-radius: 12px;
+  text-align: center;
+  padding: 16px;
+  border-radius: 32px;
   background-color: $yellow;
   color: black;
   border: none;
   min-width: 160px;
   font-size: 16px;
+  font-weight: 900;
 }
+
+// .btn-etendart:hover {
+//   background-color: $yellow;
+//   color: black;
+//   transition: 0.3s;
+// }
 
 .btn {
   margin: 4px 0px;

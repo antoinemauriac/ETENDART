@@ -49,15 +49,15 @@ coach3.roles << Role.find_by(name: 'coach')
 
 coaches = [coach1, coach2, coach3]
 
-student1 = Student.create!(first_name: 'student', last_name: '1')
-student2 = Student.create!(first_name: 'student', last_name: '2')
-student3 = Student.create!(first_name: 'student', last_name: '3')
+student1 = Student.create!(first_name: 'Leo', last_name: 'Zozo')
+student2 = Student.create!(first_name: 'Lea', last_name: 'Zaza')
+student3 = Student.create!(first_name: 'Titou', last_name: 'Zizou')
 
 students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
 rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager1)
-angers = Academy.create!(name: 'Angers', manager: manager2)
+angers = Academy.create!(name: 'Angers Academy', manager: manager2)
 
 coach1.academies_as_coach << djoko
 coach1.categories << categories.sample
@@ -75,11 +75,11 @@ location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rud
 locations = [location1, location2, location3, location4]
 
 
-djoko_avril_23 = SchoolPeriod.create!(name: 'djoko_avril_23', year: 2023, academy: djoko)
-djoko_ete_23 = SchoolPeriod.create!(name: 'djoko_ete_23', year: 2023, academy: djoko)
-rudy_avril_23 = SchoolPeriod.create!(name: 'rudy_avril_23', year: 2023, academy: rudy)
-rudy_ete_23 = SchoolPeriod.create!(name: 'rudy_ete_23', year: 2023, academy: rudy)
-angers_avril_23 = SchoolPeriod.create!(name: 'angers_avril_23', year: 2023, academy: angers)
+djoko_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: djoko)
+djoko_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: djoko)
+rudy_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: rudy)
+rudy_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: rudy)
+angers_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: angers)
 
 week1_d = Camp.create!(name: 'semaine1', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
 week2_d = Camp.create!(name: 'semaine2', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
@@ -92,12 +92,13 @@ days1 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 days2 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday']
 days3 = ['Monday', 'Tuesday', 'Thursday']
 days = [days1, days2, days3]
+activities = ['Anglais(8-10ans)', 'Pétanque(12-16ans)', 'Pipeau(tout âge)']
 
 weeks.each do |week|
   3.times do |i|
     jours = days.sample
     coach = coaches.sample
-    Activity.create!(name: "activité #{i}",
+    Activity.create!(name: activities[i],
                      days: jours,
                      coach: coach,
                      camp: week,

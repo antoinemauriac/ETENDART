@@ -7,7 +7,6 @@
 }
 
 .card-academy {
-  background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), image-url('rudy-court.jpg');
   background-size: cover;
   background-position: center;
   padding: 64px;
@@ -17,7 +16,7 @@
   color: white;
   font-size: 24px;
   font-weight: 900;
-  height: 240px;
+  height: 120px;
   width: 90%; /* Utilisez une valeur relative en pourcentage */
   // max-width: 600px; /* Définissez une largeur maximale pour les cartes */
   display: flex;

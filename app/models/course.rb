@@ -19,6 +19,10 @@ class Course < ApplicationRecord
     course_enrollments.find_by(student: student).present
   end
 
+  def self.today(manager)
+    where("starts_at <= ? AND ends_at >= ? AND manager = ?", Time.zone.now.end_of_day, Time.zone.now.beginning_of_day, manager)
+  end
+
   private
 
   def starts_at_before_ends_at

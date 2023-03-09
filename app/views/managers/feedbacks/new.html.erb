@@ -3,7 +3,7 @@
 
 <div class="container flexy">
   <div class="feedback-container">
-    <%= form_with(model: @feedback, url: coaches_feedbacks_path, local: true) do |form| %>
+    <%= form_with(model: @feedback, url: managers_feedbacks_path, local: true) do |form| %>
       <%= form.hidden_field :student_id, value: params[:student_id] %>
       <div class="form-group">
         <%= form.text_area :content, class: "form-control", placeholder: "Ecrivez votre commentaire ici..." %>

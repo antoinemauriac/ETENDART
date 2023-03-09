@@ -81,15 +81,17 @@ class Managers::StudentsController < ApplicationController
           week_camp = school_period.camps.find_by(name: week_name)
           student.camps << week_camp unless student.camps.include?(week_camp)
 
-          activity_name = row["activite_#{week_name}"]
-          if activity_name.present?
-            activity = week_camp.activities.find_by(name: activity_name)
-            if activity.present?
-              student.courses << activity.courses unless student.activities.include?(activity)
-              student.activities << activity unless student.activities.include?(activity)
-            else
-              flash[:alert] = "Une erreur est survenue. L'activité #{activity_name} ne correspond pas à une activité créée sur l'application"
-              redirect_to managers_school_period_path(school_period) and return
+          (1..2).each do |i|
+            activity_name = row["activite_#{i}_#{week_name}"]
+            if activity_name.present?
+              activity = week_camp.activities.find_by(name: activity_name)
+              if activity.present?
+                student.courses << activity.courses unless student.activities.include?(activity)
+                student.activities << activity unless student.activities.include?(activity)
+              else
+                flash[:alert] = "Une erreur est survenue. L'activité #{activity_name} ne correspond pas à une activité créée sur l'application"
+                redirect_to managers_school_period_path(school_period) and return
+              end
             end
           end
         end
