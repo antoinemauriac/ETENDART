@@ -1,6 +1,6 @@
-<div class="cards-academy">
+<div class="row justify-content-center">
   <% @academies.each do |academy| %>
-    <%= link_to managers_academy_path(academy) do %>
+    <%= link_to managers_academy_path(academy), class: "col-6" do %>
       <div class="card-academy" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path("#{academy.name}.jpg") %>')">
           <%= academy.name %>
       </div>
