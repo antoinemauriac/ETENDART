@@ -1,5 +1,5 @@
 <%= link_to managers_academy_path(@academy) do %>
-  <div id="academy-header" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= asset_path("#{@academy.name}.jpg") %>')">
+  <div class="header" style="background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('<%= url_for(@academy.image) %>')">
     <%= @academy.name %>
   </div>
 <% end %>

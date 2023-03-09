@@ -25,13 +25,13 @@
 
   <div data-controller="hidden-forms">
     <div class="flexy">
-      <button class="btn btn-primary" id="add-category-btn">Ajouter une categorie</button>
+      <button class="btn-etendart-square" id="add-category-btn">Ajouter une categorie</button>
       <%= form_with(model: @category, url: managers_categories_path, method: :post, class: "hidden-form form-container", id: "category-form") do |form| %>
         <%= form.label :name, "Nom :" %>
         <%= form.text_field :name, class: "form-control" %>
         <div class="flex-btn">
-          <%= form.submit "Valider", class: "btn btn-primary" %>
-          <button class="btn btn-secondary" id="cancel-category-btn" type="button">Annuler</button>
+          <%= form.submit "Valider", class: "btn-etendart" %>
+          <button class="btn-etendart-black" id="cancel-category-btn" type="button">Annuler</button>
         </div>
       <% end %>
     </div>

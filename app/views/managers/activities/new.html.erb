@@ -3,7 +3,7 @@
 <div class="black-title">Ajouter une activité</div>
 
 <div class="flexy container">
-  <div class="container form-container form-max-width">
+  <div class="form-container form-min-width">
     <%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post, data: { controller: 'activity-form' } do |f| %>
       <%= f.input :name, label: "Nom" %>
       <%= f.input :category_id, as: :select, collection: Category.all, label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", action: 'change->activity-form#onCategoryChange' } } %>

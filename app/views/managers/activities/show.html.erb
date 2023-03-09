@@ -16,7 +16,9 @@
         <%= simple_form_for course, url: managers_course_path(course), method: :put, data: { turbo: false } do |f| %>
         <tr>
           <td class="align-middle">
-            <%= link_to l(course.starts_at, format: :long), managers_course_path(course), class: "btn btn-primary btn-day" %>
+            <div class="d-flex"> <!-- Ajout de la classe justify-content-center -->
+              <%= link_to l(course.starts_at, format: :long), managers_course_path(course), class: "btn-etendart-blue mb-2", style:"width:80%"%>
+            </div>
           </td>
           <td class="align-middle">
             <%= f.input :starts_at, as: :time, label: false, minute_step: 15 %>
@@ -25,11 +27,13 @@
             <%= f.input :ends_at, as: :time, label: false, minute_step: 15 %>
           </td>
           <td class="align-middle">
-            <%= f.submit "Mettre à jour l'horaire", class: 'btn btn-primary' %>
+            <%= f.submit "Mettre à jour l'horaire", class: 'btn-etendart-blue mb-2' %>
           </td>
             <% end %>
           <td class="align-middle">
-            <%= link_to "Supprimer", managers_course_path(course), class: "btn btn-primary", data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce cours ?"} %>
+            <%= link_to managers_course_path(course), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce cours ?"} do %>
+              <i class="fas fa-trash trash"></i>
+            <% end %>
           </td>
         </tr>
       <% end %>
@@ -56,7 +60,9 @@
           <td class="align-middle"><%= student.age %> ans</td>
           <td class="align-middle">0<%= student.phone_number %></td>
           <td class="align-middle">
-            <%= link_to "Supprimer", managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id)), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" }, class: "btn btn-primary trash" %>
+            <%= link_to managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id)), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>
+              <i class="fas fa-trash trash"></i>
+            <% end %>
           </td>
         </tr>
       <% end %>

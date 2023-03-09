@@ -4,9 +4,8 @@ import "datatables.net"
 
 export default class extends Controller {
 
-
   connect() {
-    console.log('zozo');
+    console.log('pipa');
     if ($('#myTable_wrapper').length === 0 ) {
       $('#myTable').DataTable({
         searchable: true,
@@ -14,7 +13,7 @@ export default class extends Controller {
         paging: true,
         select: true,
         lengthMenu: [10, 15, 20, 50, 400],
-        pageLength: 15,
+        pageLength: 50,
         language: {
           search: '',
           searchPlaceholder: 'Rechercher...',
@@ -33,6 +32,9 @@ export default class extends Controller {
         columnDefs: [
           { orderable: true, targets: [0] },
         ],
+        "table": {
+          "className": "border-0"
+        },
         initComplete: function () {
           this.api()
             .columns()
@@ -54,11 +56,45 @@ export default class extends Controller {
                 select.append( '<option value="'+d+'">'+d+'</option>' )
               } );
             });
+
+          // Création de la div pour envelopper les éléments en en-tête
+          const tableWrapper = $('#myTable_wrapper');
+          const tableHeader = tableWrapper.find('.dataTables_scrollHeadInner table');
+          const searchInput = tableWrapper.find('.dataTables_filter input');
+          const lengthSelect = tableWrapper.find('.dataTables_length');
+          const tableHeaderDiv = $('<div class="container table-header-student d-flex align-items-center justify-content-between mt-1"></div>');
+          const clearFilterButton = $('<button class="btn btn-outline-secondary btn-clear ms-2">Clear Filter</button>');
+
+          const selectLength = lengthSelect.children().eq(0).children().eq(0);
+          selectLength.addClass('select-length');
+
+          // Ajout de la div avant le tableau
+          tableWrapper.prepend(tableHeaderDiv);
+
+          // Déplacement des éléments dans la div créée
+          tableHeaderDiv.append(clearFilterButton);
+          tableHeaderDiv.append(searchInput);
+          tableHeaderDiv.append(lengthSelect);
+
+
+          // Au clic sur le bouton, réinitialiser les filtres et vider le champ de recherche
+          clearFilterButton.on('click', function () {
+            const table = $('#myTable').DataTable();
+            table.search('').columns().search('').draw();
+            $('.dataTables_filter input').val('');
+
+            // Parcourir tous les éléments select et les réinitialiser
+            $('.form-select').each(function() {
+              $(this).val('');
+            });
+          });
         },
       });
     }
   }
 }
+
+
 
       // const datanames = ['academie', 'nom', 'prenom', 'genre', 'datenaissance'];
       // const selects = {};

@@ -8,4 +8,8 @@ class SchoolPeriod < ApplicationRecord
   def students
     school_period_enrollments.map(&:student)
   end
+
+  def students_count
+    students.count
+  end
 end

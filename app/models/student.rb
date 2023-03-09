@@ -1,4 +1,7 @@
 class Student < ApplicationRecord
+
+  attr_accessor :academy1_id, :academy2_id
+
   has_many :academy_enrollments, dependent: :destroy
   has_many :academies, through: :academy_enrollments
 
@@ -22,15 +25,15 @@ class Student < ApplicationRecord
   end
 
   def past_courses
-    courses.where('ends_at < ?', Time.now + 1.hour).order(starts_at: :asc)
+    courses.where('ends_at < ?', Time.current).order(starts_at: :asc)
   end
 
   def unattended_courses
-    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.now + 1.hour)
+    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current)
   end
 
   def next_courses
-    courses.where('starts_at > ?', Time.now + 1.hour).order(starts_at: :asc)
+    courses.where('starts_at > ?', Time.current).order(starts_at: :asc)
   end
 
   def courses_count
@@ -38,11 +41,11 @@ class Student < ApplicationRecord
   end
 
   def past_courses_count
-    courses.where('ends_at < ?', Time.now + 1.hour).count
+    courses.where('ends_at < ?', Time.current).count
   end
 
   def unattended_courses_count
-    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.now + 1.hour).count
+    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).count
   end
 
   def unattended_rate
@@ -67,15 +70,15 @@ class Student < ApplicationRecord
 
   def age
     if date_of_birth
-    now = Time.now.utc.to_date
-    birthdate = date_of_birth.to_date
-    age = now.year - birthdate.year
-    age -= 1 if birthdate.strftime("%m%d").to_i > now.strftime("%m%d").to_i
-    age
+      now = Time.current
+      birthdate = date_of_birth.to_date
+      age = now.year - birthdate.year
+      age -= 1 if birthdate.strftime("%m%d").to_i > now.strftime("%m%d").to_i
+      age
     end
   end
 
   def next_activities
-    activities.joins(:camp).where('camps.ends_at > ?', Time.now).order('camps.starts_at ASC')
+    activities.joins(:camp).where('camps.ends_at > ?', Time.current).order('camps.starts_at ASC')
   end
 end

@@ -5,4 +5,4 @@
 <% @feedbacks.each do |feedback| %>
   <p><%= feedback.created_at%> - <%= feedback.content %></p>
 <% end %>
-<%= link_to "Ajouter un feedback", new_coaches_feedback_path(params: { student_id: @student.id }), class: "btn btn-primary" %>
+<%= link_to "Ajouter un feedback", new_coaches_feedback_path(params: { student_id: @student.id }), class: "btn-etendart" %>

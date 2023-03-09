@@ -1,18 +1,32 @@
-<div class="student-title"><%= @student.last_name %> - <%= @student.first_name %></div>
-<div class="flexy container">
-  <div class="container form-container form-max-width">
-    <%= simple_form_for @student, url: managers_student_path(@student), method: :put do |f| %>
-      <%= f.input :first_name, label: "Prénom" %>
-      <%= f.input :last_name, label: "Nom" %>
-      <%= f.input :date_of_birth, label: "Date de naissance" %>
-      <%= f.input :gender, as: :select, collection: ["Garçon", "Fille"], label: "Genre" %>
-      <%= f.input :email, label: "Email" %>
-      <%= f.input :phone_number, label: "Numéro de téléphone" %>
-      <%= f.input :address, label: "Adresse" %>
-      <%= f.input :zipcode, label: "Code postal" %>
-      <%= f.input :city, label: "Ville" %>
+<%= render "shared/home_header" %>
+<div class="yellow-title">Modifier les informations</div>
+<div class="container flexy">
+  <div class="form-container form-min-width">
+    <%= simple_form_for @student, url: managers_student_path(@student), html: {class: 'form-horizontal'}, method: :put do |form| %>
+      <%= form.input :last_name, label: "Nom de famille", required: true %>
+
+      <%= form.input :first_name, label: "Prénom", required: true %>
+
+      <%= form.input :email, required: true %>
+
+      <%= form.input :phone_number, label: "Téléphone", required: true %>
+
+      <%= form.input :date_of_birth, as: :date, label: "Date de naissance", required: true %>
+
+      <%= form.input :gender, as: :select, collection: ["Garçon", "Fille"], label: "Genre", required: true %>
+
+      <%= form.input :address, label: "Adresse", required: true %>
+
+      <%= form.input :zipcode, label: "Code Postal", required: true %>
+
+      <%= form.input :city, label: "Ville", required: true %>
+
+      <%= form.input :academy1_id, label: "Académie 1", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, required: true, selected: @academy1&.id %>
+
+      <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true, selected: @academy2&.id || 'Sélectionnez une académie' %>
+
       <div class="flexy">
-        <%= f.button :submit, "Valider", class: "btn btn-primary" %>
+        <%= form.button :submit, "Valider", class: "btn-etendart" %>
       </div>
     <% end %>
   </div>

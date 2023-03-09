@@ -1,4 +1,6 @@
 class Academy < ApplicationRecord
+  has_one_attached :image
+
   has_many :locations
   has_many :school_periods
   has_many :camps, through: :school_periods

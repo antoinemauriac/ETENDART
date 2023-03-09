@@ -37,6 +37,8 @@ class Managers::StudentsController < ApplicationController
 
   def edit
     @student = Student.find(params[:id])
+    @academy1 = @student.academies.first if @student.academies.any?
+    @academy2 = @student.academies.second if @student.academies.count == 2
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
   end
 
@@ -44,6 +46,7 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     if @student.update(student_params)
+      update_academies
       redirect_to managers_student_path(@student)
       flash[:notice] = "Informations modifiées avec succès"
     else
@@ -101,6 +104,11 @@ class Managers::StudentsController < ApplicationController
     redirect_to managers_school_period_path(school_period), notice: "Le fichier CSV a été importé avec succès."
   end
 
+  def update_academies
+    @student.academies.clear
+    @student.academies << Academy.find(params[:student][:academy1_id]) if params[:student][:academy1_id].present?
+    @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
+  end
   private
 
   def student_params

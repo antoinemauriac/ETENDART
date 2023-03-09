@@ -2,9 +2,13 @@
   display: flex;
 }
 
-.content {
+#content {
   flex-grow: 1;
-  transition: all 0.5s ease;
+  max-width: calc(100% - 255px);
+}
+
+#content.close {
+  max-width: calc(100% - 78px);
 }
 
 .sidebar{
@@ -14,6 +18,13 @@
   height: calc(100vh - 56px);
   background: black;
   z-index: 100;
+  width: 255px;
+}
+
+@media (max-width: 2000px) {
+  .sidebar {
+  width: 255px;
+  }
 }
 
 .sidebar.close{

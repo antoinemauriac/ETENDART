@@ -29,7 +29,7 @@
         <% if user_signed_in? %>
           <%= render "shared/sidebar" %>
         <% end %>
-        <div class="content"><%= yield %></div>
+        <div id="content"><%= yield %></div>
       </div>
   </body>
 </html>

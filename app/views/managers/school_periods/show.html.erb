@@ -22,15 +22,19 @@
         <td class="align-middle"><%= camp.name %></td>
         <td class="align-middle"><%= l(camp.starts_at, format: :date) %></td>
         <td class="align-middle"><%= l(camp.ends_at, format: :date) %></td>
-        <td class="align-middle"></td>
-        <td class="align-middle"><%= link_to "Supprimer", managers_camp_path(camp), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette semaine ?" }, class: "btn btn-primary trash"%></td>
+        <td class="align-middle"><%= camp.students_count %></td>
+        <td class="align-middle">
+          <%= link_to managers_camp_path(camp), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette semaine ?" } do %>
+            <i class="fas fa-trash trash"></i>
+          <% end %>
+        </td>
       </tr>
       <% end %>
     </tbody>
   </table>
 
   <div class="flexy" data-controller="hidden-forms">
-    <button class="btn btn-primary" id="add-camp-btn">Ajouter une semaine</button>
+    <button class="btn-etendart-square" id="add-camp-btn">Ajouter une semaine</button>
     <%= form_with(model: @camp, url: managers_school_period_camps_path(@school_period), method: :post, class: "hidden-form form-container", id: "camp-form") do |form| %>
       <%= form.label :name, "Nom :" %>
       <%= form.text_field :name, class: "form-control", placeholder: "semaine1", required: true %>
@@ -39,8 +43,8 @@
       <%= form.label :ends_at, "Date de fin :" %>
       <%= form.date_field :ends_at, class: "form-control" %>
       <div class="flex-btn">
-        <%= form.submit "Valider", class: "btn btn-primary" %>
-        <button class="btn btn-secondary" id="cancel-camp-btn" type="button">Annuler</button>
+        <%= form.submit "Valider", class: "btn-etendart" %>
+        <button class="btn-etendart-black" id="cancel-camp-btn" type="button">Annuler</button>
       </div>
     <% end %>
   </div>

@@ -17,7 +17,7 @@
         <td><%= period.academy.name %></td>
         <td><%= period.name %></td>
         <td><%= period.year %></td>
-        <td></td>
+        <td><%= period.students_count %></td>
         <td>
           <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce stage ?" } do %>
             <i class="fas fa-trash trash"></i>
@@ -30,15 +30,15 @@
 
   <div data-controller="hidden-forms">
     <div class="flexy">
-      <button class="btn btn-primary" id="add-school-period-btn">Ajouter un stage</button>
+      <button class="btn-etendart-square" id="add-school-period-btn">Ajouter un stage</button>
       <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form form-container", id: "school-period-form") do |form| %>
         <%= form.label :name, "Nom :" %>
         <%= form.text_field :name, { class: "form-control", required: true } %>
         <%= form.label :year, "Année :" %>
-        <%= form.select :year, (Time.now.year..Time.now.year + 5).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
+        <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
         <div class="flex-btn">
-          <%= form.submit "Valider", class: "btn btn-primary" %>
-          <button class="btn btn-secondary" id="cancel-school-period-btn" type="button">Annuler</button>
+          <%= form.submit "Valider", class: "btn-etendart" %>
+          <button class="btn-etendart-black" id="cancel-school-period-btn" type="button">Annuler</button>
         </div>
       <% end %>
     </div>

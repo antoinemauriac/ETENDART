@@ -1,42 +1,31 @@
-<div class="form-container">
-  <%= form_with model: @student, url: managers_students_path, local: true do |form| %>
-    <div class="form-group">
-      <%= form.label :last_name, "Nom de famille" %>
-      <%= form.text_field :last_name, class: "form-control", required: true %>
-    </div>
+<%= render "shared/home_header" %>
+<div class="yellow-title">Ajouter un élève</div>
+<div class="container flexy">
+  <div class="form-container">
+    <%= simple_form_for @student, url: managers_students_path, html: {class: 'form-horizontal'} do |form| %>
+      <%= form.input :last_name, label: "Nom de famille", required: true %>
 
-    <div class="form-group">
-      <%= form.label :first_name, "Prénom" %>
-      <%= form.text_field :first_name, class: "form-control", required: true %>
-    </div>
+      <%= form.input :first_name, label: "Prénom", required: true %>
 
-    <div class="form-group">
-      <%= form.label :email %>
-      <%= form.email_field :email, class: "form-control", required: true %>
-    </div>
+      <%= form.input :email, required: true %>
 
-    <div class="form-group">
-      <%= form.label :date_of_birth, "Date de naissance" %>
-      <%= form.date_field :date_of_birth, class: "form-control", required: true %>
-    </div>
+      <%= form.input :phone_number, label: "Téléphone", required: true %>
 
-    <div class="form-group">
-      <%= form.label :gender, "Genre" %>
-      <%= form.select :gender, options_for_select(["Garçon", "Fille"]), {}, class: "form-control", required: true %>
-    </div>
+      <%= form.input :date_of_birth, as: :date, label: "Date de naissance", required: true %>
 
-    <div class="form-group">
-      <%= form.label :academy1_id, "Academie 1" %>
-      <%= form.collection_select :academy1_id, current_user.academies_as_manager, :id, :name, {}, {class: "form-control", required: true} %>
-    </div>
+      <%= form.input :gender, as: :select, collection: ["Garçon", "Fille"], label: "Genre", required: true %>
 
-    <div class="form-group">
-      <%= form.label :academy2_id, "Academie 2 (optionnel)" %>
-      <%= form.collection_select :academy2_id, current_user.academies_as_manager, :id, :name, {include_blank: true}, {class: "form-control"} %>
-    </div>
+      <%= form.input :address, label: "Adresse", required: true %>
 
-    <div class="form-group">
-      <%= form.submit "Valider", class: "btn btn-primary" %>
-    </div>
-  <% end %>
+      <%= form.input :zipcode, label: "Code Postal", required: true %>
+
+      <%= form.input :city, label: "Ville", required: true %>
+
+      <%= form.input :academy1_id, label: "Académie 1", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, required: true %>
+
+      <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true %>
+
+      <%= form.button :submit, "Valider", class: "btn-etendart" %>
+    <% end %>
+  </div>
 </div>

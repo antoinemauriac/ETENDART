@@ -21,10 +21,11 @@ export default class extends Controller {
 
     const sidebar = document.querySelector(".sidebar");
     const sidebarBtn = document.querySelector(".bx-menu");
-    const content = document.querySelector(".content");
+    const content = document.querySelector("#content");
 
     sidebarBtn.addEventListener("click", () => {
       sidebar.classList.toggle("close");
+      content.classList.toggle("close");
 
       // Vérifie la largeur de l'écran et la classe de la sidebar
       if (window.innerWidth < 800 && !sidebar.classList.contains("close")) {

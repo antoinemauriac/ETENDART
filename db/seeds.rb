@@ -56,8 +56,14 @@ student3 = Student.create!(first_name: 'Titou', last_name: 'Zizou')
 students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
+djoko.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'djoko-court.jpg')), filename: 'djoko-court.jpg')
+djoko.save
 rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager1)
+rudy.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'rudy-court.jpg')), filename: 'rudy-court.jpg')
+rudy.save
 angers = Academy.create!(name: 'Angers Academy', manager: manager2)
+angers.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'angers-court.jpg')), filename: 'angers-court.jpg')
+angers.save
 
 coach1.academies_as_coach << djoko
 coach1.categories << categories.sample
@@ -92,10 +98,10 @@ days1 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 days2 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday']
 days3 = ['Monday', 'Tuesday', 'Thursday']
 days = [days1, days2, days3]
-activities = ['Anglais(8-10ans)', 'Pétanque(12-16ans)', 'Pipeau(tout âge)']
+activities = ['Tennis(8-12ans)', 'Tennis(12-16ans)', 'Web Design (entre 2008 et 2005)', 'Danse (entre 2008 et 2005)']
 
 weeks.each do |week|
-  3.times do |i|
+  activities.length.times do |i|
     jours = days.sample
     coach = coaches.sample
     Activity.create!(name: activities[i],

@@ -1,36 +1,118 @@
 .btn-etendart {
   text-align: center;
-  padding: 16px;
+  padding: 8px;
   border-radius: 32px;
   background-color: $yellow;
   color: black;
   border: none;
-  min-width: 160px;
+  min-width: 140px;
   font-size: 16px;
   font-weight: 900;
+  margin: 1em 1em 0em 1em;
 }
 
-// .btn-etendart:hover {
-//   background-color: $yellow;
-//   color: black;
-//   transition: 0.3s;
-// }
+.btn-etendart:hover {
+  background-color: rgb(0, 0, 0);
+  color: $yellow;
+  transition: 0.3s;
+}
+
+.btn-etendart-blue {
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #042060;
+  color: white;
+  border: none;
+  min-width: 140px;
+  font-size: 16px;
+  font-weight: 900;
+  margin: 1em 1em 0em 1em;
+}
+
+.btn-etendart-blue:hover {
+  color: white!important;
+}
+
+.btn-etendart-square {
+  text-align: center;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: $yellow;
+  color: black;
+  border: none;
+  min-width: 140px;
+  font-size: 16px;
+  font-weight: 900;
+  margin: 1em 1em 0em 1em;
+}
+
+.btn-etendart-square:hover {
+  background-color: rgb(0, 0, 0);
+  color: $yellow;
+  transition: 0.3s;
+}
+
+
+.btn-etendart-black {
+  text-align: center;
+  padding: 8px;
+  border-radius: 32px;
+  background-color: rgb(222, 222, 222);
+  color: black;
+  border: none;
+  min-width: 140px;
+  font-size: 16px;
+  font-weight: 900;
+  margin: 1em 1em 0em 1em;
+}
+
+
+.btn-etendart-black:hover {
+  background-color: #686868;
+  color: white;
+  transition: 0.3s;
+}
 
 .btn {
   margin: 4px 0px;
 }
 
-.btn-day {
-  background-color: $yellow;
-  color: black;
-  width: 220px;
-  text-align: center;
-  border: none;
+// .btn-day {
+//   background-color: $yellow;
+//   color: black;
+//   width: 220px;
+//   text-align: center;
+//   border: none;
+// }
+
+.btn-clear {
+  border-radius: 6px;
+  padding: 8px;
+  border: 0.5px solid lightgray;
 }
+
+
+.table-header-student input {
+  width: 320px;
+  text-align: center;
+  padding: 8px;
+  border-radius: 20px;
+  border: 0.5px solid lightgray;
+}
+
+.select-length {
+  border-radius: 6px!important;
+  padding: 8px!important;
+  border: 0.5px solid lightgray!important;
+}
+
 
 .flex-btn {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
+  justify-content: center;
+}
+
+.fa-trash {
+  color: black;
 }

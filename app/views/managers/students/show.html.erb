@@ -11,7 +11,9 @@
       <p><%= "EMAIL: #{@student.email}" %></p>
       <p><%= "TEL : 0#{@student.phone_number}" %></p>
       <p><%= "ADRESSE : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
-      <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn btn-primary" %>
+      <div class="flexy">
+        <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn-etendart-blue", style:"width:300px"%>
+      </div>
     </div>
   </div>
 
@@ -54,9 +56,11 @@
       </div>
       <% end %>
       <div data-controller="enrollment-form">
-        <button type="button" class="btn btn-primary" data-action="click->enrollment-form#openModal" style="width:100%">
-          Inscrire à une activité
-        </button>
+        <div class="flexy">
+          <button type="button" class="btn-etendart-blue" data-action="click->enrollment-form#openModal" style="width:300px">
+            Inscrire à une activité
+          </button>
+        </div>
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
@@ -81,8 +85,8 @@
                     <%= form.label :activity, "Activité" %>
                     <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
                     <div class="d-flex justify-content-around mt-3">
-                      <%= form.submit "Valider", class: "btn btn-primary" %>
-                      <button class="btn btn-secondary" type="button" data-action="click->enrollment-form#closeModal">Annuler</button>
+                      <%= form.submit "Valider", class: "btn-etendart" %>
+                      <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeModal">Annuler</button>
                     </div>
                 <% end %>
               </div>
@@ -110,25 +114,27 @@
     <div class="header-info">Feedbacks</div>
     <div class="content-info">
       <div>
-        <table class="table table-striped table-responsive table-center">
+        <table class="table table-striped table-responsive">
           <thead>
             <tr>
               <th>Auteur</th>
+              <th>Date</th>
               <th>Message</th>
             </tr>
           </thead>
           <tbody>
             <% @student.feedbacks.each do |feedback| %>
             <tr>
-              <td class="align-middle"><%= feedback.coach.email %></td>
+              <td class="align-middle"><%= feedback.coach.first_name %> <%= feedback.coach.last_name %></td>
+              <td class="align-middle"><%= l(feedback.created_at, format: :date)  %></td>
               <td class="align-middle"><%= feedback.content %></td>
             </tr>
             <% end %>
           </tbody>
         </table>
       </div>
-      <div>
-        <%= link_to "Ajouter un feedback", new_managers_feedback_path(params: { student_id: @student.id }), class: "btn btn-primary", style:"width:100%" %>
+      <div class="flexy">
+        <%= link_to "Ajouter un feedback", new_managers_feedback_path(params: { student_id: @student.id }), class: "btn-etendart-blue", style:"width:300px" %>
       </div>
     </div>
   </div>
