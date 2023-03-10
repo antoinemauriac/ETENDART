@@ -2,6 +2,8 @@ class Student < ApplicationRecord
 
   attr_accessor :academy1_id, :academy2_id
 
+  has_one_attached :photo
+
   has_many :academy_enrollments, dependent: :destroy
   has_many :academies, through: :academy_enrollments
 

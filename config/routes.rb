@@ -40,7 +40,11 @@
       end
     end
 
-    resources :students, only: %i[show new create edit update]
+    resources :students, only: %i[show new create edit update] do
+      member do
+        put :update_photo
+      end
+    end
     resources :feedbacks, only: %i[new create]
     resources :activity_enrollments, only: %i[destroy]
     resources :activities, only: %i[show destroy]

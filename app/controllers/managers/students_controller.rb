@@ -109,10 +109,19 @@ class Managers::StudentsController < ApplicationController
     @student.academies << Academy.find(params[:student][:academy1_id]) if params[:student][:academy1_id].present?
     @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
   end
+
+
+  def update_photo
+    @student = Student.find(params[:id])
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
+    @student.photo.attach(params[:student][:photo])
+    redirect_to managers_student_path(@student)
+  end
+
   private
 
   def student_params
-    params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address)
+    params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :photo)
   end
 
   def student_params_upload(row)

@@ -18,4 +18,8 @@ class Managers::StudentPolicy < ApplicationPolicy
   def import?
     user.manager?
   end
+
+  def update_photo?
+    user.manager? || user.coach?
+  end
 end

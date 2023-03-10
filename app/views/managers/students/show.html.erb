@@ -1,5 +1,24 @@
 <div class="student-title"><%= @student.last_name %> - <%= @student.first_name %></div>
 
+
+<% if @student.photo.attached? %>
+  <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true }) do |form| %>
+    <%= form.input :photo, label: "Changer la photo", as: :file %>
+    <%= form.button :submit, "Enregistrer" %>
+  <% end %>
+<% else %>
+  <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true }) do |form| %>
+    <%= form.input :photo, label: "Ajouter une photo", as: :file %>
+    <%= form.button :submit, "Enregistrer" %>
+  <% end %>
+<% end %>
+
+<% if @student.photo.attached? %>
+  <%= cl_image_tag @student.photo.key, height: 300, width: 300 %>
+<% else %>
+  <%= image_tag "home.jpeg", height: 300, width: 300 %>
+<% end %>
+
 <div class="row mt-3 justify-content-center align-items-stretch">
 
   <div class="col-lg-4 col-sm-12 mt-3">
