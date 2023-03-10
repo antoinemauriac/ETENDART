@@ -13,11 +13,8 @@
   <% end %>
 <% end %>
 
-<% if @student.photo.attached? %>
-  <%= cl_image_tag @student.photo.key, height: 300, width: 300 %>
-<% else %>
-  <%= image_tag "home.jpeg", height: 300, width: 300 %>
-<% end %>
+<%= cl_image_tag @student.photo_or_default, height: 300, width: 300 %>
+
 
 <div class="row mt-3 justify-content-center align-items-stretch">
 

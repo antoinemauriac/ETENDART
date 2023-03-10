@@ -83,4 +83,12 @@ class Student < ApplicationRecord
   def next_activities
     activities.joins(:camp).where('camps.ends_at > ?', Time.current).order('camps.starts_at ASC')
   end
+
+  def photo_or_default
+    if photo.attached?
+      photo.key
+    else
+      "avatar-anonyme_humrcg.png"
+    end
+  end
 end

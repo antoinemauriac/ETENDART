@@ -56,14 +56,18 @@ student3 = Student.create!(first_name: 'Titou', last_name: 'Zizou')
 students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
-djoko.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'djoko-court.jpg')), filename: 'djoko-court.jpg', content_type: 'image/jpg')
+djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1678443159/etendart/djoko-court_ycrsiq.jpg')
+djoko.image.attach(io: djoko_image, filename: 'djoko-court.jpg', content_type: 'image/jpg')
 djoko.save
 rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager1)
-rudy.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'rudy-court.jpg')), filename: 'rudy-court.jpg', content_type: 'image/jpg')
+rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1678442609/etendart/rudy-court_upwvxz.jpg')
+rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
 rudy.save
 angers = Academy.create!(name: 'Angers Academy', manager: manager2)
-angers.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'angers-court.jpg')), filename: 'angers-court.jpg', content_type: 'image/jpg')
+angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1678442835/etendart/angers-court_yxxgtn.jpg')
+angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
 angers.save
+
 
 coach1.academies_as_coach << djoko
 coach1.categories << categories.sample
