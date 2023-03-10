@@ -56,13 +56,13 @@ student3 = Student.create!(first_name: 'Titou', last_name: 'Zizou')
 students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
-djoko.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'djoko-court.jpg')), filename: 'djoko-court.jpg')
+djoko.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'djoko-court.jpg')), filename: 'djoko-court.jpg', content_type: 'image/jpg')
 djoko.save
 rudy = Academy.create!(name: 'Rudy Gobert Academy', manager: manager1)
-rudy.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'rudy-court.jpg')), filename: 'rudy-court.jpg')
+rudy.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'rudy-court.jpg')), filename: 'rudy-court.jpg', content_type: 'image/jpg')
 rudy.save
 angers = Academy.create!(name: 'Angers Academy', manager: manager2)
-angers.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'angers-court.jpg')), filename: 'angers-court.jpg')
+angers.image.attach(io: File.open(Rails.root.join('app', 'assets', 'images', 'angers-court.jpg')), filename: 'angers-court.jpg', content_type: 'image/jpg')
 angers.save
 
 coach1.academies_as_coach << djoko
