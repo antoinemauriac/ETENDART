@@ -4,12 +4,12 @@
 
 #content {
   flex-grow: 1;
-  max-width: calc(100% - 255px);
+  // max-width: calc(100% - 255px);
 }
 
-#content.close {
-  max-width: calc(100% - 78px);
-}
+// #content.close {
+//   max-width: calc(100% - 78px);
+// }
 
 .sidebar{
   // position: fixed;
@@ -21,11 +21,11 @@
   width: 255px;
 }
 
-@media (max-width: 2000px) {
-  .sidebar {
-  width: 255px;
-  }
-}
+// @media (max-width: 2000px) {
+//   .sidebar {
+//   width: 255px;
+//   }
+// }
 
 .sidebar.close{
   width: 78px;

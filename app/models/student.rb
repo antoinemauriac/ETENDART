@@ -1,5 +1,9 @@
 class Student < ApplicationRecord
 
+  DEFAULT_AVATAR = "avatar-anonyme_humrcg.png"
+
+  scope :today_birthday, -> { where('EXTRACT(month FROM date_of_birth) = ? AND EXTRACT(day FROM date_of_birth) = ?', Date.today.month, Date.today.day).order("created_at DESC") }
+
   attr_accessor :academy1_id, :academy2_id
 
   has_one_attached :photo
@@ -27,15 +31,25 @@ class Student < ApplicationRecord
   end
 
   def past_courses
-    courses.where('ends_at < ?', Time.current).order(starts_at: :asc)
+    courses.where('ends_at < ?', Time.current)
+           .order(starts_at: :asc)
   end
 
   def unattended_courses
-    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current)
+    course_enrollments.unattended
+                      .joins(:course)
+                      .where('courses.starts_at < ?', Time.current)
+  end
+
+  def unattended_today_courses
+    course_enrollments.unattended
+                      .joins(:course)
+                      .where(courses: { ends_at: Date.current.all_day })
   end
 
   def next_courses
-    courses.where('starts_at > ?', Time.current).order(starts_at: :asc)
+    courses.where('starts_at > ?', Time.current)
+           .order(starts_at: :asc)
   end
 
   def courses_count
@@ -84,11 +98,18 @@ class Student < ApplicationRecord
     activities.joins(:camp).where('camps.ends_at > ?', Time.current).order('camps.starts_at ASC')
   end
 
+  def self.absent_students(current_user)
+    joins(:course_enrollments, courses: :academy)
+      .where(course_enrollments: { present: false })
+      .where(academies: { id: current_user.academies_as_manager.pluck(:id) })
+      .distinct
+  end
+
   def photo_or_default
     if photo.attached?
       photo.key
     else
-      "avatar-anonyme_humrcg.png"
+      DEFAULT_AVATAR
     end
   end
 end

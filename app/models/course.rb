@@ -20,7 +20,11 @@ class Course < ApplicationRecord
   end
 
   def self.today(manager)
-    where("starts_at <= ? AND ends_at >= ? AND manager_id = ?", Time.zone.now.end_of_day, Time.zone.now.beginning_of_day, manager.id)
+    where("starts_at <= ? AND ends_at >= ? AND manager_id = ?", Time.current.end_of_day, Time.current.beginning_of_day, manager.id).order(:starts_at)
+  end
+
+  def missing_students
+    students.where(id: course_enrollments.where(present: false).pluck(:student_id))
   end
 
   private

@@ -7,3 +7,38 @@
     <% end %>
   <% end %>
 </div>
+
+<% @today_courses.each do |course| %>
+<p><%= course.starts_at %></p>
+<% end %>
+
+<% @feedbacks.each do |feedback| %>
+  <p><%= feedback.content %></p>
+<% end %>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Activité</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @absent_students.each do |student| %>
+      <% student.unattended_courses.each do |course_enrollment| %>
+        <tr>
+          <td><%= student.first_name %></td>
+          <td><%= student.last_name %></td>
+          <td><%= course_enrollment.course.activity.name %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+
+<% Student.today_birthday.each do |student| %>
+  <p><%= student.first_name %></p>
+<% end %>
