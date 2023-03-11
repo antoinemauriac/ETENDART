@@ -33,10 +33,10 @@ class Managers::CoachesController < ApplicationController
       @coach.categories << Category.find(params[:user][:category_1_id])
       @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
 
-      # @coach.update(status: "creation")
+      @coach.update(status: "creation")
       # Envoie l'e-mail avec le lien de réinitialisation de mot de passe
       @coach.send_reset_password_instructions
-      # @coach.update(status: null)
+      @coach.update(status: null)
 
       flash[:notice] = "Coach ajouté avec succès."
       redirect_to managers_academy_coaches_path(@academy)
