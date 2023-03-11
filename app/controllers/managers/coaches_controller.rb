@@ -36,7 +36,8 @@ class Managers::CoachesController < ApplicationController
       @coach.update(status: "creation")
       # Envoie l'e-mail avec le lien de réinitialisation de mot de passe
       @coach.send_reset_password_instructions
-      @coach.update(status: null)
+
+      @coach.update(status: "")
 
       flash[:notice] = "Coach ajouté avec succès."
       redirect_to managers_academy_coaches_path(@academy)
