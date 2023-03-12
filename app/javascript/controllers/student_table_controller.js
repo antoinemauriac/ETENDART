@@ -63,7 +63,7 @@ export default class extends Controller {
           const searchInput = tableWrapper.find('.dataTables_filter input');
           const lengthSelect = tableWrapper.find('.dataTables_length');
           const tableHeaderDiv = $('<div class="container table-header-student d-flex align-items-center justify-content-between mt-1"></div>');
-          const clearFilterButton = $('<button class="btn btn-outline-secondary btn-clear ms-2">Clear Filter</button>');
+          const clearFilterButton = $('<button class="btn btn-outline-secondary btn-clear ms-2">Réinitialiser</button>');
 
           const selectLength = lengthSelect.children().eq(0).children().eq(0);
           selectLength.addClass('select-length');
