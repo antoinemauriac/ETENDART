@@ -8,6 +8,7 @@
   <% end %>
 </div>
 
+<% if false %>
 <% @today_courses.each do |course| %>
 <p><%= course.starts_at %></p>
 <% end %>
@@ -41,4 +42,6 @@
 
 <% Student.today_birthday.each do |student| %>
   <p><%= student.first_name %></p>
+<% end %>
+
 <% end %>

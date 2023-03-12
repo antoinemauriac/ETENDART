@@ -1,40 +1,41 @@
 <div class="student-title"><%= @student.last_name %> - <%= @student.first_name %></div>
 
 
-<% if @student.photo.attached? %>
-  <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true }) do |form| %>
-    <%= form.input :photo, label: "Changer la photo", as: :file %>
-    <%= form.button :submit, "Enregistrer" %>
-  <% end %>
-<% else %>
-  <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true }) do |form| %>
-    <%= form.input :photo, label: "Ajouter une photo", as: :file %>
-    <%= form.button :submit, "Enregistrer" %>
-  <% end %>
-<% end %>
-
-<%= cl_image_tag @student.photo_or_default, height: 300, width: 300 %>
-
-
 <div class="row mt-3 justify-content-center align-items-stretch">
 
-  <div class="col-lg-4 col-sm-12 mt-3">
+  <div class="col-lg-5 col-sm-12 mt-3">
     <div class="header-info">Informations</div>
-    <div class="content-info">
-      <p><%= "NOM : #{@student.last_name}" %></p>
-      <p><%= "PRÉNOM : #{@student.first_name}" %></p>
-      <p><%= "#{@student.gender}" %> - <%= @student.age %> ans </p>
-      <p><%= "EMAIL: #{@student.email}" %></p>
-      <p><%= "TEL : 0#{@student.phone_number}" %></p>
-      <p><%= "ADRESSE : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
-      <div class="flexy">
-        <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn-etendart-blue", style:"width:300px"%>
+    <div class="content-info content-info-student">
+      <div class="student-info">
+        <p><%= "NOM : #{@student.last_name}" %></p>
+        <p><%= "PRÉNOM : #{@student.first_name}" %></p>
+        <p><%= "#{@student.gender}" %> - <%= @student.age %> ans </p>
+        <p><%= "EMAIL: #{@student.email}" %></p>
+        <p><%= "TEL : 0#{@student.phone_number}" %></p>
+        <p><%= "ADRESSE : #{@student.address} - #{@student.zipcode} - #{@student.city}" %></p>
       </div>
+      <% if false %>
+      <div class="student-photo">
+        <% if @student.photo.attached? %>
+          <%= cl_image_tag @student.photo_or_default, id:"student-photo-manager", crop: "thumb", gravity: "face" %>
+          <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true }) do |form| %>
+            <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', style: 'display:none;cursor:pointer' }, label_html: { class: "btn-etendart-blue btn-photo" } %>
+          <% end %>
+        <% else %>
+          <%= cl_image_tag @student.photo_or_default, id:"student-photo-manager", crop: "thumb", gravity: "face" %>
+          <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true }) do |form| %>
+            <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', style: 'display: none;cursor:pointer'}, label_html: { class: "btn-etendart-blue btn-photo" } %>
+          <% end %>
+        <% end %>
+      </div>
+      <% end %>
+        <div class="flexy">
+          <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn-etendart-blue", style:"width:300px"%>
+        </div>
     </div>
   </div>
 
-
-  <div class="col-lg-8 col-sm-12 mt-3">
+  <div class="col-lg-7 col-sm-12 mt-3">
     <div class="header-info">Prochaines activités</div>
     <div class="content-info">
       <% if @student.next_activities.empty? %>
@@ -210,3 +211,35 @@
     </div>
   </div>
 </div>
+
+<style>
+/* .content-info {
+  position: relative;
+} */
+
+/* .student-photo {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0px;
+  justify-content: center;
+  align-items: end;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  overflow: hidden;
+  text-align: center;
+} */
+
+/* #student-photo-manager {
+  width: 100%;
+  height: 100%;
+} */
+/*
+.content-info-student {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+} */
+
+</style>

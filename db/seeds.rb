@@ -30,6 +30,7 @@ basket = Category.create!(name: 'Basket')
 manga = Category.create!(name: 'Manga')
 theatre = Category.create!(name: 'Théâtre')
 anglais = Category.create!(name: 'Anglais')
+danse = Category.create!(name: 'Danse')
 categories = [tennis, basket, manga, theatre, anglais]
 
 Role.create!(name: 'manager')
@@ -40,20 +41,20 @@ manager1.roles << Role.find_by(name: 'manager')
 manager2 = User.create!(email: 'manager2@gmail.com', password: 123456)
 manager2.roles << Role.find_by(name: 'manager')
 
-coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Toto", last_name: "Zizou")
+coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Remi", last_name: "Martin")
 coach1.roles << Role.find_by(name: 'coach')
-coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Titi", last_name: "Le chef")
+coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Lucie", last_name: "Durand")
 coach2.roles << Role.find_by(name: 'coach')
-coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Lala", last_name: "Patatra")
+coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
 coach3.roles << Role.find_by(name: 'coach')
 
 coaches = [coach1, coach2, coach3]
 
-student1 = Student.create!(first_name: 'Leo', last_name: 'Zozo')
-student2 = Student.create!(first_name: 'Lea', last_name: 'Zaza')
-student3 = Student.create!(first_name: 'Titou', last_name: 'Zizou')
+# student1 = Student.create!(first_name: 'Leo', last_name: 'Minot')
+# student2 = Student.create!(first_name: 'Lea', last_name: 'Lala')
+# student3 = Student.create!(first_name: 'Toto', last_name: 'Zizou')
 
-students = [student1, student2, student3]
+# students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko Academy', manager: manager1)
 djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1678443159/etendart/djoko-court_ycrsiq.jpg')
@@ -70,11 +71,11 @@ angers.save
 
 
 coach1.academies_as_coach << djoko
-coach1.categories << categories.sample
-coach1.categories << categories.sample
+coach1.categories << tennis
+coach1.categories << danse
 coach2.academies_as_coach << djoko
-coach2.categories << categories.sample
-coach3.academies_as_coach << rudy
+coach2.categories << danse
+coach3.academies_as_coach << djoko
 coach3.categories << categories.sample
 
 
@@ -85,12 +86,14 @@ location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rud
 locations = [location1, location2, location3, location4]
 
 
+djoko_fevrier_23 = SchoolPeriod.create!(name: 'février', year: 2023, academy: djoko)
 djoko_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: djoko)
 djoko_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: djoko)
 rudy_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: rudy)
 rudy_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: rudy)
 angers_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: angers)
 
+week0_d = Camp.create!(name: 'semaine1', school_period: djoko_fevrier_23, starts_at: Date.new(2023, 2, 2), ends_at: Date.new(2023, 2, 18))
 week1_d = Camp.create!(name: 'semaine1', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
 week2_d = Camp.create!(name: 'semaine2', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
 week1_r = Camp.create!(name: 'semaine1', school_period: rudy_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
@@ -132,28 +135,27 @@ weeks.each do |week|
       Course.create!(starts_at: starting_at, ends_at: ending_at, activity: Activity.last, manager: manager1, coach: coach)
     end
   end
-
 end
 
-students.each do |student|
-  AcademyEnrollment.create!(student: student, academy: djoko)
-  CampEnrollment.create!(student: student, camp: week1_d)
-  CampEnrollment.create!(student: student, camp: week2_d)
-  ActivityEnrollment.create!(student: student, activity: week1_d.activities.first)
-  ActivityEnrollment.create!(student: student, activity: week1_d.activities.second)
-  ActivityEnrollment.create!(student: student, activity: week2_d.activities.first)
-  ActivityEnrollment.create!(student: student, activity: week2_d.activities.second)
+# students.each do |student|
+#   AcademyEnrollment.create!(student: student, academy: djoko)
+#   CampEnrollment.create!(student: student, camp: week1_d)
+#   CampEnrollment.create!(student: student, camp: week2_d)
+#   ActivityEnrollment.create!(student: student, activity: week1_d.activities.first)
+#   ActivityEnrollment.create!(student: student, activity: week1_d.activities.second)
+#   ActivityEnrollment.create!(student: student, activity: week2_d.activities.first)
+#   ActivityEnrollment.create!(student: student, activity: week2_d.activities.second)
 
-  week1_d.activities.first.courses.each do |course|
-    CourseEnrollment.create!(student: student, course: course)
-  end
-  week1_d.activities.second.courses.each do |course|
-    CourseEnrollment.create!(student: student, course: course)
-  end
-  week2_d.activities.first.courses.each do |course|
-    CourseEnrollment.create!(student: student, course: course)
-  end
-  week2_d.activities.second.courses.each do |course|
-    CourseEnrollment.create!(student: student, course: course)
-  end
-end
+#   week1_d.activities.first.courses.each do |course|
+#     CourseEnrollment.create!(student: student, course: course)
+#   end
+#   week1_d.activities.second.courses.each do |course|
+#     CourseEnrollment.create!(student: student, course: course)
+#   end
+#   week2_d.activities.first.courses.each do |course|
+#     CourseEnrollment.create!(student: student, course: course)
+#   end
+#   week2_d.activities.second.courses.each do |course|
+#     CourseEnrollment.create!(student: student, course: course)
+#   end
+# end
