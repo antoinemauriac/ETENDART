@@ -27,6 +27,14 @@ class Course < ApplicationRecord
     students.where(id: course_enrollments.where(present: false).pluck(:student_id))
   end
 
+  def students_count
+    students.count
+  end
+
+  def missing_students_count
+    missing_students.count
+  end
+
   private
 
   def starts_at_before_ends_at
@@ -34,5 +42,6 @@ class Course < ApplicationRecord
       errors.add(:starts_at, "L'heure de début doit être avant l'heure de fin")
     end
   end
+
 
 end

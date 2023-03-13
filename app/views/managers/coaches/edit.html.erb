@@ -1,16 +1,23 @@
-<%= form_with(model: @coach, url: managers_coach_path(@coach), method: :put, class: "form") do |form| %>
+<div class="student-title">COACH : <%= @coach.full_name %></div>
+<div class="yellow-title">Modifier les informations</div>
+<div class="flexy container">
+  <div class="form-container form-min-width">
+    <%= form_with(model: @coach, url: managers_coach_path(@coach), method: :put, class: "form") do |form| %>
 
-  <%= form.label :academy_1_id, "Académie 1 :" %>
-  <%= form.collection_select :academy_1_id, @academies, :id, :name, { selected: @academy1, include_blank: true }, {class: "form-control"} %>
+      <%= form.label :academy_1_id, "Académie 1 :" %>
+      <%= form.collection_select :academy_1_id, @academies, :id, :name, { selected: @academy1, include_blank: true }, {class: "form-control"} %>
 
-  <%= form.label :academy_2_id, "Académie 2 (optionnel) :" %>
-  <%= form.collection_select :academy_2_id, @academies, :id, :name, { selected: @academy2, include_blank: true }, { class: "form-control" } %>
+      <%= form.label :academy_2_id, "Académie 2 (optionnel) :" %>
+      <%= form.collection_select :academy_2_id, @academies, :id, :name, { selected: @academy2, include_blank: true }, { class: "form-control" } %>
 
-  <%= form.label :category_1_id, "Catégorie 1 :" %>
-  <%= form.collection_select :category_1_id, @categories, :id, :name, { selected: @category1, include_blank: true }, {class: "form-control"} %>
+      <%= form.label :category_1_id, "Catégorie 1 :" %>
+      <%= form.collection_select :category_1_id, @categories, :id, :name, { selected: @category1, include_blank: true }, {class: "form-control"} %>
 
-  <%= form.label :category_2_id, "Catégorie 2 (optionnel) :" %>
-  <%= form.collection_select :category_2_id, @categories, :id, :name, { selected: @category2, include_blank: true }, { class: "form-control" } %>
-
-  <%= form.submit "Mettre à jour", class: "btn-etendart" %>
-<% end %>
+      <%= form.label :category_2_id, "Catégorie 2 (optionnel) :" %>
+      <%= form.collection_select :category_2_id, @categories, :id, :name, { selected: @category2, include_blank: true }, { class: "form-control" } %>
+      <div class="flexy">
+        <%= form.submit "Mettre à jour", class: "btn-etendart" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -25,6 +25,9 @@ class Student < ApplicationRecord
 
   has_many :feedbacks
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 
   def courses_sorted
     courses.order(starts_at: :asc)

@@ -11,6 +11,12 @@ class Managers::CoachesController < ApplicationController
   def show
     @coach = User.find(params[:id])
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
+    @academies = Academy.all
+    @categories = Category.all
+    @academy1 = @coach.academies_as_coach.first ? @coach.academies_as_coach.first.id : ""
+    @academy2 = @coach.academies_as_coach.second ? @coach.academies_as_coach.second.id : ""
+    @category1 = @coach.categories.first ? @coach.categories.first.id : ""
+    @category2 = @coach.categories.second ? @coach.categories.second.id : ""
   end
 
   def new
@@ -49,16 +55,16 @@ class Managers::CoachesController < ApplicationController
     end
   end
 
-  def edit
-    @coach = User.find(params[:id])
-    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
-    @academies = Academy.all
-    @categories = Category.all
-    @academy1 = @coach.academies_as_coach.first ? @coach.academies_as_coach.first.id : ""
-    @academy2 = @coach.academies_as_coach.second ? @coach.academies_as_coach.second.id : ""
-    @category1 = @coach.categories.first ? @coach.categories.first.id : ""
-    @category2 = @coach.categories.second ? @coach.categories.second.id : ""
-  end
+  # def edit
+  #   @coach = User.find(params[:id])
+  #   authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
+  #   @academies = Academy.all
+  #   @categories = Category.all
+  #   @academy1 = @coach.academies_as_coach.first ? @coach.academies_as_coach.first.id : ""
+  #   @academy2 = @coach.academies_as_coach.second ? @coach.academies_as_coach.second.id : ""
+  #   @category1 = @coach.categories.first ? @coach.categories.first.id : ""
+  #   @category2 = @coach.categories.second ? @coach.categories.second.id : ""
+  # end
 
   def update
     @coach = User.find(params[:id])
@@ -73,23 +79,24 @@ class Managers::CoachesController < ApplicationController
     redirect_to managers_coach_path(@coach)
   end
 
-  def change_password
-    @coach = User.find_by(confirmation_token: params[:token])
+  # def change_password
+  #   @coach = User.find_by(confirmation_token: params[:token])
 
-    if @coach
-      # rediriger vers la vue change_password.html.erb dans views/managers/coaches/
-      render "managers/coaches/change_password"
-    else
-      # coach non trouvé, rediriger vers la page d'accueil
-      redirect_to "https://www.google.com/"
-      flash[:alert] = "Une erreur est survenue"
-    end
-  end
+  #   if @coach
+  #     # rediriger vers la vue change_password.html.erb dans views/managers/coaches/
+  #     render "managers/coaches/change_password"
+  #   else
+  #     # coach non trouvé, rediriger vers la page d'accueil
+  #     redirect_to "/"
+  #     flash[:alert] = "Une erreur est survenue"
+  #   end
+  # end
 
   def category_coaches
     category = Category.find(params[:category_id])
     authorize([:managers, category])
-    coaches = category.coaches
+    academy = Academy.find(params[:academy_id])
+    coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: academy.id })
     render json: coaches.select(:id, :first_name, :last_name, :email)
   end
 

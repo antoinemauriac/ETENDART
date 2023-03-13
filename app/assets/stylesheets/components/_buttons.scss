@@ -81,8 +81,16 @@
   transition: 0.3s;
 }
 
-.btn {
-  margin: 4px 0px;
+.btn-photo {
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  background-color: #989ba2;
+  color: white;
+  border: none;
+  font-weight: 900;
+  margin: 1em 1em 1em 1em;
 }
 
 // .btn-day {

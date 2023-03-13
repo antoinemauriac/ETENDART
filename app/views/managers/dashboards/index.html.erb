@@ -8,36 +8,111 @@
   <% end %>
 </div>
 
+<div class="row mt-3 justify-content-center align-items-stretch">
+
+  <div class="col-lg-12 col-sm-12 mt-3">
+    <div class="header-info">Les cours du jour</div>
+    <div class="content-info">
+      <table class="table table-striped table-responsive table-center form-container">
+        <thead>
+          <tr>
+            <th>Académie</th>
+            <th>Activité</th>
+            <th>Coach</th>
+            <th>Telephone</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Nb élèves</th>
+            <th>Nb absents</th>
+            <th>Appel fait ?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @today_courses.each do |course| %>
+          <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
+            <td class="align-middle"><%= course.academy.name %></td>
+            <td class="align-middle"><%= course.activity.name %></td>
+            <td class="align-middle"><%= course.activity.coach.full_name %></td>
+            <td class="align-middle"><%= course.activity.coach.phone_number %></td>
+            <td class="align-middle"><%= l(course.starts_at, format: :hour) %></td>
+            <td class="align-middle"><%= l(course.ends_at, format: :hour) %></td>
+            <td class="align-middle"><%= course.students_count %></td>
+            <td class="align-middle"><%= course.missing_students_count %></td>
+            <td>
+              <% if course.starts_at < Time.current %>
+                <% if course.status %>
+                  <i class="fa-solid fa-check text-success"></i>
+                <% else %>
+                  <i class="fa-solid fa-xmark text-danger"></i>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-sm-12 mt-3">
+    <div class="header-info">Élèves absents</div>
+    <div class="content-info">
+      <table class="table table-striped table-responsive table-center form-container">
+        <thead>
+          <tr>
+            <th>Élève</th>
+            <th>Téléphone</th>
+            <th>Email</th>
+            <th>Activité concernée</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @absent_students.each do |student| %>
+            <% student.unattended_today_courses.each do |course_enrollment| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
+                <td class="align-middle"><%= student.full_name %></td>
+                <td class="align-middle">0<%= student.phone_number %></td>
+                <td class="align-middle"><%= student.email %></td>
+                <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-sm-12 mt-3">
+    <div class="header-info">Feedbacks récents</div>
+    <div class="content-info">
+      <table class="table table-striped table-responsive table-center form-container">
+        <thead>
+          <tr>
+            <th>Élève</th>
+            <th>Contenu</th>
+            <th>Auteur</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @feedbacks.each do |feedback| %>
+            <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(feedback.student) %>'">
+              <td class="align-middle"><%= feedback.student.full_name %></td>
+              <td class="align-middle"><%= feedback.content %></td>
+              <td class="align-middle"><%= feedback.coach.full_name %></td>
+              <td class="align-middle"><%= l(feedback.created_at, format: :date) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
 <% if false %>
-<% @today_courses.each do |course| %>
-<p><%= course.starts_at %></p>
-<% end %>
-
-<% @feedbacks.each do |feedback| %>
-  <p><%= feedback.content %></p>
-<% end %>
 
 
-<table>
-  <thead>
-    <tr>
-      <th>Prénom</th>
-      <th>Nom</th>
-      <th>Activité</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @absent_students.each do |student| %>
-      <% student.unattended_courses.each do |course_enrollment| %>
-        <tr>
-          <td><%= student.first_name %></td>
-          <td><%= student.last_name %></td>
-          <td><%= course_enrollment.course.activity.name %></td>
-        </tr>
-      <% end %>
-    <% end %>
-  </tbody>
-</table>
 
 
 <% Student.today_birthday.each do |student| %>

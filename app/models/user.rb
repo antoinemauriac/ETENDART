@@ -38,4 +38,12 @@ class User < ApplicationRecord
     roles.any? { |role| role.name == 'coach' }
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def next_activities
+    activities.joins(:camp).where('camps.starts_at > ?', Time.current).order(:starts_at)
+  end
+
 end

@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach"]
 
   connect() {
-    console.log("test ");
+    console.log("zozo ");
     this.mondayStartTimeTarget.value = "10:00";
     this.mondayEndTimeTarget.value = "12:00";
     this.startTimeTargets.forEach((input) => (input.value = "10:00"));
@@ -25,7 +25,10 @@ export default class extends Controller {
 
   loadCoaches() {
     const category_id = this.categoryTarget.value
-    const url = `/managers/coaches/${category_id}/category_coaches`
+    const academy_id = this.categoryTarget.dataset.academyId
+    console.log(academy_id);
+    console.log(category_id);
+    const url = `/managers/coaches/${category_id}/category_coaches?academy_id=${academy_id}`
 
     fetch(url)
       .then(response => response.json())
