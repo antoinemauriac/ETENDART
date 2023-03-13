@@ -1,7 +1,29 @@
 .avatar {
-
   border-radius: 50%;
 }
+
+.content-info {
+  position: relative;
+}
+
+.student-photo {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  text-align: center;
+  width: 30%;
+}
+
+.student-info {
+  width: 70%;
+}
+
 .avatar-large {
   width: 56px;
   border-radius: 50%;

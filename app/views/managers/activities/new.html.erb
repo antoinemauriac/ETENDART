@@ -1,6 +1,11 @@
 <%= render "shared/academy_header" %>
-<div class="yellow-title"><%= @school_period.name.upcase %> - <%= @camp.name.upcase %></div>
-<div class="black-title">Ajouter une activité</div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@camp.academy, @camp.school_period) %></div>
+  <div class="header-nav-item"><%= link_to "#{@camp.school_period.name.upcase} - #{@camp.school_period.year}", managers_school_period_path(@camp.academy, @camp.school_period) %></div>
+  <div class="header-nav-item"><%= link_to @camp.name.upcase, managers_camp_path(@camp) %></div>
+  <div class="header-nav-item active">NOUVELLE ACTIVITÉ</div>
+</div>
+<div class="yellow-title">NOUVELLE ACTIVITÉ</div>
 
 <div class="flexy container">
   <div class="form-container form-min-width">

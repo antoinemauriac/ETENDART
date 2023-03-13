@@ -1,5 +1,12 @@
 <%= render "shared/academy_header" %>
-<div class="yellow-title"><%= @school_period.name.upcase %> - <%= @camp.name.upcase %> - <%= @activity.name.upcase %></div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @activity.academy.name.upcase, managers_academy_path(@activity.academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@activity.academy, @activity.school_period) %></div>
+  <div class="header-nav-item"><%= link_to "#{@activity.school_period.name.upcase} - #{@activity.school_period.year}", managers_school_period_path(@activity.academy, @activity.school_period) %></div>
+  <div class="header-nav-item"><%= link_to @activity.camp.name.upcase, managers_camp_path(@activity.camp) %></div>
+  <div class="header-nav-item active"><%= @activity.name.upcase %></div>
+</div>
+<div class="yellow-title"><%= @activity.name.upcase %></div>
 <div class="container">
   <table class="table table-striped table-responsive table-center form-container">
     <thead>

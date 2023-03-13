@@ -1,0 +1,25 @@
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 50px;
+  background-color: black;
+}
+
+.header-nav-item {
+  padding: 0 10px;
+  border-right: 1px solid white;
+}
+
+.header-nav-item a {
+  color: white;
+}
+.header-nav-item a:hover {
+  color: $yellow!important;
+}
+
+.header-nav-item.active {
+  border-right: none;
+  color: $yellow;
+}

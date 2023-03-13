@@ -1,4 +1,9 @@
 <%= render "shared/academy_header" %>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @school_period.academy.name.upcase, managers_academy_path(@school_period.academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@school_period.academy, @school_period) %></div>
+  <div class="header-nav-item active"><%= @school_period.name.upcase %> - <%= @school_period.year %> </div>
+</div>
 <div class="yellow-title"><%= @school_period.name.upcase %></div>
 
 <div class="container" data-controller="clickable-table">
@@ -34,7 +39,7 @@
   </table>
 
   <div class="flexy" data-controller="hidden-forms">
-    <button class="btn-etendart-square" id="add-camp-btn">Ajouter une semaine</button>
+    <button class="btn-etendart-square" id="add-camp-btn">AJOUTER UNE SEMAINE</button>
     <%= form_with(model: @camp, url: managers_school_period_camps_path(@school_period), method: :post, class: "hidden-form form-container", id: "camp-form") do |form| %>
       <%= form.label :name, "Nom :" %>
       <%= form.text_field :name, class: "form-control", placeholder: "semaine1", required: true %>

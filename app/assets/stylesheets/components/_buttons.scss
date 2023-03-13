@@ -9,8 +9,8 @@
   text-align: center;
   padding: 8px;
   border-radius: 32px;
-  background-color: $yellow;
-  color: black;
+  background-color: black;
+  color: $yellow;
   border: none;
   min-width: 140px;
   font-size: 16px;
@@ -19,8 +19,8 @@
 }
 
 .btn-etendart:hover {
-  background-color: rgb(0, 0, 0);
-  color: $yellow;
+  background-color: $yellow;
+  color: black;
   transition: 0.3s;
 }
 
@@ -45,8 +45,8 @@
   text-align: center;
   padding: 8px;
   border-radius: 6px;
-  background-color: $yellow;
-  color: black;
+  background-color: black;
+  color: $yellow;
   border: none;
   min-width: 140px;
   font-size: 16px;
@@ -55,8 +55,8 @@
 }
 
 .btn-etendart-square:hover {
-  background-color: rgb(0, 0, 0);
-  color: $yellow;
+  background-color: $yellow;
+  color: black;
   transition: 0.3s;
 }
 

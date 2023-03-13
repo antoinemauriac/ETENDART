@@ -33,3 +33,6 @@ application.register("sidebar", SidebarController)
 
 import StudentTableController from "./student_table_controller"
 application.register("student-table", StudentTableController)
+
+import UploadPhotoController from "./upload_photo_controller"
+application.register("upload-photo", UploadPhotoController)
