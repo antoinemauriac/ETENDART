@@ -1,0 +1,29 @@
+.coach-font {
+  font-size: 14px;
+}
+
+.coach-container {
+  max-width: 700px;
+  background-color: white;
+  padding: 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+
+@media screen and (min-width: 600px) {
+  .coach-font {
+    font-size: 16px!important;
+  }
+  .black-title {
+    margin-bottom: 10px;
+  }
+
+  .yellow-title {
+    margin-bottom: 10px;
+  }
+
+  .coach-container {
+    border-radius: 4px;
+    padding: 16px;
+  }
+}

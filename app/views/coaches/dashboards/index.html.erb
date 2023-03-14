@@ -1,8 +1,10 @@
-<div class="yellow-title">ACCUEIL</div>
-<div class="black-title">FEUILLE DE PRÉSENCE</div>
+<div class="yellow-title mb-0">ACCUEIL</div>
+<% if @missing_attendance.any? %>
+  <div class="black-title">FEUILLE DE PRÉSENCE</div>
+<% end %>
 <% if @next_courses.any? %>
-<div class="black-title">PROCHAINS COURS</div>
-  <table class="table table-striped table-responsive table-center coach-container">
+  <div class="black-title">PROCHAINS COURS</div>
+  <table class="container table table-striped table-responsive table-center coach-container">
     <thead>
       <tr>
         <th>Académie</th>
@@ -15,9 +17,41 @@
       <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
         <td class="align-middle coach-font"><%= course.academy.name %></td>
         <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font"><%= l(course.starts_at, format: :hour) %></td>
+        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
       </tr>
       <% end %>
     </tbody>
   </table>
+  <div class="flexy">
+    <%= link_to "Voir tous", coaches_courses_path, class: "btn-etendart-small-device" %>
+  </div>
+<% end %>
+
+<% if @students.any? %>
+  <div class="black-title">LES ÉLÈVES</div>
+  <table class="container table table-striped table-responsive table-center coach-container">
+    <thead>
+      <tr>
+        <th>Photo</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Âge</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_student_profile_path(student) %>'">
+        <td class="align-middle coach-font">
+          <%= cl_image_tag student.photo_or_default, id: "student-photo-manager", width: 60, height: 60, crop: :thumb, class: "avatar avatar-small" %>
+        </td>
+        <td class="align-middle coach-font"><%= student.last_name %></td>
+        <td class="align-middle coach-font"><%= student.first_name %></td>
+        <td class="align-middle coach-font"><%= student.age %> ans</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="flexy">
+    <%= link_to "Voir tous", coaches_student_profiles_path, class: "btn-etendart-small-device" %>
+  </div>
 <% end %>

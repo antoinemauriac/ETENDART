@@ -1,23 +1,24 @@
-<h1>Mes prochains cours</h1>
-
-<% @camps.each do |camp| %>
-  <h2><%= "#{camp.academy.name} - #{camp.school_period.name} - #{camp.name}" %></h2>
-
-  <% camp.activities.where(coach: @coach).each do |activity| %>
-    <% upcoming_courses = activity.courses.where(coach: @coach).upcoming(2.hours) %>
-
-    <% unless upcoming_courses.empty? %>
-      <h4><%= activity.name %></h4>
-
-      <ul>
-        <% upcoming_courses.each do |course| %>
-          <%= link_to coaches_course_path(course) do %>
-            <li><%= l(course.starts_at, format: :default)  %></li>
-          <% end %>
-        <% end %>
-      </ul>
-    <% end %>
-
-  <% end %>
-
+<div class="yellow-title">MES COURS A VENIR</div>
+<% if @next_courses.any? %>
+  <table class="container table table-striped table-responsive table-center coach-container">
+    <thead>
+      <tr>
+        <th>Académie</th>
+        <th>Activité</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @next_courses.each do |course| %>
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+        <td class="align-middle coach-font"><%= course.academy.name %></td>
+        <td class="align-middle coach-font"><%= course.activity.name %></td>
+        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="flexy">
+    <%= link_to "Retour", "/", class: "btn-etendart-small-device" %>
+  </div>
 <% end %>

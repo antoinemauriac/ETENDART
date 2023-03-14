@@ -118,8 +118,18 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @student.photo.attach(params[:student][:photo])
-    @academy = Academy.find(params[:academy_id])
-    redirect_to managers_student_path(@student, academy_id: @academy.id)
+    @academy = Academy.find(params[:academy_id]) if params[:academy_id].present?
+    respond_to do |format|
+      format.html do
+        if params[:redirect_to] == 'manager'
+          redirect_to managers_student_path(@student, academy_id: @academy.id), notice: "Photo mise à jour"
+        else
+          redirect_to coaches_student_profile_path(@student)
+        end
+      end
+      format.json { head :no_content }
+    end
+
   end
 
   private

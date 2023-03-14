@@ -74,7 +74,7 @@
         put :update_enrollments
       end
     end
-    resources :student_profiles, only: %i[show]
+    resources :student_profiles, only: %i[show index]
     resources :feedbacks, only: %i[new create]
   end
 end

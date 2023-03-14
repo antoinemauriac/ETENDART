@@ -5,7 +5,7 @@ class Coaches::CoursesController < ApplicationController
   def index
     @coach = current_user
     @current_time = Time.current
-    @camps = current_user.camps.where('ends_at >= ?', @current_time - 2.hour)
+    @next_courses = @coach.next_courses
     skip_policy_scope
     authorize([:coaches, @camps], policy_class: Coaches::CoursePolicy)
   end

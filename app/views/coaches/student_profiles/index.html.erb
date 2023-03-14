@@ -1,0 +1,26 @@
+<div class="yellow-title">LES ÉLÈVES</div>
+<% if @students.any? %>
+  <table class="container table table-striped table-responsive table-center coach-container">
+    <thead>
+      <tr>
+        <th>Photo</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_student_profile_path(student) %>'">
+        <td class="align-middle coach-font">
+          <%= cl_image_tag student.photo_or_default, id: "student-photo-manager", width: 60, height: 60, crop: :thumb, class: "avatar avatar-small" %>
+        </td>
+        <td class="align-middle coach-font"><%= student.last_name %></td>
+        <td class="align-middle coach-font"><%= student.first_name %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="flexy">
+    <%= link_to "Retour", "/", class: "btn-etendart-small-device" %>
+  </div>
+<% end %>
