@@ -25,6 +25,9 @@ application.register("hidden-forms", HiddenFormsController)
 import ImportCsvController from "./import_csv_controller"
 application.register("import-csv", ImportCsvController)
 
+import NavbarController from "./navbar_controller"
+application.register("navbar", NavbarController)
+
 import PresenceSheetController from "./presence_sheet_controller"
 application.register("presence-sheet", PresenceSheetController)
 

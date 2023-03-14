@@ -25,11 +25,11 @@
   <body data-controller="sidebar">
     <%= render "shared/navbar" %>
     <%= render "shared/flashes" %>
-      <div class="big-container">
-        <% if user_signed_in? %>
-          <%= render "shared/sidebar" %>
+        <% if false %>
+          <div class="big-container">
+              <%= render "shared/sidebar" %>
+          </div>
         <% end %>
         <div id="content"><%= yield %></div>
-      </div>
   </body>
 </html>

@@ -4,7 +4,7 @@
   <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@school_period.academy, @school_period) %></div>
   <div class="header-nav-item active"><%= @school_period.name.upcase %> - <%= @school_period.year %> </div>
 </div>
-<div class="yellow-title"><%= @school_period.name.upcase %></div>
+<div class="yellow-title"><%= @school_period.name.upcase %> - <%= @school_period.year %></div>
 
 <div class="container" data-controller="clickable-table">
   <table class="table table-striped table-responsive table-center form-container">

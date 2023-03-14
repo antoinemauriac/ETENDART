@@ -2,7 +2,7 @@
   <% @academies.each do |academy| %>
     <%= link_to managers_academy_path(academy), class: "col-lg-6 col-sm-12 mt-1" do %>
       <div class="card-academy" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= cl_image_path academy.image.key %>')">
-        <%= academy.name %>
+        <%= academy.name.upcase %>
       </div>
     <% end %>
   <% end %>
