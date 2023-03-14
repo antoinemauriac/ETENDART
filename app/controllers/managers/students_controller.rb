@@ -129,7 +129,6 @@ class Managers::StudentsController < ApplicationController
       end
       format.json { head :no_content }
     end
-
   end
 
   private

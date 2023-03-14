@@ -20,19 +20,15 @@
         <p>ADRESSE : <%= @student.address %> - <%= @student.zipcode %> - <%= @student.city %></p>
       </div>
       <div class="student-photo">
-        <% if @student.photo.attached? %>
-          <%= cl_image_tag @student.photo_or_default, id: "student-photo-manager", width: 120, height: 120, crop: :thumb, gravity: "face", class: "avatar", data: { upload_photo_target: "photo" } %>
+          <%= cl_image_tag @student.photo_or_default, class: "avatar", data: { upload_photo_target: "photo" } %>
           <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner">
             <span class="sr-only">Loading...</span>
           </div>
+        <% if @student.photo.attached? %>
           <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_photo_target: "form" } }) do |form| %>
             <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*" }, label_html: { class: "btn-photo" } %>
           <% end %>
         <% else %>
-          <%= cl_image_tag @student.photo_or_default, id: "student-photo-manager", width: 120, height: 120, crop: :thumb, gravity: "face", class: "avatar", data: { upload_photo_target: "photo" } %>
-          <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner">
-            <span class="sr-only">Loading...</span>
-          </div>
           <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id), method: :put, html: { multipart: true, data: { upload_photo_target: "form" } }) do |form| %>
             <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*"}, label_html: { class: "btn-photo" } %>
           <% end %>
