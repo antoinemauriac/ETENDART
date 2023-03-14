@@ -1,5 +1,5 @@
 <%= link_to managers_academy_path(@academy) do %>
-  <div class="header" style="background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('<%= cl_image_path @academy.image.key %>')">
+  <div class="header" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= cl_image_path @academy.image.key %>')">
     <%= @academy.name.upcase %>
   </div>
 <% end %>

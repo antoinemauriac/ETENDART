@@ -1,10 +1,15 @@
 <div class="student-title"><%= @student.full_name %></div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_academy_students_path(@academy) %></div>
+  <div class="header-nav-item active"><%= @student.full_name.upcase %></div>
+</div>
 
 
 <div class="row mt-3 justify-content-center align-items-stretch">
 
   <div class="col-lg-5 col-sm-12 mt-3" data-controller="upload-photo">
-    <div class="header-info">Informations</div>
+    <div class="header-info">INFORMATIONS</div>
     <div class="content-info content-info-student">
       <div class="student-info">
         <p>NOM : <%= @student.last_name %></p>
@@ -20,16 +25,16 @@
           <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner">
             <span class="sr-only">Loading...</span>
           </div>
-          <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true, data: { upload_photo_target: "form" } }) do |form| %>
-            <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer' }, label_html: { class: "btn-photo" } %>
+          <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id), method: :put, html: { multipart: true, data: { upload_photo_target: "form" } }) do |form| %>
+            <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*" }, label_html: { class: "btn-photo" } %>
           <% end %>
         <% else %>
           <%= cl_image_tag @student.photo_or_default, id: "student-photo-manager", width: 120, height: 120, crop: :thumb, gravity: "face", class: "avatar", data: { upload_photo_target: "photo" } %>
           <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner">
             <span class="sr-only">Loading...</span>
           </div>
-          <%= simple_form_for(@student, url: update_photo_managers_student_path(@student), method: :put, html: { multipart: true, data: { upload_photo_target: "form" } }) do |form| %>
-            <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer'}, label_html: { class: "btn-photo" } %>
+          <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id), method: :put, html: { multipart: true, data: { upload_photo_target: "form" } }) do |form| %>
+            <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*"}, label_html: { class: "btn-photo" } %>
           <% end %>
         <% end %>
       </div>
@@ -40,7 +45,7 @@
   </div>
 
   <div class="col-lg-7 col-sm-12 mt-3">
-    <div class="header-info">Prochaines activités</div>
+    <div class="header-info">PROCHAINES ACTIVITÉS</div>
     <div class="content-info">
       <% if @student.next_activities.empty? %>
       <div class="text-center">
@@ -119,7 +124,7 @@
   </div>
 
   <div class="col-lg-4 col-sm-12 mt-4">
-    <div class="header-info">Historique</div>
+    <div class="header-info">HISTORIQUE</div>
     <div class="content-info">
       <div>
         <p><%= "Nb total stages : #{@student.camps_count}" %></p>
@@ -131,7 +136,7 @@
   </div>
 
   <div class="col-lg-8 col-sm-12 mt-4">
-    <div class="header-info">Feedbacks</div>
+    <div class="header-info">FEEDBACKS</div>
     <div class="content-info">
       <div>
         <table class="table table-striped table-responsive">
@@ -160,7 +165,7 @@
   </div>
 
   <div class="col-12 mt-4">
-    <div class="header-info">Cours à venir</div>
+    <div class="header-info">COURS A VENIR</div>
     <div class="content-info">
       <table class="table table-responsive table-striped table-center">
         <thead>
@@ -188,7 +193,7 @@
   </div>
 
   <div class="col-12 mt-4">
-    <div class="header-info">Cours passés</div>
+    <div class="header-info">COURS PASSÉS</div>
     <div class="content-info">
       <table class="table table-responsive table-striped table-center">
         <thead>

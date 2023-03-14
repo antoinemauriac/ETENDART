@@ -1,4 +1,9 @@
-<div class="student-title">COACH : <%= @coach.full_name %></div>
+<div class="student-title">COACH : <%= @coach.full_name.upcase %></div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES COACHS", managers_academy_coaches_path(@academy) %></div>
+  <div class="header-nav-item active"><%= @coach.full_name.upcase %></div>
+</div>
 
 <div class="row mt-3 justify-content-center align-items-stretch">
 

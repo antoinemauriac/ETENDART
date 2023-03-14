@@ -14,11 +14,13 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @academies = Academy.all
+    @academy = Academy.find(params[:academy_id])
   end
 
   def new
     @student = Student.new
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
+    @academy = Academy.find(params[:academy_id])
   end
 
   def create
@@ -26,8 +28,9 @@ class Managers::StudentsController < ApplicationController
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @student.academies << Academy.find(params[:student][:academy1_id])
     @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
+    @academy = Academy.find(params[:student][:academy1_id])
     if @student.save
-      redirect_to managers_student_path(@student)
+      redirect_to managers_student_path(@student, academy_id: @academy.id)
       flash[:notice] = "Élève ajouté"
     else
       flash[:error] = "Une erreur est survenue"
@@ -115,7 +118,8 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @student.photo.attach(params[:student][:photo])
-    redirect_to managers_student_path(@student)
+    @academy = Academy.find(params[:academy_id])
+    redirect_to managers_student_path(@student, academy_id: @academy.id)
   end
 
   private

@@ -89,9 +89,13 @@
   background-color: #ffffff;
   color: rgb(154, 154, 154);
   border: 1px solid rgb(154, 154, 154);
-  border: none;
-  // font-weight: 900;
   margin: 1em 1em 1em 1em;
+}
+
+.btn-photo:hover {
+  background-color: rgb(154, 154, 154);
+  color: white;
+  transition: 0.3s;
 }
 
 .btn-clear {

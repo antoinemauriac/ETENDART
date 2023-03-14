@@ -21,6 +21,7 @@ class User < ApplicationRecord
   has_many :camps, through: :coach_camps
 
   has_many :activities, foreign_key: :coach_id
+  has_many :courses, through: :activities
 
   has_many :feedbacks, foreign_key: :coach_id
 
@@ -43,7 +44,14 @@ class User < ApplicationRecord
   end
 
   def next_activities
-    activities.joins(:camp).where('camps.starts_at > ?', Time.current).order(:starts_at)
+    activities.joins(:camp).where('camps.ends_at > ?', Time.current).order(:starts_at)
   end
 
+  def next_courses
+    courses.where('ends_at > ?', Time.current).order(:starts_at)
+  end
+
+  def missing_attendance
+    courses.where('starts_at < ?', Time.current).where.('status = ?', 'false')
+  end
 end

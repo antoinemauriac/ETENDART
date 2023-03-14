@@ -1,7 +1,23 @@
-<ul>
-  <% @academies.each do |academy| %>
-    <li>
-      <%= academy.created_at %>
-    </li>
-  <% end %>
-</ul>
+<div class="yellow-title">ACCUEIL</div>
+<div class="black-title">FEUILLE DE PRÉSENCE</div>
+<% if @next_courses.any? %>
+<div class="black-title">PROCHAINS COURS</div>
+  <table class="table table-striped table-responsive table-center coach-container">
+    <thead>
+      <tr>
+        <th>Académie</th>
+        <th>Activité</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @next_courses.each do |course| %>
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+        <td class="align-middle coach-font"><%= course.academy.name %></td>
+        <td class="align-middle coach-font"><%= course.activity.name %></td>
+        <td class="align-middle coach-font"><%= l(course.starts_at, format: :hour) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

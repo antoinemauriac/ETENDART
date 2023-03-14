@@ -1,5 +1,9 @@
 <%= render "shared/academy_header" %>
-<div class="yellow-title">Les adresses</div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item active">LES ADRESSES</div>
+</div>
+<div class="yellow-title">LES ADRESSES</div>
 <div class="container">
   <table class="table table-striped form-container table-center table-responsive">
     <thead>
@@ -29,13 +33,15 @@
       <button class="btn-etendart-square" id="add-location-btn">Ajouter une adresse</button>
         <%= simple_form_for(@location, method: :post, :url => managers_academy_locations_path(@academy), html: {id: "location-form", class: "hidden-form form-container", style: "width: 500px;"}) do |form| %>
           <div class="form-group">
-            <%= form.input :name, class: "form-control", required: true %>
+            <%= form.input :name, class: "form-control", label: "Nom", placeholder: "Terrain pricipal", required: true %>
           </div>
 
           <div class="form-group">
             <%= form.input :address,
               input_html: {data: {address_autocomplete_target: "address"}, class: "d-none form-control"},
-              placeholder: 'Tape une adresse',
+              label: "Adresse",
+              required: true,
+              placeholder: '12 rue Jean Jaurès',
               wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV['MAPBOX_API_KEY']}}
             %>
           </div>

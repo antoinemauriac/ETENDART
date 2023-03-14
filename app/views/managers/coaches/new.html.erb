@@ -1,28 +1,29 @@
 <%= render "shared/academy_header" %>
-<div class="yellow-title">Ajouter un coach</div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES COACHS", managers_academy_coaches_path(@academy) %></div>
+  <div class="header-nav-item active">NOUVEAU COACH</div>
+</div>
+<div class="yellow-title">AJOUTER UN COACH</div>
 
 <div class="flexy container">
-  <div class="form-container form-min-width">
-    <%= simple_form_for(@coach, url: managers_coaches_path, method: :post, html: { class: "form" }) do |form| %>
-      <%= form.input :email, label: "Email :", required: true, input_html: { class: "form-control" } %>
-
+  <%= simple_form_for(@coach, url: managers_coaches_path, method: :post, html: { class: "form" }) do |form| %>
+  <div class="form-container row">
+    <div class="col-6">
       <%= form.input :last_name, label: "Nom :", required: true, input_html: { class: "form-control" } %>
-
-      <%= form.input :first_name, label: "Prénom :", required: true, input_html: { class: "form-control" } %>
-
-      <%= form.input :phone_number, label: "Numéro de téléphone :", input_html: { class: "form-control" } %>
-
+      <%= form.input :email, label: "Email :", required: true, input_html: { class: "form-control" } %>
       <%= form.input :academy_1_id, label: "Académie 1 :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, required: true, input_html: { class: "form-control", validate: ["not_blank"] } %>
-
-      <%= form.input :academy_2_id, label: "Académie 2 (optionnel) :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
-
       <%= form.input :category_1_id, label: "Catégorie 1 :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, required: true, input_html: { class: "form-control", validate: ["not_blank"] } %>
-
+    </div>
+    <div class="col-6">
+      <%= form.input :first_name, label: "Prénom :", required: true, input_html: { class: "form-control" } %>
+      <%= form.input :phone_number, label: "Numéro de téléphone :", input_html: { class: "form-control" } %>
+      <%= form.input :academy_2_id, label: "Académie 2 (optionnel) :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
       <%= form.input :category_2_id, label: "Catégorie 2 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
-
-      <div class="flexy">
-        <%= form.button :submit, "Valider", class: "btn-etendart" %>
-      </div>
+    </div>
+    <div class="flexy">
+      <%= form.button :submit, "Valider", class: "btn-etendart" %>
+    </div>
     <% end %>
   </div>
 </div>
