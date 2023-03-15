@@ -63,4 +63,7 @@ class User < ApplicationRecord
     courses.map(&:students).flatten.uniq
   end
 
+  def academies_ordered
+    academies_as_coach.order('coach_academies.created_at')
+  end
 end

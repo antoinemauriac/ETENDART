@@ -20,7 +20,11 @@ class Course < ApplicationRecord
   end
 
   def self.today(manager)
-    where("starts_at <= ? AND ends_at >= ? AND manager_id = ?", Time.current.end_of_day, Time.current.beginning_of_day, manager.id).order(:starts_at)
+    where(starts_at: Time.zone.today.all_day, manager_id: manager.id).order(:starts_at)
+  end
+
+  def self.tomorrow(manager)
+    where(starts_at: Time.zone.tomorrow.all_day, manager_id: manager.id).order(:starts_at)
   end
 
   def missing_students
@@ -38,6 +42,7 @@ class Course < ApplicationRecord
   def present_students_count
     students_count - missing_students_count
   end
+
   private
 
   def starts_at_before_ends_at

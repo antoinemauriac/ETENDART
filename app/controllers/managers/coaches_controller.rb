@@ -13,8 +13,9 @@ class Managers::CoachesController < ApplicationController
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @academies = Academy.all
     @categories = Category.all
-    @academy1 = @coach.academies_as_coach.first ? @coach.academies_as_coach.first.id : ""
-    @academy2 = @coach.academies_as_coach.second ? @coach.academies_as_coach.second.id : ""
+    academies_ordered = @coach.academies_ordered
+    @academy1 = academies_ordered.first ? academies_ordered.first.id : ""
+    @academy2 = academies_ordered.second ? academies_ordered.second.id : ""
     @category1 = @coach.categories.first ? @coach.categories.first.id : ""
     @category2 = @coach.categories.second ? @coach.categories.second.id : ""
     @academy = Academy.find(params[:academy_id])
@@ -26,7 +27,6 @@ class Managers::CoachesController < ApplicationController
     @academies = Academy.all
     @categories = Category.all
     @academy = Academy.find(params[:academy_id])
-    @academy = current_user.academies_as_manager.first
   end
 
   def create

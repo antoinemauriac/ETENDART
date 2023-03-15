@@ -39,8 +39,8 @@
   </table>
 
   <div class="flexy" data-controller="hidden-forms">
-    <button class="btn-etendart-square" id="add-camp-btn">AJOUTER UNE SEMAINE</button>
-    <%= form_with(model: @camp, url: managers_school_period_camps_path(@school_period), method: :post, class: "hidden-form form-container", id: "camp-form") do |form| %>
+    <button class="btn-etendart-square" data-action="click->hidden-forms#displayCampForm">AJOUTER UNE SEMAINE</button>
+    <%= form_with(model: @camp, url: managers_school_period_camps_path(@school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
       <%= form.label :name, "Nom :" %>
       <%= form.text_field :name, class: "form-control", placeholder: "semaine1", required: true %>
       <%= form.label :starts_at, "Date de début :" %>
@@ -49,7 +49,7 @@
       <%= form.date_field :ends_at, class: "form-control" %>
       <div class="flex-btn">
         <%= form.submit "Valider", class: "btn-etendart" %>
-        <button class="btn-etendart-black" id="cancel-camp-btn" type="button">Annuler</button>
+        <button class="btn-etendart-black" data-action="click->hidden-forms#hideCampForm" type="button">Annuler</button>
       </div>
     <% end %>
   </div>

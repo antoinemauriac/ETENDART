@@ -8,6 +8,18 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.form-container-hidden {
+  min-width: 300px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.add-padding {
+  padding: 20px;
+  margin: 12px 0px;
+}
+
 .form-no-shadow {
   box-shadow: none;
 }
