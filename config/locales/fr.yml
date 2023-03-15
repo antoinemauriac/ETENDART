@@ -18,7 +18,7 @@ fr:
     abbr_month_names: [~, janv, févr, mars, avr, mai, juin, juil, août, sept, oct, nov, déc]
   time:
     formats:
-      default: "%d/%m/%Y à %Hh"
+      default: "%d/%m - %Hh"
       short: "%d %b %Y"
       long: "%A %e %B %Y"
       date: "%d/%m/%Y"

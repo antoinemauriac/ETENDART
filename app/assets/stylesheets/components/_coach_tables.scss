@@ -9,6 +9,10 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.table-small td {
+  padding: 0.5rem 0rem;
+}
+
 
 @media screen and (min-width: 600px) {
   .coach-font {
@@ -25,5 +29,6 @@
   .coach-container {
     border-radius: 4px;
     padding: 16px;
+    margin-bottom: 10px!important;
   }
 }

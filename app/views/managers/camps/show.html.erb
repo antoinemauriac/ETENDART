@@ -57,7 +57,7 @@
     </thead>
     <tbody>
       <% @camp.students_with_activity_enrollment.each do |student| %>
-        <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
+        <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @camp.academy.id) %>'">
           <td><%= student.last_name %></td>
           <td><%= student.first_name %></td>
           <td><%= student.age %> ans</td>

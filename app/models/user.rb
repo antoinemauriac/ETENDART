@@ -48,7 +48,11 @@ class User < ApplicationRecord
   end
 
   def next_courses
-    courses.where('ends_at > ?', Time.current).order(:starts_at)
+    courses.where('starts_at > ?', Time.current).order(:starts_at)
+  end
+
+  def past_courses
+    courses.where('ends_at < ?', Time.current).order(:starts_at)
   end
 
   def missing_attendance

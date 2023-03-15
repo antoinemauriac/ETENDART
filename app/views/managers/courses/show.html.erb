@@ -8,32 +8,45 @@
   <div class="header-nav-item"><%= link_to @course.activity.name.upcase, managers_activity_path(@course.activity) %></div>
   <div class="header-nav-item active"><%= l(@course.starts_at, format: :default) %></div>
 </div>
-<div class="yellow-title">FEUILLE D'APPEL</div>
+<div class="yellow-title mb-0">FEUILLE D'APPEL</div>
+<div class="black-title"><%= @course.activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %></div>
 
+<div class="flexy justify-content-center">
+  <div class="form-container col-xxl-3 col-lg-4 col-md-6 col-sm-12">
+    <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
+    <p>TOTAL ÉLÈVES : <strong><%= @course.students_count %></strong></p>
+    <% if @course.status == true %>
+      <p>PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
+      <p>ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
+    <% end %>
+    <p>
+      <% if @course.status %>
+      <div class="presence-status container">
+        APPEL VALIDÉ <i class="fa-solid fa-check text-success fa-big"></i>
+      </div>
+      <% else %>
+      <div class="presence-status container">
+        APPEL EN ATTENTE <i class="fa-solid fa-xmark text-danger fa-big"></i>
+      </div>
+      <% end %>
+    </p>
+  </div>
 
-
-<div class="container flexy" data-controller="presence-sheet">
-  <div class="form-container">
+  <div class="form-container col-xxl-4 col-lg-6 col-md-8 col-sm-12" data-controller="presence-sheet">
     <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
-      <table class="table table-striped table-responsive table-center">
-        <thead>
-          <tr>
-            <th>Nom-Prénom</th>
-            <th></th>
-            <th style="min-width:90px">Absent ?</th>
-          </tr>
-        </thead>
+      <table class="table table-striped table-responsive">
         <tbody>
           <% @enrollments.each do |enrollment| %>
             <tr>
-              <td class="min"><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", managers_student_path(enrollment.student), class: "student-mr" %></td>
-              <td class="min">
+              <td class="align-middle" style="width:80px"><%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-smaller" %></td>
+              <td class="align-middle"><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", managers_student_path(enrollment.student), class: "student-mr" %></td>
+              <td class="align-middle">
                 <div class="form-switch form-switch-lg">
                   <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
                   <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
                 </div>
               </td>
-              <td class="min"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
+              <td class="align-middle" style="width:80px"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
             </tr>
           <% end %>
         </tbody>

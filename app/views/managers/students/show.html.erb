@@ -1,4 +1,4 @@
-<div class="student-title"><%= @student.full_name %></div>
+<div class="student-title"><%= @student.full_name.upcase %></div>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
   <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_academy_students_path(@academy) %></div>
@@ -6,14 +6,14 @@
 </div>
 
 
-<div class="row mt-3 justify-content-center align-items-stretch">
+<div class="row justify-content-center align-items-stretch">
 
   <div class="col-lg-5 col-sm-12 mt-3" data-controller="upload-photo">
     <div class="header-info">INFORMATIONS</div>
     <div class="content-info content-info-student">
       <div class="student-info">
-        <p>NOM : <%= @student.last_name %></p>
-        <p>PRÉNOM : <%= @student.first_name %></p>
+        <p>NOM : <strong><%= @student.last_name.upcase %></strong></p>
+        <p>PRÉNOM : <strong><%= @student.first_name.upcase %></strong></p>
         <p><%= @student.gender %> - <%= @student.age %> ans </p>
         <p>EMAIL: <%= @student.email %></p>
         <p>TEL : 0<%= @student.phone_number %></p>
@@ -21,7 +21,7 @@
       </div>
       <div class="student-photo">
           <%= cl_image_tag @student.photo_or_default, class: "avatar", data: { upload_photo_target: "photo" } %>
-          <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner">
+          <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner" style="height:120px;width:120px">
             <span class="sr-only">Loading...</span>
           </div>
         <% if @student.photo.attached? %>

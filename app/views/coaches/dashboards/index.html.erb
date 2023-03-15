@@ -1,6 +1,30 @@
-<div class="yellow-title mb-0">ACCUEIL</div>
+<div class="yellow-title mb-0">TABLEAU DE BORD</div>
 <% if @missing_attendance.any? %>
-  <div class="black-title">FEUILLE DE PRÉSENCE</div>
+  <div class="black-title">FEUILLE D'APPEL EN ATTENTE</div>
+    <table class="container table table-striped table-responsive table-center coach-container mb-0">
+    <thead>
+      <tr>
+        <th>Activité</th>
+        <th>Date</th>
+        <th>Appel</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @missing_attendance.each do |course| %>
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+        <td class="align-middle coach-font"><%= course.activity.name %></td>
+        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
+        <td class="align-middle coach-font">
+          <% if course.status %>
+            <i class="fa-solid fa-check text-success fa-big"></i>
+          <% else %>
+            <i class="fa-solid fa-xmark text-danger fa-big"></i>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
 <% if @next_courses.any? %>
   <div class="black-title">PROCHAINS COURS</div>
@@ -9,7 +33,7 @@
       <tr>
         <th>Académie</th>
         <th>Activité</th>
-        <th>Date</th>
+        <th style="min-width:100px">Date</th>
       </tr>
     </thead>
     <tbody>
@@ -17,7 +41,7 @@
       <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
         <td class="align-middle coach-font"><%= course.academy.name %></td>
         <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
+        <td class="align-middle coach-font"  style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
       </tr>
       <% end %>
     </tbody>
@@ -29,7 +53,7 @@
 
 <% if @students.any? %>
   <div class="black-title">LES ÉLÈVES</div>
-  <table class="container table table-striped table-responsive table-center coach-container">
+  <table class="container table-striped table table-responsive table-center coach-container">
     <thead>
       <tr>
         <th>Photo</th>
@@ -42,7 +66,7 @@
       <% @students.each do |student| %>
       <tr class="clickable-tr" onclick="window.location.href='<%= coaches_student_profile_path(student) %>'">
         <td class="align-middle coach-font">
-          <%= cl_image_tag student.photo_or_default, class: "avatar" %>
+          <%= cl_image_tag student.photo_or_default, class: "avatar-small" %>
         </td>
         <td class="align-middle coach-font"><%= student.last_name %></td>
         <td class="align-middle coach-font"><%= student.first_name %></td>

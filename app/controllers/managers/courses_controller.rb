@@ -39,13 +39,18 @@ class Managers::CoursesController < ApplicationController
     course = Course.find(params[:id])
     enrollments_params = params[:enrollments]
     authorize([:managers, @enrollments], policy_class: Managers::CoursePolicy)
-    enrollments_params.each do |enrollment_params|
-      enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
-      enrollment.update(present: enrollment_params[1][:present].to_i)
+    if enrollments_params.present?
+      enrollments_params.each do |enrollment_params|
+        enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
+        enrollment.update(present: enrollment_params[1][:present].to_i)
+      end
+      course.update(status: true)
+      redirect_to managers_course_path(course)
+      flash[:notice] = "Appel mis à jour"
+    else
+      redirect_to managers_course_path(course)
+      flash[:alert] = "Aucun élève dans ce cours"
     end
-    course.update(status: true)
-    redirect_to managers_course_path(params[:id])
-    flash[:notice] = "Appel mis à jour"
   end
 
   private

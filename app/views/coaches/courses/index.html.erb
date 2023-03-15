@@ -1,11 +1,11 @@
-<div class="yellow-title">MES COURS A VENIR</div>
+<div class="yellow-title">COURS A VENIR</div>
 <% if @next_courses.any? %>
   <table class="container table table-striped table-responsive table-center coach-container">
     <thead>
       <tr>
         <th>Académie</th>
         <th>Activité</th>
-        <th>Date</th>
+        <th style="min-width:100px">Date</th>
       </tr>
     </thead>
     <tbody>
@@ -13,7 +13,31 @@
       <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
         <td class="align-middle coach-font"><%= course.academy.name %></td>
         <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
+        <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="flexy">
+    <%= link_to "Retour", "/", class: "btn-etendart-small-device" %>
+  </div>
+<% end %>
+<% if @past_courses.any? %>
+  <div class="black-title">COURS PASSÉS</div>
+  <table class="container table table-striped table-responsive table-center coach-container">
+    <thead>
+      <tr>
+        <th>Académie</th>
+        <th>Activité</th>
+        <th style="min-width:100px">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @past_courses.each do |course| %>
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+        <td class="align-middle coach-font"><%= course.academy.name %></td>
+        <td class="align-middle coach-font"><%= course.activity.name %></td>
+        <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
       </tr>
       <% end %>
     </tbody>

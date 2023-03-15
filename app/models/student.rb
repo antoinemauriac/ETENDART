@@ -108,6 +108,10 @@ class Student < ApplicationRecord
       .distinct
   end
 
+  def first_academy
+    academies.first
+  end
+
   def photo_or_default
     if photo.attached?
       photo.key

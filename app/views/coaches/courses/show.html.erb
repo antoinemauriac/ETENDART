@@ -1,29 +1,49 @@
-<div class="container">
-  <h1>Feuille de présence</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nom-Prénom</th>
-        <th>Présent</th>
-        <th>Absent</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= form_with(url: update_enrollments_coaches_course_path(@course), method: :put, class: "presence-sheet-form", data: { controller: "presence-sheet" }) do |form| %>
-        <% @enrollments.each do |enrollment| %>
-          <tr>
-            <td><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student) %></td>
-            <td>
-              <div class="form-switch form-switch-lg">
-                <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
-                <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
-              </div>
-            </td>
-            <td><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
-          </tr>
-        <% end %>
-    </tbody>
-  </table>
-  <%= form.submit "Valider", class: "btn-etendart mt-3" %>
-  <% end %>
+<div class="yellow-title"><%= @course.activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %></div>
+
+
+<div class="flexy justify-content-center">
+  <div class="form-container container container-presence-sheet col-xxl-3 col-lg-4 col-md-6 col-sm-12">
+    <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
+    <p>TOTAL ÉLÈVES : <strong><%= @course.students_count %></strong></p>
+    <% if @course.status == true %>
+      <p>PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
+      <p>ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
+    <% end %>
+    <p>
+      <% if @course.status %>
+      <div class="presence-status container">
+        APPEL VALIDÉ <i class="fa-solid fa-check text-success fa-big"></i>
+      </div>
+      <% else %>
+      <div class="presence-status container">
+        APPEL EN ATTENTE <i class="fa-solid fa-xmark text-danger fa-big"></i>
+      </div>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="form-container col-xxl-4 col-lg-6 col-md-8 col-sm-12" data-controller="presence-sheet">
+    <%= form_with(url: update_enrollments_coaches_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
+      <table class="table table-striped table-responsive table-small">
+        <tbody>
+          <% @enrollments.each do |enrollment| %>
+            <tr>
+              <td class="align-middle" style="width:80px;padding-left:6px"><%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-smaller" %></td>
+              <td class="align-middle"><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student), class: "student-mr" %></td>
+              <td class="align-middle">
+                <div class="form-switch form-switch-lg">
+                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
+                  <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
+                </div>
+              </td>
+              <td class="align-middle" style="width:80px"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="flexy">
+        <%= form.submit "Valider", class: "btn-etendart" %>
+      </div>
+    <% end %>
+  </div>
 </div>

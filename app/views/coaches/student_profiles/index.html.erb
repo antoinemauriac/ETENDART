@@ -6,16 +6,18 @@
         <th>Photo</th>
         <th>Nom</th>
         <th>Prénom</th>
+        <th>Âge</th>
       </tr>
     </thead>
     <tbody>
       <% @students.each do |student| %>
       <tr class="clickable-tr" onclick="window.location.href='<%= coaches_student_profile_path(student) %>'">
         <td class="align-middle coach-font">
-          <%= cl_image_tag student.photo_or_default, class: "avatar" %>
+          <%= cl_image_tag student.photo_or_default, class: "avatar avatar-small" %>
         </td>
         <td class="align-middle coach-font"><%= student.last_name %></td>
         <td class="align-middle coach-font"><%= student.first_name %></td>
+        <td class="align-middle coach-font"><%= student.age %> ans</td>
       </tr>
       <% end %>
     </tbody>

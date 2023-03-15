@@ -40,8 +40,8 @@
   text-align: center;
   padding: 8px;
   border-radius: 8px;
-  background-color: #042060;
-  color: white;
+  background-color: $yellow;
+  color: black;
   border: none;
   min-width: 140px;
   font-size: 16px;
@@ -50,7 +50,9 @@
 }
 
 .btn-etendart-blue:hover {
-  color: white!important;
+  background-color: black;
+  color: $yellow;
+  transition: 0.3s;
 }
 
 .btn-etendart-square {
@@ -139,4 +141,8 @@
 
 .fa-trash {
   color: black;
+}
+
+.fa-big {
+  font-size: 2em;
 }

@@ -35,6 +35,9 @@ class Course < ApplicationRecord
     missing_students.count
   end
 
+  def present_students_count
+    students_count - missing_students_count
+  end
   private
 
   def starts_at_before_ends_at
