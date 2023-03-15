@@ -1,3 +1,25 @@
-#feedback_content {
+#feedback-content {
   min-height: 140px;
+}
+
+.feedback-container {
+  min-width: 280px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 4px;
+  margin: 12px 0px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.feedback-coach-container {
+  min-width: 280px;
+  background-color: white;
+  padding: 0px;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.add-margin-and-padding {
+  padding: 16px;
+  margin: 12px 0px;
 }

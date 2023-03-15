@@ -9,10 +9,16 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.student-info-container {
+  background-color: white;
+  padding: 10px 0px 0px 0px;
+}
+
 .table-small td {
   padding: 0.5rem 0rem;
 }
 
+// Ecran supérieur à 600px
 
 @media screen and (min-width: 600px) {
   .coach-font {
@@ -31,4 +37,20 @@
     padding: 16px;
     margin-bottom: 10px!important;
   }
+
+  .special-container {
+    margin: auto auto;
+    max-width: 1140px;
+  }
 }
+
+// // Ecran inférieur à 600px
+
+
+// @media screen and (max-width: 600px) {
+
+//   .coach-student-info {
+//     max-width: 200px;
+//   }
+
+// }

@@ -46,7 +46,7 @@ class Managers::CoursesController < ApplicationController
       end
       course.update(status: true)
       redirect_to managers_course_path(course)
-      flash[:notice] = "Appel mis à jour"
+      flash[:notice] = "Appel validé"
     else
       redirect_to managers_course_path(course)
       flash[:alert] = "Aucun élève dans ce cours"

@@ -22,5 +22,6 @@ fr:
       short: "%d %b %Y"
       long: "%A %e %B %Y"
       date: "%d/%m/%Y"
+      date_short: "%d/%m"
       # datelong: "%"
       hour: "%H h"

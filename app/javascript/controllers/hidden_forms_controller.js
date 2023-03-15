@@ -2,8 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="hidden-forms"
 export default class extends Controller {
+
+  static targets = [ "feedbackForm" ]
+
   connect() {
-    console.log("zidane")
+    console.log("toto")
 
     // School Period Form
     const addSchoolPeriodBtn = document.getElementById("add-school-period-btn");
@@ -84,5 +87,15 @@ export default class extends Controller {
         enrollmentForm.classList.add("hidden-form");
       });
     }
+  }
+
+  // Feedback Form
+  displayFeedbackForm() {
+    this.feedbackFormTarget.classList.add("show");
+    this.feedbackFormTarget.classList.add("add-margin-and-padding");
+  }
+  hideFeedbackForm() {
+    this.feedbackFormTarget.classList.remove("show");
+    this.feedbackFormTarget.classList.remove("add-margin-and-padding");
   }
 }

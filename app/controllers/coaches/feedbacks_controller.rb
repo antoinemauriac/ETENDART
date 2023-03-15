@@ -12,12 +12,11 @@ class Coaches::FeedbacksController < ApplicationController
     @feedback.student = @student
     @feedback.coach = current_user
     if @feedback.save
-      redirect_to coaches_student_profile_path(@student)
       flash[:notice] = "Feedback ajouté avec succès"
     else
       flash[:alert] = "Une erreur est survenue"
-      render :new, status: :unprocessable_entity
     end
+    redirect_to coaches_student_profile_path(@student)
   end
 
   private
