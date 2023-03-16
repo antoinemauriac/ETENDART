@@ -79,17 +79,17 @@
       <% end %>
       <div data-controller="enrollment-form">
         <div class="flexy">
-          <button type="button" class="btn-etendart-blue" data-action="click->enrollment-form#openModal" style="width:300px">
+          <button type="button" class="btn-etendart-blue" data-action="click->enrollment-form#openActivityModal" style="width:300px">
             Inscrire à une activité
           </button>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" data-enrollment-form-target="activityModal" tabindex="-1" >
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
-                <i class="fas fa-times" data-action="click->enrollment-form#closeModal" style="cursor: pointer;"></i>
+                <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
+                <i class="fas fa-times" data-action="click->enrollment-form#closeActivityModal" style="cursor: pointer;"></i>
               </div>
               <div class="modal-body">
                 <%= form_with url: managers_enrollments_path, local: true do |form| %>
@@ -108,7 +108,7 @@
                     <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
                     <div class="d-flex justify-content-around mt-3">
                       <%= form.submit "Valider", class: "btn-etendart" %>
-                      <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeModal">Annuler</button>
+                      <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
                     </div>
                 <% end %>
               </div>
@@ -154,8 +154,34 @@
           </tbody>
         </table>
       </div>
-      <div class="flexy">
-        <%= link_to "Ajouter un feedback", new_managers_feedback_path(params: { student_id: @student.id }), class: "btn-etendart-blue", style:"width:300px" %>
+      <div data-controller="feedback-form">
+        <div class="flexy">
+          <button type="button" class="btn-etendart-blue" data-action="click->feedback-form#openFeedbackModal" style="width:300px">
+            Ajouter un feedback
+          </button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" data-feedback-form-target="feedbackModal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= "Ajouter un feedback pour #{@student.first_name} #{@student.last_name}" %></h5>
+                <i class="fas fa-times" data-action="click->feedback-form#closeFeedbackModal" style="cursor: pointer;"></i>
+              </div>
+              <div class="modal-body">
+                <%= form_with(model: @feedback, url: managers_feedbacks_path(student_id: @student.id ,academy_id: @academy.id), local: true) do |form| %>
+                  <div class="form-group">
+                    <%= form.text_area :content, class: "form-control", placeholder: "Ecrivez votre commentaire ici...", required: true %>
+                  </div>
+                  <div class="d-flex justify-content-around mt-3">
+                    <%= form.submit "Valider", class: "btn-etendart" %>
+                    <button class="btn-etendart-black" type="button" data-action="click->feedback-form#closeFeedbackModal">Annuler</button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
