@@ -30,7 +30,7 @@
             <tr>
               <% if enrollment.student.photo.attached? %>
                 <td class="align-middle" style="width:80px;padding-left:6px">
-                  <%= cl_image_tag enrollment.student.photo.key, class: "avatar-smaller", width:50, height: 50, quality: 10 %>
+                  <%= cl_image_tag enrollment.student.photo.key, class: "avatar-smaller", width:50, height: 50, quality: 100 %>
                 </td>
               <% else %>
                 <td class="align-middle" style="width:80px;padding-left:6px">
