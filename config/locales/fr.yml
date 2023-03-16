@@ -25,3 +25,13 @@ fr:
       date_short: "%d/%m"
       # datelong: "%"
       hour: "%H h"
+  activerecord:
+    attributes:
+      camp:
+        starts_at: "La date de début"
+    errors:
+      models:
+        camp:
+          attributes:
+            starts_at:
+              after: "doit être avant la date de fin"

@@ -60,7 +60,7 @@ class Managers::StudentsController < ApplicationController
 
   def import
     school_period = SchoolPeriod.find(params[:school_period][:school_period_id])
-    authorize([:managers, @school_period], policy_class: Managers::StudentPolicy)
+    authorize([:managers, school_period], policy_class: Managers::StudentPolicy)
     academy = school_period.academy
     file = params[:school_period][:csv_file]
     file = File.open(file)
@@ -78,22 +78,29 @@ class Managers::StudentsController < ApplicationController
         student.update(student_params_upload(row))
       end
 
+      # retirer l'élève des cours de la période
+
+      student.school_period_enrollments.where(school_period: school_period).destroy_all
+      student.camp_enrollments.joins(:camp).where(camps: { school_period: school_period }).destroy_all
+      student.activity_enrollments.joins(activity: :camp).where(camps: { school_period: school_period }).destroy_all
+      student.course_enrollments.joins(course: { activity: :camp }).where(camps: { school_period: school_period }).destroy_all
+
       student.academies << academy unless student.academies.include?(academy)
-      student.school_periods << school_period unless student.school_periods.include?(school_period)
+      student.school_periods << school_period
 
       (1..4).each do |week_number|
         week_name = "semaine#{week_number}"
         if row[week_name] == "oui"
           week_camp = school_period.camps.find_by(name: week_name)
-          student.camps << week_camp unless student.camps.include?(week_camp)
+          student.camps << week_camp
 
           (1..2).each do |i|
             activity_name = row["activite_#{i}_#{week_name}"]
             if activity_name.present?
               activity = week_camp.activities.find_by(name: activity_name)
               if activity.present?
-                student.courses << activity.courses unless student.activities.include?(activity)
-                student.activities << activity unless student.activities.include?(activity)
+                student.activities << activity
+                student.courses << activity.courses
               else
                 flash[:alert] = "Une erreur est survenue. L'activité #{activity_name} ne correspond pas à une activité créée sur l'application"
                 redirect_to managers_school_period_path(school_period) and return

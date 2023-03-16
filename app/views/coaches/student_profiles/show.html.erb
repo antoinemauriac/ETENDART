@@ -2,7 +2,7 @@
 
 <div class="special-container">
   <div class="row justify-content-center align-items-center student-info-container">
-    <div class="flexy col-5 col-sm-5 col-md-5 col-lg-4 col-xxl-3" data-controller="upload-photo">
+    <div class="flexy col-5 col-sm-5 col-md-5 col-lg-4 col-xxl-4" data-controller="upload-photo">
       <%= cl_image_tag @student.photo_or_default, class: "avatar", data: { upload_photo_target: "photo" } %>
       <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner">
         <span class="sr-only">Loading...</span>
@@ -17,7 +17,7 @@
         <% end %>
       <% end %>
     </div>
-    <div class="col-7 col-sm-7 col-md-5 col-lg-4  col-xxl-3 coach-student-info">
+    <div class="col-7 col-sm-7 col-md-5 col-lg-5  col-xxl-5 coach-student-info">
       <p class="text-break">NOM : <strong><%= @student.last_name.upcase %></strong></p>
       <p class="text-break">PRÉNOM : <strong><%= @student.first_name.upcase %></strong></p>
       <p><%= @student.gender %> - <%= @student.age %> ans </p>

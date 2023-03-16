@@ -56,14 +56,22 @@
 </div>
 
 <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
-<div class="container flexy">
-  <div class="form-container" data-controller="import-csv">
-    <%= simple_form_for(@school_period, url: managers_students_import_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
-      <%= form.input :school_period_id, as: :hidden, input_html: { value: @school_period.id } %>
-      <div class="form-group">
-        <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
-      </div>
-      <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton" }, class: "btn btn-primary" %>
-    <% end %>
+<% if @school_period.can_import? %>
+  <div class="container flexy">
+    <div class="form-container" data-controller="import-csv">
+      <%= simple_form_for(@school_period, url: managers_students_import_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+        <%= form.input :school_period_id, as: :hidden, input_html: { value: @school_period.id } %>
+        <div class="form-group">
+          <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
+        </div>
+        <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton" }, class: "btn btn-primary" %>
+      <% end %>
+    </div>
   </div>
-</div>
+<% else %>
+  <div class="container">
+    <div class="form-container flexy">
+      <p class="mb-0">Le stage ayant déjà commencé, vous ne pouvez plus importer de fichier.</p>
+    </div>
+  </div>
+<% end %>

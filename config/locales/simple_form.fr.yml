@@ -1,0 +1,31 @@
+fr:
+  simple_form:
+    "yes": 'Oui'
+    "no": 'Non'
+    required:
+      text: 'obligatoire'
+      mark: '*'
+      # Vous pouvez décommenter la ligne ci-dessous si vous devez écraser tout le HTML requis.
+      # Lors de l'utilisation de HTML, le texte et la marque ne seront pas utilisés.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: "Veuillez vérifier les erreurs suivantes :"
+    # Exemples
+    # labels:
+    #   defaults:
+    #     password: 'Mot de passe'
+    #   user:
+    #     new:
+    #       email: 'E-mail pour se connecter.'
+    #     edit:
+    #       email: 'E-mail.'
+    # hints:
+    #   defaults:
+    #     username: 'Nom d'utilisateur pour se connecter.'
+    #     password: 'Pas de caractères spéciaux, s\'il vous plaît.'
+    # include_blanks:
+    #   defaults:
+    #     age: 'Plutôt ne pas dire'
+    # prompts:
+    #   defaults:
+    #     age: 'Sélectionnez votre âge'

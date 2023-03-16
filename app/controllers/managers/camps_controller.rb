@@ -7,17 +7,31 @@ class Managers::CampsController < ApplicationController
     @activity = Activity.new
   end
 
+  # def create
+  #   @camp = Camp.new(camp_params)
+  #   @camp.school_period = SchoolPeriod.find(params[:school_period_id])
+  #   authorize([:managers, @camp])
+  #   if @camp.save
+  #     redirect_to managers_school_period_path(@camp.school_period)
+  #     flash[:notice] = "Camp créé"
+  #   else
+  #     puts @camp.errors.full_messages
+  #     render :new # vous pouvez également remplacer :new par :edit, en fonction de la page où vous vous trouvez
+  #   end
+  # end
+
   def create
     @camp = Camp.new(camp_params)
     @camp.school_period = SchoolPeriod.find(params[:school_period_id])
     authorize([:managers, @camp])
+
     if @camp.save
-      redirect_to managers_school_period_path(@camp.school_period)
       flash[:notice] = "Camp créé"
     else
-      redirect_to managers_school_period_path(@camp.school_period)
-      flash[:alert] = "Une erreur est survenue"
+      flash[:alert] = "Erreur : " + @camp.errors.full_messages.join(", ")
     end
+
+    redirect_to managers_school_period_path(@camp.school_period)
   end
 
   def destroy

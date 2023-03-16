@@ -12,4 +12,12 @@ class SchoolPeriod < ApplicationRecord
   def students_count
     students.count
   end
+
+  def starts_at
+    camps.minimum(:starts_at)
+  end
+
+  def can_import?
+    starts_at > Date.today
+  end
 end

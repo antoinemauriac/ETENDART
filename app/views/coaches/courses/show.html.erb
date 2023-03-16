@@ -29,7 +29,7 @@
           <% @enrollments.each do |enrollment| %>
             <tr>
               <td class="align-middle" style="width:80px;padding-left:6px">
-                <%= cl_image_tag enrollment.student.photo_or_default, width: 60, height: 60, quality: 15, class: "avatar-smaller" %>
+                <%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-smaller", width:60, height: 60, quality: 15, fetch_format: :auto %>
               </td>
               <td class="align-middle"><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student), class: "student-mr" %></td>
               <td class="align-middle">

@@ -1,6 +1,6 @@
 <div id="no-user" class="row">
   <div class="devise-form">
-    <h2 class="text-center">Connexion</h2>
+    <h2 class="header-info mb-3">Connexion</h2>
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: :false }) do |f| %>
       <div class="form-inputs">
         <%= f.input :email,
@@ -14,11 +14,11 @@
                     required: false,
                     input_html: { autocomplete: "current-password" },
                     placeholder: "mot de passe" %>
-        <%= f.input :remember_me, label: "Se souvenir de moi", as: :boolean if devise_mapping.rememberable?%>
+        <%= f.input :remember_me, label: "Se souvenir de moi?", as: :boolean, wrapper_html: { class: "mt-3" } if devise_mapping.rememberable? %>
       </div>
 
       <div class="flexy">
-        <%= f.button :submit, "Connexion", class: "btn-etendart mb-4", style:"width:100%" %>
+        <%= f.button :submit, "Valider", class: "btn-etendart btn-connexion-bis mb-4", style:"width:100%" %>
       </div>
       <%= render "devise/shared/links" %>
     <% end %>

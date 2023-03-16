@@ -1,10 +1,3 @@
-.btn-connexion {
-  padding: 20px!important;
-  border-radius: 16px!important;
-  font-size: 20px!important;
-}
-
-
 .btn-etendart {
   text-align: center;
   padding: 8px;
@@ -23,6 +16,10 @@
   color: black;
   transition: 0.3s;
 }
+
+// .btn-connexion-bis {
+//   border-radius: 10px!important;
+// }
 
 .btn-etendart-small {
   text-align: center;
@@ -167,4 +164,12 @@
 
 .fa-big {
   font-size: 2em;
+}
+
+@media screen and (min-width: 768px) {
+  .btn-connexion {
+    padding: 16px!important;
+    border-radius: 16px!important;
+    font-size: 20px!important;
+  }
 }

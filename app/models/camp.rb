@@ -31,6 +31,6 @@ class Camp < ApplicationRecord
   private
 
   def starts_at_must_be_before_ends_at
-    errors.add(:starts_at, "must be before ends_at") if starts_at >= ends_at
+    errors.add(:starts_at, :after) if starts_at >= ends_at
   end
 end
