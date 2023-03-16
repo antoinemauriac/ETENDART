@@ -15,6 +15,7 @@ class Managers::StudentsController < ApplicationController
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @academies = Academy.all
     @academy = Academy.find(params[:academy_id])
+    @feedback = Feedback.new
   end
 
   def new
@@ -50,7 +51,7 @@ class Managers::StudentsController < ApplicationController
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     if @student.update(student_params)
       update_academies
-      redirect_to managers_student_path(@student)
+      redirect_to managers_student_path(@student, academy_id: @student.first_academy.id)
       flash[:notice] = "Informations modifiées avec succès"
     else
       flash[:error] = "Une erreur est survenue"
