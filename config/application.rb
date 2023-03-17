@@ -41,7 +41,7 @@ module ETENDART
       folder: "etendart/students/avatars",
       allowed_formats: %w[jpg png gif],
       transformation: [
-        { quality: 10 }
+        { width: 200, quality: "auto", crop: "scale" }
       ]
     }
 
