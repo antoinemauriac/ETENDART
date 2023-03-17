@@ -52,7 +52,7 @@ module ETENDART
     if existing_upload_preset.nil?
       Cloudinary::Api.create_upload_preset(name: upload_preset_name, **upload_preset_options)
     else
-      Cloudinary::Api.update_upload_preset(preset_name, preset_options)
+      Cloudinary::Api.update_upload_preset(upload_preset_name, upload_preset_options)
     end
   end
 
