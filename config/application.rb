@@ -35,13 +35,23 @@ module ETENDART
       config.cdn_subdomain = true
     end
 
-    Cloudinary::Api.create_upload_preset(
-      name: "student_avatar",
+    preset_name = "student_avatar"
+    preset_options = {
       unsigned: true,
       folder: "etendart/students/avatars",
       transformation: [
         { width: 200, quality: "auto", crop: "scale"}
       ]
-    )
+    }
+
+    preset = Cloudinary::Api.get_upload_preset(preset_name)
+
+    if preset["error"] == "not_found"
+      # Le preset n'existe pas, on le crée
+      Cloudinary::Api.create_upload_preset(name: preset_name, **preset_options)
+    else
+      # Le preset existe, on le met à jour
+      Cloudinary::Api.update_upload_preset(name: preset_name, **preset_options)
+    end
   end
 end
