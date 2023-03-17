@@ -1,5 +1,6 @@
 class Managers::StudentsController < ApplicationController
   require 'csv'
+  require 'open-uri'
 
   def index
     @academy = Academy.find(params[:academy_id])
@@ -121,12 +122,21 @@ class Managers::StudentsController < ApplicationController
     @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
   end
 
-
   def update_photo
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    @student.photo.attach(params[:student][:photo])
+
+    # Upload de l'image sur Cloudinary en utilisant l'upload_preset student_avatar
+    result = Cloudinary::Uploader.upload(params[:student][:photo], upload_preset: 'student_avatar')
+
+    # Récupération de l'URL de l'image uploadée
+    photo_url = result['secure_url']
+
+    # Enregistrement de l'URL de l'image sur l'objet Student
+    @student.photo.attach(io: URI.open(photo_url), filename: "avatar")
+
     @academy = Academy.find(params[:academy_id]) if params[:academy_id].present?
+
     respond_to do |format|
       format.html do
         if params[:redirect_to] === 'manager'
@@ -138,6 +148,7 @@ class Managers::StudentsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
 
   private
 
