@@ -5,6 +5,7 @@ class Coaches::StudentProfilesController < ApplicationController
     authorize([:coaches, @student], policy_class: Coaches::StudentProfilePolicy)
     @feedbacks = @student.feedbacks.where(coach_id: current_user.id).order(created_at: :desc)
     @feedback = Feedback.new
+    @url = params[:url_origin]
   end
 
   def index

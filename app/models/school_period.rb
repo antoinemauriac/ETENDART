@@ -1,4 +1,7 @@
 class SchoolPeriod < ApplicationRecord
+
+  MESSAGE = "Avant de valider, avez vous-vérifier que les dates des camps sont correctes ?"
+
   belongs_to :academy
   has_many :camps, dependent: :destroy
 
@@ -14,10 +17,14 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def starts_at
-    camps.minimum(:starts_at)
+    camps.minimum(:starts_at) if camps.any?
   end
 
   def can_import?
-    starts_at > Date.today
+    if starts_at
+      starts_at > Date.today
+    else
+      true
+    end
   end
 end

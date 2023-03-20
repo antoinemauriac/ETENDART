@@ -21,8 +21,9 @@
       <%= form.input :academy_2_id, label: "Académie 2 (optionnel) :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
       <%= form.input :category_2_id, label: "Catégorie 2 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
     </div>
-    <div class="flexy">
+    <div class="flex-btn">
       <%= form.button :submit, "Valider", class: "btn-etendart" %>
+      <%= link_to "Annuler", managers_academy_coaches_path(@academy), class: "btn-etendart-black" %>
     </div>
     <% end %>
   </div>

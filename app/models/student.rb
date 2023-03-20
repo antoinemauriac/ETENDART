@@ -1,6 +1,6 @@
 class Student < ApplicationRecord
 
-  DEFAULT_AVATAR = "avatar-anonyme_humrcg.png"
+  DEFAULT_AVATAR = "assets/fhmearnzajbboxbkrh65.png"
 
   scope :today_birthday, -> { where('EXTRACT(month FROM date_of_birth) = ? AND EXTRACT(day FROM date_of_birth) = ?', Date.today.month, Date.today.day).order("created_at DESC") }
 

@@ -17,10 +17,6 @@
   transition: 0.3s;
 }
 
-// .btn-connexion-bis {
-//   border-radius: 10px!important;
-// }
-
 .btn-etendart-small {
   text-align: center;
   padding: 8px;
@@ -31,6 +27,12 @@
   min-width: 140px;
   font-size: 14px;
   margin-bottom: 1em;
+}
+
+.btn-etendart-small:hover {
+  background-color: black;
+  color: $yellow;
+  transition: 0.3s;
 }
 
 .btn-smaller {
@@ -163,6 +165,10 @@
 }
 
 .fa-big {
+  font-size: 2em;
+}
+
+.fa-arrow-rotate-left {
   font-size: 2em;
 }
 

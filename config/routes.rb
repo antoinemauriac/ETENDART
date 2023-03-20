@@ -18,7 +18,7 @@
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # import student from csv
-  post '/managers/students/import', to: 'managers/students#import'
+  # post '/managers/students/import', to: 'managers/students#import'
 
   # coach stiumulus controller
   get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'
@@ -39,6 +39,8 @@
         put :update_enrollments
       end
     end
+
+    post 'import_students', to: 'import_students#import'
 
     resources :students, only: %i[show new create edit update] do
       member do

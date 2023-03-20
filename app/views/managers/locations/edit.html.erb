@@ -1,5 +1,10 @@
 <%= render "shared/academy_header" %>
-<div class="yellow-title">Modifier une adresse</div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES ADRESSES", managers_academy_locations_path(@academy) %></div>
+  <div class="header-nav-item active"><%= @location.name.upcase %></div>
+</div>
+<div class="yellow-title">MODIFIER UNE ADRESSE</div>
 
 <div class="flexy">
   <%= simple_form_for(@location, method: :put, url: managers_academy_location_path(@academy, @location), html: {class: "form-container", style: "width: 500px;"}) do |form| %>
@@ -14,7 +19,7 @@
 
     <div class="flex-btn">
       <%= form.submit "Valider", class: "btn-etendart" %>
-      <button class="btn-etendart-black" id="cancel-location-btn" type="button">Annuler</button>
+      <%= link_to "Annuler", managers_academy_locations_path(@academy), class: "btn-etendart-black" %>
     </div>
   <% end %>
 </div>

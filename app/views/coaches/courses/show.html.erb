@@ -37,7 +37,7 @@
                   <%= image_tag "avatar.png", class: "avatar-smaller" %>
                 </td>
               <% end %>
-              <td class="align-middle"><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student), class: "student-mr" %></td>
+              <td class="align-middle"><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr" %></td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
                   <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>

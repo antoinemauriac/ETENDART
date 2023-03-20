@@ -1,5 +1,11 @@
-<%= render "shared/home_header" %>
-<div class="yellow-title">Modifier les informations</div>
+<div class="student-title"><%= @student.full_name.upcase %></div>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_academy_students_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to @student.full_name.upcase, managers_student_path(@student, academy_id: @academy.id) %></div>
+  <div class="header-nav-item active">MODIFIER</div>
+</div>
+<div class="yellow-title">MODIFIER LES INFORMATIONS</div>
 <div class="container flexy">
   <div class="form-container form-min-width">
     <%= simple_form_for @student, url: managers_student_path(@student), html: {class: 'form-horizontal'}, method: :put do |form| %>
@@ -25,8 +31,9 @@
 
       <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true, selected: @academy2&.id || 'Sélectionnez une académie' %>
 
-      <div class="flexy">
+      <div class="flex-btn">
         <%= form.button :submit, "Valider", class: "btn-etendart" %>
+        <%= link_to "Annuler", managers_student_path(@student, academy_id: @academy.id), class: "btn-etendart-black" %>
       </div>
     <% end %>
   </div>

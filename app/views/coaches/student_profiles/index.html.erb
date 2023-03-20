@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       <% @students.each do |student| %>
-      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_student_profile_path(student) %>'">
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_student_profile_path(student, url_origin: coaches_student_profiles_path) %>'">
         <td class="align-middle coach-font">
           <%= cl_image_tag student.photo_or_default, class: "avatar avatar-small" %>
         </td>
