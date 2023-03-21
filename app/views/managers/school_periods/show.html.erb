@@ -56,7 +56,7 @@
 </div>
 
 <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
-<% if @school_period.can_import? %>
+
   <div class="container flexy">
     <div class="form-container" data-controller="import-csv">
       <%= simple_form_for(@school_period, url: managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
@@ -68,10 +68,3 @@
       <% end %>
     </div>
   </div>
-<% else %>
-  <div class="container">
-    <div class="form-container flexy">
-      <p class="mb-0">Le stage ayant déjà commencé, vous ne pouvez plus importer de fichier.</p>
-    </div>
-  </div>
-<% end %>
