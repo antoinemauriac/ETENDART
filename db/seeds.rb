@@ -31,7 +31,7 @@ basket = Category.create!(name: 'Basket')
 theatre = Category.create!(name: 'Théâtre')
 anglais = Category.create!(name: 'Anglais')
 danse = Category.create!(name: 'Danse')
-categories = [tennis, basket, manga, theatre, anglais, danse]
+categories = [tennis, basket, theatre, anglais, danse]
 
 Role.create!(name: 'manager')
 Role.create!(name: 'coach')
