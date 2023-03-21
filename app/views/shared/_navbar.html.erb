@@ -9,18 +9,15 @@
     <ul class="nav navbar-nav">
       <% if user_signed_in? %>
         <li class="nav-item active">
-          <%= link_to "DASHBOARD", "/", class: "nav-link" %>
+          <%= link_to "TABLEAU DE BORD", "/", class: "nav-link" %>
         </li>
         <% if current_user.coach? %>
         <ul class="dashboard-details">
           <li class="nav-item nav-item-small">
-            <%= link_to "MES ÉLÈVES", "#", class: "nav-link nav-link-small" %>
+            <%= link_to "LES COURS", coaches_courses_path, class: "nav-link nav-link-small" %>
           </li>
           <li class="nav-item nav-item-small">
-            <%= link_to "MES COURS", "#", class: "nav-link nav-link-small" %>
-          </li>
-          <li class="nav-item nav-item-small">
-            <%= link_to "MES RÉUNIONS", "#", class: "nav-link nav-link-small" %>
+            <%= link_to "LES ÉLÈVES", coaches_student_profiles_path, class: "nav-link nav-link-small" %>
           </li>
         </ul>
         <% end %>
