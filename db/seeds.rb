@@ -27,11 +27,11 @@ Student.destroy_all
 
 tennis = Category.create!(name: 'Tennis')
 basket = Category.create!(name: 'Basket')
-manga = Category.create!(name: 'Manga')
+# manga = Category.create!(name: 'Manga')
 theatre = Category.create!(name: 'Théâtre')
 anglais = Category.create!(name: 'Anglais')
 danse = Category.create!(name: 'Danse')
-categories = [tennis, basket, manga, theatre, anglais]
+categories = [tennis, basket, manga, theatre, anglais, danse]
 
 Role.create!(name: 'manager')
 Role.create!(name: 'coach')
@@ -47,6 +47,8 @@ coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "
 coach2.roles << Role.find_by(name: 'coach')
 coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
 coach3.roles << Role.find_by(name: 'coach')
+coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
+coach4.roles << Role.find_by(name: 'coach')
 
 coaches = [coach1, coach2, coach3]
 
@@ -76,7 +78,7 @@ coach1.categories << danse
 coach2.academies_as_coach << djoko
 coach2.categories << danse
 coach3.academies_as_coach << djoko
-coach3.categories << categories.sample
+coach3.categories << tennis
 
 
 location1 = Location.create!(address: '1 rue de la paix Clichy', academy: djoko, name: 'Clichy1')
@@ -86,56 +88,56 @@ location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rud
 locations = [location1, location2, location3, location4]
 
 
-djoko_fevrier_23 = SchoolPeriod.create!(name: 'février', year: 2023, academy: djoko)
-djoko_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: djoko)
-djoko_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: djoko)
-rudy_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: rudy)
-rudy_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: rudy)
-angers_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: angers)
+# djoko_fevrier_23 = SchoolPeriod.create!(name: 'février', year: 2023, academy: djoko)
+# djoko_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: djoko)
+# djoko_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: djoko)
+# rudy_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: rudy)
+# rudy_ete_23 = SchoolPeriod.create!(name: 'été', year: 2023, academy: rudy)
+# angers_avril_23 = SchoolPeriod.create!(name: 'avril', year: 2023, academy: angers)
 
-week0_d = Camp.create!(name: 'semaine1', school_period: djoko_fevrier_23, starts_at: Date.new(2023, 2, 2), ends_at: Date.new(2023, 2, 18))
-week1_d = Camp.create!(name: 'semaine1', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
-week2_d = Camp.create!(name: 'semaine2', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
-week1_r = Camp.create!(name: 'semaine1', school_period: rudy_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
-week2_r = Camp.create!(name: 'semaine2', school_period: rudy_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
-week1_a = Camp.create!(name: 'semaine1', school_period: angers_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
-weeks = [week1_d, week2_d, week1_r, week2_r, week1_a]
+# week0_d = Camp.create!(name: 'semaine1', school_period: djoko_fevrier_23, starts_at: Date.new(2023, 2, 2), ends_at: Date.new(2023, 2, 18))
+# week1_d = Camp.create!(name: 'semaine1', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
+# week2_d = Camp.create!(name: 'semaine2', school_period: djoko_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
+# week1_r = Camp.create!(name: 'semaine1', school_period: rudy_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
+# week2_r = Camp.create!(name: 'semaine2', school_period: rudy_avril_23, starts_at: Date.new(2023, 4, 24), ends_at: Date.new(2023, 4, 28))
+# week1_a = Camp.create!(name: 'semaine1', school_period: angers_avril_23, starts_at: Date.new(2023, 4, 17), ends_at: Date.new(2023, 4, 21))
+# weeks = [week1_d, week2_d, week1_r, week2_r, week1_a]
 
-days1 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-days2 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday']
-days3 = ['Monday', 'Tuesday', 'Thursday']
-days = [days1, days2, days3]
-activities = ['Tennis(8-12ans)', 'Tennis(12-16ans)', 'Web Design (entre 2008 et 2005)', 'Danse (entre 2008 et 2005)']
+# days1 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+# days2 = ['Monday', 'Tuesday', 'Wednesday', 'Thursday']
+# days3 = ['Monday', 'Tuesday', 'Thursday']
+# days = [days1, days2, days3]
+# activities = ['Tennis(8-12ans)', 'Tennis(12-16ans)', 'Web Design (entre 2008 et 2005)', 'Danse (entre 2008 et 2005)']
 
-weeks.each do |week|
-  activities.length.times do |i|
-    jours = days.sample
-    coach = coaches.sample
-    Activity.create!(name: activities[i],
-                     days: jours,
-                     coach: coach,
-                     camp: week,
-                     category: categories.sample,
-                     location: locations.sample)
+# weeks.each do |week|
+#   activities.length.times do |i|
+#     jours = days.sample
+#     coach = coaches.sample
+#     Activity.create!(name: activities[i],
+#                      days: jours,
+#                      coach: coach,
+#                      camp: week,
+#                      category: categories.sample,
+#                      location: locations.sample)
 
-    coach.camps << week unless coach.camps.include?(week)
-    starts_at = week.starts_at
+#     coach.camps << week unless coach.camps.include?(week)
+#     starts_at = week.starts_at
 
-    date_array = jours.map do |day|
-      date = starts_at
-      while date.strftime("%A") != day
-        date += 1
-      end
-      day = date
-    end
+#     date_array = jours.map do |day|
+#       date = starts_at
+#       while date.strftime("%A") != day
+#         date += 1
+#       end
+#       day = date
+#     end
 
-    date_array.each do |date|
-      starting_at = Time.new(date.year, date.month, date.day, rand(1..10), 0, 0)
-      ending_at = starting_at + rand(1..3).hours
-      Course.create!(starts_at: starting_at, ends_at: ending_at, activity: Activity.last, manager: manager1, coach: coach)
-    end
-  end
-end
+#     date_array.each do |date|
+#       starting_at = Time.new(date.year, date.month, date.day, rand(1..10), 0, 0)
+#       ending_at = starting_at + rand(1..3).hours
+#       Course.create!(starts_at: starting_at, ends_at: ending_at, activity: Activity.last, manager: manager1, coach: coach)
+#     end
+#   end
+# end
 
 # students.each do |student|
 #   AcademyEnrollment.create!(student: student, academy: djoko)
