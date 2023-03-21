@@ -6,8 +6,8 @@
     <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
     <p>TOTAL ÉLÈVES : <strong><%= @course.students_count %></strong></p>
     <% if @course.status == true %>
-      <p>PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
-      <p>ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
+      <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
+      <p  class="red-text">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
     <% end %>
     <p>
       <% if @course.status %>
@@ -24,20 +24,20 @@
 
   <div class="form-container col-xxl-4 col-lg-6 col-md-8 col-sm-12" data-controller="presence-sheet">
     <%= form_with(url: update_enrollments_coaches_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
-      <table class="table table-striped table-responsive table-small">
+      <table class="table table-striped table-responsive table-small table-center">
         <tbody>
           <% @enrollments.each do |enrollment| %>
             <tr>
-              <% if enrollment.student.photo.attached? %>
-                <td class="align-middle" style="width:80px;padding-left:6px">
-                  <%= cl_image_tag enrollment.student.photo.key, class: "avatar-smaller" %>
-                </td>
-              <% else %>
-                <td class="align-middle" style="width:80px;padding-left:6px">
-                  <%= image_tag "avatar.png", class: "avatar-smaller" %>
-                </td>
-              <% end %>
-              <td class="align-middle"><%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr" %></td>
+              <td class="align-middle" style="width:80px;padding-left:6px">
+                <%= link_to coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)) do %>
+                  <%= content_tag :div, class: "avatar-link" do %>
+                    <%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-small" %>
+                  <% end %>
+                <% end %>
+              </td>
+              <td class="align-middle">
+                <%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "d-block student-mr" %>
+              </td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
                   <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>

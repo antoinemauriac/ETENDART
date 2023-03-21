@@ -13,7 +13,7 @@
         <% end %>
       <% else %>
         <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, origin: @url), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-          <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*" }, label_html: { class: "btn-coach-photo" } %>
+          <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*" }, label_html: { class: "btn-coach-photo" } %>
         <% end %>
       <% end %>
     </div>
@@ -23,11 +23,11 @@
       <p><%= @student.gender %> - <%= @student.age %> ans </p>
       <p class="text-break">EMAIL : <%= @student.email %></p>
       <p class="text-break">TEL : 0<%= @student.phone_number %></p>
-  <% if params[:precedent] %>
-    <%= link_to params[:precedent], class:"menu__item" do %>
-      <i class="fa-solid fa-arrow-rotate-left icones"></i>
-    <% end %>
-  <% end %>
+      <% if params[:precedent] %>
+        <%= link_to params[:precedent], class:"menu__item" do %>
+          <i class="fa-solid fa-arrow-rotate-left icones"></i>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>

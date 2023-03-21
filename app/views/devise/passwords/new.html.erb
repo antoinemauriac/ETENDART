@@ -1,5 +1,5 @@
 <div id="no-user" class="row">
-  <div class="devise-form">
+  <div class="devise-edit-form">
     <h2 class="header-info mb-3">Réinitialisation du mot de passe</h2>
       <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { "data-turbo": "false", method: :post }) do |f| %>
         <%= f.error_notification %>
@@ -11,8 +11,9 @@
                       input_html: { autocomplete: "email" } %>
         </div>
 
-        <div class="flexy">
-          <%= f.button :submit, "Envoyer le lien", class: "btn-etendart btn-connexion-bis mb-4", style:"width:100%" %>
+        <div class="flex-btn">
+          <%= f.button :submit, "Envoyer le lien", class: "btn-etendart" %>
+          <%= link_to "Annuler", :back, class: "btn-etendart-black" %>
         </div>
     <% end %>
   </div>
