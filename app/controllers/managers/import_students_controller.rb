@@ -1,4 +1,5 @@
 class Managers::ImportStudentsController < ApplicationController
+  require 'pg'
 
   def import
     school_period = SchoolPeriod.find(params[:school_period][:school_period_id])
@@ -10,12 +11,20 @@ class Managers::ImportStudentsController < ApplicationController
 
     csv.each do |row|
       row = row.to_hash
+      username = row['username'].downcase.strip
+
+      conn = PG::Connection.open(:dbname => 'ETENDART_production', :user => 'ETENDART', :password => ENV['ETENDART_DATABASE_PASSWORD'])
+
+      username_unaccented = conn.escape_string(conn.escape_bytea(ActiveRecord::Base.connection.quote("SELECT unaccent('#{username}')::text")).force_encoding(Encoding::ASCII_8BIT))
+
+      student = Student.where("lower(username) = lower('#{username_unaccented}')").first_or_initialize
+      student.assign_attributes(student_params_upload(row))
 
       # student = Student.find_or_initialize_by(username: row['username'].downcase)
       # student = Student.where('lower(username) = ?', row['username'].downcase).first_or_initialize
-      student = Student.where("lower(unaccent(username)) = unaccent(?)", row['username'].downcase.strip).first_or_initialize
+      # student = Student.where("lower(unaccent(username)) = unaccent(?)", row['username'].downcase.strip).first_or_initialize
 
-      student.assign_attributes(student_params_upload(row))
+      # student.assign_attributes(student_params_upload(row))
 
       if student.new_record?
         student.save
