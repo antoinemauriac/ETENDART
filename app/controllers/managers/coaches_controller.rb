@@ -24,7 +24,7 @@ class Managers::CoachesController < ApplicationController
   def new
     @coach = User.new
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
-    @academies = Academy.all
+    @academies = current_user.academies_as_manager
     @categories = Category.all
     @academy = Academy.find(params[:academy_id])
   end

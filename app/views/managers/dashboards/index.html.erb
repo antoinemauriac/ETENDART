@@ -34,8 +34,8 @@
             <td class="align-middle"><%= course.activity.name %></td>
             <td class="align-middle"><%= course.activity.coach.full_name %></td>
             <td class="align-middle"><%= course.activity.coach.phone_number %></td>
-            <td class="align-middle"><%= l(course.starts_at, format: :hour) %></td>
-            <td class="align-middle"><%= l(course.ends_at, format: :hour) %></td>
+            <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
+            <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
             <td class="align-middle"><%= course.students_count %></td>
             <td class="align-middle"><%= course.missing_students_count %></td>
             <td class="align-middle">
@@ -63,6 +63,7 @@
             <th>Élève</th>
             <th>Téléphone</th>
             <th>Email</th>
+            <th>Heure</th>
             <th>Activité</th>
             <th>Academie</th>
           </tr>
@@ -74,6 +75,7 @@
                 <td class="align-middle"><%= student.full_name %></td>
                 <td class="align-middle">0<%= student.phone_number %></td>
                 <td class="align-middle"><%= student.email %></td>
+                <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
                 <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
                 <td class="align-middle"><%= course_enrollment.course.academy.name %></td>
               </tr>

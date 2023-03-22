@@ -1,6 +1,6 @@
 <div class="yellow-title mb-0">TABLEAU DE BORD</div>
-<% if @missing_attendance.any? %>
-  <div class="black-title">FEUILLE D'APPEL EN ATTENTE</div>
+<% if @today_courses.any? %>
+  <div class="black-title">AUJOURD'HUI</div>
     <table class="container table table-striped table-responsive table-center coach-container mb-0">
     <thead>
       <tr>
@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @missing_attendance.each do |course| %>
+      <% @today_courses.each do |course| %>
       <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
         <td class="align-middle coach-font"><%= course.activity.name %></td>
         <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>

@@ -18,13 +18,14 @@ fr:
     abbr_month_names: [~, janv, févr, mars, avr, mai, juin, juil, août, sept, oct, nov, déc]
   time:
     formats:
-      default: "%d/%m - %Hh"
+      default: "%d/%m - %Hh%M"
       short: "%d %b %Y"
       long: "%A %e %B %Y"
       date: "%d/%m/%Y"
       date_short: "%d/%m"
       # datelong: "%"
       hour: "%H h"
+      hour_min: "%Hh%M"
   activerecord:
     attributes:
       camp:

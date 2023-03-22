@@ -55,6 +55,10 @@ class User < ApplicationRecord
     courses.where('ends_at < ?', Time.current).order(:starts_at)
   end
 
+  def today_courses
+    courses.where('DATE(starts_at) = ?', Time.current.to_date).order(:starts_at)
+  end
+
   def missing_attendance
     courses.where('starts_at < ?', Time.current).where('status = ?', false)
   end

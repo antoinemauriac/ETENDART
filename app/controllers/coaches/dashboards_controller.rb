@@ -5,7 +5,7 @@ class Coaches::DashboardsController < ApplicationController
     authorize([:coaches, @academies], policy_class: Coaches::DashboardPolicy)
     @next_activities = current_user.next_activities
     @next_courses = current_user.next_courses.limit(3)
-    @missing_attendance = current_user.missing_attendance
+    @today_courses = current_user.today_courses
     @students = current_user.students.sample(3)
   end
 end

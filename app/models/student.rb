@@ -23,7 +23,7 @@ class Student < ApplicationRecord
   has_many :course_enrollments, dependent: :destroy
   has_many :courses, through: :course_enrollments
 
-  has_many :feedbacks
+  has_many :feedbacks, dependent: :destroy
 
   def full_name
     "#{first_name} #{last_name}"
@@ -34,8 +34,8 @@ class Student < ApplicationRecord
   end
 
   def past_courses
-    courses.where('ends_at < ?', Time.current)
-           .order(starts_at: :asc)
+    courses.where('starts_at < ?', Time.current)
+           .order(starts_at: :desc)
   end
 
   def unattended_courses
@@ -117,6 +117,14 @@ class Student < ApplicationRecord
       photo.key
     else
       DEFAULT_AVATAR
+    end
+  end
+
+  def phone_modified
+    if phone_number.length == 9
+      "0#{phone_number}"
+    else
+      phone_number
     end
   end
 end
