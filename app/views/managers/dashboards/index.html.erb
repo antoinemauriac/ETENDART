@@ -57,15 +57,15 @@
   <div class="col-12 col-xxl-10 mb-4">
     <div class="header-info">ÉLÈVES ABSENTS</div>
     <div class="content-info">
-      <table class="table table-striped table-responsive table-center">
+      <table id="missing-student-table" data-toggle="table" class="table table-striped table-bordered">
         <thead>
           <tr>
-            <th>Élève</th>
-            <th>Téléphone</th>
-            <th>Email</th>
-            <th>Heure</th>
-            <th>Activité</th>
-            <th>Academie</th>
+            <th data-sortable="true" data-filter-control="input">Élève</th>
+            <th data-sortable="true" data-filter-control="input">Téléphone</th>
+            <th data-sortable="true" data-filter-control="input">Email</th>
+            <th data-sortable="true" data-filter-control="select">Heure</th>
+            <th data-sortable="true" data-filter-control="select">Activité</th>
+            <th data-sortable="true" data-filter-control="select">Academie</th>
           </tr>
         </thead>
         <tbody>
@@ -168,3 +168,9 @@
 <% end %>
 
 <% end %>
+
+<script>
+$(function() {
+  $('#missing-student-table').bootstrapTable();
+});
+</script>

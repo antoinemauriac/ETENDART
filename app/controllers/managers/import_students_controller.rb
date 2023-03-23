@@ -10,10 +10,11 @@ class Managers::ImportStudentsController < ApplicationController
 
     csv.each do |row|
       row = row.to_hash
+      student = Student.where("lower(unaccent(replace(username, ' ', ''))) = unaccent(?)", row['username'].downcase.gsub(/\s+/, '')).first_or_initialize
 
-      # student = Student.find_or_initialize_by(username: row['username'].downcase)
-      # student = Student.where('lower(username) = ?', row['username'].downcase).first_or_initialize
-      student = Student.where("lower(unaccent(username)) = unaccent(?)", row['username'].downcase.strip).first_or_initialize
+
+      # student = Student.where("lower(unaccent(username)) = unaccent(?)", row['username'].downcase.strip).first_or_initialize
+      # student = Student.where("replace(lower(unaccent(username)), ' ', '') = unaccent(?)", row['username'].downcase.strip).first_or_initialize
 
       student.assign_attributes(student_params_upload(row))
 
