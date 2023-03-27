@@ -3,17 +3,17 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2%;
+  padding: 10px 20px;
   background-color: $black;
-  position: relative;
+  position: fixed;
+  top: 0;
   width: 100%;
   z-index: 1000;
-  height: 7vh; /* Utilisez une mesure relative pour la hauteur */
+  height: 64px;
 }
 
 .navbar.show {
   height: 100vh;
-  // padding-top: 7px;
 }
 
 .navbar-logo {
@@ -28,25 +28,15 @@
 .navbar-brand:hover {
   color: $yellow;
 }
-.navbar-toggle {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  display: block;
-  height: 30px;
-  position: relative;
-  width: 40px;
-  z-index: 1;
-}
 
 .navbar-toggle {
   background-color: transparent;
   border: none;
   cursor: pointer;
   display: block;
-  height: 30px;
+  // height: 30px;
   position: relative;
-  width: 40px;
+  width: 6vh;
   z-index: 1;
   transition: all 0.2s ease-in-out;
 }
