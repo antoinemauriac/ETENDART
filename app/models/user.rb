@@ -17,10 +17,10 @@ class User < ApplicationRecord
   has_many :coach_categories, foreign_key: :coach_id, dependent: :destroy
   has_many :categories, through: :coach_categories
 
-  has_many :coach_camps, foreign_key: :coach_id
+  has_many :coach_camps, foreign_key: :coach_id, dependent: :destroy
   has_many :camps, through: :coach_camps
 
-  has_many :activities, foreign_key: :coach_id
+  has_many :activities, foreign_key: :coach_id, dependent: :destroy
   has_many :courses, through: :activities
 
   has_many :feedbacks, foreign_key: :coach_id

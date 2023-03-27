@@ -3,18 +3,17 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 20px;
+  padding: 0 2%;
   background-color: $black;
-  position: fixed;
-  top: 0;
+  position: relative;
   width: 100%;
   z-index: 1000;
-  height: 60px;
+  height: 7vh; /* Utilisez une mesure relative pour la hauteur */
 }
 
 .navbar.show {
   height: 100vh;
-  padding-top: 7px;
+  // padding-top: 7px;
 }
 
 .navbar-logo {
