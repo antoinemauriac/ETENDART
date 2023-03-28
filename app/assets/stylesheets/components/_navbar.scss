@@ -15,9 +15,6 @@
   height: 100vh;
 }
 
-.navbar-logo {
-  width: 120px;
-}
 
 .navbar-brand {
   color: $yellow;
@@ -28,7 +25,7 @@
   color: $yellow;
 }
 
-.navbar-toggle {
+.navbar-tog {
   background-color: transparent;
   border: none;
   // cursor: pointer;
@@ -58,27 +55,27 @@
   margin-bottom: 0;
 }
 
-.navbar-toggle.active .icon-bar:nth-child(2) {
+.navbar-tog.active .icon-bar:nth-child(2) {
   opacity: 0;
   transition: all 0.5s ease-in-out;
 }
 
-.navbar-toggle.active .icon-bar:nth-child(1) {
+.navbar-tog.active .icon-bar:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
   transition: all 0.5s ease-in-out;
 }
 
-.navbar-toggle.active .icon-bar:nth-child(3) {
+.navbar-tog.active .icon-bar:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
   transition: all 0.5s ease-in-out;
 }
 
-.navbar-toggle:not(.active) .icon-bar:nth-child(1) {
+.navbar-tog:not(.active) .icon-bar:nth-child(1) {
   transform: translateY(0) rotate(0);
   transition: all 0.5s ease-in-out;
 }
 
-.navbar-toggle:not(.active) .icon-bar:nth-child(3) {
+.navbar-tog:not(.active) .icon-bar:nth-child(3) {
   transform: translateY(0) rotate(0);
   transition: all 0.5s ease-in-out;
 }
@@ -140,7 +137,7 @@
     flex-wrap: nowrap;
   }
 
-  .navbar-toggle {
+  .navbar-tog {
     display: none;
   }
 
