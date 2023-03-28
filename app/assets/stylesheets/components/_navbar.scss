@@ -32,11 +32,13 @@
 .navbar-toggle {
   background-color: transparent;
   border: none;
-  cursor: pointer;
+  // cursor: pointer;
   display: block;
   // height: 30px;
   position: relative;
-  width: 6vh;
+  -webkit-appearance: none;
+  width: 40px;
+  min-width: 40px;
   z-index: 1;
   transition: all 0.2s ease-in-out;
 }
