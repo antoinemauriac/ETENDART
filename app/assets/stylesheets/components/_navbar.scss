@@ -1,5 +1,4 @@
 .navbar {
-  // display: flex;
   padding: 10px 20px;
   background-color: $black;
   position: fixed;
@@ -46,6 +45,7 @@
   margin-bottom: 5px;
   position: relative;
   width: 100%;
+  min-width: 40px;
   transition: all 0.5s ease-in-out;
 }
 
