@@ -38,7 +38,6 @@ module ETENDART
     upload_preset_name = "student_avatar"
     upload_preset_options = {
       unsigned: true,
-      folder: "etendart/students/avatars",
       allowed_formats: %w[jpg png gif],
       transformation: [
         { width: 800, quality: "auto", crop: "scale" }

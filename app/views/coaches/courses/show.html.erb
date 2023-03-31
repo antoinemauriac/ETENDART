@@ -3,7 +3,7 @@
 
 <div class="flexy justify-content-center">
   <div class="form-container container container-presence-sheet col-xxl-3 col-lg-4 col-md-6 col-sm-12">
-    <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
+    <p>ADRESSE : <strong><%= @course.activity.location.address %></strong></p>
     <p>TOTAL ÉLÈVES : <strong><%= @course.students_count %></strong></p>
     <% if @course.status == true %>
       <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>

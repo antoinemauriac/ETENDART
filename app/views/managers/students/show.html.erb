@@ -16,7 +16,7 @@
         <p>PRÉNOM : <strong><%= @student.first_name.upcase %></strong></p>
         <p><%= @student.gender %> - <%= @student.age %> ans </p>
         <p>EMAIL: <%= @student.email %></p>
-        <p>TEL : 0<%= @student.phone_number %></p>
+        <p>TEL : <%= @student.phone_modified %></p>
         <p>ADRESSE : <%= @student.address %> - <%= @student.zipcode %> - <%= @student.city %></p>
       </div>
       <div class="student-photo">
@@ -26,11 +26,11 @@
           </div>
         <% if @student.photo.attached? %>
           <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-            <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*" }, label_html: { class: "btn-photo" } %>
+            <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer' }, label_html: { class: "btn-photo" } %>
           <% end %>
         <% else %>
           <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-            <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*"}, label_html: { class: "btn-photo" } %>
+            <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer' }, label_html: { class: "btn-photo" } %>
           <% end %>
         <% end %>
       </div>

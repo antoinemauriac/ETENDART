@@ -59,15 +59,15 @@ coaches = [coach1, coach2, coach3]
 # students = [student1, student2, student3]
 
 djoko = Academy.create!(name: 'Djoko', manager: manager1)
-djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1679309660/etendart/assets/f2yuuopyvelklcci1gf3.jpg')
+djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1680268116/etendart/dz0etqpbqcgkxps78kgm.jpg')
 djoko.image.attach(io: djoko_image, filename: 'djoko-court.jpg', content_type: 'image/jpg')
 djoko.save
 rudy = Academy.create!(name: 'Rudy Gobert', manager: manager1)
-rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1679309659/etendart/assets/wvydro86x7iamh6jr3nq.jpg')
+rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1680268116/etendart/lkvegtvhzgdhrve2wo6g.jpg')
 rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
 rudy.save
 angers = Academy.create!(name: 'Angers', manager: manager2)
-angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1679309659/etendart/assets/op38pklhssogs0wuhxpv.jpg')
+angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1680268116/etendart/tchrkajvhzrs8ucm8fv6.jpg')
 angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
 angers.save
 

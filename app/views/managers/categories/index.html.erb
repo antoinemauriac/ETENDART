@@ -1,6 +1,10 @@
 <%= render "shared/academy_header" %>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item active">LES CATÉGORIES</div>
+</div>
 <div class="yellow-title">LES CATÉGORIES D'ACTIVITÉ</div>
-<div class="container flexy">
+<div class="container flexy" style="max-width:300px">
   <table class="table table-striped form-container table-center table-responsive">
     <thead>
       <tr>

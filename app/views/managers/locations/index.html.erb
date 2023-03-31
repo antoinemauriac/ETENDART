@@ -4,15 +4,13 @@
   <div class="header-nav-item active">LES ADRESSES</div>
 </div>
 <div class="yellow-title">LES ADRESSES</div>
-<div class="container">
+<div class="container" style="max-width:1000px">
   <table class="table table-striped form-container table-center table-responsive">
     <thead>
       <tr>
         <th>Académie</th>
         <th>Nom</th>
         <th>Adresse</th>
-        <th>Code Postal</th>
-        <th>Ville</th>
       </tr>
     </thead>
     <tbody>
@@ -21,8 +19,6 @@
           <td><%= @academy.name %></td>
           <td><%= location.name %></td>
           <td><%= location.address %></td>
-          <td><%= location.zipcode %></td>
-          <td><%= location.city %></td>
         </tr>
       <% end %>
     </tbody>

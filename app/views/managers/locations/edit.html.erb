@@ -13,8 +13,7 @@
     </div>
 
     <div class="form-group">
-      <%= form.label :address, "Adresse" %>
-      <%= form.text_field :address, class: "form-control", "data-address-autocomplete-target": "address", "data-controller": "address-autocomplete", "data-address_autocomplete_api_key_value": ENV['MAPBOX_API_KEY'], value: @location.address %>
+      <%= form.input :address, class: "form-control", "data-address-autocomplete-target": "address", "data-controller": "address-autocomplete", "data-address_autocomplete_api_key_value": ENV['MAPBOX_API_KEY'], value: @location.address, required: true %>
     </div>
 
     <div class="flex-btn">
