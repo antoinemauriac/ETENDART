@@ -23,6 +23,8 @@
             <th>Début</th>
             <th>Fin</th>
             <th>Nb élèves</th>
+            <th>Nb absents</th>
+            <th>Appel fait ?</th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +37,16 @@
             <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
             <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
             <td class="align-middle"><%= course.students_count %> </td>
+            <td class="align-middle"><%= course.missing_students_count %></td>
+            <td class="align-middle">
+              <% if course.starts_at < Time.current %>
+                <% if course.status %>
+                  <i class="fa-solid fa-check text-success fa-big"></i>
+                <% else %>
+                  <i class="fa-solid fa-xmark text-danger fa-big"></i>
+                <% end %>
+              <% end %>
+            </td>
           </tr>
           <% end %>
         </tbody>
@@ -113,8 +125,6 @@
             <th>Début</th>
             <th>Fin</th>
             <th>Nb élèves</th>
-            <th>Nb absents</th>
-            <th>Appel fait ?</th>
           </tr>
         </thead>
         <tbody>
@@ -127,16 +137,6 @@
             <td class="align-middle"><%= l(course.starts_at, format: :hour) %></td>
             <td class="align-middle"><%= l(course.ends_at, format: :hour) %></td>
             <td class="align-middle"><%= course.students_count %></td>
-            <td class="align-middle"><%= course.missing_students_count %></td>
-            <td class="align-middle">
-              <% if course.starts_at < Time.current %>
-                <% if course.status %>
-                  <i class="fa-solid fa-check text-success fa-big"></i>
-                <% else %>
-                  <i class="fa-solid fa-xmark text-danger fa-big"></i>
-                <% end %>
-              <% end %>
-            </td>
           </tr>
           <% end %>
         </tbody>
