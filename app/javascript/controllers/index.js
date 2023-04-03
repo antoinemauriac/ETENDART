@@ -28,6 +28,9 @@ application.register("hidden-forms", HiddenFormsController)
 import ImportCsvController from "./import_csv_controller"
 application.register("import-csv", ImportCsvController)
 
+import MissingStudentsTableController from "./missing_students_table_controller"
+application.register("missing-students-table", MissingStudentsTableController)
+
 import NavbarController from "./navbar_controller"
 application.register("navbar", NavbarController)
 

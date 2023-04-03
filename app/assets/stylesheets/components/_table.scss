@@ -31,3 +31,23 @@
 .red-text strong {
   color: red;
 }
+
+.table-search-header {
+  text-align: center!important;
+}
+
+.sorting_disabled {
+  text-align: center!important;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  text-align: center!important;
+  float: none!important;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  text-align: center!important;
+  padding: 8px!important;
+  border-radius: 20px!important;
+  border: 0.5px solid lightgray!important;
+}
