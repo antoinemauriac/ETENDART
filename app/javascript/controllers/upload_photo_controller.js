@@ -17,11 +17,11 @@ export default class extends Controller {
     }
     this.formTarget.addEventListener("change", (event) => {
       event.preventDefault();
-      this.submitForm();
+      this.showSpinner();
     });
   }
 
-  submitForm() {
+  showSpinner() {
     console.log("submitting form");
     this.spinnerTarget.classList.remove("d-none");
     this.photoTarget.classList.add("d-none");

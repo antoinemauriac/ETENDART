@@ -1,0 +1,2421 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.6 (Debian 14.6-1.pgdg110+1)
+-- Dumped by pg_dump version 14.7 (Homebrew)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: unaccent; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS unaccent WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION unaccent; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: academies; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.academies (
+    id bigint NOT NULL,
+    name character varying,
+    manager_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.academies OWNER TO etendart_8082;
+
+--
+-- Name: academies_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.academies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.academies_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: academies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.academies_id_seq OWNED BY public.academies.id;
+
+
+--
+-- Name: academy_enrollments; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.academy_enrollments (
+    id bigint NOT NULL,
+    student_id bigint NOT NULL,
+    academy_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.academy_enrollments OWNER TO etendart_8082;
+
+--
+-- Name: academy_enrollments_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.academy_enrollments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.academy_enrollments_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: academy_enrollments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.academy_enrollments_id_seq OWNED BY public.academy_enrollments.id;
+
+
+--
+-- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.active_storage_attachments (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    record_type character varying NOT NULL,
+    record_id bigint NOT NULL,
+    blob_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.active_storage_attachments OWNER TO etendart_8082;
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.active_storage_attachments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.active_storage_attachments_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.active_storage_attachments_id_seq OWNED BY public.active_storage_attachments.id;
+
+
+--
+-- Name: active_storage_blobs; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.active_storage_blobs (
+    id bigint NOT NULL,
+    key character varying NOT NULL,
+    filename character varying NOT NULL,
+    content_type character varying,
+    metadata text,
+    service_name character varying NOT NULL,
+    byte_size bigint NOT NULL,
+    checksum character varying,
+    created_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.active_storage_blobs OWNER TO etendart_8082;
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.active_storage_blobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.active_storage_blobs_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.active_storage_blobs_id_seq OWNED BY public.active_storage_blobs.id;
+
+
+--
+-- Name: active_storage_variant_records; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.active_storage_variant_records (
+    id bigint NOT NULL,
+    blob_id bigint NOT NULL,
+    variation_digest character varying NOT NULL
+);
+
+
+ALTER TABLE public.active_storage_variant_records OWNER TO etendart_8082;
+
+--
+-- Name: active_storage_variant_records_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.active_storage_variant_records_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.active_storage_variant_records_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: active_storage_variant_records_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.active_storage_variant_records_id_seq OWNED BY public.active_storage_variant_records.id;
+
+
+--
+-- Name: activities; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.activities (
+    id bigint NOT NULL,
+    name character varying,
+    camp_id bigint NOT NULL,
+    category_id bigint NOT NULL,
+    coach_id bigint NOT NULL,
+    min_capacity integer,
+    max_capacity integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    days text,
+    location_id bigint
+);
+
+
+ALTER TABLE public.activities OWNER TO etendart_8082;
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.activities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.activities_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.activities_id_seq OWNED BY public.activities.id;
+
+
+--
+-- Name: activity_enrollments; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.activity_enrollments (
+    id bigint NOT NULL,
+    student_id bigint NOT NULL,
+    activity_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.activity_enrollments OWNER TO etendart_8082;
+
+--
+-- Name: activity_enrollments_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.activity_enrollments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.activity_enrollments_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: activity_enrollments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.activity_enrollments_id_seq OWNED BY public.activity_enrollments.id;
+
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.ar_internal_metadata OWNER TO etendart_8082;
+
+--
+-- Name: camp_enrollments; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.camp_enrollments (
+    id bigint NOT NULL,
+    student_id bigint NOT NULL,
+    camp_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.camp_enrollments OWNER TO etendart_8082;
+
+--
+-- Name: camp_enrollments_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.camp_enrollments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.camp_enrollments_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: camp_enrollments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.camp_enrollments_id_seq OWNED BY public.camp_enrollments.id;
+
+
+--
+-- Name: camps; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.camps (
+    id bigint NOT NULL,
+    name character varying,
+    starts_at date,
+    ends_at date,
+    school_period_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.camps OWNER TO etendart_8082;
+
+--
+-- Name: camps_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.camps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.camps_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: camps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.camps_id_seq OWNED BY public.camps.id;
+
+
+--
+-- Name: categories; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.categories (
+    id bigint NOT NULL,
+    name character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.categories OWNER TO etendart_8082;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- Name: coach_academies; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.coach_academies (
+    id bigint NOT NULL,
+    academy_id bigint NOT NULL,
+    coach_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.coach_academies OWNER TO etendart_8082;
+
+--
+-- Name: coach_academies_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.coach_academies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.coach_academies_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: coach_academies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.coach_academies_id_seq OWNED BY public.coach_academies.id;
+
+
+--
+-- Name: coach_camps; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.coach_camps (
+    id bigint NOT NULL,
+    camp_id bigint NOT NULL,
+    coach_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.coach_camps OWNER TO etendart_8082;
+
+--
+-- Name: coach_camps_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.coach_camps_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.coach_camps_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: coach_camps_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.coach_camps_id_seq OWNED BY public.coach_camps.id;
+
+
+--
+-- Name: coach_categories; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.coach_categories (
+    id bigint NOT NULL,
+    category_id bigint NOT NULL,
+    coach_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.coach_categories OWNER TO etendart_8082;
+
+--
+-- Name: coach_categories_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.coach_categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.coach_categories_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: coach_categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.coach_categories_id_seq OWNED BY public.coach_categories.id;
+
+
+--
+-- Name: course_enrollments; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.course_enrollments (
+    id bigint NOT NULL,
+    student_id bigint NOT NULL,
+    course_id bigint NOT NULL,
+    present boolean DEFAULT true,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.course_enrollments OWNER TO etendart_8082;
+
+--
+-- Name: course_enrollments_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.course_enrollments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.course_enrollments_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: course_enrollments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.course_enrollments_id_seq OWNED BY public.course_enrollments.id;
+
+
+--
+-- Name: courses; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.courses (
+    id bigint NOT NULL,
+    starts_at timestamp(6) without time zone,
+    ends_at timestamp(6) without time zone,
+    activity_id bigint NOT NULL,
+    manager_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    coach_id bigint,
+    status boolean DEFAULT false
+);
+
+
+ALTER TABLE public.courses OWNER TO etendart_8082;
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.courses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.courses_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.courses_id_seq OWNED BY public.courses.id;
+
+
+--
+-- Name: days; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.days (
+    id bigint NOT NULL,
+    day_of_week character varying,
+    start_time timestamp(6) without time zone,
+    end_time timestamp(6) without time zone,
+    activity_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.days OWNER TO etendart_8082;
+
+--
+-- Name: days_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.days_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.days_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: days_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.days_id_seq OWNED BY public.days.id;
+
+
+--
+-- Name: enrollments; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.enrollments (
+    id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.enrollments OWNER TO etendart_8082;
+
+--
+-- Name: enrollments_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.enrollments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.enrollments_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: enrollments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.enrollments_id_seq OWNED BY public.enrollments.id;
+
+
+--
+-- Name: feedbacks; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.feedbacks (
+    id bigint NOT NULL,
+    content character varying,
+    student_id bigint NOT NULL,
+    coach_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.feedbacks OWNER TO etendart_8082;
+
+--
+-- Name: feedbacks_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.feedbacks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.feedbacks_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: feedbacks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.feedbacks_id_seq OWNED BY public.feedbacks.id;
+
+
+--
+-- Name: locations; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.locations (
+    id bigint NOT NULL,
+    address character varying,
+    academy_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    name character varying,
+    city character varying,
+    zipcode character varying,
+    country character varying,
+    lat numeric(9,6),
+    lng numeric(9,6),
+    street_address character varying
+);
+
+
+ALTER TABLE public.locations OWNER TO etendart_8082;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.locations_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
+
+
+--
+-- Name: roles; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.roles (
+    id bigint NOT NULL,
+    name character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.roles OWNER TO etendart_8082;
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.roles_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.schema_migrations (
+    version character varying NOT NULL
+);
+
+
+ALTER TABLE public.schema_migrations OWNER TO etendart_8082;
+
+--
+-- Name: school_period_enrollments; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.school_period_enrollments (
+    id bigint NOT NULL,
+    student_id bigint NOT NULL,
+    school_period_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.school_period_enrollments OWNER TO etendart_8082;
+
+--
+-- Name: school_period_enrollments_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.school_period_enrollments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.school_period_enrollments_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: school_period_enrollments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.school_period_enrollments_id_seq OWNED BY public.school_period_enrollments.id;
+
+
+--
+-- Name: school_periods; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.school_periods (
+    id bigint NOT NULL,
+    name character varying,
+    academy_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    year integer
+);
+
+
+ALTER TABLE public.school_periods OWNER TO etendart_8082;
+
+--
+-- Name: school_periods_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.school_periods_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.school_periods_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: school_periods_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.school_periods_id_seq OWNED BY public.school_periods.id;
+
+
+--
+-- Name: students; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.students (
+    id bigint NOT NULL,
+    first_name character varying,
+    last_name character varying,
+    email character varying,
+    date_of_birth date,
+    address character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    username character varying,
+    gender character varying,
+    phone_number character varying,
+    city character varying,
+    zipcode integer
+);
+
+
+ALTER TABLE public.students OWNER TO etendart_8082;
+
+--
+-- Name: students_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.students_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.students_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: students_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.students_id_seq OWNED BY public.students.id;
+
+
+--
+-- Name: user_roles; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.user_roles (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    role_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+ALTER TABLE public.user_roles OWNER TO etendart_8082;
+
+--
+-- Name: user_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.user_roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_roles_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: user_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.user_roles_id_seq OWNED BY public.user_roles.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: etendart_8082
+--
+
+CREATE TABLE public.users (
+    id bigint NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp(6) without time zone,
+    remember_created_at timestamp(6) without time zone,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL,
+    first_name character varying,
+    last_name character varying,
+    phone_number character varying,
+    status character varying
+);
+
+
+ALTER TABLE public.users OWNER TO etendart_8082;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: etendart_8082
+--
+
+CREATE SEQUENCE public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO etendart_8082;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: etendart_8082
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: academies id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.academies ALTER COLUMN id SET DEFAULT nextval('public.academies_id_seq'::regclass);
+
+
+--
+-- Name: academy_enrollments id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.academy_enrollments ALTER COLUMN id SET DEFAULT nextval('public.academy_enrollments_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_attachments id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET DEFAULT nextval('public.active_storage_attachments_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_blobs id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval('public.active_storage_blobs_id_seq'::regclass);
+
+
+--
+-- Name: active_storage_variant_records id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET DEFAULT nextval('public.active_storage_variant_records_id_seq'::regclass);
+
+
+--
+-- Name: activities id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activities ALTER COLUMN id SET DEFAULT nextval('public.activities_id_seq'::regclass);
+
+
+--
+-- Name: activity_enrollments id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activity_enrollments ALTER COLUMN id SET DEFAULT nextval('public.activity_enrollments_id_seq'::regclass);
+
+
+--
+-- Name: camp_enrollments id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.camp_enrollments ALTER COLUMN id SET DEFAULT nextval('public.camp_enrollments_id_seq'::regclass);
+
+
+--
+-- Name: camps id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.camps ALTER COLUMN id SET DEFAULT nextval('public.camps_id_seq'::regclass);
+
+
+--
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- Name: coach_academies id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_academies ALTER COLUMN id SET DEFAULT nextval('public.coach_academies_id_seq'::regclass);
+
+
+--
+-- Name: coach_camps id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_camps ALTER COLUMN id SET DEFAULT nextval('public.coach_camps_id_seq'::regclass);
+
+
+--
+-- Name: coach_categories id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_categories ALTER COLUMN id SET DEFAULT nextval('public.coach_categories_id_seq'::regclass);
+
+
+--
+-- Name: course_enrollments id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.course_enrollments ALTER COLUMN id SET DEFAULT nextval('public.course_enrollments_id_seq'::regclass);
+
+
+--
+-- Name: courses id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.courses ALTER COLUMN id SET DEFAULT nextval('public.courses_id_seq'::regclass);
+
+
+--
+-- Name: days id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.days ALTER COLUMN id SET DEFAULT nextval('public.days_id_seq'::regclass);
+
+
+--
+-- Name: enrollments id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.enrollments ALTER COLUMN id SET DEFAULT nextval('public.enrollments_id_seq'::regclass);
+
+
+--
+-- Name: feedbacks id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.feedbacks ALTER COLUMN id SET DEFAULT nextval('public.feedbacks_id_seq'::regclass);
+
+
+--
+-- Name: locations id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
+
+
+--
+-- Name: roles id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_id_seq'::regclass);
+
+
+--
+-- Name: school_period_enrollments id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.school_period_enrollments ALTER COLUMN id SET DEFAULT nextval('public.school_period_enrollments_id_seq'::regclass);
+
+
+--
+-- Name: school_periods id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.school_periods ALTER COLUMN id SET DEFAULT nextval('public.school_periods_id_seq'::regclass);
+
+
+--
+-- Name: students id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.students ALTER COLUMN id SET DEFAULT nextval('public.students_id_seq'::regclass);
+
+
+--
+-- Name: user_roles id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.user_roles ALTER COLUMN id SET DEFAULT nextval('public.user_roles_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: academies; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.academies (id, name, manager_id, created_at, updated_at) FROM stdin;
+32	Djoko	78	2023-03-31 13:21:15.851615	2023-03-31 13:21:16.523186
+33	Rudy Gobert	78	2023-03-31 13:21:18.209063	2023-03-31 13:21:18.837412
+34	Angers	79	2023-03-31 13:21:20.37731	2023-03-31 13:21:20.741014
+\.
+
+
+--
+-- Data for Name: academy_enrollments; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.academy_enrollments (id, student_id, academy_id, created_at, updated_at) FROM stdin;
+237	213	32	2023-03-31 13:23:00.045153	2023-03-31 13:23:00.045153
+\.
+
+
+--
+-- Data for Name: active_storage_attachments; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.active_storage_attachments (id, name, record_type, record_id, blob_id, created_at) FROM stdin;
+97	image	Academy	32	97	2023-03-31 13:21:16.521225
+98	image	Academy	33	98	2023-03-31 13:21:18.835587
+99	image	Academy	34	99	2023-03-31 13:21:20.739373
+100	photo	Student	213	100	2023-03-31 13:23:06.977746
+\.
+
+
+--
+-- Data for Name: active_storage_blobs; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.active_storage_blobs (id, key, filename, content_type, metadata, service_name, byte_size, checksum, created_at) FROM stdin;
+100	zee8wihywjy7xnw9o8f36pt8isdz	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	63995	KeW2nSvDhdJOj7O/Au2smQ==	2023-03-31 13:23:06.975144
+72	eod8s447vt73i3wzpabc528dndff	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	114306	/hnVDyKZm9g/gU30psqOYw==	2023-03-20 22:29:09.780747
+73	nxq6hep4th00x8m77cxfn60uwybe	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	114306	/hnVDyKZm9g/gU30psqOYw==	2023-03-20 22:29:26.930176
+74	mlsvntptdbi2uzirqexmwl2ih7kq	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	114306	/hnVDyKZm9g/gU30psqOYw==	2023-03-20 22:29:39.619485
+75	cwpr3kkhnx4r8ahrw93usiplym9o	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	114306	/hnVDyKZm9g/gU30psqOYw==	2023-03-20 22:29:55.46586
+76	929h74b1b1kpzubfjbxpocsi6s0q	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	114306	/hnVDyKZm9g/gU30psqOYw==	2023-03-20 22:30:09.902218
+70	lzzx0mdqtl2vxzm3vh1u7nyo4ff9	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	114306	/hnVDyKZm9g/gU30psqOYw==	2023-03-20 22:28:43.091147
+77	5x05ed3k0s9y9mm2l452y2g31d0p	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	85984	UE92hWTx9p50WnJbZA3pqw==	2023-03-20 22:31:17.654785
+78	apkc54s1bkunijqolxl4buwnbrl0	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	85984	UE92hWTx9p50WnJbZA3pqw==	2023-03-20 22:31:35.501629
+79	vv7pne50ws1sb6a080fbymnhld0m	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	85984	UE92hWTx9p50WnJbZA3pqw==	2023-03-20 22:33:00.81882
+80	melhpp8xr2af27p3nxiix4byx05l	avatar	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	114306	/hnVDyKZm9g/gU30psqOYw==	2023-03-21 14:51:54.261867
+97	6xd1nilyvxsmesuff8mo9who2uxv	djoko-court.jpg	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	1535817	AK4ZglWEaJe2PqDIgpcQ7g==	2023-03-31 13:21:16.51867
+98	qjsiqry971f3syecnxe4cn0pi5vb	rudy-court.jpg	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	572775	XbJDakLi7UK5xl57PZxGsA==	2023-03-31 13:21:18.833758
+99	fp66tq4ys5ku4b5nnkj1js6p0xcj	angers-court.jpg	image/jpeg	{"identified":true,"analyzed":true}	cloudinary	507860	7w+HEs+mP2bQ/gAfkq9o1g==	2023-03-31 13:21:20.737003
+\.
+
+
+--
+-- Data for Name: active_storage_variant_records; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.active_storage_variant_records (id, blob_id, variation_digest) FROM stdin;
+\.
+
+
+--
+-- Data for Name: activities; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.activities (id, name, camp_id, category_id, coach_id, min_capacity, max_capacity, created_at, updated_at, days, location_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: activity_enrollments; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.activity_enrollments (id, student_id, activity_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ar_internal_metadata; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.ar_internal_metadata (key, value, created_at, updated_at) FROM stdin;
+environment	production	2023-03-03 13:05:20.947254	2023-03-03 13:05:20.947254
+\.
+
+
+--
+-- Data for Name: camp_enrollments; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.camp_enrollments (id, student_id, camp_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: camps; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.camps (id, name, starts_at, ends_at, school_period_id, created_at, updated_at) FROM stdin;
+55	semaine1	2023-04-24	2023-04-28	53	2023-03-31 13:41:00.728267	2023-03-31 13:41:00.728267
+56	semaine2	2023-05-01	2023-05-05	53	2023-03-31 13:41:19.067461	2023-03-31 13:41:19.067461
+\.
+
+
+--
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.categories (id, name, created_at, updated_at) FROM stdin;
+82	Tennis	2023-03-31 13:21:14.243379	2023-03-31 13:21:14.243379
+83	Basket	2023-03-31 13:21:14.247317	2023-03-31 13:21:14.247317
+84	Théâtre	2023-03-31 13:21:14.250871	2023-03-31 13:21:14.250871
+85	Anglais	2023-03-31 13:21:14.253935	2023-03-31 13:21:14.253935
+86	Danse	2023-03-31 13:21:14.25728	2023-03-31 13:21:14.25728
+87	Ping pong	2023-03-31 13:24:46.717351	2023-03-31 13:24:46.717351
+\.
+
+
+--
+-- Data for Name: coach_academies; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.coach_academies (id, academy_id, coach_id, created_at, updated_at) FROM stdin;
+61	32	80	2023-03-31 13:21:21.976203	2023-03-31 13:21:21.976203
+62	32	81	2023-03-31 13:21:22.037192	2023-03-31 13:21:22.037192
+63	32	82	2023-03-31 13:21:22.075819	2023-03-31 13:21:22.075819
+\.
+
+
+--
+-- Data for Name: coach_camps; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.coach_camps (id, camp_id, coach_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: coach_categories; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.coach_categories (id, category_id, coach_id, created_at, updated_at) FROM stdin;
+75	82	80	2023-03-31 13:21:21.992298	2023-03-31 13:21:21.992298
+76	86	80	2023-03-31 13:21:22.02687	2023-03-31 13:21:22.02687
+77	86	81	2023-03-31 13:21:22.053823	2023-03-31 13:21:22.053823
+78	82	82	2023-03-31 13:21:22.086695	2023-03-31 13:21:22.086695
+\.
+
+
+--
+-- Data for Name: course_enrollments; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.course_enrollments (id, student_id, course_id, present, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: courses; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.courses (id, starts_at, ends_at, activity_id, manager_id, created_at, updated_at, coach_id, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: days; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.days (id, day_of_week, start_time, end_time, activity_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: enrollments; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.enrollments (id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: feedbacks; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.feedbacks (id, content, student_id, coach_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: locations; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.locations (id, address, academy_id, created_at, updated_at, name, city, zipcode, country, lat, lng, street_address) FROM stdin;
+44	1 rue de la paix Clichy	32	2023-03-31 13:21:22.094088	2023-03-31 13:21:22.094088	Clichy1	\N	\N	\N	\N	\N	\N
+45	2 rue de la paix Clichy	32	2023-03-31 13:21:22.098059	2023-03-31 13:21:22.098059	Clichy2	\N	\N	\N	\N	\N	\N
+46	3 rue de la paix Levallois	33	2023-03-31 13:21:22.102194	2023-03-31 13:21:22.102194	Levallois1	\N	\N	\N	\N	\N	\N
+47	4 rue de la paix Levallois	33	2023-03-31 13:21:22.115718	2023-03-31 13:21:22.115718	Levallois2	\N	\N	\N	\N	\N	\N
+48	12 Rue De La Paix, 97620 Bouénisso	32	2023-03-31 13:25:08.800898	2023-03-31 13:25:19.353344	Terrain basket	\N	\N	\N	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.roles (id, name, created_at, updated_at) FROM stdin;
+23	manager	2023-03-31 13:21:14.26058	2023-03-31 13:21:14.26058
+24	coach	2023-03-31 13:21:14.26487	2023-03-31 13:21:14.26487
+\.
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.schema_migrations (version) FROM stdin;
+20230209150633
+20230209150908
+20230209152127
+20230209154053
+20230209154205
+20230209155533
+20230209155658
+20230209160236
+20230209160334
+20230209163706
+20230209170049
+20230209171349
+20230209171541
+20230209171604
+20230209171625
+20230209171657
+20230209172501
+20230209172617
+20230211183404
+20230211202756
+20230212162103
+20230212162609
+20230214205110
+20230220130607
+20230220144040
+20230220144153
+20230220153611
+20230221125329
+20230223075337
+20230223174425
+20230224084225
+20230225112156
+20230305132600
+20230306141738
+20230309150008
+20230309164615
+20230310104750
+20230311180852
+20230331095856
+\.
+
+
+--
+-- Data for Name: school_period_enrollments; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.school_period_enrollments (id, student_id, school_period_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: school_periods; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.school_periods (id, name, academy_id, created_at, updated_at, year) FROM stdin;
+53	Avril	32	2023-03-31 13:40:41.022734	2023-03-31 13:40:41.022734	2023
+\.
+
+
+--
+-- Data for Name: students; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.students (id, first_name, last_name, email, date_of_birth, address, created_at, updated_at, username, gender, phone_number, city, zipcode) FROM stdin;
+213	titi	toto	totototo@gmail.com	2008-03-31	12 rue brandis	2023-03-31 13:23:00.036047	2023-03-31 13:23:06.980358	\N	Garçon	+33626803401	Marseille	13005
+\.
+
+
+--
+-- Data for Name: user_roles; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.user_roles (id, user_id, role_id, created_at, updated_at) FROM stdin;
+78	78	23	2023-03-31 13:21:14.550247	2023-03-31 13:21:14.550247
+79	79	23	2023-03-31 13:21:14.823472	2023-03-31 13:21:14.823472
+80	80	24	2023-03-31 13:21:15.079867	2023-03-31 13:21:15.079867
+81	81	24	2023-03-31 13:21:15.335511	2023-03-31 13:21:15.335511
+82	82	24	2023-03-31 13:21:15.591329	2023-03-31 13:21:15.591329
+83	83	24	2023-03-31 13:21:15.847676	2023-03-31 13:21:15.847676
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: etendart_8082
+--
+
+COPY public.users (id, email, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at, created_at, updated_at, first_name, last_name, phone_number, status) FROM stdin;
+78	manager1@gmail.com	$2a$12$ieks1UkeNlZedhA0mn5uauFra.Qg8LfxN.ZWFtMzjW..RUuXqmtja	\N	\N	\N	2023-03-31 13:21:14.535646	2023-03-31 13:21:14.535646	\N	\N	\N	\N
+79	manager2@gmail.com	$2a$12$A3PiCltuwe7jP24swzERDuz2FEbahNWnFFXosJyoLVolqg62Oj7Gu	\N	\N	\N	2023-03-31 13:21:14.817263	2023-03-31 13:21:14.817263	\N	\N	\N	\N
+80	coach1@gmail.com	$2a$12$qG9T56ah0xwaaavmSeIr7.thMlGAf48xdSFWgS8ABEYg2AcYYrFKy	\N	\N	\N	2023-03-31 13:21:15.073751	2023-03-31 13:21:15.073751	Remi	Martin	\N	\N
+81	coach2@gmail.com	$2a$12$jX1bAro49JO/xok5xbFFo.z/xSft8dTpvDHn4dQpJuN7Ct9xuaf9S	\N	\N	\N	2023-03-31 13:21:15.329344	2023-03-31 13:21:15.329344	Lucie	Durand	\N	\N
+82	coach3@gmail.com	$2a$12$Y3s3lGiQJ7gJlQAeoTyzk.O6v9atYLwr/.fvM.Zs4l88vHhkaN2dK	\N	\N	\N	2023-03-31 13:21:15.584984	2023-03-31 13:21:15.584984	Thierry	Leroy	\N	\N
+83	coach4@gmail.com	$2a$12$ZVxNW3MA/VLsO.snaArnJ.p6APeRV0CqoFfAiGIhxchEpKqtjc8Ka	\N	\N	\N	2023-03-31 13:21:15.842516	2023-03-31 13:21:15.842516	Myriam	Diallo	\N	\N
+\.
+
+
+--
+-- Name: academies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.academies_id_seq', 34, true);
+
+
+--
+-- Name: academy_enrollments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.academy_enrollments_id_seq', 237, true);
+
+
+--
+-- Name: active_storage_attachments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.active_storage_attachments_id_seq', 100, true);
+
+
+--
+-- Name: active_storage_blobs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.active_storage_blobs_id_seq', 100, true);
+
+
+--
+-- Name: active_storage_variant_records_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.active_storage_variant_records_id_seq', 1, false);
+
+
+--
+-- Name: activities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.activities_id_seq', 194, true);
+
+
+--
+-- Name: activity_enrollments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.activity_enrollments_id_seq', 1317, true);
+
+
+--
+-- Name: camp_enrollments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.camp_enrollments_id_seq', 712, true);
+
+
+--
+-- Name: camps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.camps_id_seq', 56, true);
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.categories_id_seq', 87, true);
+
+
+--
+-- Name: coach_academies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.coach_academies_id_seq', 63, true);
+
+
+--
+-- Name: coach_camps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.coach_camps_id_seq', 126, true);
+
+
+--
+-- Name: coach_categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.coach_categories_id_seq', 78, true);
+
+
+--
+-- Name: course_enrollments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.course_enrollments_id_seq', 6178, true);
+
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.courses_id_seq', 811, true);
+
+
+--
+-- Name: days_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.days_id_seq', 1, false);
+
+
+--
+-- Name: enrollments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.enrollments_id_seq', 1, false);
+
+
+--
+-- Name: feedbacks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.feedbacks_id_seq', 17, true);
+
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.locations_id_seq', 48, true);
+
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.roles_id_seq', 24, true);
+
+
+--
+-- Name: school_period_enrollments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.school_period_enrollments_id_seq', 522, true);
+
+
+--
+-- Name: school_periods_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.school_periods_id_seq', 53, true);
+
+
+--
+-- Name: students_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.students_id_seq', 213, true);
+
+
+--
+-- Name: user_roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.user_roles_id_seq', 83, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: etendart_8082
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 83, true);
+
+
+--
+-- Name: academies academies_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.academies
+    ADD CONSTRAINT academies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: academy_enrollments academy_enrollments_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.academy_enrollments
+    ADD CONSTRAINT academy_enrollments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: active_storage_attachments active_storage_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT active_storage_attachments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: active_storage_blobs active_storage_blobs_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_blobs
+    ADD CONSTRAINT active_storage_blobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: active_storage_variant_records active_storage_variant_records_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_variant_records
+    ADD CONSTRAINT active_storage_variant_records_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activities
+    ADD CONSTRAINT activities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: activity_enrollments activity_enrollments_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activity_enrollments
+    ADD CONSTRAINT activity_enrollments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: camp_enrollments camp_enrollments_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.camp_enrollments
+    ADD CONSTRAINT camp_enrollments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: camps camps_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.camps
+    ADD CONSTRAINT camps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: coach_academies coach_academies_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_academies
+    ADD CONSTRAINT coach_academies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: coach_camps coach_camps_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_camps
+    ADD CONSTRAINT coach_camps_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: coach_categories coach_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_categories
+    ADD CONSTRAINT coach_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: course_enrollments course_enrollments_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.course_enrollments
+    ADD CONSTRAINT course_enrollments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: courses courses_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.courses
+    ADD CONSTRAINT courses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: days days_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.days
+    ADD CONSTRAINT days_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: enrollments enrollments_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.enrollments
+    ADD CONSTRAINT enrollments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feedbacks feedbacks_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.feedbacks
+    ADD CONSTRAINT feedbacks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locations locations_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.locations
+    ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: school_period_enrollments school_period_enrollments_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.school_period_enrollments
+    ADD CONSTRAINT school_period_enrollments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: school_periods school_periods_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.school_periods
+    ADD CONSTRAINT school_periods_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: students students_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.students
+    ADD CONSTRAINT students_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_roles user_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.user_roles
+    ADD CONSTRAINT user_roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_academies_on_manager_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_academies_on_manager_id ON public.academies USING btree (manager_id);
+
+
+--
+-- Name: index_academy_enrollments_on_academy_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_academy_enrollments_on_academy_id ON public.academy_enrollments USING btree (academy_id);
+
+
+--
+-- Name: index_academy_enrollments_on_student_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_academy_enrollments_on_student_id ON public.academy_enrollments USING btree (student_id);
+
+
+--
+-- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_active_storage_attachments_on_blob_id ON public.active_storage_attachments USING btree (blob_id);
+
+
+--
+-- Name: index_active_storage_attachments_uniqueness; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE UNIQUE INDEX index_active_storage_attachments_uniqueness ON public.active_storage_attachments USING btree (record_type, record_id, name, blob_id);
+
+
+--
+-- Name: index_active_storage_blobs_on_key; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE UNIQUE INDEX index_active_storage_blobs_on_key ON public.active_storage_blobs USING btree (key);
+
+
+--
+-- Name: index_active_storage_variant_records_uniqueness; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE UNIQUE INDEX index_active_storage_variant_records_uniqueness ON public.active_storage_variant_records USING btree (blob_id, variation_digest);
+
+
+--
+-- Name: index_activities_on_camp_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_activities_on_camp_id ON public.activities USING btree (camp_id);
+
+
+--
+-- Name: index_activities_on_category_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_activities_on_category_id ON public.activities USING btree (category_id);
+
+
+--
+-- Name: index_activities_on_coach_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_activities_on_coach_id ON public.activities USING btree (coach_id);
+
+
+--
+-- Name: index_activities_on_location_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_activities_on_location_id ON public.activities USING btree (location_id);
+
+
+--
+-- Name: index_activity_enrollments_on_activity_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_activity_enrollments_on_activity_id ON public.activity_enrollments USING btree (activity_id);
+
+
+--
+-- Name: index_activity_enrollments_on_student_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_activity_enrollments_on_student_id ON public.activity_enrollments USING btree (student_id);
+
+
+--
+-- Name: index_camp_enrollments_on_camp_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_camp_enrollments_on_camp_id ON public.camp_enrollments USING btree (camp_id);
+
+
+--
+-- Name: index_camp_enrollments_on_student_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_camp_enrollments_on_student_id ON public.camp_enrollments USING btree (student_id);
+
+
+--
+-- Name: index_camps_on_school_period_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_camps_on_school_period_id ON public.camps USING btree (school_period_id);
+
+
+--
+-- Name: index_coach_academies_on_academy_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_coach_academies_on_academy_id ON public.coach_academies USING btree (academy_id);
+
+
+--
+-- Name: index_coach_academies_on_coach_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_coach_academies_on_coach_id ON public.coach_academies USING btree (coach_id);
+
+
+--
+-- Name: index_coach_camps_on_camp_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_coach_camps_on_camp_id ON public.coach_camps USING btree (camp_id);
+
+
+--
+-- Name: index_coach_camps_on_coach_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_coach_camps_on_coach_id ON public.coach_camps USING btree (coach_id);
+
+
+--
+-- Name: index_coach_categories_on_category_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_coach_categories_on_category_id ON public.coach_categories USING btree (category_id);
+
+
+--
+-- Name: index_coach_categories_on_coach_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_coach_categories_on_coach_id ON public.coach_categories USING btree (coach_id);
+
+
+--
+-- Name: index_course_enrollments_on_course_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_course_enrollments_on_course_id ON public.course_enrollments USING btree (course_id);
+
+
+--
+-- Name: index_course_enrollments_on_student_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_course_enrollments_on_student_id ON public.course_enrollments USING btree (student_id);
+
+
+--
+-- Name: index_courses_on_activity_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_courses_on_activity_id ON public.courses USING btree (activity_id);
+
+
+--
+-- Name: index_courses_on_coach_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_courses_on_coach_id ON public.courses USING btree (coach_id);
+
+
+--
+-- Name: index_courses_on_manager_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_courses_on_manager_id ON public.courses USING btree (manager_id);
+
+
+--
+-- Name: index_days_on_activity_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_days_on_activity_id ON public.days USING btree (activity_id);
+
+
+--
+-- Name: index_feedbacks_on_coach_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_feedbacks_on_coach_id ON public.feedbacks USING btree (coach_id);
+
+
+--
+-- Name: index_feedbacks_on_student_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_feedbacks_on_student_id ON public.feedbacks USING btree (student_id);
+
+
+--
+-- Name: index_locations_on_academy_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_locations_on_academy_id ON public.locations USING btree (academy_id);
+
+
+--
+-- Name: index_school_period_enrollments_on_school_period_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_school_period_enrollments_on_school_period_id ON public.school_period_enrollments USING btree (school_period_id);
+
+
+--
+-- Name: index_school_period_enrollments_on_student_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_school_period_enrollments_on_student_id ON public.school_period_enrollments USING btree (student_id);
+
+
+--
+-- Name: index_school_periods_on_academy_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_school_periods_on_academy_id ON public.school_periods USING btree (academy_id);
+
+
+--
+-- Name: index_user_roles_on_role_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_user_roles_on_role_id ON public.user_roles USING btree (role_id);
+
+
+--
+-- Name: index_user_roles_on_user_id; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE INDEX index_user_roles_on_user_id ON public.user_roles USING btree (user_id);
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
+
+
+--
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: etendart_8082
+--
+
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: courses fk_rails_0bfe821d4e; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.courses
+    ADD CONSTRAINT fk_rails_0bfe821d4e FOREIGN KEY (coach_id) REFERENCES public.users(id);
+
+
+--
+-- Name: coach_academies fk_rails_1a55aabad7; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_academies
+    ADD CONSTRAINT fk_rails_1a55aabad7 FOREIGN KEY (coach_id) REFERENCES public.users(id);
+
+
+--
+-- Name: activity_enrollments fk_rails_2ad3fa68c2; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activity_enrollments
+    ADD CONSTRAINT fk_rails_2ad3fa68c2 FOREIGN KEY (student_id) REFERENCES public.students(id);
+
+
+--
+-- Name: user_roles fk_rails_318345354e; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.user_roles
+    ADD CONSTRAINT fk_rails_318345354e FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: academies fk_rails_322a0cf4ad; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.academies
+    ADD CONSTRAINT fk_rails_322a0cf4ad FOREIGN KEY (manager_id) REFERENCES public.users(id);
+
+
+--
+-- Name: user_roles fk_rails_3369e0d5fc; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.user_roles
+    ADD CONSTRAINT fk_rails_3369e0d5fc FOREIGN KEY (role_id) REFERENCES public.roles(id);
+
+
+--
+-- Name: courses fk_rails_3c52d340b6; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.courses
+    ADD CONSTRAINT fk_rails_3c52d340b6 FOREIGN KEY (manager_id) REFERENCES public.users(id);
+
+
+--
+-- Name: activities fk_rails_3f5db34052; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activities
+    ADD CONSTRAINT fk_rails_3f5db34052 FOREIGN KEY (camp_id) REFERENCES public.camps(id);
+
+
+--
+-- Name: school_period_enrollments fk_rails_411e075011; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.school_period_enrollments
+    ADD CONSTRAINT fk_rails_411e075011 FOREIGN KEY (student_id) REFERENCES public.students(id);
+
+
+--
+-- Name: academy_enrollments fk_rails_463f85a68d; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.academy_enrollments
+    ADD CONSTRAINT fk_rails_463f85a68d FOREIGN KEY (academy_id) REFERENCES public.academies(id);
+
+
+--
+-- Name: days fk_rails_4ab1bbe7b4; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.days
+    ADD CONSTRAINT fk_rails_4ab1bbe7b4 FOREIGN KEY (activity_id) REFERENCES public.activities(id);
+
+
+--
+-- Name: school_period_enrollments fk_rails_4eadc9ce55; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.school_period_enrollments
+    ADD CONSTRAINT fk_rails_4eadc9ce55 FOREIGN KEY (school_period_id) REFERENCES public.school_periods(id);
+
+
+--
+-- Name: courses fk_rails_5382dc75ef; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.courses
+    ADD CONSTRAINT fk_rails_5382dc75ef FOREIGN KEY (activity_id) REFERENCES public.activities(id);
+
+
+--
+-- Name: camps fk_rails_6305c1bdc2; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.camps
+    ADD CONSTRAINT fk_rails_6305c1bdc2 FOREIGN KEY (school_period_id) REFERENCES public.school_periods(id);
+
+
+--
+-- Name: locations fk_rails_6e76aa6f58; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.locations
+    ADD CONSTRAINT fk_rails_6e76aa6f58 FOREIGN KEY (academy_id) REFERENCES public.academies(id);
+
+
+--
+-- Name: course_enrollments fk_rails_875ed9c80f; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.course_enrollments
+    ADD CONSTRAINT fk_rails_875ed9c80f FOREIGN KEY (course_id) REFERENCES public.courses(id);
+
+
+--
+-- Name: course_enrollments fk_rails_8ab18ea2b7; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.course_enrollments
+    ADD CONSTRAINT fk_rails_8ab18ea2b7 FOREIGN KEY (student_id) REFERENCES public.students(id);
+
+
+--
+-- Name: activities fk_rails_8e4b6c5333; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activities
+    ADD CONSTRAINT fk_rails_8e4b6c5333 FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- Name: camp_enrollments fk_rails_944195cb21; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.camp_enrollments
+    ADD CONSTRAINT fk_rails_944195cb21 FOREIGN KEY (student_id) REFERENCES public.students(id);
+
+
+--
+-- Name: feedbacks fk_rails_945167e8cb; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.feedbacks
+    ADD CONSTRAINT fk_rails_945167e8cb FOREIGN KEY (coach_id) REFERENCES public.users(id);
+
+
+--
+-- Name: feedbacks fk_rails_96e4b8b7e1; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.feedbacks
+    ADD CONSTRAINT fk_rails_96e4b8b7e1 FOREIGN KEY (student_id) REFERENCES public.students(id);
+
+
+--
+-- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_variant_records
+    ADD CONSTRAINT fk_rails_993965df05 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: activities fk_rails_aeb27f50b1; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activities
+    ADD CONSTRAINT fk_rails_aeb27f50b1 FOREIGN KEY (coach_id) REFERENCES public.users(id);
+
+
+--
+-- Name: coach_categories fk_rails_af9f078452; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_categories
+    ADD CONSTRAINT fk_rails_af9f078452 FOREIGN KEY (coach_id) REFERENCES public.users(id);
+
+
+--
+-- Name: coach_camps fk_rails_b933993dd8; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_camps
+    ADD CONSTRAINT fk_rails_b933993dd8 FOREIGN KEY (coach_id) REFERENCES public.users(id);
+
+
+--
+-- Name: active_storage_attachments fk_rails_c3b3935057; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.active_storage_attachments
+    ADD CONSTRAINT fk_rails_c3b3935057 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: coach_academies fk_rails_c76094c9cb; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_academies
+    ADD CONSTRAINT fk_rails_c76094c9cb FOREIGN KEY (academy_id) REFERENCES public.academies(id);
+
+
+--
+-- Name: activity_enrollments fk_rails_d2c4aaceb3; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activity_enrollments
+    ADD CONSTRAINT fk_rails_d2c4aaceb3 FOREIGN KEY (activity_id) REFERENCES public.activities(id);
+
+
+--
+-- Name: coach_camps fk_rails_d89ee81706; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_camps
+    ADD CONSTRAINT fk_rails_d89ee81706 FOREIGN KEY (camp_id) REFERENCES public.camps(id);
+
+
+--
+-- Name: camp_enrollments fk_rails_db347662e2; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.camp_enrollments
+    ADD CONSTRAINT fk_rails_db347662e2 FOREIGN KEY (camp_id) REFERENCES public.camps(id);
+
+
+--
+-- Name: school_periods fk_rails_e0ff8cc552; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.school_periods
+    ADD CONSTRAINT fk_rails_e0ff8cc552 FOREIGN KEY (academy_id) REFERENCES public.academies(id);
+
+
+--
+-- Name: academy_enrollments fk_rails_e760758659; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.academy_enrollments
+    ADD CONSTRAINT fk_rails_e760758659 FOREIGN KEY (student_id) REFERENCES public.students(id);
+
+
+--
+-- Name: coach_categories fk_rails_ecd929641f; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.coach_categories
+    ADD CONSTRAINT fk_rails_ecd929641f FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- Name: activities fk_rails_ef7fc69932; Type: FK CONSTRAINT; Schema: public; Owner: etendart_8082
+--
+
+ALTER TABLE ONLY public.activities
+    ADD CONSTRAINT fk_rails_ef7fc69932 FOREIGN KEY (location_id) REFERENCES public.locations(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

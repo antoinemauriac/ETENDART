@@ -21,9 +21,7 @@
       </div>
       <div class="student-photo">
           <%= cl_image_tag @student.photo_or_default, class: "avatar", data: { upload_photo_target: "photo" } %>
-          <div class="spinner-border text-primary d-none" role="status" data-upload-photo-target="spinner" style="height:120px;width:120px">
-            <span class="sr-only">Loading...</span>
-          </div>
+          <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
         <% if @student.photo.attached? %>
           <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
             <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer' }, label_html: { class: "btn-photo" } %>
