@@ -16,7 +16,7 @@
         <th>Début</th>
         <th>Fin</th>
         <th>Élèves inscrits</th>
-        <th>Action</th>
+        <th>Supprimer</th>
       </tr>
     </thead>
     <tbody>
@@ -28,11 +28,15 @@
         <td class="align-middle"><%= l(camp.starts_at, format: :date) %></td>
         <td class="align-middle"><%= l(camp.ends_at, format: :date) %></td>
         <td class="align-middle"><%= camp.students_count %></td>
-        <td class="align-middle">
-          <%= link_to managers_camp_path(camp), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette semaine ?" } do %>
-            <i class="fas fa-trash trash"></i>
-          <% end %>
-        </td>
+        <% if camp.can_delete? %>
+          <td class="align-middle">
+            <%= link_to managers_camp_path(camp), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette semaine ?" } do %>
+              <i class="fas fa-trash trash"></i>
+            <% end %>
+          </td>
+        <% else %>
+          <td></td>
+        <% end %>
       </tr>
       <% end %>
     </tbody>

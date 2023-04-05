@@ -28,9 +28,17 @@ class Camp < ApplicationRecord
             .order(:last_name)
   end
 
+  def can_delete?
+    if starts_at
+      starts_at > Date.today
+    else
+      true
+    end
+  end
   private
 
   def starts_at_must_be_before_ends_at
     errors.add(:starts_at, :after) if starts_at >= ends_at
   end
+
 end

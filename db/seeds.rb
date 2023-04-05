@@ -27,11 +27,11 @@ Student.destroy_all
 
 tennis = Category.create!(name: 'Tennis')
 basket = Category.create!(name: 'Basket')
-# manga = Category.create!(name: 'Manga')
+manga = Category.create!(name: 'Manga')
 theatre = Category.create!(name: 'Théâtre')
 anglais = Category.create!(name: 'Anglais')
 danse = Category.create!(name: 'Danse')
-categories = [tennis, basket, theatre, anglais, danse]
+categories = [tennis, basket, theatre, anglais, danse, manga]
 
 Role.create!(name: 'manager')
 Role.create!(name: 'coach')
@@ -49,8 +49,11 @@ coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "
 coach3.roles << Role.find_by(name: 'coach')
 coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
 coach4.roles << Role.find_by(name: 'coach')
+coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
+coach5.roles << Role.find_by(name: 'coach')
 
-coaches = [coach1, coach2, coach3]
+
+# coaches = [coach1, coach2, coach3]
 
 # student1 = Student.create!(first_name: 'Leo', last_name: 'Minot')
 # student2 = Student.create!(first_name: 'Lea', last_name: 'Lala')
@@ -73,12 +76,25 @@ angers.save
 
 
 coach1.academies_as_coach << djoko
+coach1.academies_as_coach << rudy
 coach1.categories << tennis
-coach1.categories << danse
+coach1.categories << manga
 coach2.academies_as_coach << djoko
-coach2.categories << danse
+coach2.academies_as_coach << rudy
+coach2.categories << tennis
+coach2.categories << theatre
 coach3.academies_as_coach << djoko
-coach3.categories << tennis
+coach3.academies_as_coach << rudy
+coach3.categories << manga
+coach3.categories << theatre
+coach4.academies_as_coach << djoko
+coach4.academies_as_coach << rudy
+coach4.categories << basket
+coach4.categories << manga
+coach5.academies_as_coach << djoko
+coach5.academies_as_coach << rudy
+coach5.categories << basket
+coach5.categories << theatre
 
 
 location1 = Location.create!(address: '1 rue de la paix Clichy', academy: djoko, name: 'Clichy1')

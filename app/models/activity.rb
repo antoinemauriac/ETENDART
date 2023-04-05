@@ -35,4 +35,12 @@ class Activity < ApplicationRecord
     activity_enrollments.map(&:student)
   end
 
+  def can_delete?
+    if camp.starts_at
+      camp.starts_at > Date.today
+    else
+      true
+    end
+  end
+
 end
