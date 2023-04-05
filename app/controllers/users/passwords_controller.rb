@@ -17,9 +17,15 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # PUT /resource/password
-  # def update
-  #   super
-  # end
+  def update
+    super do |resource|
+      # Si la réinitialisation de mot de passe a réussi et que l'utilisateur a coché la case "se souvenir de moi"
+      if resource.errors.empty? && resource.remember_me == "1"
+        # Crée une nouvelle session pour l'utilisateur
+        sign_in(resource_name, resource)
+      end
+    end
+  end
 
   # protected
 
