@@ -46,7 +46,7 @@
     <button class="btn-etendart-square" data-action="click->hidden-forms#displayCampForm">AJOUTER UNE SEMAINE</button>
     <%= form_with(model: @camp, url: managers_school_period_camps_path(@school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
       <%= form.label :name, "Nom :" %>
-      <%= form.text_field :name, class: "form-control", placeholder: "semaine1", required: true %>
+      <%= form.collection_select :name, ["semaine1", "semaine2", "semaine3",  "semaine4"], class: "form-control", required: true %>
       <%= form.label :starts_at, "Date de début :" %>
       <%= form.date_field :starts_at, class: "form-control" %>
       <%= form.label :ends_at, "Date de fin :" %>

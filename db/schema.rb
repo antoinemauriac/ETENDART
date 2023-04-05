@@ -13,7 +13,6 @@
 ActiveRecord::Schema[7.0].define(version: 2023_04_03_122523) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "unaccent"
 
   create_table "academies", force: :cascade do |t|
     t.string "name"
@@ -70,7 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_03_122523) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "days"
-    t.bigint "location_id"
+    t.bigint "location_id", null: false
     t.index ["camp_id"], name: "index_activities_on_camp_id"
     t.index ["category_id"], name: "index_activities_on_category_id"
     t.index ["coach_id"], name: "index_activities_on_coach_id"

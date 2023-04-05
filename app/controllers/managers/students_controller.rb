@@ -14,7 +14,7 @@ class Managers::StudentsController < ApplicationController
   def show
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    @academies = Academy.all
+    @academies = urrent_user.academies_as_manager
     @academy = Academy.find(params[:academy_id])
     @feedback = Feedback.new
   end
@@ -100,6 +100,5 @@ class Managers::StudentsController < ApplicationController
   def student_params
     params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :photo)
   end
-
 
 end
