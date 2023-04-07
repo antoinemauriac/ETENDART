@@ -138,6 +138,8 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    jquery-ui-rails (6.0.1)
+      railties (>= 3.2.16)
     jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
     kaminari (1.2.2)
@@ -315,6 +317,7 @@ DEPENDENCIES
   font-awesome-sass (~> 6.1)
   geocoder
   jbuilder
+  jquery-ui-rails
   jsbundling-rails
   letter_opener
   pg (~> 1.1)
