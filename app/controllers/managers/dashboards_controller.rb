@@ -4,7 +4,7 @@ class Managers::DashboardsController < ApplicationController
     @today_courses = Course.today(current_user).sort_by(&:starts_at)
     @tomorrow_courses = Course.tomorrow(current_user).sort_by(&:starts_at)
     @feedbacks = Feedback.last_five(current_user)
-    @absent_students = Student.absent_students(current_user)
+    @today_absent_students = Student.today_absent_students(current_user)
 
     skip_policy_scope
     authorize([:managers, @academies], policy_class: Managers::DashboardPolicy)

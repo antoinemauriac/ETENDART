@@ -101,11 +101,11 @@ class Student < ApplicationRecord
     activities.joins(:camp).where('camps.ends_at > ?', Time.current).order('camps.starts_at ASC')
   end
 
-  def self.absent_students(current_user)
-    joins(:course_enrollments, courses: :academy)
+  def self.today_absent_students(manager)
+    joins(course_enrollments: { course: :academy })
       .where(course_enrollments: { present: false })
-      .where(academies: { id: current_user.academies_as_manager.pluck(:id) })
-      .where("DATE(courses.starts_at) = ?", Date.today)
+      .where(courses: { starts_at: Time.current.all_day, manager_id: manager.id })
+      .where(academies: { id: manager.academies_as_manager.pluck(:id) })
       .distinct
   end
 

@@ -20,7 +20,7 @@ class Course < ApplicationRecord
   end
 
   def self.today(manager)
-    where(starts_at: Time.zone.today.all_day, manager_id: manager.id).order(:starts_at)
+    where(starts_at: Time.current.all_day, manager_id: manager.id).order(:starts_at)
   end
 
   def self.tomorrow(manager)

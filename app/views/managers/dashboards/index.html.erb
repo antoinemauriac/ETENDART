@@ -70,7 +70,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @absent_students.each do |student| %>
+          <% @today_absent_students.each do |student| %>
             <% student.unattended_today_courses.each do |course_enrollment| %>
               <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: course_enrollment.course.academy.id) %>'">
                 <td class="align-middle"><%= student.full_name %></td>
