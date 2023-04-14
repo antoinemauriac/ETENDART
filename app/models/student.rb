@@ -105,6 +105,7 @@ class Student < ApplicationRecord
     joins(:course_enrollments, courses: :academy)
       .where(course_enrollments: { present: false })
       .where(academies: { id: current_user.academies_as_manager.pluck(:id) })
+      .where("DATE(courses.starts_at) = ?", Date.today)
       .distinct
   end
 
