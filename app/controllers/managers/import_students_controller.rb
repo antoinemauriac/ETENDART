@@ -75,7 +75,7 @@ class Managers::ImportStudentsController < ApplicationController
   def student_params_upload(row)
     row = row.transform_keys do |key|
       case key
-      when 'prenom'
+      when 'prénom'
         'first_name'
       when 'nom'
         'last_name'
