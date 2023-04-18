@@ -29,6 +29,7 @@ class Student < ApplicationRecord
     "#{first_name} #{last_name}" if first_name && last_name
   end
 
+
   def courses_sorted
     courses.order(starts_at: :asc)
   end
