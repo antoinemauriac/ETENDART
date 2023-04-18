@@ -36,7 +36,7 @@
                 <% end %>
               </td>
               <td class="align-middle">
-                <%= link_to "#{enrollment.student.last_name} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "d-block student-mr" %>
+                <%= link_to "#{enrollment.student.last_name.upcase} #{enrollment.student.first_name}", coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "d-block student-mr" %>
               </td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
