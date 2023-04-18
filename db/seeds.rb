@@ -5,52 +5,63 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-UserRole.destroy_all
-Role.destroy_all
-CourseEnrollment.destroy_all
-Course.destroy_all
-ActivityEnrollment.destroy_all
-Activity.destroy_all
-CoachCategory.destroy_all
-Category.destroy_all
-CoachCamp.destroy_all
-CampEnrollment.destroy_all
-Camp.destroy_all
-SchoolPeriod.destroy_all
-CoachAcademy.destroy_all
-Location.destroy_all
-AcademyEnrollment.destroy_all
-Academy.destroy_all
-Feedback.destroy_all
-User.destroy_all
-Student.destroy_all
+# UserRole.destroy_all
+# Role.destroy_all
+# CourseEnrollment.destroy_all
+# Course.destroy_all
+# ActivityEnrollment.destroy_all
+# Activity.destroy_all
+# CoachCategory.destroy_all
+# Category.destroy_all
+# CoachCamp.destroy_all
+# CampEnrollment.destroy_all
+# Camp.destroy_all
+# SchoolPeriod.destroy_all
+# CoachAcademy.destroy_all
+# Location.destroy_all
+# AcademyEnrollment.destroy_all
+# Academy.destroy_all
+# Feedback.destroy_all
+# User.destroy_all
+# Student.destroy_all
 
-tennis = Category.create!(name: 'Tennis')
-basket = Category.create!(name: 'Basket')
-manga = Category.create!(name: 'Manga')
-theatre = Category.create!(name: 'Théâtre')
-anglais = Category.create!(name: 'Anglais')
-danse = Category.create!(name: 'Danse')
-categories = [tennis, basket, theatre, anglais, danse, manga]
+# Category.create!(name: 'Tennis')
+# Category.create!(name: 'Basket')
 
-Role.create!(name: 'manager')
-Role.create!(name: 'coach')
+# Role.create!(name: 'manager')
+# Role.create!(name: 'coach')
 
-manager1 = User.create!(email: 'manager1@gmail.com', password: 123456)
-manager1.roles << Role.find_by(name: 'manager')
-manager2 = User.create!(email: 'manager2@gmail.com', password: 123456)
-manager2.roles << Role.find_by(name: 'manager')
+# celine = User.create!(email: 'celine@etendart.org', password: 123456)
+# celine.roles << Role.find_by(name: 'manager')
 
-coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Remi", last_name: "Martin")
-coach1.roles << Role.find_by(name: 'coach')
-coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Lucie", last_name: "Durand")
-coach2.roles << Role.find_by(name: 'coach')
-coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
-coach3.roles << Role.find_by(name: 'coach')
-coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
-coach4.roles << Role.find_by(name: 'coach')
-coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
-coach5.roles << Role.find_by(name: 'coach')
+# djoko = Academy.create!(name: 'Djokovic', manager: celine)
+# djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/sr6nqll54ykkr03jqvgn.jpg')
+# djoko.image.attach(io: djoko_image, filename: 'djoko-court.jpg', content_type: 'image/jpg')
+# djoko.save
+
+# rudy = Academy.create!(name: 'Rudy Gobert', manager: celine)
+# rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/b5cmmg95x1kuvmtm9ysu.jpg')
+# rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
+# rudy.save
+
+# manga = Category.create!(name: 'Manga')
+# theatre = Category.create!(name: 'Théâtre')
+# anglais = Category.create!(name: 'Anglais')
+# danse = Category.create!(name: 'Danse')
+# categories = [tennis, basket, theatre, anglais, danse, manga]
+# manager2 = User.create!(email: 'manager2@gmail.com', password: 123456)
+# manager2.roles << Role.find_by(name: 'manager')
+
+# coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Remi", last_name: "Martin")
+# coach1.roles << Role.find_by(name: 'coach')
+# coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Lucie", last_name: "Durand")
+# coach2.roles << Role.find_by(name: 'coach')
+# coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
+# coach3.roles << Role.find_by(name: 'coach')
+# coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
+# coach4.roles << Role.find_by(name: 'coach')
+# coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
+# coach5.roles << Role.find_by(name: 'coach')
 
 
 # coaches = [coach1, coach2, coach3]
@@ -61,47 +72,39 @@ coach5.roles << Role.find_by(name: 'coach')
 
 # students = [student1, student2, student3]
 
-djoko = Academy.create!(name: 'Djoko', manager: manager1)
-djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1680268116/etendart/dz0etqpbqcgkxps78kgm.jpg')
-djoko.image.attach(io: djoko_image, filename: 'djoko-court.jpg', content_type: 'image/jpg')
-djoko.save
-rudy = Academy.create!(name: 'Rudy Gobert', manager: manager1)
-rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1680268116/etendart/lkvegtvhzgdhrve2wo6g.jpg')
-rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
-rudy.save
-angers = Academy.create!(name: 'Angers', manager: manager2)
-angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1680268116/etendart/tchrkajvhzrs8ucm8fv6.jpg')
-angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
-angers.save
+# angers = Academy.create!(name: 'Angers', manager: manager2)
+# angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1680268116/etendart/tchrkajvhzrs8ucm8fv6.jpg')
+# angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
+# angers.save
 
 
-coach1.academies_as_coach << djoko
-coach1.academies_as_coach << rudy
-coach1.categories << tennis
-coach1.categories << manga
-coach2.academies_as_coach << djoko
-coach2.academies_as_coach << rudy
-coach2.categories << tennis
-coach2.categories << theatre
-coach3.academies_as_coach << djoko
-coach3.academies_as_coach << rudy
-coach3.categories << manga
-coach3.categories << theatre
-coach4.academies_as_coach << djoko
-coach4.academies_as_coach << rudy
-coach4.categories << basket
-coach4.categories << manga
-coach5.academies_as_coach << djoko
-coach5.academies_as_coach << rudy
-coach5.categories << basket
-coach5.categories << theatre
+# coach1.academies_as_coach << djoko
+# coach1.academies_as_coach << rudy
+# coach1.categories << tennis
+# coach1.categories << manga
+# coach2.academies_as_coach << djoko
+# coach2.academies_as_coach << rudy
+# coach2.categories << tennis
+# coach2.categories << theatre
+# coach3.academies_as_coach << djoko
+# coach3.academies_as_coach << rudy
+# coach3.categories << manga
+# coach3.categories << theatre
+# coach4.academies_as_coach << djoko
+# coach4.academies_as_coach << rudy
+# coach4.categories << basket
+# coach4.categories << manga
+# coach5.academies_as_coach << djoko
+# coach5.academies_as_coach << rudy
+# coach5.categories << basket
+# coach5.categories << theatre
 
 
-location1 = Location.create!(address: '1 rue de la paix Clichy', academy: djoko, name: 'Clichy1')
-location2 = Location.create!(address: '2 rue de la paix Clichy', academy: djoko, name: 'Clichy2')
-location3 = Location.create!(address: '3 rue de la paix Levallois', academy: rudy, name: 'Levallois1')
-location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rudy, name: 'Levallois2')
-locations = [location1, location2, location3, location4]
+# location1 = Location.create!(address: '1 rue de la paix Clichy', academy: djoko, name: 'Clichy1')
+# location2 = Location.create!(address: '2 rue de la paix Clichy', academy: djoko, name: 'Clichy2')
+# location3 = Location.create!(address: '3 rue de la paix Levallois', academy: rudy, name: 'Levallois1')
+# location4 = Location.create!(address: '4 rue de la paix Levallois', academy: rudy, name: 'Levallois2')
+# locations = [location1, location2, location3, location4]
 
 
 # djoko_fevrier_23 = SchoolPeriod.create!(name: 'février', year: 2023, academy: djoko)

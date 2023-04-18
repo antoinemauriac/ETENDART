@@ -40,8 +40,8 @@ class Managers::ActivitiesController < ApplicationController
           end
 
           # Calculer la date et heure de début et de fin en utilisant les dates starts_at et ends_at du camp
-          start_datetime = DateTime.new(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec, start_time.utc_offset)
-          end_datetime = DateTime.new(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec, end_time.utc_offset)
+          start_datetime = Time.zone.local(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec)
+          end_datetime = Time.zone.local(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec)
 
           Course.create!(activity: @activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach)
         end
