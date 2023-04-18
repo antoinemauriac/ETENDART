@@ -26,7 +26,7 @@ class Student < ApplicationRecord
   has_many :feedbacks, dependent: :destroy
 
   def full_name
-    "#{first_name} #{last_name}"
+    "#{first_name} #{last_name}" if first_name && last_name
   end
 
   def courses_sorted
