@@ -1,4 +1,4 @@
-<div class="yellow-title mb-0"><%= @student.full_name.upcase %></div>
+<div class="yellow-title mb-0"><%= @student.full_name.try(:upcase) %></div>
 
 <div class="special-container">
   <div class="row justify-content-center align-items-center student-info-container">
@@ -16,8 +16,8 @@
       <% end %>
     </div>
     <div class="col-7 col-sm-7 col-md-5 col-lg-5  col-xxl-5 coach-student-info">
-      <p class="text-break">NOM : <strong><%= @student.last_name.upcase %></strong></p>
-      <p class="text-break">PRÉNOM : <strong><%= @student.first_name.upcase %></strong></p>
+      <p class="text-break">NOM : <strong><%= @student.last_name.try(:upcase) %></strong></p>
+      <p class="text-break">PRÉNOM : <strong><%= @student.first_name.try(:upcase) %></strong></p>
       <p><%= @student.gender %> - <%= @student.age %> ans </p>
       <p class="text-break">EMAIL : <%= @student.email %></p>
       <p class="text-break">TEL : 0<%= @student.phone_number %></p>

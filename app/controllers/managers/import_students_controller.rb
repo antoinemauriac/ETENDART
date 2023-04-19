@@ -95,6 +95,10 @@ class Managers::ImportStudentsController < ApplicationController
         key
       end
     end
+
+    row['first_name'] = row['first_name'].capitalize if row['first_name'].present?
+    row['last_name'] = row['last_name'].capitalize if row['last_name'].present?
+
     ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address)
   end
 end

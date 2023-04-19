@@ -1,4 +1,4 @@
-<div class="student-title"><%= @student.last_name %> - <%= @student.first_name %></div>
+<div class="student-title"><%= @student.last_name.try(:upcase) %> - <%= @student.first_name %></div>
 <div class="yellow-title">AJOUTER UN FEEDBACK</div>
 
 <div class="container flexy">

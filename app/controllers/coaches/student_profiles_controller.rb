@@ -9,7 +9,7 @@ class Coaches::StudentProfilesController < ApplicationController
   end
 
   def index
-    @students = current_user.students
+    @students = current_user.students.sort_by { |student| student.last_name.try(:downcase) }
     skip_policy_scope
     authorize([:coaches, @students], policy_class: Coaches::StudentProfilePolicy)
   end

@@ -39,7 +39,7 @@
           <% @enrollments.each do |enrollment| %>
             <tr>
               <td class="align-middle" style="width:80px"><%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-small" %></td>
-              <td class="align-middle"><%= link_to "#{enrollment.student.last_name.upcase} #{enrollment.student.first_name}", managers_student_path(enrollment.student, academy_id: @academy.id), class: "student-mr" %></td>
+              <td class="align-middle"><%= link_to "#{enrollment.student.last_name.try(:upcase)} #{enrollment.student.first_name}", managers_student_path(enrollment.student, academy_id: @academy.id), class: "student-mr" %></td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
                   <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
