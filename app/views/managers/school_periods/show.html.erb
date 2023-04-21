@@ -60,17 +60,21 @@
 </div>
 
 <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
-<div class="flexy" data-controller="import-csv">
-  <div class="loader d-none" data-import-csv-target="spinner"></div>
-  <div class="container flexy">
-    <div class="form-container">
-      <%= simple_form_for(@school_period, url: managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
-        <%= form.input :school_period_id, as: :hidden, input_html: { value: @school_period.id } %>
-        <div class="form-group">
-          <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
-        </div>
-        <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
-      <% end %>
+<% if @school_period.can_import? %>
+  <div class="flexy" data-controller="import-csv">
+    <div class="loader d-none" data-import-csv-target="spinner"></div>
+    <div class="container flexy">
+      <div class="form-container">
+        <%= simple_form_for(@school_period, url: managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+          <%= form.input :school_period_id, as: :hidden, input_html: { value: @school_period.id } %>
+          <div class="form-group">
+            <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
+          </div>
+          <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
+<% else %>
+  <p class="text-center">Vous ne pouvez plus importer de fichier CSV pour cette période.</p>
+<% end %>
