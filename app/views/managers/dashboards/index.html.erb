@@ -138,8 +138,8 @@
               <td class="align-middle"><%= course.activity.name %></td>
               <td class="align-middle"><%= course.activity.coach.full_name %></td>
               <td class="align-middle"><%= course.activity.coach.phone_number %></td>
-              <td class="align-middle"><%= l(course.starts_at, format: :hour) %></td>
-              <td class="align-middle"><%= l(course.ends_at, format: :hour) %></td>
+              <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
+              <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
               <td class="align-middle"><%= course.students_count %></td>
             </tr>
             <% end %>
