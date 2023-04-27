@@ -70,6 +70,10 @@
     resources :camps, only: %i[show destroy] do
       resources :activities, only: %i[new create]
     end
+
+    resources :camps do
+      get :export_csv, on: :member
+    end
   end
 
   namespace :coaches do

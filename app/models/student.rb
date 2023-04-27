@@ -68,19 +68,30 @@ class Student < ApplicationRecord
     courses.count
   end
 
-  def past_courses_count
-    courses.where('ends_at < ?', Time.current).count
-  end
-
-  def unattended_courses_count
-    course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).count
-  end
-
-  def unattended_rate
-    if past_courses_count.positive?
-      (unattended_courses_count.to_f / past_courses_count * 100).round
+  def past_courses_count(activity=nil)
+    if activity
+      courses.where('ends_at < ? AND activity_id = ?', Time.current, activity.id).count
     else
-      0
+      courses.where('ends_at < ?', Time.current).count
+    end
+  end
+
+  def unattended_courses_count(activity=nil)
+    if activity
+      course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).where('courses.activity_id = ?', activity.id).count
+    else
+      course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).count
+    end
+  end
+
+  def unattended_rate(activity=nil)
+    past_count = past_courses_count(activity)
+    unattended_count = unattended_courses_count(activity)
+
+    if past_count.positive?
+      "#{(unattended_count.to_f / past_count * 100).round} %"
+    else
+      "#{0} %"
     end
   end
 
@@ -131,10 +142,14 @@ class Student < ApplicationRecord
   end
 
   def phone_modified
-    if phone_number.length == 9
-      "0#{phone_number}"
+    if phone_number
+      if phone_number.length == 9
+        "0#{phone_number}"
+      else
+        phone_number
+      end
     else
-      phone_number
+      "No phone number"
     end
   end
 end
