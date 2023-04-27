@@ -11,6 +11,10 @@ class Managers::CampPolicy < ApplicationPolicy
     user.manager? && record.school_period.academy.manager == user
   end
 
+  def export_csv?
+    user.manager? && record.school_period.academy.manager == user
+  end
+
   class Scope < Scope
     def resolve
 
