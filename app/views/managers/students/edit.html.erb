@@ -17,7 +17,7 @@
 
       <%= form.input :phone_number, label: "Téléphone", required: true %>
 
-      <%= form.input :date_of_birth, as: :date, label: "Date de naissance", required: true %>
+      <%= form.input :date_of_birth, as: :date, label: "Date de naissance", required: true, start_year: Date.today.year - 30, end_year: Date.today.year %>
 
       <%= form.input :gender, as: :select, collection: ["Garçon", "Fille"], label: "Genre", required: true %>
 
