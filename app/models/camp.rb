@@ -21,6 +21,14 @@ class Camp < ApplicationRecord
     students.count
   end
 
+  def number_of_students(genre)
+    camp_enrollments.joins(:student).where(students: { gender: genre }).count
+  end
+
+  def age_of_students
+    (students.map(&:age).sum.to_f / students.count).round(1)
+  end
+
   def students_with_activity_enrollment
     students.joins(:activity_enrollments)
             .where(activity_enrollments: { activity_id: activities })
@@ -35,6 +43,19 @@ class Camp < ApplicationRecord
       true
     end
   end
+
+  def participant_ages
+    students.map(&:age).uniq.sort
+  end
+
+  def number_of_students_by_age(age)
+    students.select { |student| student.age == age }.count
+  end
+
+  def number_of_students_by_dpt(department)
+    students.select { |student| student.department == department }.count
+  end
+
   private
 
   def starts_at_must_be_before_ends_at

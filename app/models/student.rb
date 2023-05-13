@@ -117,6 +117,12 @@ class Student < ApplicationRecord
     end
   end
 
+  def department
+    if zipcode
+      zipcode.to_s.first(2)
+    end
+  end
+
   def next_activities
     activities.joins(:camp).where('camps.ends_at > ?', Time.current).order('camps.starts_at ASC')
   end

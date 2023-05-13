@@ -4,6 +4,7 @@ class SchoolPeriod < ApplicationRecord
 
   belongs_to :academy
   has_many :camps, dependent: :destroy
+  has_many :activities, through: :camps
 
   has_many :school_period_enrollments, dependent: :destroy
   has_many :students, through: :school_period_enrollments
@@ -14,6 +15,14 @@ class SchoolPeriod < ApplicationRecord
 
   def students_count
     students.count
+  end
+
+  def participant_ages
+    students.map(&:age).uniq.sort
+  end
+
+  def participant_departments
+    students.map(&:department).uniq.sort
   end
 
   def starts_at

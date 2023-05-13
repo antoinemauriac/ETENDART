@@ -74,6 +74,9 @@
     resources :camps do
       get :export_csv, on: :member
     end
+    resources :school_periods do
+      get :export_bilan_csv, on: :member
+    end
   end
 
   namespace :coaches do

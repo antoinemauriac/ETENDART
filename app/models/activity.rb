@@ -14,6 +14,7 @@ class Activity < ApplicationRecord
   belongs_to :category
   belongs_to :coach, class_name: 'User'
   has_many :courses, dependent: :destroy
+  has_many :course_enrollments, through: :courses
   accepts_nested_attributes_for :courses
 
   belongs_to :location
@@ -27,12 +28,28 @@ class Activity < ApplicationRecord
   # has_many :days
   # accepts_nested_attributes_for :days
 
+  def absenteeism_rate
+    total_enrollments = course_enrollments.count
+    absent_enrollments = course_enrollments.where(present: false).count
+
+    absenteeism_rate = (absent_enrollments.to_f / total_enrollments) * 100
+    return absenteeism_rate.round(0)
+  end
+
+  def number_of_students(genre)
+    activity_enrollments.joins(:student).where(students: { gender: genre }).count
+  end
+
   def students_count
     students.count
   end
 
   def students
     activity_enrollments.map(&:student)
+  end
+
+  def age_of_students
+    (students.map(&:age).sum.to_f / students.count).round(1)
   end
 
   def can_delete?

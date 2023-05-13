@@ -25,6 +25,9 @@ class Managers::SchoolPeriodsController < ApplicationController
     @academy = @school_period.academy
     authorize([:managers, @school_period])
     @camp = Camp.new
+
+    @activities = @school_period.activities.order(:camp_id)
+    @camps = @school_period.camps.order(:starts_at)
   end
 
   def destroy
@@ -36,6 +39,55 @@ class Managers::SchoolPeriodsController < ApplicationController
     flash[:notice] = "Période scolaire supprimée"
   end
 
+  def export_bilan_csv
+    school_period = SchoolPeriod.find(params[:id])
+    camps = school_period.camps.order(:starts_at)
+    activities = school_period.activities.order(:camp_id)
+    authorize([:managers, school_period])
+
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"bilan.csv\""
+        headers['Content-Type'] = 'text/csv; charset=UTF-8'
+
+        csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
+          if params[:export_type] == "activities"
+            csv << ["Semaine", "Activite", "Total Eleves", "Garçons", "Filles", "Age moyen", "Taux absenteisme %"]
+            activities.each do |activity|
+              csv << [activity.camp.name, activity.name, activity.students_count, activity.number_of_students("Garçon"), activity.number_of_students("Fille"), activity.age_of_students, activity.absenteeism_rate]
+            end
+          elsif params[:export_type] == "semaine"
+            csv << ["Semaine", "Total Eleves", "Garçons", "Filles", "Age moyen"]
+            camps.each do |camp|
+              csv << [camp.name, camp.students_count, camp.number_of_students("Garçon"), camp.number_of_students("Fille"), camp.age_of_students]
+            end
+          elsif params[:export_type] == "age"
+            csv << ["Age", "Semaine1", "Semaine2"]
+            school_period.participant_ages.each do |age|
+              csv << [age, camps.first.number_of_students_by_age(age), camps.second.number_of_students_by_age(age)]
+            end
+          elsif params[:export_type] == "department"
+            csv << ["Departement", "Semaine1", "Semaine2"]
+            school_period.participant_departments.each do |department|
+              csv << [department, camps.first.number_of_students_by_dpt(department), camps.first.number_of_students_by_dpt(department)]
+            end
+          end
+        end
+
+        if params[:export_type] == "activities"
+          send_data(csv_data, filename: "bilan_par_activite_#{school_period.academy.name}_#{school_period.name}_#{school_period.year}.csv")
+        elsif params[:export_type] == "semaine"
+          send_data(csv_data, filename: "bilan_par_semaine_#{school_period.academy.name}_#{school_period.name}_#{school_period.year}.csv")
+        elsif params[:export_type] == "age"
+          send_data(csv_data, filename: "bilan_par_age_#{school_period.academy.name}_#{school_period.name}_#{school_period.year}.csv")
+        elsif params[:export_type] == "department"
+          send_data(csv_data, filename: "bilan_par_departement_#{school_period.academy.name}_#{school_period.name}_#{school_period.year}.csv")
+        end
+      end
+    end
+  end
+
+  private
 
   def school_period_params
     params.require(:school_period).permit(:name, :year)

@@ -15,6 +15,10 @@ class Managers::SchoolPeriodPolicy < ApplicationPolicy
     user.manager? && record.academy.manager == user
   end
 
+  def export_bilan_csv?
+    user.manager? && record.academy.manager == user
+  end
+
   class Scope < Scope
     def resolve
       # scope.where(manager_id: user.id)
