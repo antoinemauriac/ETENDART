@@ -69,7 +69,7 @@ class Managers::SchoolPeriodsController < ApplicationController
           elsif params[:export_type] == "department"
             csv << ["Departement", "Semaine1", "Semaine2"]
             school_period.participant_departments.each do |department|
-              csv << [department, camps.first.number_of_students_by_dpt(department), camps.first.number_of_students_by_dpt(department)]
+              csv << [department, camps.first.number_of_students_by_dpt(department), camps.second.number_of_students_by_dpt(department)]
             end
           end
         end
