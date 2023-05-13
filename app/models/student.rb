@@ -76,7 +76,7 @@ class Student < ApplicationRecord
     end
   end
 
-  def unattended_courses_count(activity=nil)
+  def unattended_courses_count(activity = nil)
     if activity
       course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).where('courses.activity_id = ?', activity.id).count
     else
@@ -84,14 +84,14 @@ class Student < ApplicationRecord
     end
   end
 
-  def unattended_rate(activity=nil)
+  def unattended_rate(activity = nil)
     past_count = past_courses_count(activity)
     unattended_count = unattended_courses_count(activity)
 
     if past_count.positive?
-      "#{(unattended_count.to_f / past_count * 100).round} %"
+      (unattended_count.to_f / past_count * 100).round
     else
-      "#{0} %"
+      0
     end
   end
 
