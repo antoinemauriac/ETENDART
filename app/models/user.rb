@@ -20,16 +20,28 @@ class User < ApplicationRecord
   has_many :coach_camps, foreign_key: :coach_id, dependent: :destroy
   has_many :camps, through: :coach_camps
 
-  has_many :activities, foreign_key: :coach_id, dependent: :destroy
-  has_many :courses, through: :activities
-
   has_many :feedbacks, foreign_key: :coach_id
 
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
 
   has_many :courses_as_manager, class_name: 'Course', foreign_key: :manager_id
-  has_many :courses_as_coach, class_name: 'Course', foreign_key: :coach_id
+  # has_many :courses, foreign_key: :coach_id
+
+  has_many :activities_as_lead, class_name: 'Activity', foreign_key: :coach_id, dependent: :destroy
+  has_many :courses_as_lead, through: :activities_as_lead, source: :courses
+
+  has_many :activity_coaches, foreign_key: :coach_id, dependent: :destroy
+  has_many :activities_as_coach, through: :activity_coaches, source: :activity
+  has_many :courses_as_coach, through: :activities_as_coach, source: :courses
+
+  def all_activities
+    (activities_as_lead + activities_as_coach).uniq
+  end
+
+  def all_courses
+    (courses_as_lead + courses_as_coach ).uniq
+  end
 
   def manager?
     roles.any? { |role| role.name == 'manager' }

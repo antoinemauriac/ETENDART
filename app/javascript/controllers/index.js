@@ -43,5 +43,8 @@ application.register("sidebar", SidebarController)
 import StudentTableController from "./student_table_controller"
 application.register("student-table", StudentTableController)
 
+import TomSelectController from "./tom_select_controller"
+application.register("tom-select", TomSelectController)
+
 import UploadPhotoController from "./upload_photo_controller"
 application.register("upload-photo", UploadPhotoController)

@@ -33,13 +33,15 @@ export default class extends Controller {
     fetch(url)
       .then(response => response.json())
       .then(coaches => {
-        this.coachTarget.innerHTML = ''
-        this.coachTarget.insertAdjacentHTML('beforeend', '<option value=""></option>');
-        coaches.forEach(coach => {
-          const option = document.createElement('option')
-          option.value = coach.id
-          option.textContent = `${coach.first_name} ${coach.last_name}`
-          this.coachTarget.appendChild(option)
+        this.coachTargets.forEach(coachTarget => {
+          coachTarget.innerHTML = ''
+          coachTarget.insertAdjacentHTML('beforeend', '<option value=""></option>');
+          coaches.forEach(coach => {
+            const option = document.createElement('option')
+            option.value = coach.id
+            option.textContent = `${coach.first_name} ${coach.last_name}`
+            coachTarget.appendChild(option)
+          })
         })
       })
   }

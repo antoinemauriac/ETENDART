@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_03_122523) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_19_124508) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "academies", force: :cascade do |t|
     t.string "name"
@@ -63,7 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_03_122523) do
     t.string "name"
     t.bigint "camp_id", null: false
     t.bigint "category_id", null: false
-    t.bigint "coach_id", null: false
+    t.bigint "coach_id"
     t.integer "min_capacity"
     t.integer "max_capacity"
     t.datetime "created_at", null: false
@@ -74,6 +75,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_03_122523) do
     t.index ["category_id"], name: "index_activities_on_category_id"
     t.index ["coach_id"], name: "index_activities_on_coach_id"
     t.index ["location_id"], name: "index_activities_on_location_id"
+  end
+
+  create_table "activity_coaches", force: :cascade do |t|
+    t.bigint "coach_id", null: false
+    t.bigint "activity_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_activity_coaches_on_activity_id"
+    t.index ["coach_id"], name: "index_activity_coaches_on_coach_id"
   end
 
   create_table "activity_enrollments", force: :cascade do |t|
@@ -275,6 +285,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_03_122523) do
   add_foreign_key "activities", "categories"
   add_foreign_key "activities", "locations"
   add_foreign_key "activities", "users", column: "coach_id"
+  add_foreign_key "activity_coaches", "activities"
+  add_foreign_key "activity_coaches", "users", column: "coach_id"
   add_foreign_key "activity_enrollments", "activities"
   add_foreign_key "activity_enrollments", "students"
   add_foreign_key "camp_enrollments", "camps"
