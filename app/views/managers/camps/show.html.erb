@@ -26,7 +26,7 @@
           <td><%= activity.name %></td>
           <td><%= activity.category.name %></td>
           <td><%= activity.location.name %></td>
-          <td><%= activity.coach.first_name %> <%= activity.coach.last_name %></td>
+          <td><%= activity.lead_coach.try(:first_name) %> <%= activity.lead_coach.try(:last_name) %></td>
           <td><%= activity.students_count %></td>
           <% if activity.can_delete? %>
             <td>

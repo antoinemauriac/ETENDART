@@ -23,7 +23,7 @@
         <%= simple_form_for course, url: managers_course_path(course), method: :put, data: { turbo: false } do |f| %>
         <tr>
           <td class="align-middle">
-            <div class="d-flex"> <!-- Ajout de la classe justify-content-center -->
+            <div class="d-flex">
               <%= link_to l(course.starts_at, format: :long), managers_course_path(course), class: "btn-etendart-blue mb-2", style:"width:80%"%>
             </div>
           </td>
@@ -65,7 +65,7 @@
           <td class="align-middle"><%= student.last_name %></td>
           <td class="align-middle"><%= student.first_name %></td>
           <td class="align-middle"><%= student.age %> ans</td>
-          <td class="align-middle">0<%= student.phone_number %></td>
+          <td class="align-middle"><%= student.phone_modified %></td>
           <td class="align-middle">
             <%= link_to managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id)), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>
               <i class="fas fa-trash trash"></i>

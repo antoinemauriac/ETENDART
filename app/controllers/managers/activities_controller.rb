@@ -15,39 +15,24 @@ class Managers::ActivitiesController < ApplicationController
     @locations = @academy.locations
     @school_period = camp.school_period
     authorize([:managers, @activity])
+
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
-    coach = User.find(params[:activity][:coach_id])
+    coach = User.find_by_id(params[:activity][:coach_id])
+    coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
 
-    # Validate start time and end time
-    # # A mettre dans le modèle
+    @activity.coaches << coach
+    @activity.coaches << User.where(id: coaches)
 
-    # Plus besoin de ceci car le modèle va se charger de remonter l'erreur dans if @activity.save
+
     if @activity.errors.any?
       return render :new, status: :unprocessable_entity
     end
 
     if validate_start_time_before_end_time
       if @activity.save
-        coach.camps << @camp unless coach.camps.include?(@camp)
-        days.each do |day|
-          start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
-          end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
+        create_courses_for_activity(@activity, coach, days)
 
-          # Trouver la date correspondant au jour de la semaine donné
-          date = @camp.starts_at
-          while date.strftime("%A").downcase != day.downcase
-            date += 1
-          end
-
-          # Calculer la date et heure de début et de fin en utilisant les dates starts_at et ends_at du camp
-          start_datetime = Time.zone.local(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec)
-          end_datetime = Time.zone.local(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec)
-
-          Course.create!(activity: @activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach)
-        end
-
-        redirect_to managers_camp_path(@camp)
-        flash[:notice] = "Activité créée"
+        redirect_to managers_camp_path(@camp), notice: "Activité créée"
       else
         flash[:alert] = "Une erreur est survenue"
         render :new, status: :unprocessable_entity
@@ -102,5 +87,26 @@ class Managers::ActivitiesController < ApplicationController
       end
     end
     no_error
+  end
+  def create_courses_for_activity(activity, coach, days)
+    days.each do |day|
+      start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
+      end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
+      date = find_date_for_day(day)
+
+      start_datetime = Time.zone.local(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec)
+      end_datetime = Time.zone.local(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec)
+
+      course = Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach_id: coach.id)
+    end
+  end
+
+  def find_date_for_day(day)
+    day_names_fr = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+    date = @camp.starts_at
+    while day_names_fr[date.strftime("%w").to_i] != day.capitalize
+      date += 1
+    end
+    date
   end
 end

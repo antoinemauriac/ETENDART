@@ -31,6 +31,8 @@ fr:
       camp:
         starts_at: "La date de début"
     errors:
+      messages:
+        record_invalid: "L'enregistrement est invalide"
       models:
         camp:
           attributes:
