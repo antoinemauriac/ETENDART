@@ -38,10 +38,10 @@ class Activity < ApplicationRecord
     end
   end
 
-  # def all_coaches
-  #   coaches << lead_coach
-  #   coaches.uniq
-  # end
+  def all_coaches
+    coaches << lead_coach
+    coaches.uniq
+  end
 
   def absenteeism_rate
     total_enrollments = course_enrollments.count

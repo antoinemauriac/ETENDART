@@ -97,7 +97,7 @@ class Managers::ActivitiesController < ApplicationController
       start_datetime = Time.zone.local(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec)
       end_datetime = Time.zone.local(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec)
 
-      course = Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach_id: coach.id)
+      Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach_id: coach.id)
     end
   end
 
