@@ -12,10 +12,12 @@
     <%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post, data: { controller: 'activity-form' } do |f| %>
       <%= f.input :name, label: "Nom" %>
       <%= f.input :category_id, as: :select, collection: Category.all, label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", academy_id: @camp.school_period.academy.id, action: 'change->activity-form#onCategoryChange' } } %>
-      <%= f.input :coach_id, as: :select, label: "Coach Référent", collection: User.all, label_method: ->(user) { "#{user.first_name} #{user.last_name}" }, value_method: :id, input_html: { data: { activity_form_target: "coach"} } %>
-      <%= f.collection_select :coach_ids, User.all, :id, :full_name, { }, { multiple: true, data: { activity_form_target: "coach" } } %>
 
-      <%= f.input :location_id, as: :select, collection: @locations,  label: "Adresse", required: true %>
+      <%= f.input :coach_id, as: :select, label: "Coach Référent", collection: User.all, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select", activity_form_target: "coach" } } %>
+      <%= f.input :coach_ids, as: :select, collection: User.all, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select", activity_form_target: "coach" } } %>
+
+      <%= f.input :location_id, as: :select, collection: @locations, label: "Adresse", required: true %>
+
 
       <ul>
         <li>
