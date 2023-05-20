@@ -11,7 +11,9 @@ export default class extends Controller {
     this.startTimeTargets.forEach((input) => (input.value = "10:00"));
     this.endTimeTargets.forEach((input) => (input.value = "12:00"));
     this.coachTargets.forEach(coachTarget => {
-        new TomSelect(coachTarget)
+        new TomSelect(coachTarget, {
+          plugins: ['remove_button'],
+        })
       })
   }
 
