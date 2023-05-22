@@ -8,6 +8,7 @@ class Course < ApplicationRecord
 
   belongs_to :manager, class_name: 'User', foreign_key: :manager_id
   # belongs_to :lead_coach, class_name: 'User', foreign_key: :coach_id
+  belongs_to :coach, class_name: 'User', optional: true
 
   has_many :course_enrollments, dependent: :destroy
   has_many :students, through: :course_enrollments

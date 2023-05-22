@@ -19,10 +19,8 @@ class Managers::ActivitiesController < ApplicationController
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
     coach = User.find_by_id(params[:activity][:coach_id])
     coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
-
-    @activity.coaches << coach
-    @activity.coaches << User.where(id: coaches)
-
+    # @activity.coaches << coach if coach
+    @activity.coaches << User.where(id: coaches) if coaches.any?
 
     if @activity.errors.any?
       return render :new, status: :unprocessable_entity
@@ -51,7 +49,35 @@ class Managers::ActivitiesController < ApplicationController
     @students = @activity.students.sort_by(&:last_name)
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
+    category = @activity.category
+    @coach = @activity.lead_coach
+    @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
   end
+
+  def update
+    @activity = Activity.find(params[:id])
+    authorize([:managers, @activity])
+
+    if @activity.update(activity_params)
+      # mettre à jour la liste des coaches
+      coach = User.find_by_id(params[:activity][:coach_id])
+      coaches = params[:activity][:coach_ids].reject { |id| id == "" }
+      @activity.coaches = []
+      # @activity.coaches << coach if coach
+      @activity.coaches << User.where(id: coaches) if coaches.any?
+
+      # update le coach de tous les courses
+      @activity.courses.each do |course|
+        course.update(coach: coach)
+      end
+      redirect_to managers_activity_path(@activity), notice: "L'activité a été mise à jour avec succès."
+    else
+      flash.now[:alert] = "Erreur lors de la mise à jour de l'activité."
+      render :show
+    end
+  end
+
+
 
   def destroy
     activity = Activity.find(params[:id])
@@ -97,7 +123,7 @@ class Managers::ActivitiesController < ApplicationController
       start_datetime = Time.zone.local(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec)
       end_datetime = Time.zone.local(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec)
 
-      Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach_id: coach.id)
+      Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach)
     end
   end
 
