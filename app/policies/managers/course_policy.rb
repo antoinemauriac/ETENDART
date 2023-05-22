@@ -24,6 +24,6 @@ class Managers::CoursePolicy < ApplicationPolicy
   end
 
   def update_enrollments?
-    user.manager?
+    user.manager? || user.coach?
   end
 end

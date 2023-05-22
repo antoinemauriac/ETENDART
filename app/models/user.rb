@@ -36,11 +36,15 @@ class User < ApplicationRecord
   has_many :courses_as_coach, through: :activities_as_coach, source: :courses
 
   def all_activities
-    (activities_as_lead + activities_as_coach).uniq
+    Activity.where(id: activities_as_lead.select(:id)).or(Activity.where(id: activities_as_coach.select(:id))).distinct
   end
 
+  # def all_courses
+  #   (courses_as_lead + courses_as_coach ).uniq.sort_by(&:id).map(&:id)
+  # end
+
   def all_courses
-    (courses_as_lead + courses_as_coach ).uniq
+    Course.where(id: courses_as_lead.select(:id)).or(Course.where(id: courses_as_coach.select(:id))).distinct
   end
 
   def manager?
@@ -63,29 +67,33 @@ class User < ApplicationRecord
     end
   end
 
+  # def next_activities
+  #   all_activities.select { |activity| activity.camp.ends_at > Time.current }.sort_by { |activity| activity.camp.starts_at}
+  # end
+
   def next_activities
-    all_activities.select { |activity| activity.camp.ends_at > Time.current }.sort_by { |activity| activity.camp.starts_at}
-    # all_activities.joins(:camp).where('camps.ends_at > ?', Time.current).order(:starts_at)
+    activity_ids = Activity.where(id: activities_as_lead.select(:id)).or(Activity.where(id: activities_as_coach.select(:id))).select(:id)
+    Activity.joins(:camp).where(id: activity_ids).where('camps.ends_at > ?', Time.current).order(:starts_at)
   end
 
   def next_courses
-    courses.where('starts_at > ?', Time.current).order(:starts_at)
+    all_courses.where('starts_at > ?', Time.current).order(:starts_at)
   end
 
   def past_courses
-    courses.where('ends_at < ?', Time.current).order(:starts_at)
+    all_courses.where('ends_at < ?', Time.current).order(:starts_at)
   end
 
   def today_courses
-    courses.where('DATE(starts_at) = ?', Time.current.to_date).order(:starts_at)
+    all_courses.where('DATE(starts_at) = ?', Time.current.to_date).order(:starts_at)
   end
 
   def missing_attendance
-    courses.where('starts_at < ?', Time.current).where('status = ?', false)
+    all_courses.where('starts_at < ?', Time.current).where('status = ?', false)
   end
 
   def students
-    courses.map(&:students).flatten.uniq
+    all_courses.map(&:students).flatten.uniq
   end
 
   def academies_ordered
