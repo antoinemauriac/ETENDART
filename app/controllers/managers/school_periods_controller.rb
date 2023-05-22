@@ -90,7 +90,7 @@ class Managers::SchoolPeriodsController < ApplicationController
   private
 
   def school_period_params
-    params.require(:school_period).permit(:name, :year)
+    params.require(:school_period).permit(:name, :year, :paid, :price)
   end
 
 end
