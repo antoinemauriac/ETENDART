@@ -25,4 +25,5 @@ class Managers::AcademiesController < ApplicationController
   def academy_params
     params.require(:academy).permit(:name)
   end
+
 end

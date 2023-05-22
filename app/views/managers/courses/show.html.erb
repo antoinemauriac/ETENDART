@@ -47,11 +47,17 @@
                 </div>
               </td>
               <td class="align-middle" style="width:80px"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
+              <td class="align-middle">
+                <div>
+                  <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", id: "has-paid-#{enrollment.id}", checked: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>
+                </div>
+              </td>
             </tr>
           <% end %>
         </tbody>
       </table>
       <div class="flexy">
+        <%= form.hidden_field :redirect_to, value: "manager" %>
         <%= form.submit "Valider", class: "btn-etendart" %>
       </div>
     <% end %>

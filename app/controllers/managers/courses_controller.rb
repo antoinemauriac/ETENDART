@@ -43,13 +43,32 @@ class Managers::CoursesController < ApplicationController
       enrollments_params.each do |enrollment_params|
         enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
         enrollment.update(present: enrollment_params[1][:present].to_i)
+        camp_enrollment = enrollment.student.camp_enrollments.find_by(camp: course.activity.camp)
+        camp_enrollment&.update(has_paid: enrollment_params[1][:has_paid])
       end
       course.update(status: true)
-      redirect_to managers_course_path(course)
-      flash[:notice] = "Appel validé"
+      # redirect_to managers_course_path(course)
+      respond_to do |format|
+        format.html do
+          if params[:redirect_to] === 'manager'
+            redirect_to managers_course_path(course), notice: "Appel validé"
+          else
+            redirect_to coaches_course_path(course), notice: "Appel validé"
+          end
+        end
+        format.json { head :no_content }
+      end
     else
-      redirect_to managers_course_path(course)
-      flash[:alert] = "Aucun élève dans ce cours"
+      respond_to do |format|
+        format.html do
+          if params[:redirect_to] === 'manager'
+            redirect_to managers_course_path(course), alert: "Aucun élève dans ce cours"
+          else
+            redirect_to coaches_course_path(course), alert: "Aucun élève dans ce cours"
+          end
+        end
+        format.json { head :no_content }
+      end
     end
   end
 
