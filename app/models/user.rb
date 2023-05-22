@@ -64,7 +64,8 @@ class User < ApplicationRecord
   end
 
   def next_activities
-    activities.joins(:camp).where('camps.ends_at > ?', Time.current).order(:starts_at)
+    all_activities.select { |activity| activity.camp.ends_at > Time.current }.sort_by { |activity| activity.camp.starts_at}
+    # all_activities.joins(:camp).where('camps.ends_at > ?', Time.current).order(:starts_at)
   end
 
   def next_courses

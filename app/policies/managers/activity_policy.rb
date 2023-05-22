@@ -16,6 +16,9 @@ class Managers::ActivityPolicy < ApplicationPolicy
     user.manager? && record.camp.school_period.academy.manager == user
   end
 
+  def update?
+    user.manager? && record.camp.school_period.academy.manager == user
+  end
   class Scope < Scope
     def resolve
 

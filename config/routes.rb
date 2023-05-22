@@ -51,7 +51,7 @@
     end
     resources :feedbacks, only: %i[new create]
     resources :activity_enrollments, only: %i[destroy]
-    resources :activities, only: %i[show destroy]
+    resources :activities, only: %i[show destroy update]
     resources :school_periods, only: %i[show destroy] do
       resources :camps, only: %i[new create]
     end
