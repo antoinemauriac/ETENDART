@@ -18,11 +18,11 @@
           <tr>
             <th>Académie</th>
             <th>Activité</th>
-            <th>Coach</th>
+            <th>Coach Référent</th>
             <th>Telephone</th>
             <th>Début</th>
             <th>Fin</th>
-            <th>Nb élèves</th>
+            <th>Total élèves</th>
             <th>Nb absents</th>
             <th>Appel fait ?</th>
           </tr>
@@ -124,7 +124,7 @@
             <tr>
               <th>Académie</th>
               <th>Activité</th>
-              <th>Coach</th>
+              <th>Coach Référent</th>
               <th>Téléphone</th>
               <th>Début</th>
               <th>Fin</th>
@@ -136,8 +136,8 @@
             <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
               <td class="align-middle"><%= course.academy.name %></td>
               <td class="align-middle"><%= course.activity.name %></td>
-              <td class="align-middle"><%= course.activity.coach.full_name %></td>
-              <td class="align-middle"><%= course.activity.coach.phone_number %></td>
+              <td class="align-middle"><%= course.activity.lead_coach.full_name %></td>
+              <td class="align-middle"><%= course.activity.lead_coach.phone_number %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
               <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
               <td class="align-middle"><%= course.students_count %></td>

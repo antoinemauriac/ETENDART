@@ -13,6 +13,7 @@ class Coaches::CoursesController < ApplicationController
 
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
+    @school_period = course.school_period
     authorize([:coaches, @course], policy_class: Coaches::CoursePolicy)
   end
 
