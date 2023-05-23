@@ -10,11 +10,12 @@ class Managers::CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
     authorize([:managers, @category])
-    if @category.save
-      redirect_to managers_categories_path
-      flash[:notice] = "Catégorie créée"
+    if Category.exists?(name: @category.name)
+      redirect_to managers_categories_path, alert: "Cette catégorie existe déjà"
+    elsif @category.save
+      redirect_to managers_categories_path, notice: "Catégorie créée"
     else
-      render :new, status: :unprocessable_entity
+      redirect_to managers_categories_path, alert: "Une erreur est survenue lors de la création de la catégorie"
     end
   end
 
@@ -47,6 +48,6 @@ class Managers::CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:name)
+    params.require(:category).permit(:name, :super_category)
   end
 end
