@@ -45,9 +45,15 @@ class Managers::CoursesController < ApplicationController
         enrollment.update(present: enrollment_params[1][:present].to_i)
         camp_enrollment = enrollment.student.camp_enrollments.find_by(camp: course.activity.camp)
         camp_enrollment&.update(has_paid: enrollment_params[1][:has_paid])
+        student = enrollment.student
+        if student.unattended_courses_count(camp: course.activity.camp) >= 2
+          camp_enrollment.update(banished: true)
+        else
+          camp_enrollment.update(banished: false)
+        end
       end
       course.update(status: true)
-      # redirect_to managers_course_path(course)
+
       respond_to do |format|
         format.html do
           if params[:redirect_to] === 'manager'

@@ -76,11 +76,53 @@ class Student < ApplicationRecord
     end
   end
 
-  def unattended_courses_count(activity = nil)
+  # def unattended_courses_count(activity = nil)
+  #   if activity
+  #     course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).where('courses.activity_id = ?', activity.id).count
+  #   else
+  #     course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).count
+  #   end
+  # end
+
+  # def unattended_courses_count(options = { camp: nil, activity: nil })
+  #   activity = options[:activity]
+  #   camp = options[:camp]
+
+  #   if activity
+  #     course_enrollments.unattended.joins(:course)
+  #                       .where('courses.ends_at < ?', Time.current)
+  #                       .where('courses.activity_id = ?', activity.id)
+  #                       .count
+  #   elsif camp
+  #     course_enrollments.unattended.joins(course: { activity: :camp })
+  #                       .where('courses.ends_at < ?', Time.current)
+  #                       .where('courses.camps.id = ?', camp.id)
+  #                       .count
+  #   else
+  #     course_enrollments.unattended.joins(:course)
+  #                       .where('courses.ends_at < ?', Time.current)
+  #                       .count
+  #   end
+  # end
+
+  def unattended_courses_count(options = { camp: nil, activity: nil })
+    activity = options[:activity] if options.present?
+    camp = options[:camp] if options.present?
+
     if activity
-      course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).where('courses.activity_id = ?', activity.id).count
+      course_enrollments.unattended.joins(:course)
+                        .where('courses.ends_at < ?', Time.current)
+                        .where('courses.activity_id = ?', activity.id)
+                        .count
+    elsif camp
+      course_enrollments.unattended.joins(course: :camp)
+                        .where('courses.ends_at < ?', Time.current)
+                        .where('camps.id = ?', camp.id)
+                        .count
     else
-      course_enrollments.unattended.joins(:course).where('courses.ends_at < ?', Time.current).count
+      course_enrollments.unattended.joins(:course)
+                        .where('courses.ends_at < ?', Time.current)
+                        .count
     end
   end
 
