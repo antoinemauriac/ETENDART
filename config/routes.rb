@@ -39,6 +39,7 @@
     resources :courses, only: %i[index show edit update destroy] do
       member do
         put :update_enrollments
+        post :unban_student
       end
     end
 
@@ -80,11 +81,11 @@
   end
 
   namespace :coaches do
-    resources :courses, only: %i[index show] do
-      member do
-        put :update_enrollments
-      end
-    end
+    resources :courses, only: %i[index show]
+    #   member do
+    #     put :update_enrollments
+    #   end
+    # end
     resources :student_profiles, only: %i[show index]
     resources :feedbacks, only: %i[new create]
   end

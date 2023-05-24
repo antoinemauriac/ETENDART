@@ -17,6 +17,10 @@ class Camp < ApplicationRecord
   validates :name, presence: true
   validate :starts_at_must_be_before_ends_at
 
+  def banished_students
+    students.joins(:camp_enrollments).where(camp_enrollments: { banished: true }).uniq
+  end
+
   def students_count
     students.count
   end

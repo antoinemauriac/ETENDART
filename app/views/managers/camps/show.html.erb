@@ -6,7 +6,7 @@
   <div class="header-nav-item"><%= link_to "#{@camp.school_period.name.upcase} - #{@camp.school_period.year}", managers_school_period_path(@camp.academy, @camp.school_period) %></div>
   <div class="header-nav-item active"><%= @camp.name.upcase %></div>
 </div>
-<% if false %>
+
 <div class="yellow-title">LES ACTIVITÉS</div>
 
 <div class="container">
@@ -47,8 +47,6 @@
   </div>
 </div>
 
-<% end %>
-
 <div class="yellow-title mt-3 mb-3">ÉLÈVES INSCRITS</div>
 
 <div class="container">
@@ -70,7 +68,7 @@
         <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @camp.academy.id) %>'">
           <td><%= student.last_name %></td>
           <td><%= student.first_name %></td>
-          <td><%= student.camp_enrollments.where(camp: @camp).first.banished %></td>
+          <td><%= student.camp_enrollments.where(camp: @camp).first.banished ? "Oui" : "" %></td>
           <td><%= student.age %> ans</td>
           <td><%= student.student_activities(@camp).first.name %></td>
           <td><%= student.unattended_rate(student.student_activities(@camp).first)%></td>
