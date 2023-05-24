@@ -26,4 +26,8 @@ class Managers::CoursePolicy < ApplicationPolicy
   def update_enrollments?
     user.manager? || user.coach?
   end
+
+  def unban_student?
+    user.manager?
+  end
 end

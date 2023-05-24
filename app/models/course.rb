@@ -23,6 +23,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def banished_students
+    students.joins(camp_enrollments: :camp).where(camp_enrollments: { banished: true, camps: { id: camp.id } }).uniq
+  end
+
   def student_presence(student)
     course_enrollments.find_by(student: student).present
   end
