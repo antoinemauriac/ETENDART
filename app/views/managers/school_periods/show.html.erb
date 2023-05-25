@@ -86,6 +86,7 @@
 <%= link_to "Export par semaine", export_bilan_csv_managers_school_period_path(@school_period, export_type: "semaine", format: :csv), class: "btn btn-success mb-3" %>
 <%= link_to "Export par âge", export_bilan_csv_managers_school_period_path(@school_period, export_type: "age", format: :csv), class: "btn btn-success mb-3" %>
 <%= link_to "Export par département", export_bilan_csv_managers_school_period_path(@school_period, export_type: "department", format: :csv), class: "btn btn-success mb-3" %>
+<%= link_to "Export all", export_bilan_csv_managers_school_period_path(@school_period, export_type: "all", format: :csv), class: "btn btn-success mb-3" %>
 <% @activities.each do |activity| %>
   <ul>
     <li><%= "#{activity.camp.name} - #{activity.name} - #{activity.students_count} - #{activity.number_of_students("Garçon")} - #{activity.number_of_students("Fille")} - #{activity.age_of_students} ans - #{activity.absenteeism_rate}" %></li>
