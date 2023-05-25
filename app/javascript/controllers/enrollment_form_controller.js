@@ -51,7 +51,8 @@ export default class extends Controller {
         schoolPeriods.forEach(schoolPeriod => {
           const option = document.createElement('option')
           option.value = schoolPeriod.id
-          option.textContent = `${schoolPeriod.name}`
+          option.textContent = `${schoolPeriod.full_name}`
+          console.log(option.textContent);
           this.schoolPeriodTarget.appendChild(option)
         })
       })

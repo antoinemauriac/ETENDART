@@ -13,6 +13,10 @@ class SchoolPeriod < ApplicationRecord
     school_period_enrollments.map(&:student)
   end
 
+  def full_name
+    "#{name} - #{year}"
+  end
+
   def students_count
     students.count
   end

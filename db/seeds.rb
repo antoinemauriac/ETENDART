@@ -31,15 +31,40 @@
 # Role.create!(name: 'manager')
 # Role.create!(name: 'coach')
 
-# celine = User.create!(email: 'celine@etendart.org', password: 123456)
-# celine.roles << Role.find_by(name: 'manager')
+toto = User.create!(email: 'toto@toto.com', password: 123456)
+toto.roles << Role.find_by(name: 'manager')
+
+angers = Academy.find_by(name: 'Angers')
+angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022761/etendart/szhjycwofx768fuvmurf.jpg')
+angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
+angers.save
+
+
+strasbourg = Academy.find_by(name: 'Strasbourg')
+strasbourg_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022664/etendart/jr1urgr52c8yls0icjdk.png')
+strasbourg.image.attach(io: strasbourg_image, filename: 'strasbourg-court.jpg', content_type: 'image/jpg')
+strasbourg.save
+
+saint_quentin = Academy.find_by(name: 'Saint-Quentin')
+saint_quentin_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022663/etendart/wn1pkzmautra2tlhvqqh.jpg')
+saint_quentin.image.attach(io: saint_quentin_image, filename: 'saint-quentin-court.jpg', content_type: 'image/jpg')
+saint_quentin.save
+
+
+
+# strasbourg_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/sr6nqll54ykkr03jqvgn.jpg')
+# strasbourg.image.attach(io: strasbourg_image, filename: 'strasbourg-court.jpg', content_type: 'image/jpg')
+# strasbourg.save
+
 
 # djoko = Academy.create!(name: 'Djokovic', manager: celine)
+# djoko = Academy.find_by(name: 'Djoko')
 # djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/sr6nqll54ykkr03jqvgn.jpg')
 # djoko.image.attach(io: djoko_image, filename: 'djoko-court.jpg', content_type: 'image/jpg')
 # djoko.save
 
 # rudy = Academy.create!(name: 'Rudy Gobert', manager: celine)
+# rudy = Academy.find_by(name: 'Rudy Gobert')
 # rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/b5cmmg95x1kuvmtm9ysu.jpg')
 # rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
 # rudy.save
