@@ -28,9 +28,10 @@ class Managers::EnrollmentsController < ApplicationController
   def update_school_periods
     academy = Academy.find(params[:academy_id])
     authorize([:managers, academy], policy_class: Managers::EnrollmentPolicy)
-    school_periods = academy.school_periods
-    render json: school_periods.select(:id, :name)
+    school_periods = academy.school_periods.select(:id, :name, :year)
+    render json: school_periods.as_json(methods: :full_name)
   end
+
 
   def update_camps
     school_period = SchoolPeriod.find(params[:school_period_id])

@@ -32,7 +32,7 @@
 </div>
 
 <div class="row justify-content-center align-items-stretch">
-
+  <%# LES COURS DU JOUR %>
   <div class="col-12 col-xxl-11 mt-2 mb-4">
     <div class="header-info">LES COURS DU JOUR</div>
     <div class="content-info">
@@ -76,7 +76,8 @@
       </table>
     </div>
   </div>
-
+  <%# LES EXCLUS %>
+  <% if @academy.name == "Rudy Gobert" %>
   <div class="col-12 col-xxl-11 mb-4">
     <div class="header-info">ÉLÈVES EXCLUS DE LA SEMAINE</div>
     <div class="content-info">
@@ -104,7 +105,8 @@
       </table>
     </div>
   </div>
-
+  <% end %>
+  <%# LES ABSENTS %>
   <div class="col-12 col-xxl-11 mb-4" data-controller="missing-students-table">
     <div class="header-info">ÉLÈVES ABSENTS</div>
     <div class="content-info">
@@ -140,7 +142,7 @@
     <% end %>
     </div>
   </div>
-
+  <%# LES FEEDBACKS %>
   <div class="col-12 col-xxl-11 mb-4">
     <div class="header-info">FEEDBACKS RÉCENTS</div>
     <div class="content-info">
@@ -166,7 +168,7 @@
       </table>
     </div>
   </div>
-
+  <%# DEMAIN %>
   <div class="col-12 col-xxl-11 mt-2 mb-4">
     <div class="header-info">DEMAIN</div>
     <div class="content-info">
@@ -198,7 +200,4 @@
       </table>
     </div>
   </div>
-
-
-
 </div>
