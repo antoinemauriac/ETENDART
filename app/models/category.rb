@@ -1,6 +1,6 @@
 class Category < ApplicationRecord
 
-  validates :super_category, presence: true, inclusion: { in: ['Sport', 'Sport-eveil', 'Eveil', 'Cuisine'] }
+  validates :super_category, presence: true
   validates :name, presence: true, uniqueness: true
 
   has_many :activities

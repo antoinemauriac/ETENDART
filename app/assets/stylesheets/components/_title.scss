@@ -11,6 +11,11 @@
   font-weight: 900;
   padding: 10px;
 }
+
+.yellow-title-flex {
+  flex-direction: row!important;
+}
+
 .black-title {
   background-color: black;
   color: $yellow;

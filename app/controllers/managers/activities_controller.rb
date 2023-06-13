@@ -114,6 +114,7 @@ class Managers::ActivitiesController < ApplicationController
     end
     no_error
   end
+
   def create_courses_for_activity(activity, coach, days)
     days.each do |day|
       start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])

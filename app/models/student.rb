@@ -37,6 +37,18 @@ class Student < ApplicationRecord
     end
   end
 
+  def full_name_separator
+    if first_name && last_name
+      "#{last_name.upcase} - #{first_name}"
+    elsif first_name && !last_name
+      first_name
+    elsif !first_name && last_name
+      last_name.upcase
+    else
+      "No name"
+    end
+  end
+
 
   def courses_sorted
     courses.order(starts_at: :asc)
@@ -99,7 +111,7 @@ class Student < ApplicationRecord
 
   def unattended_rate(activity = nil)
     past_count = past_courses_count(activity)
-    unattended_count = unattended_courses_count(activity)
+    unattended_count = unattended_courses_count(activity: activity)
 
     if past_count.positive?
       (unattended_count.to_f / past_count * 100).round

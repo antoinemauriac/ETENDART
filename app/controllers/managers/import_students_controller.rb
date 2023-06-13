@@ -32,17 +32,17 @@ class Managers::ImportStudentsController < ApplicationController
       student.course_enrollments.joins(course: { activity: :camp }).where(camps: { school_period: school_period }).destroy_all
 
       student.academies << academy unless student.academies.include?(academy)
-      student.school_periods << school_period
+      student.school_periods << school_period unless student.school_periods.include?(school_period)
 
       if school_period.camps.any?
-        (1..4).each do |week_number|
+        (1..school_period.camps.length).each do |week_number|
           week_name = "semaine#{week_number}"
           if row[week_name] == "oui"
             week_camp = school_period.camps.find_by(name: week_name)
             if week_camp.present?
               student.camps << week_camp
 
-              (1..2).each do |i|
+              (1..3).each do |i|
                 activity_name = row["activite_#{i}_#{week_name}"]
                 if activity_name.present?
                   activity = week_camp.activities.find_by(name: activity_name)
@@ -91,14 +91,16 @@ class Managers::ImportStudentsController < ApplicationController
         'zipcode'
       when 'adresse'
         'address'
+      when 'allergies'
+        'allergy'
       else
         key
       end
     end
 
-    row['first_name'] = row['first_name'].capitalize if row['first_name'].present?
-    row['last_name'] = row['last_name'].capitalize if row['last_name'].present?
+    row['first_name'] = row['first_name'].split.map(&:capitalize).join(' ') if row['first_name'].present?
+    row['last_name'] = row['last_name'].split.map(&:capitalize).join(' ') if row['last_name'].present?
 
-    ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address)
+    ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :allergy)
   end
 end

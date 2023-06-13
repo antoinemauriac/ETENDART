@@ -32,7 +32,7 @@
       <button class="btn-etendart-square" data-action="click->hidden-forms#displayCategoryForm">Ajouter une categorie</button>
       <%= simple_form_for @category, url: managers_categories_path, method: :post, html: { class: "hidden-form form-container-hidden", id: "category-form"}, data: { hidden_forms_target: "categoryForm" } do |form| %>
         <%= form.input :name, label: "Nom :" %>
-        <%= form.input :super_category, label: "Super catégorie :", collection: ['Sport', 'Sport-eveil', 'Eveil', 'Cuisine'], input_html: { class: "form-control" } %>
+        <%= form.input :super_category, label: "Super catégorie :", collection: ['Sport', 'Eveil', 'Cuisine', 'Accompagnement'], input_html: { class: "form-control" } %>
         <div class="flex-btn">
           <%= form.button :submit, "Valider", class: "btn-etendart" %>
           <button class="btn-etendart-black" data-action="click->hidden-forms#hideCategoryForm" type="button">Annuler</button>

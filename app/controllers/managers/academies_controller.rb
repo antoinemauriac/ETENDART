@@ -17,7 +17,7 @@ class Managers::AcademiesController < ApplicationController
     @today_absent_students = @academy.today_absent_students
     @camp = @academy.camps.where("starts_at <= ? AND ends_at >= ?", Time.current, Time.current).first
     if @camp.present?
-      @banished_students = @camp.banished_students
+      @banished_students = @camp.banished_students.sort_by(&:last_name)
     else
       @banished_students = []
     end
@@ -33,6 +33,31 @@ class Managers::AcademiesController < ApplicationController
     # @students = @academy.students
     # @camps = @academy.camps.where(starts_at: Date.today..Date.today + 1.year)
     # @school_period = SchoolPeriod.new
+  end
+
+  def export_absent_students_csv
+    academy = Academy.find(params[:id])
+    authorize [:managers, academy]
+    today_absent_students = academy.today_absent_students
+    respond_to do |format|
+      format.csv do
+
+        headers['Content-Type'] = 'text/csv; charset=UTF-8'
+        headers['Content-Disposition'] = 'attachment; filename=eleves_exclus.csv'
+
+        csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
+          csv << ["Nom", "Prénom", "Telephone", "Email"]
+
+          today_absent_students.each do |student|
+            csv << [student.last_name, student.first_name, student.phone_modified, student.email]
+          end
+        end
+
+        send_data(csv_data, filename: "eleves_absents_aujourd'hui.csv")
+      end
+    end
+
+
   end
 
   private

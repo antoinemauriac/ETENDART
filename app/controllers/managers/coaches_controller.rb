@@ -98,7 +98,7 @@ class Managers::CoachesController < ApplicationController
     category = Category.find(params[:category_id])
     authorize([:managers, category])
     academy = Academy.find(params[:academy_id])
-    coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: academy.id })
+    coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: academy.id }).order(:first_name)
     render json: coaches.select(:id, :first_name, :last_name, :email)
   end
 

@@ -9,18 +9,13 @@ class Managers::CoursesController < ApplicationController
 
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
-    @academy = course.activity.academy
+    @academy = course.academy
+    @school_period = course.school_period
+    @category = course.category
+    @activity = course.activity
+    @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id))
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
   end
-
-  # def show
-  #   @enrollments = course.course_enrollments.joins(:student)
-  #                        .where.not(student_id: course.banished_students)
-  #                        .order(last_name: :asc)
-  #   @banished_students = course.banished_students
-  #   @academy = course.activity.academy
-  #   authorize([:managers, @course], policy_class: Managers::CoursePolicy)
-  # end
 
   def edit
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
@@ -46,6 +41,7 @@ class Managers::CoursesController < ApplicationController
 
   def update_enrollments
     course = Course.find(params[:id])
+    school_period = course.school_period
     academy = course.activity.academy
     enrollments_params = params[:enrollments]
     authorize([:managers, @enrollments], policy_class: Managers::CoursePolicy)
@@ -56,11 +52,13 @@ class Managers::CoursesController < ApplicationController
         enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
         student = enrollment.student
 
-        camp_enrollment = student.camp_enrollments.find_by(camp: course.activity.camp)
-        camp_enrollment&.update(has_paid: enrollment_params[1][:has_paid])
+        if school_period.paid == true
+          camp_enrollment = student.camp_enrollments.find_by(camp: course.activity.camp)
+          camp_enrollment&.update(has_paid: enrollment_params[1][:has_paid])
+        end
 
 
-        if academy.name == "Djokovic"
+        if academy.name == "Rudy Gobert"
           if enrollment_params[1][:present].to_i == 0 && enrollment.present == true
             camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
           elsif enrollment_params[1][:present].to_i == 1 && enrollment.present == false
@@ -90,7 +88,7 @@ class Managers::CoursesController < ApplicationController
     future_courses = camp.courses.joins(activity: :students).where("starts_at > ? AND students.id = ?", Time.current, student.id)
     # ré-inscrire le student aux cours futurs
     future_courses.each do |course|
-      course.course_enrollments.create(student: student)
+      course.course_enrollments.create(student: student) unless course.course_enrollments.find_by(student: student)
     end
   end
 
@@ -108,12 +106,11 @@ class Managers::CoursesController < ApplicationController
 
     # ré-inscrire le student aux cours futurs
     future_courses.each do |course|
-      course.course_enrollments.create(student: student)
+      course.course_enrollments.create(student: student) unless course.course_enrollments.find_by(student: student)
     end
-    redirect_to manager_root_path
+    redirect_to managers_academy_path(camp.academy)
     flash[:notice] = "#{student.full_name} a été réintégré(e)"
   end
-
 
   private
 
