@@ -4,10 +4,11 @@
   <div class="header-nav-item active">LES CATÉGORIES</div>
 </div>
 <div class="yellow-title">LES CATÉGORIES D'ACTIVITÉ</div>
-<div class="container flexy" style="max-width:300px">
+<div class="container flexy" style="max-width:500px">
   <table class="table table-striped form-container table-center table-responsive">
     <thead>
       <tr>
+        <th>Super Catégorie</th>
         <th>Nom de la catégorie</th>
         <th>Modifier</th>
       </tr>
@@ -15,6 +16,7 @@
     <tbody>
       <% @categories.each do |category| %>
         <tr>
+          <td><%= category.super_category %></td>
           <td><%= category.name %></td>
           <td>
             <%= link_to edit_managers_category_path(category), data: { turbolinks: false } do %>

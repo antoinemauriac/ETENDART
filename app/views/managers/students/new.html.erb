@@ -14,15 +14,15 @@
         <%= form.input :date_of_birth, as: :date, label: "Date de naissance", start_year: Date.today.year - 30, end_year: Date.today.year, required: true, input_html: { value: '' }, default: nil, include_blank: true %>
 
 
-        <%= form.input :address, label: "Adresse", required: true %>
-        <%= form.input :city, label: "Ville", required: true %>
+        <%= form.input :address, label: "Adresse" %>
+        <%= form.input :city, label: "Ville" %>
         <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true %>
       </div>
       <div class="col-6">
         <%= form.input :first_name, label: "Prénom", required: true %>
         <%= form.input :phone_number, label: "Téléphone", required: true %>
         <%= form.input :gender, as: :select, collection: ["Garçon", "Fille"], label: "Genre", required: true %>
-        <%= form.input :zipcode, label: "Code Postal", required: true %>
+        <%= form.input :zipcode, label: "Code Postal" %>
         <%= form.input :academy1_id, label: "Académie 1", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, required: true %>
       </div>
       <div class="flexy">

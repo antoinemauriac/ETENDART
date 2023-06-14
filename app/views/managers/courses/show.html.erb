@@ -16,13 +16,13 @@
     <div class="header-info">INFOS</div>
     <div class="content-info">
       <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
-      <p>TOTAL ÉLÈVES : <strong><%= @activity.students.count %></strong></p>
+      <p>NB ÉLÈVES ATTENDUS: <strong><%= @academy.name == "Rudy Gobert" ? (@activity.students.count - @banished_students.count) : @activity.students.count %></strong></p>
       <% if @course.status %>
-        <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
-        <p class="red-text">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
+        <p class="green-text">NB PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
+        <p class="red-text">NB ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
       <% end %>
       <% if @academy.name == "Rudy Gobert" %>
-        <p>EXCLUS : <strong><%= @banished_students.count %></strong></p>
+        <p>NB ÉLÈVES EXCLUS : <strong><%= @banished_students.count %></strong></p>
       <% end %>
       <% if @course.status %>
         <p class="presence-status container">
