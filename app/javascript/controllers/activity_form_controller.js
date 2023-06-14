@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import TomSelect from "tom-select";
 
 export default class extends Controller {
-  static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach"]
+  static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach", "toto"]
 
   connect() {
     console.log("zozo ");
@@ -50,6 +50,7 @@ export default class extends Controller {
   }
 
   onCategoryChange() {
+    this.totoTarget.classList.remove("d-none")
     this.loadCoaches()
   }
 }

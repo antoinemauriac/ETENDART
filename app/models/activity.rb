@@ -43,6 +43,13 @@ class Activity < ApplicationRecord
     coaches.uniq
   end
 
+  def banished_students
+    students.joins(camp_enrollments: { camp: :activities })
+            .where(camp_enrollments: { banished: true }, activities: { id: id })
+            .distinct
+  end
+
+
   def absenteeism_rate
     total_enrollments = course_enrollments.count
     absent_enrollments = course_enrollments.where(present: false).count
@@ -63,9 +70,9 @@ class Activity < ApplicationRecord
     students.count
   end
 
-  def students
-    activity_enrollments.map(&:student)
-  end
+  # def students
+  #   activity_enrollments.map(&:student)
+  # end
 
   def age_of_students
     (students.map(&:age).sum.to_f / students.count).round(1)

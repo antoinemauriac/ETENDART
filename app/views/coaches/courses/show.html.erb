@@ -2,27 +2,32 @@
 
 
 <div class="flexy justify-content-center">
-  <div class="form-container container container-info-presence-sheet col-xxl-3 col-lg-4 col-md-6 col-sm-12">
-    <p>ADRESSE : <strong><%= @course.activity.location.address %></strong></p>
-    <p>TOTAL ÉLÈVES : <strong><%= @course.students_count %></strong></p>
-    <% if @course.status == true %>
-      <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
-      <p  class="red-text">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
-    <% end %>
-    <p>
+  <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
+    <div class="header-info">INFOS</div>
+    <div class="content-info">
+      <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
+      <p>TOTAL ÉLÈVES : <strong><%= @activity.students.count %></strong></p>
       <% if @course.status %>
-      <div class="presence-status container">
-        APPEL VALIDÉ <i class="fa-solid fa-check text-success fa-big"></i>
-      </div>
-      <% else %>
-      <div class="presence-status container">
-        APPEL EN ATTENTE <i class="fa-solid fa-xmark text-danger fa-big"></i>
-      </div>
+        <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
+        <p class="red-text">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
       <% end %>
-    </p>
+      <% if @academy.name == "Rudy Gobert" %>
+        <p>EXCLUS : <strong><%= @banished_students.count %></strong></p>
+      <% end %>
+      <% if @course.status %>
+        <p class="presence-status container">
+          APPEL VALIDÉ <i class="fa-solid fa-check text-success fa-big"></i>
+        </p>
+      <% else %>
+        <p class="presence-status container">
+          APPEL EN ATTENTE <i class="fa-solid fa-xmark text-danger fa-big"></i>
+        </p>
+      <% end %>
+    </div>
   </div>
 
   <div class="form-container container-presence-sheet col-xxl-4 col-lg-6 col-md-8 col-sm-12" data-controller="presence-sheet">
+    <div class="header-info">LISTE</div>
     <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
       <table class="table table-striped table-responsive">
         <thead>
@@ -43,18 +48,19 @@
             <tr>
               <td class="align-middle">
                 <%= link_to coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)) do %>
-                  <%= content_tag :div, class: "avatar-link" do %>
                     <%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-small" %>
-                  <% end %>
                 <% end %>
               </td>
-              <td class="align-middle" style="text-align:center; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">
+              <td class="align-middle" style="text-align:left; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">
                 <%= link_to enrollment.student.last_name.try(:upcase), coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr", style: "white-space: normal;" %><br>
-                <%= link_to enrollment.student.first_name, coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr" %>
+                <%= link_to enrollment.student.first_name, coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr" %><br>
+                <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
+                  <span style="color: red; font-weight: bold;"><%= enrollment.student.allergy %></span>
+                <% end %>
               </td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
-                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present }, 1, 0 %>
+                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: (@course.ends_at + 3.hour) < Time.current }, 1, 0 %>
                   <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
                 </div>
               </td>
@@ -64,7 +70,7 @@
               <% if @school_period.paid %>
                 <td class="align-middle">
                   <div class="has-paid">
-                    <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", id: "has-paid-#{enrollment.id}", checked: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>
+                    <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", id: "has-paid-#{enrollment.id}", checked: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false, disabled: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp).has_paid == true } %>
                   </div>
                 </td>
               <% end %>
@@ -77,4 +83,19 @@
       </div>
     <% end %>
   </div>
+
+  <% if @academy.name == "Rudy Gobert" %>
+    <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
+      <div class="header-info">ÉLÈVES EXCLUS</div>
+      <div class="content-info">
+        <ul>
+          <% @banished_students.each do |student| %>
+            <li>
+            <%= student.full_name %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
 </div>

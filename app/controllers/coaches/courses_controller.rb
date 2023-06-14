@@ -13,7 +13,11 @@ class Coaches::CoursesController < ApplicationController
 
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
+    @academy = course.academy
     @school_period = course.school_period
+    @category = course.category
+    @activity = course.activity
+    @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id))
     authorize([:coaches, @course], policy_class: Coaches::CoursePolicy)
   end
 

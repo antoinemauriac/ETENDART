@@ -23,7 +23,7 @@
           <td><%= coach.last_name %></td>
           <td><%= coach.first_name %></td>
           <td><%= coach.email %></td>
-          <td><%= coach.categories[0].name %></td>
+          <td><%= coach.categories[0].name if coach.categories.present? %></td>
           <td><%= coach.categories[1].name if coach.categories[1] %></td>
           <td><%= coach.academies_as_coach.first.name %></td>
           <td><%= coach.academies_as_coach.second.name if coach.academies_as_coach.second %></td>

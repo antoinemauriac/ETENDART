@@ -2,6 +2,7 @@ class Course < ApplicationRecord
   validate :starts_at_before_ends_at
 
   belongs_to :activity
+  has_one :category, through: :activity
   has_one :camp, through: :activity
   has_one :school_period, through: :camp
   has_one :academy, through: :school_period
@@ -23,8 +24,14 @@ class Course < ApplicationRecord
     end
   end
 
+  # def banished_students
+  #   students.joins(camp_enrollments: :camp).where(camp_enrollments: { banished: true, camps: { id: camp.id } }).uniq
+  # end
+
   def banished_students
-    students.joins(camp_enrollments: :camp).where(camp_enrollments: { banished: true, camps: { id: camp.id } }).uniq
+    students.joins(camp_enrollments: { camp: { activities: :courses } })
+           .where(camp_enrollments: { banished: true }, courses: { id: id })
+           .distinct
   end
 
   def student_presence(student)

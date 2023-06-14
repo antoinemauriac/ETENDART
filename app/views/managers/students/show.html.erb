@@ -33,7 +33,7 @@
         <% end %>
       </div>
       <div class="flexy">
-        <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn-etendart-blue", style: "width:300px" %>
+        <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn-etendart-yellow", style: "width:300px" %>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
             <% @student.next_activities.each do |activity| %>
             <tr>
               <td class="align-middle"><%= activity.academy.name %></td>
-              <td class="align-middle"><%= activity.school_period.name %></td>
+              <td class="align-middle"><%= activity.school_period.full_name %></td>
               <td class="align-middle"><%= activity.camp.name %></td>
               <td class="align-middle"><%= activity.name %></td>
               <td class="align-middle">
@@ -77,7 +77,7 @@
       <% end %>
       <div data-controller="enrollment-form">
         <div class="flexy">
-          <button type="button" class="btn-etendart-blue" data-action="click->enrollment-form#openActivityModal" style="width:300px">
+          <button type="button" class="btn-etendart-yellow" data-action="click->enrollment-form#openActivityModal" style="width:300px">
             Inscrire à une activité
           </button>
         </div>
@@ -154,7 +154,7 @@
       </div>
       <div data-controller="feedback-form">
         <div class="flexy">
-          <button type="button" class="btn-etendart-blue" data-action="click->feedback-form#openFeedbackModal" style="width:300px">
+          <button type="button" class="btn-etendart-yellow" data-action="click->feedback-form#openFeedbackModal" style="width:300px">
             Ajouter un feedback
           </button>
         </div>
@@ -201,7 +201,7 @@
           <% @student.next_courses.each do |course| %>
             <tr>
               <td class="align-middle"><%= course.academy.name %></td>
-              <td class="align-middle"><%= course.school_period.name %></td>
+              <td class="align-middle"><%= course.school_period.full_name %></td>
               <td class="align-middle"><%= course.camp.name %></td>
               <td class="align-middle"><%= course.activity.name %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
@@ -220,6 +220,7 @@
           <tr>
             <th>Academie</th>
             <th>Stage</th>
+            <th>Semaine</th>
             <th>Activité</th>
             <th>Jour</th>
             <th>Présent</th>
@@ -229,7 +230,8 @@
           <% @student.past_courses.each do |course| %>
             <tr style="<%= course.student_presence(@student) ? '' : 'background-color: orange !important;' %>">
               <td class="align-middle"><%= course.academy.name %></td>
-              <td class="align-middle"><%= course.school_period.name %></td>
+              <td class="align-middle"><%= course.school_period.full_name %></td>
+              <td class="align-middle"><%= course.camp.name %></td>
               <td class="align-middle"><%= course.activity.name %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
               <td class="align-middle"><%= course.student_presence(@student) ? 'présent' : 'absent' %></td>

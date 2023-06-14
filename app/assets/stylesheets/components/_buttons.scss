@@ -11,6 +11,9 @@
   margin: 1em 1em 0em 1em;
 }
 
+.btn-reintegrer {
+  margin: 0em 0em 0em 0em!important;
+}
 .btn-presence {
   margin: 0em 1em 1em 1em!important;
 }
@@ -52,7 +55,7 @@
   color: black;
 }
 
-.btn-etendart-blue {
+.btn-etendart-yellow {
   text-align: center;
   padding: 8px;
   border-radius: 8px;
@@ -65,10 +68,15 @@
   margin: 1em 1em 0em 1em;
 }
 
-.btn-etendart-blue:hover {
+.btn-etendart-yellow:hover {
   background-color: black;
   color: $yellow;
   transition: 0.3s;
+}
+
+.btn-no-top-margin {
+  margin-top: 0em!important;
+  padding: 3px!important;
 }
 
 .btn-etendart-square {
@@ -170,6 +178,26 @@
 
 .fa-big {
   font-size: 2em;
+}
+
+
+.fa-download {
+  font-size: 24px;
+  margin-left: 16px;
+}
+
+.fa-download-white {
+  color: $yellow;
+}
+.fa-download-white:hover {
+  color: white;
+}
+
+.fa-download-black {
+  color: black;
+}
+.fa-download-black:hover {
+  color: white;
 }
 
 .fa-arrow-rotate-left {

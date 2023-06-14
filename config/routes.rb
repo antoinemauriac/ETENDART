@@ -62,6 +62,9 @@
     resources :enrollments, only: %i[new create]
 
     resources :academies, only: %i[show index] do
+      member do
+        get :export_absent_students_csv
+      end
       resources :school_periods, only: %i[new create index]
       resources :locations, only: %i[create index edit update]
       resources :students, only: %i[index]
@@ -73,7 +76,10 @@
     end
 
     resources :camps do
-      get :export_csv, on: :member
+      member do
+        get :export_students_csv
+        get :export_banished_students_csv
+      end
     end
     resources :school_periods do
       get :export_bilan_csv, on: :member

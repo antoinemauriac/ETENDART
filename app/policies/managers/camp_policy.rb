@@ -11,7 +11,11 @@ class Managers::CampPolicy < ApplicationPolicy
     user.manager? && record.school_period.academy.manager == user
   end
 
-  def export_csv?
+  def export_students_csv?
+    user.manager? && record.school_period.academy.manager == user
+  end
+
+  def export_banished_students_csv?
     user.manager? && record.school_period.academy.manager == user
   end
 
