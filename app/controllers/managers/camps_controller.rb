@@ -61,7 +61,7 @@ class Managers::CampsController < ApplicationController
     else
       banished_students = []
     end
-    authorize([:managers, @camp])
+    authorize([:managers, camp])
     # exporter au format csv la liste des banished_students avec le last_name, le forst_name, le phone_number et le eamil
     respond_to do |format|
       format.csv do
