@@ -1,13 +1,27 @@
-import { Controller } from "@hotwired/stimulus"
+// import { Controller } from "@hotwired/stimulus"
+// import TomSelect from "tom-select";
+
+// export default class extends Controller {
+//   connect() {
+//     new TomSelect(this.element, {
+//       plugins: ['remove_button'],
+//     });
+//   }
+// }
+
+import { Controller } from "@hotwired/stimulus";
 import TomSelect from "tom-select";
 
 export default class extends Controller {
   connect() {
-    new TomSelect(this.element, {
-      plugins: ['remove_button'],
-    });
+    if (!this.element._tomSelect) {
+      this.element._tomSelect = new TomSelect(this.element, {
+        plugins: ['remove_button'],
+      });
+    }
   }
 }
+
 
 // loadCoaches() {
 //   const category_id = this.categoryTarget.value
