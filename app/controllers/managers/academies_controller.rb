@@ -14,7 +14,7 @@ class Managers::AcademiesController < ApplicationController
     @feedbacks = Feedback.last_five(@academy)
     @today_courses = @academy.today_courses
     @tomorrow_courses = @academy.tomorrow_courses
-    @today_absent_students = @academy.today_absent_students
+    @today_absent_students = @academy.today_absent_students.first(5)
     @camp = @academy.camps.where("starts_at <= ? AND ends_at >= ?", Time.current, Time.current).first
     if @camp.present?
       @banished_students = @camp.banished_students.sort_by(&:last_name)
@@ -56,8 +56,12 @@ class Managers::AcademiesController < ApplicationController
         send_data(csv_data, filename: "eleves_absents_aujourd'hui.csv")
       end
     end
+  end
 
-
+  def all_absent_students
+    @academy = Academy.find(params[:id])
+    authorize [:managers, @academy]
+    @absent_students = @academy.today_absent_students
   end
 
   private

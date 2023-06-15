@@ -1,10 +1,11 @@
 class Managers::ImportStudentsController < ApplicationController
 
   def import
-    school_period = SchoolPeriod.find(params[:school_period][:school_period_id])
-    authorize([:managers, school_period], policy_class: Managers::StudentPolicy)
-    academy = school_period.academy
-    file = params[:school_period][:csv_file]
+    camp = Camp.find(params[:camp][:camp_id])
+    authorize([:managers, camp], policy_class: Managers::StudentPolicy)
+    school_period = camp.school_period
+    academy = camp.academy
+    file = params[:camp][:csv_file]
     file = File.open(file)
     csv = CSV.parse(file, headers: true, col_sep: ';')
 
