@@ -43,13 +43,12 @@ export default class extends Controller {
           let tomSelect = coachTarget.tomselect
           tomSelect.options =
             coaches.map (coach => {
-            console.log(coach.first_name);
+              console.log(coach.first_name);
             return {value: coach.id, text: `${coach.first_name} ${coach.last_name}`}
           })
           tomSelect.options.push({value: coaches[0].id, text: `${coaches[0].first_name} ${coaches[0].last_name}`})
         })
       })
-
   }
 
   onCategoryChange() {
