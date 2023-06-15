@@ -28,25 +28,26 @@ class Managers::ImportStudentsController < ApplicationController
       # retirer l'élève des cours de la période
 
       student.school_period_enrollments.where(school_period: school_period).destroy_all
-      student.camp_enrollments.joins(:camp).where(camps: { school_period: school_period }).destroy_all
-      student.activity_enrollments.joins(activity: :camp).where(camps: { school_period: school_period }).destroy_all
-      student.course_enrollments.joins(course: { activity: :camp }).where(camps: { school_period: school_period }).destroy_all
+      student.camp_enrollments.joins(:camp).where(camps: camp).destroy_all
+      student.activity_enrollments.joins(activity: :camp).where(camps: camp).destroy_all
+      student.course_enrollments.joins(course: { activity: :camp }).where(camps: camp).destroy_all
 
       student.academies << academy unless student.academies.include?(academy)
       student.school_periods << school_period unless student.school_periods.include?(school_period)
+      student.camps << camp unless student.camps.include?(camp)
 
-      if school_period.camps.any?
-        (1..school_period.camps.length).each do |week_number|
-          week_name = "semaine#{week_number}"
-          if row[week_name] == "oui"
-            week_camp = school_period.camps.find_by(name: week_name)
-            if week_camp.present?
-              student.camps << week_camp
+      # if school_period.camps.any?
+        # (1..school_period.camps.length).each do |week_number|
+          week_name = camp.name
+          # if row[week_name] == "oui"
+            # week_camp = school_period.camps.find_by(name: week_name)
+            # if week_camp.present?
+              # student.camps << camp
 
               (1..3).each do |i|
                 activity_name = row["activite_#{i}_#{week_name}"]
                 if activity_name.present?
-                  activity = week_camp.activities.find_by(name: activity_name)
+                  activity = camp.activities.find_by(name: activity_name)
                   if activity.present?
                     student.activities << activity
                     student.courses << activity.courses
@@ -56,16 +57,16 @@ class Managers::ImportStudentsController < ApplicationController
                   end
                 end
               end
-            else
-              flash[:alert] = "Une erreur est survenue. La semaine #{week_name} ne correspond pas à une semaine créée sur l'application"
-              redirect_to managers_school_period_path(school_period) and return
-            end
-          end
-        end
-      else
-        flash[:alert] = "Vous devez d'abord créer les semaines et les activités du stage avant d'importer le csv"
-        redirect_to managers_school_period_path(school_period) and return
-      end
+            # else
+            #   flash[:alert] = "Une erreur est survenue. La semaine #{week_name} ne correspond pas à une semaine créée sur l'application"
+            #   redirect_to managers_school_period_path(school_period) and return
+            # end
+          # end
+        # end
+      # else
+      #   flash[:alert] = "Vous devez d'abord créer les semaines et les activités du stage avant d'importer le csv"
+      #   redirect_to managers_school_period_path(school_period) and return
+      # end
     end
 
     redirect_to managers_school_period_path(school_period), notice: "Le fichier CSV a été importé avec succès."

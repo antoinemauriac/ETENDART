@@ -10,11 +10,13 @@ export default class extends Controller {
     this.mondayEndTimeTarget.value = "12:00";
     this.startTimeTargets.forEach((input) => (input.value = "10:00"));
     this.endTimeTargets.forEach((input) => (input.value = "12:00"));
-    this.coachTargets.forEach(coachTarget => {
-        new TomSelect(coachTarget, {
+    this.coachTargets.forEach((coachTarget) => {
+      if (!coachTarget._tomSelect) { // Vérifier si le TomSelect est déjà initialisé
+        coachTarget._tomSelect = new TomSelect(coachTarget, {
           plugins: ['remove_button'],
-        })
-      })
+        });
+      }
+    });
   }
 
   onMondayStartTimeInputChange(event) {
