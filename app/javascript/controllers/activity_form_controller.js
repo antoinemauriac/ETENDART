@@ -50,7 +50,6 @@ export default class extends Controller {
   }
 
   onCategoryChange() {
-    this.totoTarget.classList.remove("d-none")
     this.loadCoaches()
   }
 }

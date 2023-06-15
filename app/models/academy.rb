@@ -27,6 +27,7 @@ class Academy < ApplicationRecord
            .where(course_enrollments: { present: false })
            .where(courses: { starts_at: Time.current.all_day })
            .distinct
+           .order(:last_name)
   end
 
 end

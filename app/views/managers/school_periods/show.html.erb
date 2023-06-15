@@ -61,54 +61,54 @@
 
 <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
 
-  <div class="flexy" data-controller="import-csv">
-    <div class="loader d-none" data-import-csv-target="spinner"></div>
-    <div class="container flexy">
-      <div class="form-container">
-        <%= simple_form_for(@school_period, url: managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
-          <%= form.input :school_period_id, as: :hidden, input_html: { value: @school_period.id } %>
-          <div class="form-group">
-            <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
-          </div>
-          <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
-        <% end %>
-      </div>
+<div class="flexy" data-controller="import-csv">
+  <div class="loader d-none" data-import-csv-target="spinner"></div>
+  <div class="container flexy">
+    <div class="form-container">
+      <%= simple_form_for(@school_period, url: managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+        <%= form.input :school_period_id, as: :hidden, input_html: { value: @school_period.id } %>
+        <div class="form-group">
+          <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
+        </div>
+        <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
+      <% end %>
     </div>
   </div>
+</div>
 
 
 
 
 <% if false %>
-<div class="yellow-title mb-3 mt-3">BILAN</div>
-<div class="black-title mb-3 mt-3">ACTIVITES</div>
-<%= link_to "Export par activité", export_bilan_csv_managers_school_period_path(@school_period, export_type: "activities", format: :csv), class: "btn btn-success mb-3" %>
-<%= link_to "Export par semaine", export_bilan_csv_managers_school_period_path(@school_period, export_type: "semaine", format: :csv), class: "btn btn-success mb-3" %>
-<%= link_to "Export par âge", export_bilan_csv_managers_school_period_path(@school_period, export_type: "age", format: :csv), class: "btn btn-success mb-3" %>
-<%= link_to "Export par département", export_bilan_csv_managers_school_period_path(@school_period, export_type: "department", format: :csv), class: "btn btn-success mb-3" %>
-<%= link_to "Export all", export_bilan_csv_managers_school_period_path(@school_period, export_type: "all", format: :csv), class: "btn btn-success mb-3" %>
-<% @activities.each do |activity| %>
-  <ul>
-    <li><%= "#{activity.camp.name} - #{activity.name} - #{activity.students_count} - #{activity.number_of_students("Garçon")} - #{activity.number_of_students("Fille")} - #{activity.age_of_students} ans - #{activity.absenteeism_rate}" %></li>
-  </ul>
-<% end %>
-<div class="black-title mb-3 mt-3">SEMAINE</div>
-<% @camps.each do |camp| %>
-  <ul>
-    <li><%= "#{camp.name} - #{camp.students_count} - #{camp.number_of_students("Garçon")} - #{camp.number_of_students("Fille")} - #{camp.age_of_students} ans " %></li>
-  </ul>
-<% end %>
-<div class="black-title mb-3 mt-3">AGE</div>
-<% @school_period.participant_ages.each do |age| %>
-  <ul>
-    <li><%= "#{age} - #{@camps.first.number_of_students_by_age(age)} - #{@camps.second.number_of_students_by_age(age)}" %></li>
-  </ul>
-<% end %>
-<div class="black-title mb-3 mt-3">DEPARTEMENT</div>
-<% @school_period.participant_departments.each do |department| %>
-  <ul>
-    <li><%= "#{department} - #{@camps.first.number_of_students_by_dpt(department)} - #{@camps.second.number_of_students_by_dpt(department)}"%></li>
-  </ul>
-<% end %>
+  <div class="yellow-title mb-3 mt-3">BILAN</div>
+  <div class="black-title mb-3 mt-3">ACTIVITES</div>
+  <%= link_to "Export par activité", export_bilan_csv_managers_school_period_path(@school_period, export_type: "activities", format: :csv), class: "btn btn-success mb-3" %>
+  <%= link_to "Export par semaine", export_bilan_csv_managers_school_period_path(@school_period, export_type: "semaine", format: :csv), class: "btn btn-success mb-3" %>
+  <%= link_to "Export par âge", export_bilan_csv_managers_school_period_path(@school_period, export_type: "age", format: :csv), class: "btn btn-success mb-3" %>
+  <%= link_to "Export par département", export_bilan_csv_managers_school_period_path(@school_period, export_type: "department", format: :csv), class: "btn btn-success mb-3" %>
+  <%= link_to "Export all", export_bilan_csv_managers_school_period_path(@school_period, export_type: "all", format: :csv), class: "btn btn-success mb-3" %>
+  <% @activities.each do |activity| %>
+    <ul>
+      <li><%= "#{activity.camp.name} - #{activity.name} - #{activity.students_count} - #{activity.number_of_students("Garçon")} - #{activity.number_of_students("Fille")} - #{activity.age_of_students} ans - #{activity.absenteeism_rate}" %></li>
+    </ul>
+  <% end %>
+  <div class="black-title mb-3 mt-3">SEMAINE</div>
+  <% @camps.each do |camp| %>
+    <ul>
+      <li><%= "#{camp.name} - #{camp.students_count} - #{camp.number_of_students("Garçon")} - #{camp.number_of_students("Fille")} - #{camp.age_of_students} ans " %></li>
+    </ul>
+  <% end %>
+  <div class="black-title mb-3 mt-3">AGE</div>
+  <% @school_period.participant_ages.each do |age| %>
+    <ul>
+      <li><%= "#{age} - #{@camps.first.number_of_students_by_age(age)} - #{@camps.second.number_of_students_by_age(age)}" %></li>
+    </ul>
+  <% end %>
+  <div class="black-title mb-3 mt-3">DEPARTEMENT</div>
+  <% @school_period.participant_departments.each do |department| %>
+    <ul>
+      <li><%= "#{department} - #{@camps.first.number_of_students_by_dpt(department)} - #{@camps.second.number_of_students_by_dpt(department)}"%></li>
+    </ul>
+  <% end %>
 
 <% end %>

@@ -104,7 +104,7 @@
         <tbody>
           <% @banished_students.each do |student| %>
             <tr>
-              <td class="align-middle"><%= student.full_name %></td>
+              <td class="align-middle"><%= student.full_name_separator %></td>
               <td class="align-middle"><%= student.phone_modified %></td>
               <td class="align-middle"><%= student.email %></td>
               <td class="align-middle">
@@ -159,8 +159,12 @@
     <% else %>
       <p style="text-align:center">Aucun élève absent aujourd'hui.</p>
     <% end %>
+    <div class="flexy">
+    <%= link_to "Voir tous", all_absent_students_managers_academy_path, class: "btn-etendart" %>
+    </div>
     </div>
   </div>
+
   <%# LES FEEDBACKS %>
   <div class="col-12 col-xxl-11 mb-4">
     <div class="header-info header-info-academy">FEEDBACKS RÉCENTS</div>

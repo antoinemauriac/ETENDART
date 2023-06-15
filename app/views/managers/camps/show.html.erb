@@ -47,6 +47,23 @@
   </div>
 </div>
 
+<div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
+
+<div class="flexy" data-controller="import-csv">
+  <div class="loader d-none" data-import-csv-target="spinner"></div>
+  <div class="container flexy">
+    <div class="form-container">
+      <%= simple_form_for(@camp, url: managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+        <%= form.input :camp_id, as: :hidden, input_html: { value: @camp.id } %>
+        <div class="form-group">
+          <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
+        </div>
+        <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
 <div class="yellow-title yellow-title-flex mt-3 mb-3">
     ÉLÈVES INSCRITS
     <%= link_to export_students_csv_managers_camp_path(@camp, format: :csv) do %>

@@ -64,6 +64,7 @@
     resources :academies, only: %i[show index] do
       member do
         get :export_absent_students_csv
+        get :all_absent_students
       end
       resources :school_periods, only: %i[new create index]
       resources :locations, only: %i[create index edit update]
