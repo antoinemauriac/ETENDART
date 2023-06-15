@@ -5,13 +5,12 @@ export default class extends Controller {
   static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach", "toto"]
 
   connect() {
-    console.log("zozo ");
     this.mondayStartTimeTarget.value = "10:00";
     this.mondayEndTimeTarget.value = "12:00";
     this.startTimeTargets.forEach((input) => (input.value = "10:00"));
     this.endTimeTargets.forEach((input) => (input.value = "12:00"));
     this.coachTargets.forEach((coachTarget) => {
-      if (!coachTarget._tomSelect) { // Vérifier si le TomSelect est déjà initialisé
+      if (!coachTarget._tomSelect) {
         coachTarget._tomSelect = new TomSelect(coachTarget, {
           plugins: ['remove_button'],
         });
@@ -20,14 +19,12 @@ export default class extends Controller {
   }
 
   onMondayStartTimeInputChange(event) {
-    console.log("onMondayStartTimeInputChange");
     const mondayStartTime = this.mondayStartTimeTarget.value;
     this.startTimeTargets.forEach((input) => (input.value = mondayStartTime))
   }
 
   onMondayEndTimeInputChange(event) {
     const mondayEndTime = this.mondayEndTimeTarget.value
-
     this.endTimeTargets.forEach((input) => (input.value = mondayEndTime))
   }
 
@@ -40,19 +37,15 @@ export default class extends Controller {
       .then(response => response.json())
       .then(coaches => {
         this.coachTargets.forEach(coachTarget => {
-          let tomSelect = coachTarget.tomselect
-          tomSelect.options =
-            coaches.map (coach => {
-              console.log(coach.first_name);
-            return {value: coach.id, text: `${coach.first_name} ${coach.last_name}`}
-          })
-          tomSelect.options.push({value: coaches[0].id, text: `${coaches[0].first_name} ${coaches[0].last_name}`})
+          const tomSelect = coachTarget._tomSelect;
+          tomSelect.clearOptions();
+          tomSelect.addOption(coaches.map(coach => ({ value: coach.id, text: `${coach.first_name} ${coach.last_name}` })));
         })
       })
   }
 
   onCategoryChange() {
-    this.totoTarget.classList.remove("d-none")
-    this.loadCoaches()
+    this.totoTarget.classList.remove("d-none");
+    this.loadCoaches();
   }
 }
