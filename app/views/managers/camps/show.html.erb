@@ -49,7 +49,6 @@
 
 <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
 
-<% if @camp.can_import? %>
   <div class="flexy" data-controller="import-csv">
     <div class="loader d-none" data-import-csv-target="spinner"></div>
     <div class="container flexy">
@@ -64,8 +63,12 @@
       </div>
     </div>
   </div>
+  <% if false %>
+<% if @camp.can_import? %>
+<p>Hello</p>
 <% else %>
   <p class="text-center">Vous ne pouvez plus importer de fichier csv pour cette semaine</p>
+<% end %>
 <% end %>
 
 
