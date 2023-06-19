@@ -23,9 +23,11 @@
         <td><%= period.year %></td>
         <td><%= period.students.uniq.count %></td>
         <td>
+        <% if period.can_import? %>
           <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce stage ?" } do %>
             <i class="fas fa-trash trash"></i>
           <% end %>
+        <% end %>
         </td>
       </tr>
       <% end %>
