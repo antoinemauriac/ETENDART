@@ -1,7 +1,7 @@
 class Managers::CategoriesController < ApplicationController
   def index
     @categories = Category.all.order(:super_category, :name)
-    @academy = current_user.academies_as_manager.first
+    @academy = Academy.find(params[:academy])
     skip_policy_scope
     authorize([:managers, @categories])
     @category = Category.new

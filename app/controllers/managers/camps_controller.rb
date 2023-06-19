@@ -14,7 +14,7 @@ class Managers::CampsController < ApplicationController
     authorize([:managers, @camp])
 
     if @camp.save
-      flash[:notice] = "Camp créé"
+      flash[:notice] = "Semaine créée avec succès"
     else
       flash[:alert] = "Erreur : " + @camp.errors.full_messages.join(", ")
     end
@@ -33,7 +33,7 @@ class Managers::CampsController < ApplicationController
   def export_students_csv
     @camp = Camp.find(params[:id])
     authorize([:managers, @camp])
-    students = @camp.students_with_activity_enrollment.sort_by { |student| student.unattended_rate(student.student_activities(@camp).first) }
+    students = @camp.students_with_activity_enrollment.sort_by(&:last_name)
 
     respond_to do |format|
       format.csv do

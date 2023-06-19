@@ -7,6 +7,9 @@ class Camp < ApplicationRecord
 
   has_many :activities, dependent: :destroy
   has_many :courses, through: :activities
+  has_many :course_enrollments, through: :courses
+
+  has_many :activity_enrollments, through: :activities
 
   has_many :camp_enrollments, dependent: :destroy
   has_many :students, through: :camp_enrollments
@@ -58,6 +61,14 @@ class Camp < ApplicationRecord
 
   def number_of_students_by_dpt(department)
     students.select { |student| student.department == department }.count
+  end
+
+  def can_import?
+    if starts_at
+      starts_at > Date.today
+    else
+      true
+    end
   end
 
   private
