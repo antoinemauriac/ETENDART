@@ -31,24 +31,30 @@
 # Role.create!(name: 'manager')
 # Role.create!(name: 'coach')
 
-ornella = User.create!(email: 'ornella@etendart.org', password: 123456)
-ornella.roles << Role.find_by(name: 'manager')
+# ornella = User.create!(email: 'ornella@etendart.org', password: 123456)
+# ornella.roles << Role.find_by(name: 'manager')
 
-angers = Academy.create!(name: 'Angers', manager: ornella)
-angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022761/etendart/szhjycwofx768fuvmurf.jpg')
-angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
-angers.save
+# angers = Academy.create!(name: 'Angers', manager: ornella)
+# angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022761/etendart/szhjycwofx768fuvmurf.jpg')
+# angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
+# angers.save
 
 
-strasbourg = Academy.create!(name: 'Strasbourg', manager: ornella)
-strasbourg_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022664/etendart/jr1urgr52c8yls0icjdk.png')
-strasbourg.image.attach(io: strasbourg_image, filename: 'strasbourg-court.jpg', content_type: 'image/jpg')
-strasbourg.save
+# strasbourg = Academy.create!(name: 'Strasbourg', manager: ornella)
+# strasbourg_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022664/etendart/jr1urgr52c8yls0icjdk.png')
+# strasbourg.image.attach(io: strasbourg_image, filename: 'strasbourg-court.jpg', content_type: 'image/jpg')
+# strasbourg.save
 
-saint_quentin = Academy.create!(name: 'Saint-Quentin', manager: ornella)
-saint_quentin_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022663/etendart/wn1pkzmautra2tlhvqqh.jpg')
-saint_quentin.image.attach(io: saint_quentin_image, filename: 'saint-quentin-court.jpg', content_type: 'image/jpg')
-saint_quentin.save
+# saint_quentin = Academy.create!(name: 'Saint-Quentin', manager: ornella)
+# saint_quentin_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022663/etendart/wn1pkzmautra2tlhvqqh.jpg')
+# saint_quentin.image.attach(io: saint_quentin_image, filename: 'saint-quentin-court.jpg', content_type: 'image/jpg')
+# saint_quentin.save
+
+celine = User.find_by(email: 'celine@etendart.org')
+eole = Academy.create!(name: 'Éole', manager: celine)
+eole_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1687172446/etendart/scsq3kipduarl3dobesk.jpg')
+eole.image.attach(io: eole_image, filename: 'eole-court.jpg', content_type: 'image/jpg')
+eole.save
 
 
 

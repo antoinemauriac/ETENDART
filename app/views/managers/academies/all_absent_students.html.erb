@@ -1,6 +1,7 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item active">ÉLÈVES ABSENTS</div>
 </div>
 <div class="row justify-content-center align-items-stretch mt-3">
 <div class="col-12 col-xxl-11 mb-4" data-controller="missing-students-table">

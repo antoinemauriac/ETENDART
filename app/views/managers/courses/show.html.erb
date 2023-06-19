@@ -3,7 +3,7 @@
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @course.academy.name.upcase, managers_academy_path(@course.academy) %></div>
   <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@course.academy, @course.school_period) %></div>
-  <div class="header-nav-item"><%= link_to "#{@course.school_period.name.upcase} - #{@course.school_period.year}", managers_academy_school_periods_path(@course.academy, @course.school_period) %></div>
+  <div class="header-nav-item"><%= link_to "#{@course.school_period.name.upcase} - #{@course.school_period.year}", managers_school_period_path(@course.academy, @course.school_period) %></div>
   <div class="header-nav-item"><%= link_to @course.camp.name.upcase, managers_camp_path(@course.camp) %></div>
   <div class="header-nav-item"><%= link_to @course.activity.name.upcase, managers_activity_path(@course.activity) %></div>
   <div class="header-nav-item active"><%= l(@course.starts_at, format: :default) %></div>

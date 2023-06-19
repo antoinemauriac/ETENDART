@@ -24,7 +24,7 @@
     </div>
   <% end %>
 
-  <%= link_to managers_categories_path, class: "col-sm-12 col-md-2 mb-3" do %>
+  <%= link_to managers_categories_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
     <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students5.jpeg') %>')">
       LES CATÉGORIES
     </div>

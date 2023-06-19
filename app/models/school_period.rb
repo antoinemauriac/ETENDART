@@ -4,14 +4,17 @@ class SchoolPeriod < ApplicationRecord
 
   belongs_to :academy
   has_many :camps, dependent: :destroy
+  has_many :camp_enrollments, through: :camps
+  has_many :students, through: :camp_enrollments
+
   has_many :activities, through: :camps
 
   has_many :school_period_enrollments, dependent: :destroy
-  has_many :students, through: :school_period_enrollments
+  # has_many :students, through: :school_period_enrollments
 
-  def students
-    school_period_enrollments.map(&:student)
-  end
+  # def students
+  #   school_period_enrollments.map(&:student)
+  # end
 
   def full_name
     "#{name} - #{year}"
