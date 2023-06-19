@@ -3,8 +3,8 @@
 
 <div class="flexy justify-content-center">
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
-    <div class="header-info">INFOS</div>
-    <div class="content-info">
+    <div class="header-info header-info-coach">INFOS</div>
+    <div class="content-info content-info-coach">
       <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
       <p>TOTAL ÉLÈVES : <strong><%= @activity.students.count %></strong></p>
       <% if @course.status %>
@@ -26,8 +26,8 @@
     </div>
   </div>
 
-  <div class="form-container container-presence-sheet col-xxl-4 col-lg-6 col-md-8 col-sm-12" data-controller="presence-sheet">
-    <div class="header-info">LISTE</div>
+  <div class="form-container form-no-radius container-presence-sheet col-xxl-4 col-lg-6 col-md-8 col-sm-12" data-controller="presence-sheet">
+    <div class="header-info header-info-coach">LISTE</div>
     <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
       <table class="table table-striped table-responsive">
         <thead>
@@ -91,15 +91,19 @@
 
   <% if @academy.name == "Rudy Gobert" %>
     <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
-      <div class="header-info">ÉLÈVES EXCLUS</div>
-      <div class="content-info">
-        <ul>
-          <% @banished_students.each do |student| %>
-            <li>
-            <%= student.full_name %>
-            </li>
-          <% end %>
-        </ul>
+      <div class="header-info header-info-coach">ÉLÈVES EXCLUS</div>
+      <div class="content-info content-info-coach">
+        <% if @banished_students.any? %>
+          <ul>
+            <% @banished_students.each do |student| %>
+              <li>
+              <%= student.full_name %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-center">Aucun élève exclu</p>
+        <% end %>
       </div>
     </div>
   <% end %>

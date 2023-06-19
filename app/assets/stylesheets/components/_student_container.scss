@@ -17,6 +17,11 @@
   font-weight: 900;
 }
 
+.header-info-coach {
+  border-top-left-radius: 0px!important;
+  border-top-right-radius: 0px!important;
+}
+
 .header-info-yellow {
   background-color: $yellow!important;
   color: black!important;
@@ -36,6 +41,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.content-info-coach {
+  border-bottom-left-radius: 0px!important;
+  border-bottom-right-radius: 0px!important;
 }
 
 .coach-info {
