@@ -145,6 +145,8 @@ class Student < ApplicationRecord
   def department
     if zipcode
       zipcode.to_s.first(2)
+    else
+      "No zipcode"
     end
   end
 

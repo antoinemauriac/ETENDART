@@ -59,6 +59,7 @@ class Managers::CoursesController < ApplicationController
 
 
         if academy.name == "Rudy Gobert"
+          camp_enrollment = student.camp_enrollments.find_by(camp: course.activity.camp)
           if enrollment_params[1][:present].to_i == 0 && enrollment.present == true
             camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
           elsif enrollment_params[1][:present].to_i == 1 && enrollment.present == false

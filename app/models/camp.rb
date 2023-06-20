@@ -32,6 +32,14 @@ class Camp < ApplicationRecord
     camp_enrollments.joins(:student).where(students: { gender: genre }).count
   end
 
+  def percentage_of_students(genre)
+    if students_count.positive?
+      ((number_of_students(genre).to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
   def age_of_students
     (students.map(&:age).sum.to_f / students.count).round(1)
   end
@@ -70,6 +78,17 @@ class Camp < ApplicationRecord
       true
     end
   end
+
+  def absenteeism_rate
+    total_enrollments = course_enrollments.count
+    absent_enrollments = course_enrollments.where(present: false).count
+    if total_enrollments.positive?
+      absenteeism_rate = ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
+    else
+      absenteeism_rate = 0
+    end
+  end
+
 
   private
 

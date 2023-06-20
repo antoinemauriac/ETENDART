@@ -28,6 +28,9 @@ class Managers::SchoolPeriodsController < ApplicationController
 
     @activities = @school_period.activities.order(:camp_id)
     @camps = @school_period.camps.order(:starts_at)
+    @sorted_departments = @school_period.participant_departments.sort_by do |department|
+      -@school_period.number_of_students_by_department(department)
+    end
   end
 
   def destroy
