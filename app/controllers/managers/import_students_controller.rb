@@ -9,6 +9,13 @@ class Managers::ImportStudentsController < ApplicationController
     file = File.open(file)
     csv = CSV.parse(file, headers: true, col_sep: ';')
 
+    SchoolPeriodEnrollment.where(school_period: school_period).each do |school_period_enrollment|
+      camps = school_period_enrollment.student.camps.where(school_period: school_period)
+      if camps == [camp]
+        school_period_enrollment.destroy
+      end
+    end
+
     camp.camp_enrollments.destroy_all
     ActivityEnrollment.joins(activity: :camp).where(camps: { id: camp.id }).destroy_all
     CourseEnrollment.joins(course: { activity: :camp }).where(camps: { id: camp.id }).destroy_all
