@@ -25,6 +25,13 @@ class Managers::CampsController < ApplicationController
   def destroy
     @camp = Camp.find(params[:id])
     authorize([:managers, @camp])
+    school_period_enrollments = SchoolPeriodEnrollment.where(school_period: @camp.school_period)
+    school_period_enrollments.each do |school_period_enrollment|
+      camps = school_period_enrollment.student.camps.where(school_period: @camp.school_period)
+      if camps == [@camp]
+        school_period_enrollment.destroy
+      end
+    end
     @camp.destroy
     redirect_to managers_school_period_path(@camp.school_period)
     flash[:notice] = "Semaine supprimée"
