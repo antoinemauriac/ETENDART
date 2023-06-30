@@ -116,7 +116,7 @@
               <td class="align-middle"><%= student.full_name_separator %></td>
               <td class="align-middle"><%= student.phone_modified %></td>
               <td class="align-middle"><%= student.email %></td>
-              <td class="align-middle"><%= l(student.camp_enrollments.where(camp: @camp).first&.banishment_day, format: :abbr_bis) %></td>
+              <td class="align-middle"><%= l(student.camp_enrollments.where(camp: @camp).first&.banishment_day, format: :abbr_bis) || 'N/A' %></td>
               <td class="align-middle">
                 <%= link_to "Réintégrer", unban_student_managers_course_path(@course, camp_id: @camp.id, student_id: student.id), method: :post, data: { turbo_method: :post, turbo_confirm: "Êtes-vous sûr de vouloir réintégrer l'élève?" }, class: "btn btn-etendart btn-reintegrer" %>
               </td>
