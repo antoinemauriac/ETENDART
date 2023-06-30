@@ -47,6 +47,10 @@
               <th>Début</th>
               <th>Fin</th>
               <th>Total élèves</th>
+              <% if @academy.name == "Rudy Gobert" %>
+                <th>Nb exclus</th>
+              <% end %>
+              <th>Nb présents</th>
               <th>Nb absents</th>
               <th>Appel fait ?</th>
             </tr>
@@ -60,8 +64,12 @@
               <td class="align-middle"><%= course.activity.lead_coach.try(:phone_number) || "" %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
               <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
-              <td class="align-middle"><%= course.students_count %> </td>
-              <td class="align-middle"><%= course.missing_students_count %></td>
+              <td class="align-middle"><%= course.students_count %></td>
+              <% if @academy.name == "Rudy Gobert" %>
+                <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.activity.banished_students.where.not(id: course.course_enrollments.joins(:student).pluck(:student_id)).count, style: 'font-weight:bold;') : "-" %></td>
+              <% end %>
+              <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.present_students_count, style: 'color:green; font-weight:bold;') : "-" %></td>
+              <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.missing_students_count, style: 'color:red; font-weight:bold;') : "-" %></td>
               <td class="align-middle">
                 <% if course.starts_at < Time.current %>
                   <% if course.status %>
@@ -98,6 +106,7 @@
             <th>Élève</th>
             <th>Téléphone</th>
             <th>Email</th>
+            <th>Exclu depuis</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -107,6 +116,7 @@
               <td class="align-middle"><%= student.full_name_separator %></td>
               <td class="align-middle"><%= student.phone_modified %></td>
               <td class="align-middle"><%= student.email %></td>
+              <td class="align-middle"><%= l(student.camp_enrollments.where(camp: @camp).first&.banishment_day, format: :abbr_bis) %></td>
               <td class="align-middle">
                 <%= link_to "Réintégrer", unban_student_managers_course_path(@course, camp_id: @camp.id, student_id: student.id), method: :post, data: { turbo_method: :post, turbo_confirm: "Êtes-vous sûr de vouloir réintégrer l'élève?" }, class: "btn btn-etendart btn-reintegrer" %>
               </td>

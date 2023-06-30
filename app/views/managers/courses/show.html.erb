@@ -16,7 +16,7 @@
     <div class="header-info">INFOS</div>
     <div class="content-info">
       <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
-      <p>NB ÉLÈVES ATTENDUS: <strong><%= @academy.name == "Rudy Gobert" ? (@activity.students.count - @banished_students.count) : @activity.students.count %></strong></p>
+      <p>NB ÉLÈVES ATTENDUS: <strong><%= @course.students.count %></strong></p>
       <% if @course.status %>
         <p class="green-text">NB PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
         <p class="red-text">NB ABSENTS : <strong><%= @course.missing_students_count %></strong></p>

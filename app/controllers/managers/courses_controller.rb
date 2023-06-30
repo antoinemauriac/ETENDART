@@ -58,7 +58,7 @@ class Managers::CoursesController < ApplicationController
         end
 
 
-        if academy.name == "Rudy Gobert"
+        if academy.name == "Rudy Gobert" && course.activity.category.name != "Accompagnement"
           camp_enrollment = student.camp_enrollments.find_by(camp: course.activity.camp)
           if enrollment_params[1][:present].to_i == 0 && enrollment.present == true
             camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
@@ -66,7 +66,7 @@ class Managers::CoursesController < ApplicationController
             camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences - 1)
           end
 
-          if camp_enrollment.number_of_absences >= 2
+          if camp_enrollment.number_of_absences >= 2 && camp_enrollment.banished == false
             banishment(camp_enrollment, student, course)
           elsif camp_enrollment.number_of_absences < 2 && camp_enrollment.banished == true
             unban_because_of_late(student, camp_enrollment)
@@ -85,8 +85,8 @@ class Managers::CoursesController < ApplicationController
 
   def unban_because_of_late(student, camp_enrollment)
     camp = camp_enrollment.camp
-    camp_enrollment.update(banished: false)
-    future_courses = camp.courses.joins(activity: :students).where("starts_at > ? AND students.id = ?", Time.current, student.id)
+    camp_enrollment.update(banished: false, banishment_day: nil)
+    future_courses = camp.courses.joins(activity: :students).where("ends_at > ? AND students.id = ?", Time.current, student.id)
     # ré-inscrire le student aux cours futurs
     future_courses.each do |course|
       course.course_enrollments.create(student: student) unless course.course_enrollments.find_by(student: student)
@@ -100,10 +100,10 @@ class Managers::CoursesController < ApplicationController
     authorize([:managers, course], policy_class: Managers::CoursePolicy)
     camp_enrollment = student.camp_enrollments.find_by(camp: camp)
     # débannir le student du camp
-    camp_enrollment.update(banished: false)
-    camp_enrollment.update(number_of_absences: 0)
+    camp_enrollment.update(banished: false, banishment_day: nil, number_of_absences: 0)
+    # camp_enrollment.update(number_of_absences: 0)
     # future_courses = camp.courses.where("starts_at > ?", Time.current)
-    future_courses = camp.courses.joins(activity: :students).where("starts_at > ? AND students.id = ?", Time.current, student.id)
+    future_courses = camp.courses.joins(activity: :students).where("ends_at > ? AND students.id = ?", Time.current, student.id)
 
     # ré-inscrire le student aux cours futurs
     future_courses.each do |course|
@@ -125,8 +125,8 @@ class Managers::CoursesController < ApplicationController
 
   def banishment(camp_enrollment, student, course)
     camp = course.activity.camp
-    camp_enrollment.update(banished: true)
-    future_courses = camp.courses.where("starts_at > ?", course.starts_at + 1.hour)
+    camp_enrollment.update(banished: true, banishment_day: Time.current)
+    future_courses = camp.courses.where("starts_at > ?", course.starts_at + 0.5.hour)
     student.course_enrollments.where(course: future_courses).destroy_all
   end
 
