@@ -46,10 +46,10 @@ class Managers::AcademiesController < ApplicationController
         headers['Content-Disposition'] = 'attachment; filename=eleves_exclus.csv'
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Telephone", "Email"]
+          csv << ["Nom", "Prénom", "Genre", "Telephone", "Email"]
 
           today_absent_students.each do |student|
-            csv << [student.last_name, student.first_name, student.phone_modified, student.email]
+            csv << [student.last_name, student.first_name, student.gender, student.phone_modified, student.email]
           end
         end
 

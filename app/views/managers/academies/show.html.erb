@@ -64,7 +64,7 @@
               <td class="align-middle"><%= course.activity.lead_coach.try(:phone_number) || "" %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
               <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
-              <td class="align-middle"><%= course.students_count %></td>
+              <td class="align-middle"><%= course.activity.students_count %></td>
               <% if @academy.name == "Rudy Gobert" %>
                 <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.activity.banished_students.where.not(id: course.course_enrollments.joins(:student).pluck(:student_id)).count, style: 'font-weight:bold;') : "-" %></td>
               <% end %>
