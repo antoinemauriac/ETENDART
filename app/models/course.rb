@@ -34,6 +34,10 @@ class Course < ApplicationRecord
            .distinct
   end
 
+  def banished_students_count
+    banished_students.count
+  end
+
   def student_presence(student)
     course_enrollments.find_by(student: student).present
   end

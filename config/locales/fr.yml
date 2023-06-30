@@ -12,6 +12,8 @@ fr:
       birthday: "%d/%m"
       date_hour: "%d/%m/%Y à %Hh"
       hour: "%Hh"
+      hour_min: "%Hh%M"
+      abbr_bis: "%a %d %b"
     day_names: [Dimanche, Lundi, Mardi, Mercredi, Jeudi, Vendredi, Samedi]
     abbr_day_names: [Dim, Lun, Mar, Mer, Jeu, Ven, Sam]
     month_names: [~, janvier, février, mars, avril, mai, juin, juillet, août, septembre, octobre, novembre, décembre]
@@ -27,6 +29,7 @@ fr:
       hour: "%H h"
       hour_min: "%Hh%M"
       abbr: "%a %d %b %Y"
+      abbr_bis: "%a %d %b à %Hh"
   activerecord:
     attributes:
       camp:
