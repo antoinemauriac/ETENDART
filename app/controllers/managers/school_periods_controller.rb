@@ -31,6 +31,7 @@ class Managers::SchoolPeriodsController < ApplicationController
     @sorted_departments = @school_period.participant_departments.sort_by do |department|
       -@school_period.number_of_students_by_department(department)
     end
+    @categories = @school_period.categories.uniq.sort_by { |category| @school_period.number_of_students_by_category(category) }.reverse
   end
 
   def destroy

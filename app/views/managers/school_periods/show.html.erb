@@ -81,129 +81,160 @@
 
 
 
-
-  <div class="yellow-title mb-0 mt-3">BILAN</div>
-  <div class="black-title mb-3">BILAN PAR SEMAINE</div>
-  <div class="container">
-    <table class="table table-striped table-responsive table-center form-container">
-      <thead>
+<% if !@school_period.can_import? %>
+<div class="yellow-title mb-0 mt-3">BILAN</div>
+<div class="black-title mb-3">BILAN PAR SEMAINE</div>
+<div class="container">
+  <table class="table table-striped table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Camp</th>
+        <th>Total élèves</th>
+        <th>Garçon (%)</th>
+        <th>Fille (%)</th>
+        <th>Âge moyen</th>
+        <th>Taux d'absentéisme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @camps.each do |camp| %>
         <tr>
-          <th>Camp</th>
-          <th>Total élèves</th>
-          <th>Garçon (%)</th>
-          <th>Fille (%)</th>
-          <th>Âge moyen</th>
-          <th>Taux d'absentéisme</th>
+          <td><%= camp.name %></td>
+          <td><%= camp.students_count %></td>
+          <td><%= "#{camp.percentage_of_students("Garçon")} %" %></td>
+          <td><%= "#{camp.percentage_of_students("Fille")} %" %></td>
+          <td><%= camp.age_of_students %> ans</td>
+          <td><%= "#{camp.absenteeism_rate} %" %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% @camps.each do |camp| %>
-          <tr>
-            <td><%= camp.name %></td>
-            <td><%= camp.students_count %></td>
-            <td><%= "#{camp.percentage_of_students("Garçon")} %" %></td>
-            <td><%= "#{camp.percentage_of_students("Fille")} %" %></td>
-            <td><%= camp.age_of_students %> ans</td>
-            <td><%= "#{camp.absenteeism_rate} %" %></td>
-          </tr>
-        <% end %>
-          <tr class="total-row">
-            <td>TOTAL</td>
-            <td><%= @school_period.students_count %></td>
-            <td><%= "#{@school_period.percentage_of_students("Garçon")} %" %></td>
-            <td><%= "#{@school_period.percentage_of_students("Fille")} %" %></td>
-            <td><%= @school_period.age_of_students %> ans</td>
-            <td><%= "#{@school_period.absenteeism_rate} %" %></td>
-          </tr>
-      </tbody>
-    </table>
-  </div>
+      <% end %>
+        <tr class="total-row">
+          <td>TOTAL</td>
+          <td><%= @school_period.students_count %></td>
+          <td><%= "#{@school_period.percentage_of_students("Garçon")} %" %></td>
+          <td><%= "#{@school_period.percentage_of_students("Fille")} %" %></td>
+          <td><%= @school_period.age_of_students %> ans</td>
+          <td><%= "#{@school_period.absenteeism_rate} %" %></td>
+        </tr>
+    </tbody>
+  </table>
+</div>
 
-  <div class="black-title mb-3 mt-3">BILAN PAR ÂGE</div>
-  <div class="container">
-    <table class="table table-responsive table-center form-container">
-      <thead>
+<div class="black-title mb-3 mt-3">BILAN PAR ÂGE</div>
+<div class="container">
+  <table class="table table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Âge</th>
+        <% @school_period.camps.each do |camp| %>
+          <th><%= camp.name %></th>
+        <% end %>
+        <th class="total-row">TOTAL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @school_period.participant_ages.each do |age| %>
         <tr>
-          <th>Âge</th>
+          <td><%= "#{age} ans" %></td>
           <% @school_period.camps.each do |camp| %>
-            <th><%= camp.name %></th>
+            <td><%= camp.number_of_students_by_age(age) %></td>
           <% end %>
-          <th class="total-row">TOTAL</th>
+          <td class="total-row"><%= @school_period.number_of_students_by_age(age) %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% @school_period.participant_ages.each do |age| %>
-          <tr>
-            <td><%= "#{age} ans" %></td>
-            <% @school_period.camps.each do |camp| %>
-              <td><%= camp.number_of_students_by_age(age) %></td>
-            <% end %>
-            <td class="total-row"><%= @school_period.number_of_students_by_age(age) %></td>
-          </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="black-title mb-3 mt-3">BILAN PAR DEPARTEMENT</div>
+<div class="container">
+  <table class="table table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Département</th>
+        <% @school_period.camps.each do |camp| %>
+          <th><%= camp.name %></th>
         <% end %>
-      </tbody>
-    </table>
-  </div>
-
-
-  <div class="black-title mb-3 mt-3">BILAN PAR DEPARTEMENT</div>
-  <div class="container">
-    <table class="table table-responsive table-center form-container">
-      <thead>
+        <th class="total-row">TOTAL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sorted_departments.each do |department| %>
         <tr>
-          <th>Département</th>
+          <td><%= department %></td>
           <% @school_period.camps.each do |camp| %>
-            <th><%= camp.name %></th>
+            <td><%= camp.number_of_students_by_dpt(department) %></td>
           <% end %>
-          <th class="total-row">TOTAL</th>
+          <td class="total-row"><%= @school_period.number_of_students_by_department(department) %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% @sorted_departments.each do |department| %>
-          <tr>
-            <td><%= department %></td>
-            <% @school_period.camps.each do |camp| %>
-              <td><%= camp.number_of_students_by_dpt(department) %></td>
-            <% end %>
-            <td class="total-row"><%= @school_period.number_of_students_by_department(department) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
+<div class="black-title mb-3">BILAN PAR CATÉGORIE</div>
+<div class="container">
+  <table class="table table-striped table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Catégorie</th>
+        <th>Nombre d'élèves</th>
+        <th>Garçon (%)</th>
+        <th>Fille (%)</th>
+        <th>Taux d'absentéisme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @categories.each do |category| %>
+        <tr>
+          <td><%= category.name %></td>
+          <td><%= @school_period.number_of_students_by_category(category) %></td>
+          <td><%= "#{@school_period.percentage_of_students_by_category_and_gender(category, "Garçon")} %" %></td>
+          <td><%= "#{@school_period.percentage_of_students_by_category_and_gender(category, "Fille")} %" %></td>
+          <td><%= "#{@school_period.absenteeism_rate_by_category(category)} %" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
+<div class="black-title mb-3 mt-3">BILAN PAR ACTIVITÉ</div>
+<div class="container">
+  <% @camps.each do |camp| %>
+  <table class="table table-striped table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Semaine</th>
+        <th>Activité</th>
+        <th>Nb élèves</th>
+        <th>Nb Garçon</th>
+        <th>Nb Fille</th>
+        <th>Âge moyen</th>
+        <th>Taux d'absentéisme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% camp.activities.each do |activity| %>
+        <tr>
+          <td><%= activity.camp.name %></td>
+          <td><%= activity.name %></td>
+          <td><%= activity.students_count %></td>
+          <td><%= activity.number_of_students("Garçon") %></td>
+          <td><%= activity.number_of_students("Fille") %></td>
+          <td><%= activity.age_of_students %> ans</td>
+          <td><%= "#{activity.absenteeism_rate} %" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% end %>
+</div>
+<% end %>
 
-  <div class="black-title mb-3 mt-3">ACTIVITES</div>
+<% if false %>
   <%= link_to "Export par activité", export_bilan_csv_managers_school_period_path(@school_period, export_type: "activities", format: :csv), class: "btn btn-success mb-3" %>
   <%= link_to "Export par semaine", export_bilan_csv_managers_school_period_path(@school_period, export_type: "semaine", format: :csv), class: "btn btn-success mb-3" %>
   <%= link_to "Export par âge", export_bilan_csv_managers_school_period_path(@school_period, export_type: "age", format: :csv), class: "btn btn-success mb-3" %>
   <%= link_to "Export par département", export_bilan_csv_managers_school_period_path(@school_period, export_type: "department", format: :csv), class: "btn btn-success mb-3" %>
   <%= link_to "Export all", export_bilan_csv_managers_school_period_path(@school_period, export_type: "all", format: :csv), class: "btn btn-success mb-3" %>
-
-<table class="table table-striped table-responsive table-center form-container">
-  <thead>
-    <tr>
-      <th>Semaine</th>
-      <th>Activité</th>
-      <th>Nb élèves</th>
-      <th>Nb Garçon</th>
-      <th>Nb Fille</th>
-      <th>Âge moyen</th>
-      <th>Taux d'absentéisme</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @activities.each do |activity| %>
-      <tr>
-        <td><%= activity.camp.name %></td>
-        <td><%= activity.name %></td>
-        <td><%= activity.students_count %></td>
-        <td><%= activity.number_of_students("Garçon") %></td>
-        <td><%= activity.number_of_students("Fille") %></td>
-        <td><%= activity.age_of_students %> ans</td>
-        <td><%= "#{activity.absenteeism_rate} %" %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<% end %>

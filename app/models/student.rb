@@ -62,7 +62,7 @@ class Student < ApplicationRecord
   def unattended_courses
     course_enrollments.unattended
                       .joins(:course)
-                      .where('courses.starts_at < ?', Time.current)
+                      .where('courses.ends_at < ?', Time.current)
   end
 
   def unattended_today_courses
