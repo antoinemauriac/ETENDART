@@ -8,6 +8,8 @@ class SchoolPeriod < ApplicationRecord
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps
+  has_many :activity_enrollments, through: :activities
+  has_many :categories, through: :activities
   has_many :courses, through: :activities
   has_many :course_enrollments, through: :courses
 
@@ -62,15 +64,61 @@ class SchoolPeriod < ApplicationRecord
     camps.minimum(:starts_at) if camps.any?
   end
 
+  # def absenteeism_rate
+  #   total_enrollments = course_enrollments.count
+  #   absent_enrollments = course_enrollments.where(present: false).count
+  #   if total_enrollments.positive?
+  #     ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
+  #   else
+  #     0
+  #   end
+  # end
+
   def absenteeism_rate
-    total_enrollments = course_enrollments.count
-    absent_enrollments = course_enrollments.where(present: false).count
+    enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
+    total_enrollments = enrollments.count
+    absent_enrollments = enrollments.unattended.count
+
     if total_enrollments.positive?
       ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
     else
       0
     end
   end
+
+  def absenteeism_rate_by_category(category)
+    enrollments = course_enrollments.joins({course: :activity}).where("courses.ends_at < ?", Time.current).where("activities.category_id = ?", category.id)
+    total_enrollments = enrollments.count
+    absent_enrollments = enrollments.unattended.count
+
+    if total_enrollments.positive?
+      ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
+    else
+      0
+    end
+  end
+
+
+  def number_of_students_by_category(category)
+    activity_enrollments.joins(:activity).where(activities: { category: category }).count
+  end
+
+  def number_of_students_by_category_and_gender(category, gender)
+    activity_enrollments.joins(:student, activity: :category).where(activities: { category: category }, students: { gender: gender }).count
+  end
+
+
+  def percentage_of_students_by_category_and_gender(category, gender)
+    if number_of_students_by_category(category).positive?
+      ((number_of_students_by_category_and_gender(category, gender).to_f / number_of_students_by_category(category)) * 100).round(0)
+    else
+      0
+    end
+  end
+
+
+  # def absenteeism_rate_by_super_category(super_category)
+  #   total_enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current).where("courses.category_id IN (?)", super_category.categories.ids).count
 
   def can_import?
     if starts_at

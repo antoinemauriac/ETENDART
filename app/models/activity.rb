@@ -50,15 +50,27 @@ class Activity < ApplicationRecord
   end
 
 
+  # def absenteeism_rate
+  #   total_enrollments = course_enrollments.count
+  #   absent_enrollments = course_enrollments.where(present: false).count
+
+  #   if total_enrollments.positive?
+  #     absenteeism_rate = (absent_enrollments.to_f / total_enrollments) * 100
+  #     return absenteeism_rate.round(0)
+  #   else
+  #     return 0
+  #   end
+  # end
+
   def absenteeism_rate
-    total_enrollments = course_enrollments.count
-    absent_enrollments = course_enrollments.where(present: false).count
+    enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
+    total_enrollments = enrollments.count
+    absent_enrollments = enrollments.unattended.count
 
     if total_enrollments.positive?
-      absenteeism_rate = (absent_enrollments.to_f / total_enrollments) * 100
-      return absenteeism_rate.round(0)
+      ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
     else
-      return 0
+      0
     end
   end
 
