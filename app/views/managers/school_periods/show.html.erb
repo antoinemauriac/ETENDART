@@ -217,7 +217,7 @@
       <% camp.activities.each do |activity| %>
         <tr>
           <td><%= activity.camp.name %></td>
-          <td><%= camp.has_begun? ? activity.name : "-" %></td>
+          <td><%= activity.name %></td>
           <td><%= camp.has_begun? ? activity.students_count : "-" %></td>
           <td><%= camp.has_begun? ? activity.number_of_students("Garçon") : "-" %></td>
           <td><%= camp.has_begun? ? activity.number_of_students("Fille") : "-" %></td>
