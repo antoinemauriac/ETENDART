@@ -113,9 +113,15 @@
         <tbody>
           <% @banished_students.each do |student| %>
             <tr>
-              <td class="align-middle"><%= student.full_name_separator %></td>
-              <td class="align-middle"><%= student.phone_modified %></td>
-              <td class="align-middle"><%= student.email %></td>
+              <td class="align-middle">
+                <%= link_to student.full_name_separator, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+              </td>
+              <td class="align-middle">
+                <%= link_to student.phone_modified, managers_student_path(student, academy_id: @academy), style:"color:inherit"  %>
+              </td>
+              <td class="align-middle">
+                <%= link_to student.email, managers_student_path(student, academy_id: @academy), style:"color:inherit"  %>
+              </td>
               <% banishment_day = student.camp_enrollments.where(camp: @camp).first&.banishment_day %>
               <td class="align-middle"><%= banishment_day.present? ? l(banishment_day, format: :abbr_bis) : '-' %></td>
               <td class="align-middle">
