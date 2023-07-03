@@ -79,6 +79,10 @@ class Camp < ApplicationRecord
     end
   end
 
+  def has_begun?
+    starts_at <= Date.today
+  end
+
   # def absenteeism_rate
   #   total_enrollments = course_enrollments.count
   #   absent_enrollments = course_enrollments.where(present: false).count
