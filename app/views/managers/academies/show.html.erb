@@ -112,7 +112,7 @@
         </thead>
         <tbody>
           <% @banished_students.each do |student| %>
-            <tr>
+            <tr class="banish-student-row">
               <td class="align-middle">
                 <%= link_to student.full_name_separator, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
               </td>
