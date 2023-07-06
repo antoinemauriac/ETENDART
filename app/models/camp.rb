@@ -118,6 +118,24 @@ class Camp < ApplicationRecord
     end
   end
 
+  def no_show_count
+    students_count = course_enrollments.joins(:student)
+                                      .group(:student_id)
+                                      .having("COUNT(*) = SUM(CASE WHEN present = false THEN 1 ELSE 0 END)")
+                                      .count.keys.count
+
+    students_count
+  end
+
+  def no_show_rate
+    if students_count.positive?
+      ((no_show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
+
   private
 
   def starts_at_must_be_before_ends_at

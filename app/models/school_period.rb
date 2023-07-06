@@ -133,6 +133,18 @@ class SchoolPeriod < ApplicationRecord
     activities.where(category: Category.find_by(name: "Accompagnement")).any?
   end
 
+  def no_show_count
+    camps.sum(&:no_show_count)
+  end
+
+  def no_show_rate
+    if students_count.positive?
+      ((no_show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
 
   # def absenteeism_rate_by_super_category(super_category)
   #   total_enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current).where("courses.category_id IN (?)", super_category.categories.ids).count
