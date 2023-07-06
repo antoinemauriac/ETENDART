@@ -93,7 +93,7 @@
         <th>Garçon (%)</th>
         <th>Fille (%)</th>
         <th>Âge moyen</th>
-        <th>Taux d'absentéisme</th>
+        <th><%= @school_period.include_accompagnement? ? "Taux abs (hors Accompagnement)" : "Taux d'absentéisme" %></th>
       </tr>
     </thead>
     <tbody>

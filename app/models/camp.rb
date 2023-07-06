@@ -93,8 +93,21 @@ class Camp < ApplicationRecord
   #   end
   # end
 
+  # def absenteeism_rate
+  #   enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
+  #   total_enrollments = enrollments.count
+  #   absent_enrollments = enrollments.unattended.count
+
+  #   if total_enrollments.positive?
+  #     ((absent_enrollments.to_f / total_enrollments) * 100)
+  #   else
+  #     0
+  #   end
+  # end
+
   def absenteeism_rate
-    enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
+    enrollments = course_enrollments.joins(course: { activity: :category })
+                                   .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
     total_enrollments = enrollments.count
     absent_enrollments = enrollments.unattended.count
 
