@@ -86,11 +86,22 @@ class SchoolPeriod < ApplicationRecord
   #   end
   # end
 
+  # def absenteeism_rate
+  #   enrollments = course_enrollments.joins(course: { activity: :category })
+  #                                  .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
+  #   total_enrollments = enrollments.count
+  #   absent_enrollments = enrollments.unattended.count
+
+  #   if total_enrollments.positive?
+  #     ((absent_enrollments.to_f / total_enrollments) * 100)
+  #   else
+  #     0
+  #   end
+  # end
+
   def absenteeism_rate
-    enrollments = course_enrollments.joins(course: { activity: :category })
-                                   .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
-    total_enrollments = enrollments.count
-    absent_enrollments = enrollments.unattended.count
+    total_enrollments = camps.sum(&:total_enrollments_count)
+    absent_enrollments = camps.sum(&:absent_enrollments_count)
 
     if total_enrollments.positive?
       ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
@@ -99,10 +110,22 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
+
+  # def absenteeism_rate_by_category(category)
+  #   enrollments = course_enrollments.joins({course: :activity})
+  #                                   .where("courses.ends_at < ?", Time.current).where("activities.category_id = ?", category.id)
+  #   total_enrollments = enrollments.count
+  #   absent_enrollments = enrollments.unattended.count
+
+  #   if total_enrollments.positive?
+  #     ((absent_enrollments.to_f / total_enrollments) * 100)
+  #   else
+  #     0
+  #   end
+  # end
   def absenteeism_rate_by_category(category)
-    enrollments = course_enrollments.joins({course: :activity}).where("courses.ends_at < ?", Time.current).where("activities.category_id = ?", category.id)
-    total_enrollments = enrollments.count
-    absent_enrollments = enrollments.unattended.count
+    total_enrollments = camps.sum { |camp| camp.total_enrollments_count_by_category(category) }
+    absent_enrollments = camps.sum { |camp| camp.absent_enrollments_count_by_category(category) }
 
     if total_enrollments.positive?
       ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
@@ -110,6 +133,7 @@ class SchoolPeriod < ApplicationRecord
       0
     end
   end
+
 
 
   def number_of_students_by_category(category)
@@ -145,6 +169,17 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
+  def show_count
+    camps.sum(&:show_count)
+  end
+
+  def show_rate
+    if students_count.positive?
+      ((show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
 
   # def absenteeism_rate_by_super_category(super_category)
   #   total_enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current).where("courses.category_id IN (?)", super_category.categories.ids).count

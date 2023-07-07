@@ -105,9 +105,36 @@ class Camp < ApplicationRecord
   #   end
   # end
 
-  def absenteeism_rate
+  # def absenteeism_rate
+  #   enrollments = course_enrollments.joins(course: { activity: :category })
+  #                                  .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
+  #   total_enrollments = enrollments.count
+  #   absent_enrollments = enrollments.unattended.count
+
+  #   if total_enrollments.positive?
+  #     ((absent_enrollments.to_f / total_enrollments) * 100)
+  #   else
+  #     0
+  #   end
+  # end
+
+  def enrollments_without_accompagnement_and_without_no_show
     enrollments = course_enrollments.joins(course: { activity: :category })
-                                   .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
+                                    .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
+                                    .where.not(student_id: no_show_students)
+    enrollments
+  end
+
+  def total_enrollments_count
+    enrollments_without_accompagnement_and_without_no_show.count
+  end
+
+  def absent_enrollments_count
+    enrollments_without_accompagnement_and_without_no_show.unattended.count
+  end
+
+  def absenteeism_rate
+    enrollments = enrollments_without_accompagnement_and_without_no_show
     total_enrollments = enrollments.count
     absent_enrollments = enrollments.unattended.count
 
@@ -116,6 +143,27 @@ class Camp < ApplicationRecord
     else
       0
     end
+  end
+
+  def enrollments_without_no_show
+    enrollments = course_enrollments.joins(course: { activity: :category })
+                                    .where("courses.ends_at < ?", Time.current)
+                                    .where.not(student_id: no_show_students)
+    enrollments
+  end
+
+  def enrollments_without_no_show_by_category(category)
+    enrollments = enrollments_without_no_show.joins(course: { activity: :category })
+                                             .where("categories.id" => category.id)
+    enrollments
+  end
+
+  def total_enrollments_count_by_category(category)
+    enrollments_without_no_show_by_category(category).count
+  end
+
+  def absent_enrollments_count_by_category(category)
+    enrollments_without_no_show_by_category(category).unattended.count
   end
 
   def no_show_count
@@ -127,6 +175,14 @@ class Camp < ApplicationRecord
     students_count
   end
 
+  def no_show_students
+    course_enrollments.joins(:student)
+                                  .group(:student_id)
+                                  .having("COUNT(*) = SUM(CASE WHEN present = false THEN 1 ELSE 0 END)")
+                                  .count.keys
+  end
+
+
   def no_show_rate
     if students_count.positive?
       ((no_show_count.to_f / students_count) * 100).round(0)
@@ -134,6 +190,19 @@ class Camp < ApplicationRecord
       0
     end
   end
+
+  def show_count
+    students_count - no_show_count
+  end
+
+  def show_rate
+    if students_count.positive?
+      ((show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
 
 
   private
