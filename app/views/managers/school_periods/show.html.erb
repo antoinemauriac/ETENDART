@@ -93,7 +93,9 @@
         <th>Garçon (%)</th>
         <th>Fille (%)</th>
         <th>Âge moyen</th>
-        <th><%= @school_period.include_accompagnement? ? "Taux abs (hors Accompagnement)" : "Taux d'absentéisme" %></th>
+        <th>Taux abs</th>
+        <th>Nb Show</th>
+        <th>% Show</th>
         <th>Nb No-Show</th>
         <th>% No-Show</th>
       </tr>
@@ -107,6 +109,8 @@
           <td><%= camp.has_begun? ? "#{camp.percentage_of_students("Fille")} %" : "-" %></td>
           <td><%= camp.has_begun? ? "#{camp.age_of_students} ans" : "-" %></td>
           <td><%= camp.has_begun? ? "#{camp.absenteeism_rate} %" : "-" %></td>
+          <td><%= camp.has_begun? ? camp.show_count : "-" %></td>
+          <td><%= camp.has_begun? ? "#{camp.show_rate} %" : "-" %></td>
           <td><%= camp.has_begun? ? camp.no_show_count : "-" %></td>
           <td><%= camp.has_begun? ? "#{camp.no_show_rate} %" : "-" %></td>
         </tr>
@@ -118,6 +122,8 @@
           <td><%= "#{@school_period.percentage_of_students("Fille")} %" %></td>
           <td><%= @school_period.age_of_students %> ans</td>
           <td><%= "#{@school_period.absenteeism_rate} %" %></td>
+          <td><%= @school_period.show_count %></td>
+          <td><%= "#{@school_period.show_rate} %" %></td>
           <td><%= @school_period.no_show_count %></td>
           <td><%= "#{@school_period.no_show_rate} %" %></td>
         </tr>
