@@ -1,5 +1,7 @@
 class Student < ApplicationRecord
 
+  validates :username, presence: true
+
   DEFAULT_AVATAR = "xkhgd88iqzlk5ctay2hu.png"
 
   scope :today_birthday, -> { where('EXTRACT(month FROM date_of_birth) = ? AND EXTRACT(day FROM date_of_birth) = ?', Date.today.month, Date.today.day).order("created_at DESC") }
@@ -150,8 +152,16 @@ class Student < ApplicationRecord
     end
   end
 
+
+  def active_camps
+    Camp.joins(:camp_enrollments)
+        .where(camp_enrollments: { banished: false, student_id: id })
+  end
+
   def next_activities
-    activities.joins(:camp).where('camps.ends_at > ?', Time.current).order('camps.starts_at ASC')
+    activities.joins(:camp).merge(active_camps)
+              .where('camps.ends_at > ?', Time.current)
+              .order('camps.starts_at ASC')
   end
 
   def self.today_absent_students(manager)

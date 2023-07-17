@@ -22,7 +22,22 @@ class Managers::ImportStudentsController < ApplicationController
 
     csv.each do |row|
       row = row.to_hash
-      student = Student.where("lower(unaccent(replace(username, ' ', ''))) = unaccent(?)", row['username'].downcase.gsub(/\s+/, '')).first_or_initialize
+      username = row['username'].to_s.strip
+      if username.empty?
+        flash[:alert] = "Le 'username' doit être présent pour chaque élève"
+        SchoolPeriodEnrollment.where(school_period: school_period).each do |school_period_enrollment|
+          camps = school_period_enrollment.student.camps.where(school_period: school_period)
+          if camps == [camp]
+            school_period_enrollment.destroy
+          end
+        end
+        camp.camp_enrollments.destroy_all
+        ActivityEnrollment.joins(activity: :camp).where(camps: { id: camp.id }).destroy_all
+        CourseEnrollment.joins(course: { activity: :camp }).where(camps: { id: camp.id }).destroy_all
+        redirect_to managers_school_period_path(school_period) and return
+      end
+
+      student = Student.where("lower(unaccent(replace(username, ' ', ''))) = unaccent(?)", username.downcase.gsub(/\s+/, '')).first_or_initialize
 
       student.assign_attributes(student_params_upload(row))
 
