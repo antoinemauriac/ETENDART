@@ -31,6 +31,9 @@ class Managers::StudentsController < ApplicationController
     @student.academies << Academy.find(params[:student][:academy1_id])
     @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
     @academy = Academy.find(params[:student][:academy1_id])
+    excel_serial_date = (@student.date_of_birth - Date.new(1899, 12, 30)).to_i
+    username = "#{@student.first_name.downcase}#{@student.last_name.downcase}#{excel_serial_date }"
+    @student.update(username: username)
     if @student.save
       redirect_to managers_student_path(@student, academy_id: @academy.id)
       flash[:notice] = "Élève ajouté"
