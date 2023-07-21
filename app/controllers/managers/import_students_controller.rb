@@ -11,7 +11,7 @@ class Managers::ImportStudentsController < ApplicationController
 
     SchoolPeriodEnrollment.where(school_period: school_period).each do |school_period_enrollment|
       camps = school_period_enrollment.student.camps.where(school_period: school_period)
-      if camps == [camp]
+      if camps == [camp] || camps.empty?
         school_period_enrollment.destroy
       end
     end
@@ -27,7 +27,7 @@ class Managers::ImportStudentsController < ApplicationController
         flash[:alert] = "Le 'username' doit être présent pour chaque élève"
         SchoolPeriodEnrollment.where(school_period: school_period).each do |school_period_enrollment|
           camps = school_period_enrollment.student.camps.where(school_period: school_period)
-          if camps == [camp]
+          if camps == [camp] || camps.empty?
             school_period_enrollment.destroy
           end
         end
