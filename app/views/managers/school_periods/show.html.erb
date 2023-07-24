@@ -90,8 +90,8 @@
       <tr>
         <th>Camp</th>
         <th>Total inscrits</th>
-        <th>Total Présents (%)</th>
         <th>Total Absents (%)</th>
+        <th>Total Présents (%)</th>
         <th>Garçon (%)</th>
         <th>Fille (%)</th>
         <th>Âge moyen</th>
@@ -103,8 +103,8 @@
         <tr>
           <td><%= camp.name %></td>
           <td><%= camp.has_begun? ? camp.students_count : "-" %></td>
-          <td><%= camp.has_begun? ? "#{camp.show_count} (#{camp.show_rate}%)": "-" %></td>
           <td><%= camp.has_begun? ? "#{camp.no_show_count} (#{camp.no_show_rate}%)": "-" %></td>
+          <td><%= camp.has_begun? ? "#{camp.show_count} (#{camp.show_rate}%)": "-" %></td>
           <td><%= camp.has_begun? ? "#{camp.percentage_of_students("Garçon")} %" : "-" %></td>
           <td><%= camp.has_begun? ? "#{camp.percentage_of_students("Fille")} %" : "-" %></td>
           <td><%= camp.has_begun? ? "#{camp.age_of_students} ans" : "-" %></td>
