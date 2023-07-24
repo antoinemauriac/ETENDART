@@ -75,12 +75,17 @@ class Activity < ApplicationRecord
     end
   end
 
+  def show_students
+    camp.show_students
+  end
+
   def number_of_students(genre)
-    activity_enrollments.joins(:student).where(students: { gender: genre }).count
+    activity_enrollments.joins(:student)
+                        .where(students: { gender: genre, id: show_students }).count
   end
 
   def students_count
-    students.count
+    students.where(id: show_students).count
   end
 
   # def students
@@ -88,7 +93,7 @@ class Activity < ApplicationRecord
   # end
 
   def age_of_students
-    (students.map(&:age).sum.to_f / students.count).round(1)
+    (students.where(id: show_students).map(&:age).sum.to_f / students.where(id: show_students).count).round(1)
   end
 
   def can_delete?
