@@ -114,8 +114,8 @@
         <tr class="total-row">
           <td>TOTAL</td>
           <td><%= @school_period.students_count %></td>
-          <td><%= "#{@school_period.show_count} (#{@school_period.show_rate}%)"%></td>
           <td><%= "#{@school_period.no_show_count} (#{@school_period.no_show_rate}%)"%></td>
+          <td><%= "#{@school_period.show_count} (#{@school_period.show_rate}%)"%></td>
           <td><%= "#{@school_period.percentage_of_students("Garçon")} %" %></td>
           <td><%= "#{@school_period.percentage_of_students("Fille")} %" %></td>
           <td><%= @school_period.age_of_students %> ans</td>
