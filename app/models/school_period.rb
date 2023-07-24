@@ -28,36 +28,46 @@ class SchoolPeriod < ApplicationRecord
     students.count
   end
 
+  def show_students
+    subquery = camps.map(&:show_students).flatten
+    Student.where(id: subquery)
+  end
+
+  def no_show_students
+    subquery = camps.map(&:no_show_students).flatten
+    Student.where(id: subquery)
+  end
+
   def total_number_of_students(genre)
-    camp_enrollments.joins(:student).where(students: { gender: genre }).count
+    show_students.where(gender: genre).count
   end
 
   def percentage_of_students(genre)
-    if students_count.positive?
-      ((total_number_of_students(genre).to_f / students_count) * 100).round(0)
+    if show_count.positive?
+      ((total_number_of_students(genre).to_f / show_count) * 100).round(0)
     else
       0
     end
   end
 
   def age_of_students
-    (students.map(&:age).sum.to_f / students.count).round(1)
+    (show_students.map(&:age).sum.to_f / show_students.count).round(1)
   end
 
   def participant_ages
-    students.map(&:age).uniq.sort
+    show_students.map(&:age).uniq.sort
   end
 
   def number_of_students_by_age(age)
-    students.map(&:age).count(age)
+    show_students.map(&:age).count(age)
   end
 
   def participant_departments
-    students.map(&:department).uniq.sort
+    show_students.map(&:department).uniq.sort
   end
 
   def number_of_students_by_department(department)
-    students.map(&:department).count(department)
+    show_students.map(&:department).count(department)
   end
 
   def starts_at
@@ -136,14 +146,23 @@ class SchoolPeriod < ApplicationRecord
 
 
 
+  # def number_of_students_by_category(category)
+  #   activity_enrollments.joins(:activity).where(activities: { category: category }).count
+  # end
+
   def number_of_students_by_category(category)
-    activity_enrollments.joins(:activity).where(activities: { category: category }).count
+    activity_enrollments.joins(:activity)
+                        .where(students: show_students)
+                        .where(activities: { category: category })
+                        .count
   end
 
   def number_of_students_by_category_and_gender(category, gender)
-    activity_enrollments.joins(:student, activity: :category).where(activities: { category: category }, students: { gender: gender }).count
+    activity_enrollments.joins(:student, activity: :category)
+                        .where(students: show_students)
+                        .where(activities: { category: category }, students: { gender: gender })
+                        .count
   end
-
 
   def percentage_of_students_by_category_and_gender(category, gender)
     if number_of_students_by_category(category).positive?
