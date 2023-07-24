@@ -28,7 +28,7 @@
           <td><%= activity.category.name %></td>
           <td><%= activity.location.name %></td>
           <td><%= activity.lead_coach.try(:full_name) || "" %></td>
-          <td><%= activity.students_count %></td>
+          <td><%= activity.number_of_students %></td>
           <% if activity.can_delete? %>
             <td>
               <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>

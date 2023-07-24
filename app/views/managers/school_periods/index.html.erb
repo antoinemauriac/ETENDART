@@ -21,7 +21,7 @@
         <td><%= period.academy.name %></td>
         <td><%= period.name %></td>
         <td><%= period.year %></td>
-        <td><%= period.school_period_enrollments.count %></td>
+        <td><%= period.students_count %></td>
         <td>
         <% if period.can_import? %>
           <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce stage ?" } do %>

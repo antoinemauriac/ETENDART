@@ -88,10 +88,6 @@ class Activity < ApplicationRecord
     students.where(id: show_students).count
   end
 
-  # def students
-  #   activity_enrollments.map(&:student)
-  # end
-
   def age_of_students
     (students.where(id: show_students).map(&:age).sum.to_f / students.where(id: show_students).count).round(1)
   end

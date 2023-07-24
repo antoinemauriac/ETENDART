@@ -28,18 +28,20 @@ class SchoolPeriod < ApplicationRecord
     students.count
   end
 
-  def show_students
-    subquery = camps.map(&:show_students).flatten
-    Student.where(id: subquery)
+  def show_students_ids
+    camps.map(&:show_students).flatten.pluck(:id)
   end
 
-  def no_show_students
-    subquery = camps.map(&:no_show_students).flatten
-    Student.where(id: subquery)
+  def show_students
+    show_students_ids.map { |student_id| Student.find(student_id) }
   end
+
+  # def show_students
+  #   Student.where(id: show_students_ids)
+  # end
 
   def total_number_of_students(genre)
-    show_students.where(gender: genre).count
+    show_students.select { |student| student.gender == genre }.count
   end
 
   def percentage_of_students(genre)
@@ -51,7 +53,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def age_of_students
-    (show_students.map(&:age).sum.to_f / show_students.count).round(1)
+    (show_students.map(&:age).sum.to_f / show_count).round(1)
   end
 
   def participant_ages
