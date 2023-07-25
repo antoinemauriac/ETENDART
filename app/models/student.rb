@@ -195,4 +195,64 @@ class Student < ApplicationRecord
       "No phone number"
     end
   end
+
+  def self.find_duplicates(threshold = 2)
+    all_students = all.to_a
+
+    duplicates = []
+
+    until all_students.empty?
+      student = all_students.pop
+      similar_students = [student]
+
+      all_students.each do |other_student|
+        # Calculate the Levenshtein distance for first_name and last_name
+        first_name_distance = Text::Levenshtein.distance(student.first_name, other_student.first_name)
+        last_name_distance = Text::Levenshtein.distance(student.last_name, other_student.last_name)
+
+        # If both first_name and last_name are similar enough, consider them duplicates
+        if first_name_distance <= threshold && last_name_distance <= threshold
+          similar_students << other_student
+        end
+      end
+
+      # Remove the duplicates from the main list to avoid checking them again
+      all_students -= similar_students
+
+      # Add the group of duplicates to the results
+      duplicates << similar_students if similar_students.size > 1
+    end
+
+    duplicates
+  end
+
+  def self.find_duplicates_separate(threshold_first_name = 2, threshold_last_name = 2)
+    all_students = all.to_a
+
+    duplicates = []
+
+    until all_students.empty?
+      student = all_students.pop
+      similar_students = [student]
+
+      all_students.each do |other_student|
+        # Calculate the Levenshtein distance for first_name and last_name separately
+        first_name_distance = Text::Levenshtein.distance(student.first_name, other_student.first_name)
+        last_name_distance = Text::Levenshtein.distance(student.last_name, other_student.last_name)
+
+        # If both first_name and last_name are similar enough, consider them duplicates
+        if first_name_distance <= threshold_first_name && last_name_distance <= threshold_last_name
+          similar_students << other_student
+        end
+      end
+
+      # Remove the duplicates from the main list to avoid checking them again
+      all_students -= similar_students
+
+      # Add the group of duplicates to the results
+      duplicates << similar_students if similar_students.size > 1
+    end
+
+    duplicates
+  end
 end
