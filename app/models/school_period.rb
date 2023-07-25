@@ -36,12 +36,32 @@ class SchoolPeriod < ApplicationRecord
     show_students_ids.map { |student_id| Student.find(student_id) }
   end
 
-  # def show_students
-  #   Student.where(id: show_students_ids)
-  # end
+  def show_count
+    camps.sum(&:show_count)
+  end
+
+  def show_rate
+    if students_count.positive?
+      ((show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
+  def no_show_count
+    camps.sum(&:no_show_count)
+  end
+
+  def no_show_rate
+    if students_count.positive?
+      ((no_show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
 
   def total_number_of_students(genre)
-    show_students.select { |student| student.gender == genre }.count
+    show_students.count { |student| student.gender == genre }
   end
 
   def percentage_of_students(genre)
@@ -146,12 +166,6 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
-
-
-  # def number_of_students_by_category(category)
-  #   activity_enrollments.joins(:activity).where(activities: { category: category }).count
-  # end
-
   def number_of_students_by_category(category)
     activity_enrollments.joins(:activity)
                         .where(students: show_students)
@@ -177,33 +191,6 @@ class SchoolPeriod < ApplicationRecord
   def include_accompagnement?
     activities.where(category: Category.find_by(name: "Accompagnement")).any?
   end
-
-  def no_show_count
-    camps.sum(&:no_show_count)
-  end
-
-  def no_show_rate
-    if students_count.positive?
-      ((no_show_count.to_f / students_count) * 100).round(0)
-    else
-      0
-    end
-  end
-
-  def show_count
-    camps.sum(&:show_count)
-  end
-
-  def show_rate
-    if students_count.positive?
-      ((show_count.to_f / students_count) * 100).round(0)
-    else
-      0
-    end
-  end
-
-  # def absenteeism_rate_by_super_category(super_category)
-  #   total_enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current).where("courses.category_id IN (?)", super_category.categories.ids).count
 
   def can_import?
     if starts_at

@@ -28,17 +28,49 @@ class Camp < ApplicationRecord
     students.count
   end
 
+  def show_students
+    ids = course_enrollments.joins(:student)
+                            .group(:student_id)
+                            .having("SUM(CASE WHEN present = true THEN 1 ELSE 0 END) >= 1")
+                            .count.keys
+    Student.where(id: ids)
+  end
+
+  def show_count
+    show_students.count
+  end
+
+  def no_show_students
+    ids = course_enrollments.joins(:student)
+                            .group(:student_id)
+                            .having("COUNT(*) = SUM(CASE WHEN present = false THEN 1 ELSE 0 END)")
+                            .count.keys
+    Student.where(id: ids)
+  end
+
+  def no_show_count
+    no_show_students.count
+  end
+
+  def no_show_rate
+    if students_count.positive?
+      ((no_show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
+  def show_rate
+    if students_count.positive?
+      ((show_count.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
   def number_of_students(genre)
     camp_enrollments.joins(:student).where(students: { gender: genre }).count
   end
-
-  # def percentage_of_students(genre)
-  #   if students_count.positive?
-  #     ((number_of_students(genre).to_f / students_count) * 100)
-  #   else
-  #     0
-  #   end
-  # end
 
   def percentage_of_students(genre)
     if show_students.count.positive?
@@ -73,11 +105,11 @@ class Camp < ApplicationRecord
   end
 
   def number_of_students_by_age(age)
-    show_students.select { |student| student.age == age }.count
+    show_students.count { |student| student.age == age }
   end
 
   def number_of_students_by_dpt(department)
-    show_students.select { |student| student.department == department }.count
+    show_students.count { |student| student.department == department }
   end
 
   def can_import?
@@ -128,10 +160,9 @@ class Camp < ApplicationRecord
   # end
 
   def enrollments_without_accompagnement_and_without_no_show
-    enrollments = course_enrollments.joins(course: { activity: :category })
-                                    .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
-                                    .where.not(student_id: no_show_students)
-    enrollments
+    course_enrollments.joins(course: { activity: :category })
+                      .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
+                      .where.not(student_id: no_show_students)
   end
 
   def total_enrollments_count
@@ -155,16 +186,14 @@ class Camp < ApplicationRecord
   end
 
   def enrollments_without_no_show
-    enrollments = course_enrollments.joins(course: { activity: :category })
-                                    .where("courses.ends_at < ?", Time.current)
-                                    .where.not(student_id: no_show_students)
-    enrollments
+    course_enrollments.joins(course: { activity: :category })
+                      .where("courses.ends_at < ?", Time.current)
+                      .where.not(student_id: no_show_students)
   end
 
   def enrollments_without_no_show_by_category(category)
-    enrollments = enrollments_without_no_show.joins(course: { activity: :category })
-                                             .where("categories.id" => category.id)
-    enrollments
+    enrollments_without_no_show.joins(course: { activity: :category })
+                               .where("categories.id" => category.id)
   end
 
   def total_enrollments_count_by_category(category)
@@ -175,63 +204,9 @@ class Camp < ApplicationRecord
     enrollments_without_no_show_by_category(category).unattended.count
   end
 
-  # def no_show_count
-  #   students_count = course_enrollments.joins(:student)
-  #                                      .group(:student_id)
-  #                                      .having("COUNT(*) = SUM(CASE WHEN present = false THEN 1 ELSE 0 END)")
-  #                                      .count.keys.count
-
-  #   students_count
-  # end
-
-  def show_students
-    ids = course_enrollments.joins(:student)
-                            .group(:student_id)
-                            .having("SUM(CASE WHEN present = true THEN 1 ELSE 0 END) >= 1")
-                            .count.keys
-    Student.where(id: ids)
-  end
-
-  def show_count
-    show_students.count
-  end
-
-  def no_show_students
-    ids = course_enrollments.joins(:student)
-                            .group(:student_id)
-                            .having("COUNT(*) = SUM(CASE WHEN present = false THEN 1 ELSE 0 END)")
-                            .count.keys
-    Student.where(id: ids)
-  end
-
-  def no_show_count
-    no_show_students.count
-  end
-
-  def no_show_rate
-    if students_count.positive?
-      ((no_show_count.to_f / students_count) * 100).round(0)
-    else
-      0
-    end
-  end
-
-  # def show_count
-  #   students_count - no_show_count
-  # end
-
-  def show_rate
-    if students_count.positive?
-      ((show_count.to_f / students_count) * 100).round(0)
-    else
-      0
-    end
-  end
-
   private
 
   def starts_at_must_be_before_ends_at
     errors.add(:starts_at, :after) if starts_at >= ends_at
   end
-
 end

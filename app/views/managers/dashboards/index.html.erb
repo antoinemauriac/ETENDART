@@ -18,7 +18,6 @@
       <table class="table table-striped table-responsive table-center">
         <thead>
           <tr>
-            <th>Académie</th>
             <th>Activité</th>
             <th>Coach Référent</th>
             <th>Telephone</th>
@@ -32,7 +31,6 @@
         <tbody>
           <% @today_courses.each do |course| %>
           <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
-            <td class="align-middle"><%= course.academy.name %></td>
             <td class="align-middle"><%= course.activity.name %></td>
             <td class="align-middle"><%= course.activity.lead_coach.full_name %></td>
             <td class="align-middle"><%= course.activity.lead_coach.phone_number %></td>
