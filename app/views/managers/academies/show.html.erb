@@ -161,7 +161,7 @@
         <tbody>
           <% @today_absent_students.each do |student| %>
             <% student.unattended_today_courses.each do |course_enrollment| %>
-              <% if course_enrollment.course.academy.name == @academy %>
+              <% if course_enrollment.course.academy.name == @academy.name %>
                 <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
                   <td class="align-middle"><%= student.full_name %></td>
                   <td class="align-middle"><%= student.phone_modified %></td>
