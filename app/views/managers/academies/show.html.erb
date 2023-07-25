@@ -161,14 +161,16 @@
         <tbody>
           <% @today_absent_students.each do |student| %>
             <% student.unattended_today_courses.each do |course_enrollment| %>
-              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
-                <td class="align-middle"><%= student.full_name %></td>
-                <td class="align-middle"><%= student.phone_modified %></td>
-                <td class="align-middle"><%= student.email %></td>
-                <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
-                <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
-                <td class="align-middle"><%= course_enrollment.course.academy.name %></td>
-              </tr>
+              <% if course_enrollment.course.academy.name == @academy %>
+                <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
+                  <td class="align-middle"><%= student.full_name %></td>
+                  <td class="align-middle"><%= student.phone_modified %></td>
+                  <td class="align-middle"><%= student.email %></td>
+                  <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
+                  <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
+                  <td class="align-middle"><%= course_enrollment.course.academy.name %></td>
+                </tr>
+              <% end %>
             <% end %>
           <% end %>
         </tbody>
