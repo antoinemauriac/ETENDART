@@ -152,7 +152,6 @@ class Student < ApplicationRecord
     end
   end
 
-
   def active_camps
     Camp.joins(:camp_enrollments)
         .where(camp_enrollments: { banished: false, student_id: id })

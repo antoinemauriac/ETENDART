@@ -13,7 +13,7 @@ class Managers::CoursesController < ApplicationController
     @school_period = course.school_period
     @category = course.category
     @activity = course.activity
-    @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id))
+    @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id)).order(last_name: :asc)
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
   end
 
