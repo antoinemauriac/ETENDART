@@ -105,6 +105,17 @@
   transition: 0.3s;
 }
 
+.btn-stat {
+  background-color: $yellow!important;
+  color: black!important;
+  transition: 0.3s;
+}
+.btn-stat:hover {
+  background-color: black!important;
+  color: $yellow!important;
+  transition: 0.3s;
+}
+
 
 .btn-etendart-black {
   text-align: center;

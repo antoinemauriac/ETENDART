@@ -1,0 +1,25 @@
+<div class="container form-container">
+  <%= simple_form_for([:managers, @annual_program], wrapper: :horizontal_form, html: { class: 'form-horizontal' }) do |f| %>
+
+    <!-- Champ pour le start_year -->
+    <%= f.input :start_year, label: 'Année de début' %>
+
+    <!-- Champs pour les program_periods -->
+    <%= f.simple_fields_for :program_periods do |program_period| %>
+      <div class="mb-4">
+        <h5>Période <%= program_period.index + 1 %></h5> <!-- Affichage du numéro de la période -->
+
+        <!-- Ajout de data-controller="date-picker" pour le champ start_date -->
+        <%= program_period.input :start_date, label: 'Date de début', as: :string, input_html: { data: { controller: "date-picker" } } %>
+
+        <!-- Ajout de data-controller="date-picker" pour le champ end_date -->
+        <%= program_period.input :end_date, label: 'Date de fin', as: :string, input_html: { data: { controller: "date-picker" } } %>
+
+      </div>
+    <% end %>
+
+    <div class="actions">
+      <%= f.button :submit, 'Créer', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>

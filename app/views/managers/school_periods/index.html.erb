@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       <% @school_periods.each do |period| %>
-      <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_school_period_path(@academy, period) %>">
+      <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_school_period_path(period) %>">
         <td><%= period.academy.name %></td>
         <td><%= period.name %></td>
         <td><%= period.year %></td>

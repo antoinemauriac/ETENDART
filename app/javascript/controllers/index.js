@@ -13,6 +13,9 @@ application.register("address-autocomplete", AddressAutocompleteController)
 import ClickableTableController from "./clickable_table_controller"
 application.register("clickable-table", ClickableTableController)
 
+import DatePickerController from "./date_picker_controller"
+application.register("date-picker", DatePickerController)
+
 import EnrollmentFormController from "./enrollment_form_controller"
 application.register("enrollment-form", EnrollmentFormController)
 

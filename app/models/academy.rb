@@ -7,6 +7,8 @@ class Academy < ApplicationRecord
   has_many :activities, through: :camps
   has_many :courses, through: :activities
 
+  has_many :annual_programs
+
   belongs_to :manager, class_name: 'User'
   has_many :coach_academies
   has_many :coaches, through: :coach_academies

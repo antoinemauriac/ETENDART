@@ -8,9 +8,12 @@ class Activity < ApplicationRecord
     Vendredi: { start_time: nil, end_time: nil }
   }
 
-  belongs_to :camp
+  belongs_to :camp, optional: true
   has_one :school_period, through: :camp
-  has_one :academy, through: :school_period
+  # has_one :academy, through: :school_period
+
+  belongs_to :annual_program, optional: true
+
   belongs_to :category
   # belongs_to :lead_coach, class_name: 'User', foreign_key: :coach_id
   has_many :courses, dependent: :destroy
@@ -29,6 +32,16 @@ class Activity < ApplicationRecord
   # accepts_nested_attributes_for :days
   has_many :activity_coaches, dependent: :destroy
   has_many :coaches, through: :activity_coaches, source: :coach
+
+  def academy
+    if camp
+      camp.academy
+    elsif annual_program
+      annual_program.academy
+    else
+      nil
+    end
+  end
 
   def lead_coach
     if coach_id.nil?

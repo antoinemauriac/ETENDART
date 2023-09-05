@@ -21,7 +21,7 @@ class Managers::SchoolPeriodsController < ApplicationController
   end
 
   def show
-    @school_period = SchoolPeriod.find(params[:format])
+    @school_period = SchoolPeriod.find(params[:id])
     @academy = @school_period.academy
     authorize([:managers, @school_period])
     @camp = Camp.new
@@ -33,6 +33,20 @@ class Managers::SchoolPeriodsController < ApplicationController
     end
     @categories = @school_period.categories.uniq.sort_by { |category| @school_period.number_of_students_by_category(category) }.reverse
   end
+
+  def statistics
+    @school_period = SchoolPeriod.find(params[:id])
+    authorize([:managers, @school_period])
+
+    @academy = @school_period.academy
+    @activities = @school_period.activities.order(:camp_id)
+    @camps = @school_period.camps.order(:starts_at)
+    @sorted_departments = @school_period.participant_departments.sort_by do |department|
+      -@school_period.number_of_students_by_department(department)
+    end
+    @categories = @school_period.categories.uniq.sort_by { |category| @school_period.number_of_students_by_category(category) }.reverse
+  end
+
 
   def destroy
     @school_period = SchoolPeriod.find(params[:id])

@@ -12,11 +12,22 @@
     </div>
   <% end %>
 
-  <%= link_to managers_academy_school_periods_path(@academy), class: "col-sm-12 col-md-3 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students2.jpeg') %>')">
-      LES STAGES
-    </div>
-  <% end %>
+  <div class="col-sm-12 col-md-3 mb-3 d-flex flex-column justify-content-center">
+    <!-- Les stages card -->
+    <%= link_to managers_academy_school_periods_path(@academy) do %>
+      <div class="card-category mb-2" style="height: 60px; background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students2.jpeg') %>')">
+        LES STAGES
+      </div>
+    <% end %>
+    <!-- Les stages card -->
+    <%= link_to managers_annual_programs_path(academy: @academy) do %>
+      <div class="card-category mb-2" style="height: 60px; background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students2.jpeg') %>')">
+        PROGRAMME ANNUEL
+      </div>
+    <% end %>
+  </div>
+
+
 
   <%= link_to managers_academy_locations_path(@academy), class: "col-sm-12 col-md-2 mb-3" do %>
     <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students3.jpeg') %>')">

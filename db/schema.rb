@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_05_091918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -71,6 +71,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
     t.datetime "updated_at", null: false
     t.text "days"
     t.bigint "location_id", null: false
+    t.bigint "annual_program_id"
+    t.index ["annual_program_id"], name: "index_activities_on_annual_program_id"
     t.index ["camp_id"], name: "index_activities_on_camp_id"
     t.index ["category_id"], name: "index_activities_on_category_id"
     t.index ["coach_id"], name: "index_activities_on_coach_id"
@@ -93,6 +95,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
     t.datetime "updated_at", null: false
     t.index ["activity_id"], name: "index_activity_enrollments_on_activity_id"
     t.index ["student_id"], name: "index_activity_enrollments_on_student_id"
+  end
+
+  create_table "annual_program_enrollments", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "annual_program_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["annual_program_id"], name: "index_annual_program_enrollments_on_annual_program_id"
+    t.index ["student_id"], name: "index_annual_program_enrollments_on_student_id"
+  end
+
+  create_table "annual_programs", force: :cascade do |t|
+    t.integer "start_year"
+    t.integer "end_year"
+    t.bigint "academy_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["academy_id"], name: "index_annual_programs_on_academy_id"
   end
 
   create_table "camp_enrollments", force: :cascade do |t|
@@ -171,6 +191,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
     t.datetime "updated_at", null: false
     t.bigint "coach_id"
     t.boolean "status", default: false
+    t.boolean "annual", default: false, null: false
     t.index ["activity_id"], name: "index_courses_on_activity_id"
     t.index ["coach_id"], name: "index_courses_on_coach_id"
     t.index ["manager_id"], name: "index_courses_on_manager_id"
@@ -214,6 +235,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
     t.decimal "lng", precision: 9, scale: 6
     t.string "street_address"
     t.index ["academy_id"], name: "index_locations_on_academy_id"
+  end
+
+  create_table "program_periods", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.bigint "annual_program_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["annual_program_id"], name: "index_program_periods_on_annual_program_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -289,6 +319,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
   add_foreign_key "academy_enrollments", "students"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activities", "annual_programs"
   add_foreign_key "activities", "camps"
   add_foreign_key "activities", "categories"
   add_foreign_key "activities", "locations"
@@ -297,6 +328,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
   add_foreign_key "activity_coaches", "users", column: "coach_id"
   add_foreign_key "activity_enrollments", "activities"
   add_foreign_key "activity_enrollments", "students"
+  add_foreign_key "annual_program_enrollments", "annual_programs"
+  add_foreign_key "annual_program_enrollments", "students"
+  add_foreign_key "annual_programs", "academies"
   add_foreign_key "camp_enrollments", "camps"
   add_foreign_key "camp_enrollments", "students"
   add_foreign_key "camps", "school_periods"
@@ -315,6 +349,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_28_112331) do
   add_foreign_key "feedbacks", "students"
   add_foreign_key "feedbacks", "users", column: "coach_id"
   add_foreign_key "locations", "academies"
+  add_foreign_key "program_periods", "annual_programs"
   add_foreign_key "school_period_enrollments", "school_periods"
   add_foreign_key "school_period_enrollments", "students"
   add_foreign_key "school_periods", "academies"
