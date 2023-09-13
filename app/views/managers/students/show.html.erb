@@ -41,7 +41,7 @@
   <div class="col-lg-7 col-sm-12 mt-3">
     <div class="header-info">PROCHAINES ACTIVITÉS</div>
     <div class="content-info">
-      <% if @student.next_activities.empty? %>
+      <% if @next_activities.empty? %>
       <div class="text-center">
         Aucune activité à venir
       </div>
@@ -58,7 +58,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @student.next_activities.each do |activity| %>
+            <% @next_activities.each do |activity| %>
             <tr>
               <td class="align-middle"><%= activity.academy.name %></td>
               <td class="align-middle"><%= activity.school_period.full_name %></td>

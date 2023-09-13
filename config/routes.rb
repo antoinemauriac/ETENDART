@@ -36,10 +36,6 @@ Rails.application.routes.draw do
 
 
   namespace :managers do
-    get 'annual_programs/new'
-    get 'annual_programs/create'
-    get 'annual_programs/show'
-    get 'annual_programs/index'
     resources :courses, only: %i[index show edit update destroy] do
       member do
         put :update_enrollments
@@ -56,7 +52,16 @@ Rails.application.routes.draw do
     end
     resources :feedbacks, only: %i[new create]
     resources :activity_enrollments, only: %i[destroy]
-    resources :activities, only: %i[show destroy update]
+    resources :activities, only: %i[show destroy update] do
+      collection do
+        get 'new_for_annual'
+        post 'create_for_annual'
+        get 'show_for_annual'
+      end
+      member do
+        get :all_courses
+      end
+    end
     resources :school_periods, only: %i[show destroy] do
       member do
         get :statistics
@@ -68,7 +73,7 @@ Rails.application.routes.draw do
     resources :coaches, except: %i[index]
     resources :enrollments, only: %i[new create]
 
-    resources :annual_programs, only: %i[show index]
+    resources :annual_programs, only: %i[show index new create destroy]
 
     resources :academies, only: %i[show index] do
       member do

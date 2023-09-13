@@ -29,7 +29,7 @@ class Activity < ApplicationRecord
   has_many :activity_enrollments, dependent: :destroy
   has_many :students, through: :activity_enrollments
   # has_many :days
-  # accepts_nested_attributes_for :days
+
   has_many :activity_coaches, dependent: :destroy
   has_many :coaches, through: :activity_coaches, source: :coach
 
@@ -54,6 +54,17 @@ class Activity < ApplicationRecord
   def all_coaches
     coaches << lead_coach
     coaches.uniq
+  end
+
+  def day_of_activity
+    first_course = courses.first
+    return "No day assigned" unless first_course&.starts_at
+
+    first_course.starts_at.strftime("%A")
+  end
+
+  def next_courses
+    courses.where("starts_at > ?", Time.current).order(:starts_at)
   end
 
   def banished_students
@@ -106,11 +117,20 @@ class Activity < ApplicationRecord
   end
 
   def can_delete?
-    if camp.starts_at
-      camp.starts_at > Date.today
+    if camp
+      if camp.starts_at
+        camp.starts_at > Date.today
+      else
+        true
+      end
+    elsif annual_program
+      if annual_program.program_periods.first.start_date
+        annual_program.program_periods.first.start_date > Date.today
+      else
+        true
+      end
     else
       true
     end
   end
-
 end

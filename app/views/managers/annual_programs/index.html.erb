@@ -1,7 +1,7 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
-  <div class="header-nav-item active">LES PROGRAMMES ANNUELS</div>
+  <div class="header-nav-item active">LES PROGRAMMES</div>
 </div>
 
 <div class="yellow-title">LES PROGRAMMES</div>
@@ -34,7 +34,7 @@
   </table>
 
   <div class="text-center">
-    <%= link_to managers_annual_programs_new_path(academy: @academy), class: "btn-etendart-square" do %>
+    <%= link_to new_managers_annual_program_path(academy: @academy), class: "btn-etendart-square" do %>
       <i class="fas fa-plus"></i> CRÉER UN PROGRAMME
     <% end %>
   </div>

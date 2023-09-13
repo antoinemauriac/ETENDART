@@ -17,6 +17,10 @@ class Managers::StudentsController < ApplicationController
     @academies = current_user.academies_as_manager
     @academy = Academy.find(params[:academy_id])
     @feedback = Feedback.new
+    next_activities = @student.next_activities
+    @next_activities = next_activities.reject do |activity|
+      @student.next_courses_by_activity(activity).empty?
+    end
   end
 
   def new

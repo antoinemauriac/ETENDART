@@ -10,7 +10,10 @@ class Managers::CoursesController < ApplicationController
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
     @academy = course.academy
-    @school_period = course.school_period
+    @activity = course.activity
+    @school_period = course.school_period if course.school_period
+    @camp = course.camp if course.camp
+    @annual_program = @activity.annual_program if @activity.annual_program
     @category = course.category
     @activity = course.activity
     @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id)).order(last_name: :asc)
@@ -24,19 +27,29 @@ class Managers::CoursesController < ApplicationController
   def update
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
     if course.update(course_params)
-      redirect_to managers_activity_path(course.activity)
-      flash[:notice] = "Cours mis à jour"
+      if params[:redirect_to] == "camp"
+        redirect_to managers_activity_path(course.activity), notice: "Cours mis à jour"
+      else
+        redirect_to show_for_annual_managers_activities_path(activity: course.activity), notice: "Cours mis à jour"
+      end
     else
       flash[:alert] = "L'heure de début doit être avant l'heure de fin"
-      redirect_to managers_activity_path(course.activity)
+      if params[:redirect_to] == "camp"
+        redirect_to managers_activity_path(course.activity)
+      else
+        redirect_to show_for_annual_managers_activities_path(activity: course.activity), notice: "Cours mis à jour"
+      end
     end
   end
 
   def destroy
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
     course.destroy
-    redirect_to managers_activity_path(course.activity)
-    flash[:notice] = "Cours supprimé"
+    if params[:redirect_to] == "camp"
+      redirect_to managers_activity_path(course.activity), notice: "Cours supprimé"
+    else
+      redirect_to show_for_annual_managers_activities_path(activity: course.activity), notice: "Cours supprimé"
+    end
   end
 
   def update_enrollments

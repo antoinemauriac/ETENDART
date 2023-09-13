@@ -157,6 +157,21 @@ class Student < ApplicationRecord
         .where(camp_enrollments: { banished: false, student_id: id })
   end
 
+  def activities_with_next_courses
+    activities.joins(:camp).merge(active_camps)
+              .where('camps.ends_at > ?', Time.current)
+              .where(id: Activity.joins(camp: :courses)
+                                .merge(next_courses)
+                                .select(:id))
+              .order('camps.starts_at ASC')
+  end
+
+  def next_courses_by_activity(activity)
+    courses.where('starts_at > ?', Time.current)
+            .where(activity_id: activity.id)
+            .order(starts_at: :asc)
+  end
+
   def next_activities
     activities.joins(:camp).merge(active_camps)
               .where('camps.ends_at > ?', Time.current)

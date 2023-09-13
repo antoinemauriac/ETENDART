@@ -2,14 +2,19 @@ class Managers::ActivityEnrollmentsController < ApplicationController
   def destroy
     @activity_enrollment = ActivityEnrollment.find(params[:id])
     authorize([:managers, @activity_enrollment])
-    @activity_enrollment.destroy
+    # @activity_enrollment.destroy
     student = @activity_enrollment.student
     activity = @activity_enrollment.activity
     camp = activity.camp
     school_period = camp.school_period
 
     #détruire les course_enrollments associés
-    student.course_enrollments.where(course: activity.courses).destroy_all
+    student.course_enrollments.where(course: activity.next_courses).destroy_all
+
+    course_enrollments = student.course_enrollments.where(course: activity.courses)
+    if course_enrollments.empty?
+      student.activity_enrollments.where(activity: activity).destroy_all
+    end
 
     activities = student.activities.where(camp: camp)
     if activities.empty?

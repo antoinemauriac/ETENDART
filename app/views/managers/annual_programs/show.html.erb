@@ -1,2 +1,52 @@
-<h1>Managers::AnnualPrograms#show</h1>
-<p>Find me in app/views/managers/annual_programs/show.html.erb</p>
+<%= render "shared/academy_header" %>
+
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES PROGRAMMES", managers_annual_programs_path(academy: @academy) %></div>
+  <div class="header-nav-item active"><%= @annual_program.start_year %> - <%= @annual_program.end_year %></div>
+</div>
+
+<div class="yellow-title">LES ACTIVITÉS</div>
+
+<div class="container">
+  <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
+    <thead>
+      <tr>
+        <th>Activité</th>
+        <th>Jour</th>
+        <th>Heure</th>
+        <th>Catégorie</th>
+        <th>Lieu</th>
+        <th>Coach Référent</th>
+        <th>Nb inscrits</th>
+        <th><i class="fas fa-trash trash"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @activities.each do |activity| %>
+        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activities_path(activity: activity) %>">
+          <td><%= activity.name %></td>
+          <td><%= l(activity.courses.first.starts_at, format: :day_name ) %></td>
+          <td><%= l(activity.courses.first.starts_at, format: :hour ) %></td>
+          <td><%= activity.category.name %></td>
+          <td><%= activity.location.name %></td>
+          <td><%= activity.lead_coach.try(:full_name) || "" %></td>
+          <td><%= activity.students.count %></td>
+
+          <% if activity.can_delete? %>
+            <td>
+              <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
+                <i class="fas fa-trash trash"></i>
+              <% end %>
+            </td>
+          <% else %>
+            <td></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="flexy">
+    <%= link_to "AJOUTER UNE ACTIVITÉ", new_for_annual_managers_activities_path(annual_program: @annual_program), class: "btn-etendart-square" %>
+  </div>
+</div>
