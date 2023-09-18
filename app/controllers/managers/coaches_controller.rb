@@ -3,7 +3,7 @@ class Managers::CoachesController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy])
-    @coaches = @academy.coach_academies.includes(:coach).map(&:coach)
+    @coaches = @academy.coach_academies.includes(:coach).map(&:coach).sort_by(&:last_name)
     skip_policy_scope
     authorize([:managers, @coaches], policy_class: Managers::CoachPolicy)
   end
