@@ -37,7 +37,7 @@
   <div data-controller="hidden-forms">
     <div class="flexy">
       <button class="btn-etendart-square" data-action="click->hidden-forms#displaySchoolPeriodForm">AJOUTER UN STAGE</button>
-      <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
+      <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
         <%= form.label :name, "Nom :" %>
         <%= form.text_field :name, { class: "form-control", required: true } %>
         <%= form.label :year, "Année :" %>

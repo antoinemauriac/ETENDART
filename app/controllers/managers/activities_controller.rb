@@ -89,6 +89,14 @@ class Managers::ActivitiesController < ApplicationController
     @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
   end
 
+  def all_annual_courses
+    @activity = Activity.find(params[:id])
+    @courses = @activity.courses.sort_by(&:starts_at)
+    @academy = @activity.academy
+    @annual_program = @activity.annual_program
+    authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
+  end
+
   def update
     @activity = Activity.find(params[:id])
     authorize([:managers, @activity])
@@ -139,7 +147,7 @@ class Managers::ActivitiesController < ApplicationController
   end
 
   def camp
-    @camp ||= Camp.find(params[:camp_id])
+    @camp ||= Camp.find(params[:camp])
   end
 
   # Les validations sont plutôt à ajouter dans le modèle si elles sont toujours appliqués

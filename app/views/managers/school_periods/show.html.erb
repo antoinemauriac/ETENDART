@@ -1,7 +1,7 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @school_period.academy.name.upcase, managers_academy_path(@school_period.academy) %></div>
-  <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@school_period.academy, @school_period) %></div>
+  <div class="header-nav-item"><%= link_to "LES STAGES", managers_school_periods_path(academy: @academy) %></div>
   <div class="header-nav-item active"><%= @school_period.name.upcase %> - <%= @school_period.year %> </div>
 </div>
 <div class="yellow-title"><%= @school_period.name.upcase %> - <%= @school_period.year %></div>
@@ -48,7 +48,7 @@
 
   <div class="flexy" data-controller="hidden-forms">
     <button class="btn-etendart-square" data-action="click->hidden-forms#displayCampForm">AJOUTER UNE SEMAINE</button>
-    <%= form_with(model: @camp, url: managers_school_period_camps_path(@school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
+    <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
       <%= form.label :name, "Nom :" %>
       <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: true }, { class: "form-select", required: true } %>
       <%= form.label :starts_at, "Date de début :" %>

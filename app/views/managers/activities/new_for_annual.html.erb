@@ -21,8 +21,8 @@
 
       <%= f.simple_fields_for :day_attributes do |activity_period| %>
         <%= activity_period.input :day, as: :select, collection: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'], label: 'Jour', input_html: { class: 'activity-input' } %>
-        <%= activity_period.input :start_time, as: :time, label: 'Heure de début', input_html: { class: 'activity-input' }, minute_step: 15   %>
-        <%= activity_period.input :end_time, as: :time, label: 'Heure de fin', input_html: { class: 'activity-input' }, minute_step: 15   %>
+        <%= activity_period.input :start_time, as: :time, label: 'Heure de début', input_html: { class: 'activity-input' }, minute_step: 15 %>
+        <%= activity_period.input :end_time, as: :time, label: 'Heure de fin', input_html: { class: 'activity-input' }, minute_step: 15 %>
       <% end %>
       <div class="flexy">
         <%= f.submit "Valider", class: "btn-etendart" %>

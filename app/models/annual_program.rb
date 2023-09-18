@@ -1,4 +1,5 @@
 class AnnualProgram < ApplicationRecord
+
   belongs_to :academy
 
   has_many :annual_program_enrollments, dependent: :destroy
@@ -6,7 +7,9 @@ class AnnualProgram < ApplicationRecord
 
   has_many :program_periods, dependent: :destroy
   has_many :activities, dependent: :destroy
+  has_many :activity_enrollments, through: :activities
   has_many :courses, through: :activities
+  has_many :course_enrollments, through: :courses
 
   accepts_nested_attributes_for :program_periods, reject_if: :all_blank, allow_destroy: true
 
@@ -31,8 +34,24 @@ class AnnualProgram < ApplicationRecord
     "No day assigned" => 7
   }
 
-  def has_started?
-    false
+  def can_import?
+    true
+  end
+
+  def today_courses
+    courses.where(starts_at: Time.current.all_day).order(:starts_at)
+  end
+
+  def tomorrow_courses
+    courses.where(starts_at: Time.current.tomorrow.all_day).order(:starts_at)
+  end
+
+  def started?
+    program_periods.first.start_date <= Date.today
+  end
+
+  def start_date
+    program_periods.first.start_date
   end
 
   def find_all_specific_days(day_name)

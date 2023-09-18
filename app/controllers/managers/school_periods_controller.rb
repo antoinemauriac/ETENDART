@@ -1,7 +1,7 @@
 class Managers::SchoolPeriodsController < ApplicationController
 
   def index
-    @academy = Academy.find(params[:academy_id])
+    @academy = Academy.find(params[:academy])
     @school_periods = @academy.school_periods.sort_by(&:year)
     @school_period = SchoolPeriod.new
     skip_policy_scope
@@ -9,11 +9,11 @@ class Managers::SchoolPeriodsController < ApplicationController
   end
 
   def create
-    @academy = Academy.find(params[:academy_id])
+    @academy = Academy.find(params[:academy])
     @school_period = @academy.school_periods.build(school_period_params)
     authorize([:managers, @school_period])
     if @school_period.save
-      redirect_to managers_academy_school_periods_path(@academy)
+      redirect_to managers_school_periods_path(academy: @academy)
       flash[:notice] = "Période scolaire créée"
     else
       render :new, status: :unprocessable_entity
@@ -47,13 +47,12 @@ class Managers::SchoolPeriodsController < ApplicationController
     @categories = @school_period.categories.uniq.sort_by { |category| @school_period.number_of_students_by_category(category) }.reverse
   end
 
-
   def destroy
     @school_period = SchoolPeriod.find(params[:id])
     @academy = @school_period.academy
     authorize([:managers, @school_period])
     @school_period.destroy
-    redirect_to managers_academy_school_periods_path(@academy)
+    redirect_to managers_school_periods_path(academy: @academy)
     flash[:notice] = "Période scolaire supprimée"
   end
 

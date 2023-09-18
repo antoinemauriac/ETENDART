@@ -65,6 +65,7 @@ class Managers::CoursesController < ApplicationController
         enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
         student = enrollment.student
 
+      if school_period
         if school_period.paid == true
           camp_enrollment = student.camp_enrollments.find_by(camp: course.activity.camp)
           camp_enrollment&.update(has_paid: enrollment_params[1][:has_paid])
@@ -85,6 +86,7 @@ class Managers::CoursesController < ApplicationController
             unban_because_of_late(student, camp_enrollment)
           end
         end
+      end
 
         enrollment.update(present: enrollment_params[1][:present].to_i)
       end

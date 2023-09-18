@@ -40,6 +40,10 @@ class Managers::ActivityPolicy < ApplicationPolicy
     user.manager? && record.annual_program.academy.manager == user
   end
 
+  def all_annual_courses?
+    user.manager? && record.annual_program.academy.manager == user
+  end
+
   class Scope < Scope
     def resolve
 
