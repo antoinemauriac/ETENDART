@@ -36,6 +36,7 @@ class Managers::ActivitiesController < ApplicationController
 
     if validate_start_time_before_end_time
       if @activity.save
+        activity.update(annual: false)
         create_courses_for_activity(@activity, coach, days)
 
         redirect_to managers_camp_path(@camp), notice: "Activité créée"
@@ -56,6 +57,7 @@ class Managers::ActivitiesController < ApplicationController
 
     authorize([:managers, activity])
     if activity.save
+      activity.update(annual: true)
       create_annual_courses_for_activity(params, activity, annual_program, coach)
       redirect_to managers_annual_program_path(annual_program), notice: "Activité créée"
     else
@@ -177,7 +179,7 @@ class Managers::ActivitiesController < ApplicationController
       start_datetime = Time.zone.local(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec)
       end_datetime = Time.zone.local(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec)
 
-      Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach)
+      Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach, annual: false)
     end
   end
 
@@ -202,7 +204,7 @@ class Managers::ActivitiesController < ApplicationController
     specific_days = annual_program.find_all_specific_days(params[:activity][:day_attributes][:day])
 
     specific_days.each do |day|
-      Course.create(activity: activity, starts_at: day + start_time.to_i.hours, ends_at: day + end_time.to_i.hours, manager: current_user, coach: coach)
+      Course.create(activity: activity, starts_at: day + start_time.to_i.hours, ends_at: day + end_time.to_i.hours, manager: current_user, coach: coach, annual: true)
     end
   end
 end

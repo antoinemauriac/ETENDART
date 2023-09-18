@@ -50,11 +50,17 @@
 # saint_quentin.image.attach(io: saint_quentin_image, filename: 'saint-quentin-court.jpg', content_type: 'image/jpg')
 # saint_quentin.save
 
-# celine = User.find_by(email: 'celine@etendart.org')
+
 # eole = Academy.create!(name: 'Éole', manager: celine)
 # eole_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1687172446/etendart/scsq3kipduarl3dobesk.jpg')
 # eole.image.attach(io: eole_image, filename: 'eole-court.jpg', content_type: 'image/jpg')
 # eole.save
+
+# celine = User.find_by(email: 'celine@etendart.org')
+# clichy_levallois = Academy.create!(name: 'Clichy-Levallois', manager: celine, annual: true)
+# clichy_levallois_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1695041073/etendart/ii2atulzrgap7rwikcbw.png')
+# clichy_levallois.image.attach(io: clichy_levallois_image, filename: 'clichy-levallois.png', content_type: 'image/png')
+# clichy_levallois.save
 
 
 

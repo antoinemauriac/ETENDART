@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_18_103632) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_18_125900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -73,6 +73,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_18_103632) do
     t.text "days"
     t.bigint "location_id", null: false
     t.bigint "annual_program_id"
+    t.boolean "annual", default: false
     t.index ["annual_program_id"], name: "index_activities_on_annual_program_id"
     t.index ["camp_id"], name: "index_activities_on_camp_id"
     t.index ["category_id"], name: "index_activities_on_category_id"
