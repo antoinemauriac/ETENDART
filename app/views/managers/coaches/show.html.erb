@@ -38,6 +38,9 @@
           <%= form.label :category_2_id, "Catégorie 2 (optionnel) :" %>
           <%= form.collection_select :category_2_id, @categories, :id, :name, { selected: @category2, include_blank: true }, { class: "form-control" } %>
 
+          <%= form.label :category_3_id, "Catégorie 3 (optionnel) :" %>
+          <%= form.collection_select :category_3_id, @categories, :id, :name, { selected: @category3, include_blank: true }, { class: "form-control" } %>
+
         <div class="flexy">
           <%= form.submit "Mettre à jour", class: "btn-etendart-yellow" %>
         </div>

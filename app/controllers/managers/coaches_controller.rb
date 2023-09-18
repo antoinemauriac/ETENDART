@@ -19,6 +19,7 @@ class Managers::CoachesController < ApplicationController
     @academy3 = academies_ordered.third ? academies_ordered.third.id : ""
     @category1 = @coach.categories.first ? @coach.categories.first.id : ""
     @category2 = @coach.categories.second ? @coach.categories.second.id : ""
+    @category3 = @coach.categories.third ? @coach.categories.third.id : ""
     @academy = Academy.find(params[:academy_id])
   end
 
@@ -42,6 +43,7 @@ class Managers::CoachesController < ApplicationController
       @coach.academies_as_coach << Academy.find(params[:user][:academy_3_id]) if params[:user][:academy_3_id].present?
       @coach.categories << Category.find(params[:user][:category_1_id])
       @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
+      @coach.categories << Category.find(params[:user][:category_3_id]) if params[:user][:category_3_id].present?
 
       @coach.update(status: "creation")
       # Envoie l'e-mail avec le lien de réinitialisation de mot de passe
@@ -80,6 +82,7 @@ class Managers::CoachesController < ApplicationController
     @coach.categories.clear
     @coach.categories << Category.find(params[:user][:category_1_id])
     @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
+    @coach.categories << Category.find(params[:user][:category_3_id]) if params[:user][:category_3_id].present?
     flash[:notice] = "Coach mis à jour."
     redirect_to managers_coach_path(@coach)
   end

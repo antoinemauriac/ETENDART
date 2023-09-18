@@ -13,6 +13,7 @@
         <th>Email</th>
         <th>Categorie 1</th>
         <th>Categorie 2</th>
+        <th>Categorie 3</th>
         <th>Académie 1</th>
         <th>Académie 2</th>
         <th>Académie 3</th>
@@ -26,6 +27,7 @@
           <td><%= coach.email %></td>
           <td><%= coach.categories[0].name if coach.categories.present? %></td>
           <td><%= coach.categories[1].name if coach.categories[1] %></td>
+          <td><%= coach.categories[2].name if coach.categories[2] %></td>
           <td><%= coach.academies_as_coach.first.name %></td>
           <td><%= coach.academies_as_coach.second.name if coach.academies_as_coach.second %></td>
           <td><%= coach.academies_as_coach.third.name if coach.academies_as_coach.third %></td>
