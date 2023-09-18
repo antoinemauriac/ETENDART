@@ -27,6 +27,9 @@ class Student < ApplicationRecord
 
   has_many :feedbacks, dependent: :destroy
 
+  has_many :annual_program_enrollments, dependent: :destroy
+  has_many :annual_programs, through: :annual_program_enrollments
+
   def full_name
     if first_name && last_name
       "#{first_name} #{last_name}"
@@ -157,10 +160,21 @@ class Student < ApplicationRecord
         .where(camp_enrollments: { banished: false, student_id: id })
   end
 
-  def next_activities
+  def next_courses_by_activity(activity)
+    courses.where('starts_at > ?', Time.current)
+            .where(activity_id: activity.id)
+            .order(starts_at: :asc)
+  end
+
+  def next_camp_activities
     activities.joins(:camp).merge(active_camps)
               .where('camps.ends_at > ?', Time.current)
               .order('camps.starts_at ASC')
+  end
+
+  def next_annual_activities
+    activities.joins(:annual_program)
+              .where('annual_programs.end_year >= ?', Date.current.year)
   end
 
   def self.today_absent_students(manager)

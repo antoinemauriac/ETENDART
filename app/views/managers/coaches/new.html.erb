@@ -1,7 +1,7 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
-  <div class="header-nav-item"><%= link_to "LES COACHS", managers_academy_coaches_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES COACHS", managers_coaches_path(academy: @academy) %></div>
   <div class="header-nav-item active">NOUVEAU COACH</div>
 </div>
 <div class="yellow-title">AJOUTER UN COACH</div>
@@ -14,6 +14,7 @@
       <%= form.input :email, label: "Email :", required: true, input_html: { class: "form-control" } %>
       <%= form.input :academy_1_id, label: "Académie 1 :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, required: true, input_html: { class: "form-control", validate: ["not_blank"] } %>
       <%= form.input :academy_2_id, label: "Académie 2 (optionnel) :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
+      <%= form.input :academy_3_id, label: "Académie 3 (optionnel) :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
     </div>
     <div class="col-6">
       <%= form.input :first_name, label: "Prénom :", required: true, input_html: { class: "form-control" } %>
@@ -23,7 +24,7 @@
     </div>
     <div class="flex-btn">
       <%= form.button :submit, "Valider", class: "btn-etendart" %>
-      <%= link_to "Annuler", managers_academy_coaches_path(@academy), class: "btn-etendart-black" %>
+      <%= link_to "Annuler", managers_coaches_path(academy: @academy), class: "btn-etendart-black" %>
     </div>
     <% end %>
   </div>

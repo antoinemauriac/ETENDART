@@ -1,0 +1,41 @@
+<%= render "shared/academy_header" %>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item active">LES PROGRAMMES</div>
+</div>
+
+<div class="yellow-title">LES PROGRAMMES</div>
+<div class="container" data-controller="clickable-table">
+  <table class="table table-striped table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Académie</th>
+        <th>Année</th>
+        <th>Élèves inscrits</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @annual_programs.each do |annual_program| %>
+      <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_annual_program_path(annual_program) %>">
+        <td><%= annual_program.academy.name %></td>
+        <td><%= annual_program.start_year %> - <%= annual_program.end_year %></td>
+        <td>100</td>
+        <td>
+        <% if !annual_program.started? %>
+          <%= link_to managers_annual_program_path(annual_program), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce programme ?" } do %>
+            <i class="fas fa-trash trash"></i>
+          <% end %>
+        <% end %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="text-center">
+    <%= link_to new_managers_annual_program_path(academy: @academy), class: "btn-etendart-square" do %>
+      <i class="fas fa-plus"></i> CRÉER UN PROGRAMME
+    <% end %>
+  </div>
+</div>

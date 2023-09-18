@@ -1,0 +1,73 @@
+<%= render "shared/academy_header" %>
+
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES PROGRAMMES", managers_annual_programs_path(academy: @academy) %></div>
+  <div class="header-nav-item active"><%= @annual_program.start_year %> - <%= @annual_program.end_year %></div>
+</div>
+
+<div class="yellow-title">LES ACTIVITÉS</div>
+
+<div class="container">
+  <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
+    <thead>
+      <tr>
+        <th>Activité</th>
+        <th>Jour</th>
+        <th>Heure</th>
+        <th>Catégorie</th>
+        <th>Lieu</th>
+        <th>Coach Référent</th>
+        <th>Nb inscrits</th>
+        <th><i class="fas fa-trash trash"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @activities.each do |activity| %>
+        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activities_path(activity: activity) %>">
+          <td><%= activity.name %></td>
+          <td><%= l(activity.courses.first.starts_at, format: :day_name ) %></td>
+          <td><%= l(activity.courses.first.starts_at, format: :hour ) %></td>
+          <td><%= activity.category.name %></td>
+          <td><%= activity.location.name %></td>
+          <td><%= activity.lead_coach.try(:full_name) || "" %></td>
+          <td><%= activity.students.count %></td>
+
+          <% if activity.can_delete? %>
+            <td>
+              <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
+                <i class="fas fa-trash trash"></i>
+              <% end %>
+            </td>
+          <% else %>
+            <td></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="flexy">
+    <%= link_to "AJOUTER UNE ACTIVITÉ", new_for_annual_managers_activities_path(annual_program: @annual_program), class: "btn-etendart-square" %>
+  </div>
+</div>
+
+<div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
+
+<% if @annual_program.can_import? %>
+  <div class="flexy" data-controller="import-csv">
+    <div class="loader d-none" data-import-csv-target="spinner"></div>
+    <div class="container flexy">
+      <div class="form-container">
+        <%= simple_form_for(@annual_program.academy, url: managers_import_annual_students_path(annual_program: @annual_program), method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+          <%= form.input :annual_program_id, as: :hidden, input_html: { value: @annual_program.id } %>
+          <div class="form-group">
+            <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
+          </div>
+          <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <p class="text-center">Vous ne pouvez plus importer de fichier csv pour ce programme</p>
+<% end %>

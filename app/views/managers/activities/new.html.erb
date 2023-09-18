@@ -1,7 +1,8 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
-  <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@camp.academy, @camp.school_period) %></div>
-  <div class="header-nav-item"><%= link_to "#{@camp.school_period.name.upcase} - #{@camp.school_period.year}", managers_school_period_path(@camp.academy, @camp.school_period) %></div>
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES STAGES", managers_school_periods_path(academy: @academy) %></div>
+  <div class="header-nav-item"><%= link_to "#{@school_period.name.upcase} - #{@school_period.year}", managers_school_period_path(@school_period) %></div>
   <div class="header-nav-item"><%= link_to @camp.name.upcase, managers_camp_path(@camp) %></div>
   <div class="header-nav-item active">NOUVELLE ACTIVITÉ</div>
 </div>
@@ -9,7 +10,7 @@
 
 <div class="flexy container">
   <div class="form-container form-min-width">
-    <%= simple_form_for @activity, url: managers_camp_activities_path(camp_id: @camp.id), method: :post, data: { controller: 'activity-form' } do |f| %>
+    <%= simple_form_for @activity, url: managers_activities_path(camp: @camp), method: :post, data: { controller: 'activity-form' } do |f| %>
       <%= f.input :name, label: "Nom", input_html: { class: "activity-input" } %>
       <%= f.input :category_id, as: :select, collection: Category.all.order(:name), label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", academy_id: @camp.school_period.academy.id, action: 'change->activity-form#onCategoryChange' }, class: "activity-input" } %>
       <div class="d-none" data-activity-form-target="toto">
@@ -17,7 +18,7 @@
         <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: User.all, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select", activity_form_target: "coach" } } %>
       </div>
 
-      <%= f.input :location_id, as: :select, collection: @locations, label: "Adresse", required: true, input_html: { class: "activity-input" }  %>
+      <%= f.input :location_id, as: :select, collection: @locations, label: "Adresse", input_html: { class: "activity-input" }  %>
 
 
       <ul>

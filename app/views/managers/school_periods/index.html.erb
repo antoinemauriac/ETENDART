@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       <% @school_periods.each do |period| %>
-      <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_school_period_path(@academy, period) %>">
+      <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_school_period_path(period) %>">
         <td><%= period.academy.name %></td>
         <td><%= period.name %></td>
         <td><%= period.year %></td>
@@ -37,7 +37,7 @@
   <div data-controller="hidden-forms">
     <div class="flexy">
       <button class="btn-etendart-square" data-action="click->hidden-forms#displaySchoolPeriodForm">AJOUTER UN STAGE</button>
-      <%= form_with(model: @school_period, url: managers_academy_school_periods_path(@academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
+      <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
         <%= form.label :name, "Nom :" %>
         <%= form.text_field :name, { class: "form-control", required: true } %>
         <%= form.label :year, "Année :" %>

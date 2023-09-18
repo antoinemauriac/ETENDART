@@ -10,8 +10,20 @@ application.register("activity-form", ActivityFormController)
 import AddressAutocompleteController from "./address_autocomplete_controller"
 application.register("address-autocomplete", AddressAutocompleteController)
 
+import AnnualCoursesController from "./annual_courses_controller"
+application.register("annual-courses", AnnualCoursesController)
+
+import AnnualEnrollmentsFormController from "./annual_enrollments_form_controller"
+application.register("annual-enrollments-form", AnnualEnrollmentsFormController)
+
+import CampCoursesController from "./camp_courses_controller"
+application.register("camp-courses", CampCoursesController)
+
 import ClickableTableController from "./clickable_table_controller"
 application.register("clickable-table", ClickableTableController)
+
+import DatePickerController from "./date_picker_controller"
+application.register("date-picker", DatePickerController)
 
 import EnrollmentFormController from "./enrollment_form_controller"
 application.register("enrollment-form", EnrollmentFormController)
@@ -33,6 +45,9 @@ application.register("missing-students-table", MissingStudentsTableController)
 
 import NavbarController from "./navbar_controller"
 application.register("navbar", NavbarController)
+
+import PastCampCoursesController from "./past_camp_courses_controller"
+application.register("past-camp-courses", PastCampCoursesController)
 
 import PresenceSheetController from "./presence_sheet_controller"
 application.register("presence-sheet", PresenceSheetController)

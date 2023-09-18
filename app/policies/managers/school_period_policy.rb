@@ -15,6 +15,10 @@ class Managers::SchoolPeriodPolicy < ApplicationPolicy
     user.manager? && record.academy.manager == user
   end
 
+  def statistics?
+    user.manager? && record.academy.manager == user
+  end
+
   def export_bilan_csv?
     user.manager? && record.academy.manager == user
   end

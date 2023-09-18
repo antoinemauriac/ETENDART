@@ -1,14 +1,14 @@
 <div class="student-title"><%= @student.full_name.upcase %></div>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
-  <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_academy_students_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_students_path(academy: @academy) %></div>
   <div class="header-nav-item active"><%= @student.full_name.upcase %></div>
 </div>
 
 
 <div class="row justify-content-center align-items-stretch">
 
-  <div class="col-lg-5 col-sm-12 mt-3" data-controller="upload-photo">
+  <div class="col-lg-7 col-sm-12 mt-3" data-controller="upload-photo">
     <div class="header-info">INFORMATIONS</div>
     <div class="content-info">
       <div class="student-info">
@@ -38,10 +38,22 @@
     </div>
   </div>
 
-  <div class="col-lg-7 col-sm-12 mt-3">
-    <div class="header-info">PROCHAINES ACTIVITÉS</div>
+  <div class="col-lg-5 col-sm-12 mt-3">
+    <div class="header-info">HISTORIQUE</div>
     <div class="content-info">
-      <% if @student.next_activities.empty? %>
+      <div>
+        <p><%= "Nb total stages : #{@student.camps_count}" %></p>
+        <p><%= "Nb de cours passés : #{@student.past_courses_count}" %></p>
+        <p><%= "Nb absences : #{@student.unattended_courses_count}" %></p>
+        <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-sm-12 mt-4">
+    <div class="header-info">PROCHAINES ACTIVITÉS - STAGES</div>
+    <div class="content-info">
+      <% if @next_camp_activities.empty? %>
       <div class="text-center">
         Aucune activité à venir
       </div>
@@ -58,14 +70,14 @@
             </tr>
           </thead>
           <tbody>
-            <% @student.next_activities.each do |activity| %>
+            <% @next_camp_activities.each do |activity| %>
             <tr>
               <td class="align-middle"><%= activity.academy.name %></td>
               <td class="align-middle"><%= activity.school_period.full_name %></td>
               <td class="align-middle"><%= activity.camp.name %></td>
               <td class="align-middle"><%= activity.name %></td>
               <td class="align-middle">
-                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student', origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
                   <i class="fas fa-trash trash"></i>
                 <% end %>
               </td>
@@ -117,14 +129,76 @@
     </div>
   </div>
 
-  <div class="col-lg-4 col-sm-12 mt-4">
-    <div class="header-info">HISTORIQUE</div>
+  <div class="col-lg-6 col-sm-12 mt-4">
+    <div class="header-info">PROCHAINES ACTIVITÉS - PROGRAMME ANNUEL</div>
     <div class="content-info">
+      <% if @next_annual_activities.empty? %>
+      <div class="text-center">
+        Aucune activité à venir
+      </div>
+      <% else %>
       <div>
-        <p><%= "Nb total stages : #{@student.camps_count}" %></p>
-        <p><%= "Nb de cours passés : #{@student.past_courses_count}" %></p>
-        <p><%= "Nb absences : #{@student.unattended_courses_count}" %></p>
-        <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
+        <table class="table table-striped table-responsive table-center">
+          <thead>
+            <tr>
+              <th>Académie</th>
+              <th>Année</th>
+              <th>Activité</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @next_annual_activities.each do |activity| %>
+            <tr>
+              <td class="align-middle"><%= activity.academy.name %></td>
+              <td class="align-middle"><%= activity.annual_program.start_year %> - <%= activity.annual_program.end_year %></td>
+              <td class="align-middle"><%= activity.name %></td>
+              <td class="align-middle">
+                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+                  <i class="fas fa-trash trash"></i>
+                <% end %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% end %>
+      <div data-controller="annual-enrollments-form enrollment-form">
+        <div class="flexy">
+          <button type="button" class="btn-etendart-yellow" data-action="click->enrollment-form#openActivityModal" style="width:300px">
+            Inscrire à une activité
+          </button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" data-enrollment-form-target="activityModal" tabindex="-1" >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= "Inscription de ZOZO" %></h5>
+                <i class="fas fa-times" data-action="click->enrollment-form#closeActivityModal" style="cursor: pointer;"></i>
+              </div>
+              <div class="modal-body">
+                <%= form_with url: managers_annual_enrollments_path, local: true do |form| %>
+                    <%= form.hidden_field :student_id, value: @student.id %>
+
+                    <%= form.label :academy, "Académie" %>
+                    <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'academy', action: "change->annual-enrollments-form#updateAnnualPrograms" } } %>
+
+                    <%= form.label :annual_program, "Programme" %>
+                    <%= form.collection_select :annual_program, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'annualProgram', action: "change->annual-enrollments-form#updateActivities" } } %>
+
+                    <%= form.label :activity, "Activité" %>
+                    <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'activity' } } %>
+                    <div class="d-flex justify-content-around mt-3">
+                      <%= form.submit "Valider", class: "btn-etendart" %>
+                      <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
+                    </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -184,38 +258,81 @@
     </div>
   </div>
 
-  <div class="col-12 mt-4">
-    <div class="header-info">COURS A VENIR</div>
+  <div data-controller="camp-courses" data-camp-courses-target="header" class="col-6 mt-4">
+    <div class="header-info">COURS A VENIR - STAGES</div>
     <div class="content-info">
-      <table class="table table-responsive table-striped table-center">
-        <thead>
-          <tr>
-            <th>Academie</th>
-            <th>Stage</th>
-            <th>Semaine</th>
-            <th>Activité</th>
-            <th>Jour</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @student.next_courses.each do |course| %>
+      <% if @next_camp_courses.empty? %>
+        <div class="text-center">
+          Aucun cours à venir
+        </div>
+      <% else %>
+        <table data-camp-courses-target="table" class="table table-responsive table-striped table-center show-more">
+          <thead>
             <tr>
-              <td class="align-middle"><%= course.academy.name %></td>
-              <td class="align-middle"><%= course.school_period.full_name %></td>
-              <td class="align-middle"><%= course.camp.name %></td>
-              <td class="align-middle"><%= course.activity.name %></td>
-              <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
+              <th>Academie</th>
+              <th>Stage</th>
+              <th>Semaine</th>
+              <th>Activité</th>
+              <th>Jour</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @next_camp_courses.each do |course| %>
+              <tr>
+                <td class="align-middle"><%= course.academy.name %></td>
+                <td class="align-middle"><%= course.school_period.full_name %></td>
+                <td class="align-middle"><%= course.camp.name %></td>
+                <td class="align-middle"><%= course.activity.name %></td>
+                <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="flexy">
+          <button data-action="click->camp-courses#toggleTable" data-camp-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div data-controller="annual-courses" data-annual-courses-target="header" class="col-6 mt-4">
+    <div class="header-info">COURS A VENIR - PROGRAMME ANNUEL</div>
+    <div class="content-info">
+      <% if @next_annual_courses.empty? %>
+        <div class="text-center">
+          Aucun cours à venir
+        </div>
+      <% else %>
+        <table data-annual-courses-target="table" class="table table-responsive table-striped table-center show-more">
+          <thead>
+            <tr>
+              <th>Academie</th>
+              <th>Année</th>
+              <th>Activité</th>
+              <th>Jour</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @next_annual_courses.each do |course| %>
+              <tr>
+                <td class="align-middle"><%= course.academy.name %></td>
+                <td class="align-middle"><%= course.annual_program.start_year %> - <%= course.annual_program.end_year %></td>
+                <td class="align-middle"><%= course.activity.name %></td>
+                <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="flexy">
+          <button data-action="click->annual-courses#toggleTable" data-annual-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+        </div>
+      <% end %>
     </div>
   </div>
 
-  <div class="col-12 mt-4">
+  <div data-controller="past-camp-courses" data-past-camp-courses-target="header" class="col-12 mt-4">
     <div class="header-info">COURS PASSÉS</div>
     <div class="content-info">
-      <table class="table table-responsive table-striped table-center">
+      <table data-past-camp-courses-target="table" class="table table-responsive table-center show-more">
         <thead>
           <tr>
             <th>Academie</th>
@@ -227,7 +344,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @student.past_courses.each do |course| %>
+          <% @past_camp_courses.each do |course| %>
             <tr style="<%= course.student_presence(@student) ? '' : 'background-color: orange !important;' %>">
               <td class="align-middle"><%= course.academy.name %></td>
               <td class="align-middle"><%= course.school_period.full_name %></td>
@@ -239,6 +356,39 @@
           <% end %>
         </tbody>
       </table>
+      <div class="flexy">
+        <button data-action="click->past-camp-courses#toggleTable" data-past-camp-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+      </div>
+    </div>
+  </div>
+  <div data-controller="past-annual-courses" data-past-annual-courses-target="header" class="col-12 mt-4">
+    <div class="header-info">COURS PASSÉS - PROGRAMME ANNUEL</div>
+    <div class="content-info">
+      <table data-past-annual-courses-target="table" class="table table-responsive table-center show-more">
+        <thead>
+          <tr>
+            <th>Academie</th>
+            <th>Programme</th>
+            <th>Activité</th>
+            <th>Jour</th>
+            <th>Présent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @past_annual_courses.each do |course| %>
+            <tr style="<%= course.student_presence(@student) ? '' : 'background-color: orange !important;' %>">
+              <td class="align-middle"><%= course.academy.name %></td>
+              <td class="align-middle"><%= course.annual_program.start_year %> - <%= course.annual_program.end_year %></td>
+              <td class="align-middle"><%= course.activity.name %></td>
+              <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
+              <td class="align-middle"><%= course.student_presence(@student) ? 'présent' : 'absent' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="flexy">
+        <button data-action="click->past-annual-courses#toggleTable" data-past-annual-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+      </div>
     </div>
   </div>
 

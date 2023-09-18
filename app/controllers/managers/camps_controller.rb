@@ -1,7 +1,8 @@
 class Managers::CampsController < ApplicationController
   def show
     @camp = Camp.find(params[:id])
-    @academy = @camp.school_period.academy
+    @school_period = @camp.school_period
+    @academy = @school_period.academy
     authorize([:managers, @camp])
     @activities = @camp.activities
     @activity = Activity.new
@@ -10,7 +11,7 @@ class Managers::CampsController < ApplicationController
 
   def create
     @camp = Camp.new(camp_params)
-    @camp.school_period = SchoolPeriod.find(params[:school_period_id])
+    @camp.school_period = SchoolPeriod.find(params[:school_period])
     authorize([:managers, @camp])
 
     if @camp.save
@@ -28,9 +29,7 @@ class Managers::CampsController < ApplicationController
     school_period_enrollments = SchoolPeriodEnrollment.where(school_period: @camp.school_period)
     school_period_enrollments.each do |school_period_enrollment|
       camps = school_period_enrollment.student.camps.where(school_period: @camp.school_period)
-      if camps == [@camp]
-        school_period_enrollment.destroy
-      end
+      school_period_enrollment.destroy if camps == [@camp]
     end
     @camp.destroy
     redirect_to managers_school_period_path(@camp.school_period)

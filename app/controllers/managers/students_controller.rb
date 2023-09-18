@@ -3,7 +3,7 @@ class Managers::StudentsController < ApplicationController
   require 'open-uri'
 
   def index
-    @academy = Academy.find(params[:academy_id])
+    @academy = Academy.find(params[:academy])
     @students = Student.joins(academy_enrollments: :academy)
                        .where(academies: @academy)
                        .distinct
@@ -17,6 +17,14 @@ class Managers::StudentsController < ApplicationController
     @academies = current_user.academies_as_manager
     @academy = Academy.find(params[:academy_id])
     @feedback = Feedback.new
+    @next_camp_activities = @student.next_camp_activities.reject { |activity| @student.next_courses_by_activity(activity).empty? }
+    @next_annual_activities = @student.next_annual_activities.reject { |activity| @student.next_courses_by_activity(activity).empty? }
+    next_courses = @student.next_courses
+    @next_annual_courses = next_courses.select(&:annual_program)
+    @next_camp_courses = next_courses.select(&:camp)
+    past_courses = @student.past_courses
+    @past_annual_courses = past_courses.select(&:annual_program)
+    @past_camp_courses = past_courses.select(&:camp)
   end
 
   def new

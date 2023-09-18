@@ -1,21 +1,32 @@
 <%= render "shared/academy_header" %>
 
+<% if @school_period %>
 <div class="header-nav">
-  <div class="header-nav-item"><%= link_to @course.academy.name.upcase, managers_academy_path(@course.academy) %></div>
-  <div class="header-nav-item"><%= link_to "LES STAGES", managers_academy_school_periods_path(@course.academy, @course.school_period) %></div>
-  <div class="header-nav-item"><%= link_to "#{@course.school_period.name.upcase} - #{@course.school_period.year}", managers_school_period_path(@course.academy, @course.school_period) %></div>
-  <div class="header-nav-item"><%= link_to @course.camp.name.upcase, managers_camp_path(@course.camp) %></div>
-  <div class="header-nav-item"><%= link_to @course.activity.name.upcase, managers_activity_path(@course.activity) %></div>
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES STAGES", managers_school_periods_path(academy: @academy) %></div>
+  <div class="header-nav-item"><%= link_to "#{@school_period.name.upcase} - #{@school_period.year}", managers_school_period_path(@school_period) %></div>
+  <div class="header-nav-item"><%= link_to @camp.name.upcase, managers_camp_path(@camp) %></div>
+  <div class="header-nav-item"><%= link_to @activity.name.upcase, managers_activity_path(@activity) %></div>
   <div class="header-nav-item active"><%= l(@course.starts_at, format: :default) %></div>
 </div>
+<% else %>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES PROGRAMMES", managers_annual_programs_path(academy: @academy) %></div>
+  <div class="header-nav-item"><%= link_to "#{@annual_program.start_year} - #{@annual_program.end_year}", managers_annual_program_path(@annual_program)  %></div>
+  <div class="header-nav-item"><%= link_to @activity.name.upcase, show_for_annual_managers_activities_path(activity: @activity) %></div>
+  <div class="header-nav-item active"><%= l(@course.starts_at, format: :default) %></div>
+</div>
+<% end %>
+
 <div class="yellow-title mb-0">FEUILLE D'APPEL</div>
-<div class="black-title"><%= @course.activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %></div>
+<div class="black-title"><%= @activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %></div>
 
 <div class="flexy justify-content-center presence-sheet-container">
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
     <div class="header-info">INFOS</div>
     <div class="content-info">
-      <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
+      <p>ADRESSE : <strong><%= @activity.location.address %> - <%= @activity.location.city %></strong></p>
       <p>NB ÉLÈVES ATTENDUS: <strong><%= @course.students.count %></strong></p>
       <% if @course.status %>
         <p class="green-text">NB PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
@@ -48,7 +59,7 @@
             <% if false %>
               <th class="presence-head" style="text-align:center"></th>
             <% end %>
-            <% if @school_period.paid %>
+            <% if @school_period && @school_period.paid %>
               <th class="presence-head" style="text-align:center">A payé ?</th>
             <% end %>
           </tr>
@@ -73,7 +84,7 @@
               <% if false %>
                 <td class="align-middle"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
               <% end %>
-              <% if @school_period.paid %>
+              <% if @school_period && @school_period.paid %>
                 <td class="align-middle">
                   <div class="has-paid">
                     <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", id: "has-paid-#{enrollment.id}", checked: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>

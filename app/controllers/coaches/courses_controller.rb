@@ -4,7 +4,6 @@ class Coaches::CoursesController < ApplicationController
 
   def index
     @coach = current_user
-    @current_time = Time.current
     @next_courses = @coach.next_courses
     @past_courses = @coach.past_courses
     skip_policy_scope

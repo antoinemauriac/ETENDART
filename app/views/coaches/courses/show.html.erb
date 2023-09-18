@@ -38,7 +38,7 @@
             <% if false %>
               <th class="presence-head" style="text-align:center"></th>
             <% end %>
-            <% if @school_period.paid %>
+            <% if @school_period && @school_period.paid %>
               <th class="presence-head" style="text-align:center">A payé ?</th>
             <% end %>
           </tr>
@@ -67,7 +67,7 @@
               <% if false %>
                 <td class="align-middle"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
               <% end %>
-              <% if @school_period.paid %>
+              <% if @school_period && @school_period.paid %>
                 <td class="align-middle">
                   <div class="has-paid">
                     <% if enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp).has_paid %>
@@ -89,7 +89,7 @@
     <% end %>
   </div>
 
-  <% if @academy.name == "Rudy Gobert" %>
+  <% if @school_period && @academy.name == "Rudy Gobert" %>
     <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
       <div class="header-info header-info-coach">ÉLÈVES EXCLUS</div>
       <div class="content-info content-info-coach">

@@ -1,13 +1,13 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
-  <div class="header-nav-item"><%= link_to "LES ADRESSES", managers_academy_locations_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES ADRESSES", managers_locations_path(academy: @academy) %></div>
   <div class="header-nav-item active"><%= @location.name.upcase %></div>
 </div>
 <div class="yellow-title">MODIFIER UNE ADRESSE</div>
 
 <div class="flexy">
-  <%= simple_form_for(@location, method: :put, url: managers_academy_location_path(@academy, @location), html: {class: "form-container", style: "width: 500px;"}) do |form| %>
+  <%= simple_form_for(@location, method: :put, url: managers_location_path(@location, academy: @academy), html: {class: "form-container", style: "width: 500px;"}) do |form| %>
     <div class="form-group">
       <%= form.input :name, class: "form-control", required: true %>
     </div>
@@ -18,7 +18,7 @@
 
     <div class="flex-btn">
       <%= form.submit "Valider", class: "btn-etendart" %>
-      <%= link_to "Annuler", managers_academy_locations_path(@academy), class: "btn-etendart-black" %>
+      <%= link_to "Annuler", managers_locations_path(academy: @academy), class: "btn-etendart-black" %>
     </div>
   <% end %>
 </div>

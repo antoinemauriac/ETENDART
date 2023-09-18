@@ -8,9 +8,12 @@ class Activity < ApplicationRecord
     Vendredi: { start_time: nil, end_time: nil }
   }
 
-  belongs_to :camp
+  belongs_to :camp, optional: true
   has_one :school_period, through: :camp
-  has_one :academy, through: :school_period
+  # has_one :academy, through: :school_period
+
+  belongs_to :annual_program, optional: true
+
   belongs_to :category
   # belongs_to :lead_coach, class_name: 'User', foreign_key: :coach_id
   has_many :courses, dependent: :destroy
@@ -21,14 +24,25 @@ class Activity < ApplicationRecord
 
   validates :name, presence: true
   validates :category_id, presence: true
+  validates :location_id, presence: true
   # validates :coach_id, presence: true
 
   has_many :activity_enrollments, dependent: :destroy
   has_many :students, through: :activity_enrollments
   # has_many :days
-  # accepts_nested_attributes_for :days
+
   has_many :activity_coaches, dependent: :destroy
   has_many :coaches, through: :activity_coaches, source: :coach
+
+  def academy
+    if camp
+      camp.academy
+    elsif annual_program
+      annual_program.academy
+    else
+      nil
+    end
+  end
 
   def lead_coach
     if coach_id.nil?
@@ -41,6 +55,17 @@ class Activity < ApplicationRecord
   def all_coaches
     coaches << lead_coach
     coaches.uniq
+  end
+
+  def day_of_activity
+    first_course = courses.first
+    return "No day assigned" unless first_course&.starts_at
+
+    first_course.starts_at.strftime("%A")
+  end
+
+  def next_courses
+    courses.where("starts_at > ?", Time.current).order(:starts_at)
   end
 
   def banished_students
@@ -93,11 +118,20 @@ class Activity < ApplicationRecord
   end
 
   def can_delete?
-    if camp.starts_at
-      camp.starts_at > Date.today
+    if camp
+      if camp.starts_at
+        camp.starts_at > Date.today
+      else
+        true
+      end
+    elsif annual_program
+      if annual_program.program_periods.first.start_date
+        annual_program.program_periods.first.start_date > Date.today
+      else
+        true
+      end
     else
       true
     end
   end
-
 end

@@ -9,7 +9,7 @@ class Managers::ImportStudentsController < ApplicationController
     file = File.open(file)
     csv = CSV.parse(file, headers: true, col_sep: ';')
 
-    SchoolPeriodEnrollment.where(school_period: school_period).each do |school_period_enrollment|
+    school_period.school_period_enrollments.each do |school_period_enrollment|
       camps = school_period_enrollment.student.camps.where(school_period: school_period)
       if camps == [camp] || camps.empty?
         school_period_enrollment.destroy

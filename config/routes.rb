@@ -19,23 +19,20 @@ Rails.application.routes.draw do
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # import student from csv
-  # post '/managers/students/import', to: 'managers/students#import'
-
   # coach stiumulus controller
   get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'
-
-  # création compte coach
-  # get 'coaches/change_password/:token', to: 'coaches#change_password', as: :coaches_change_password
-  # get 'coaches/change_password/:token', to: 'managers/coaches#change_password', as: :coaches_change_password
-
   # enrollment stiumulus controller
   get '/managers/enrollments/:academy_id/update_school_periods', to: 'managers/enrollments#update_school_periods'
   get '/managers/enrollments/:school_period_id/update_camps', to: 'managers/enrollments#update_camps'
   get '/managers/enrollments/:camp_id/update_activities', to: 'managers/enrollments#update_activities'
-
+  # annual_enrollment stimulus controller
+  get '/managers/annual_enrollments/:academy_id/update_annual_programs', to: 'managers/annual_enrollments#update_annual_programs'
+  get '/managers/annual_enrollments/:annual_program_id/update_activities', to: 'managers/annual_enrollments#update_activities'
 
   namespace :managers do
+    post 'import_students', to: 'import_students#import'
+    post 'import_annual_students', to: 'import_annual_students#import'
+
     resources :courses, only: %i[index show edit update destroy] do
       member do
         put :update_enrollments
@@ -43,56 +40,56 @@ Rails.application.routes.draw do
       end
     end
 
-    post 'import_students', to: 'import_students#import'
-
-    resources :students, only: %i[show new create edit update] do
+    resources :students, only: %i[show new create edit update index] do
       member do
         put :update_photo
       end
     end
-    resources :feedbacks, only: %i[new create]
-    resources :activity_enrollments, only: %i[destroy]
-    resources :activities, only: %i[show destroy update]
-    resources :school_periods, only: %i[show destroy] do
-      resources :camps, only: %i[new create]
+
+    resources :activities, only: %i[new create show destroy update] do
+      collection do
+        get 'new_for_annual'
+        post 'create_for_annual'
+        get 'show_for_annual'
+      end
+      member do
+        get :all_annual_courses
+      end
     end
-    resources :categories, only: %i[index create edit update destroy]
-    resources :locations, only: %i[show]
-    resources :coaches, except: %i[index]
-    resources :enrollments, only: %i[new create]
+
+    resources :school_periods, only: %i[new create index show destroy] do
+      member do
+        get :statistics
+        get :export_bilan_csv
+      end
+    end
 
     resources :academies, only: %i[show index] do
       member do
         get :export_absent_students_csv
         get :all_absent_students
       end
-      resources :school_periods, only: %i[new create index]
-      resources :locations, only: %i[create index edit update]
-      resources :students, only: %i[index]
-      resources :coaches, only: %i[index]
     end
 
-    resources :camps, only: %i[show destroy] do
-      resources :activities, only: %i[new create]
-    end
-
-    resources :camps do
+    resources :camps, only: %i[new create show destroy] do
       member do
         get :export_students_csv
         get :export_banished_students_csv
       end
     end
-    resources :school_periods do
-      get :export_bilan_csv, on: :member
-    end
+    resources :annual_enrollments, only: %i[create]
+    resources :feedbacks, only: %i[new create]
+    resources :activity_enrollments, only: %i[destroy]
+    resources :categories, only: %i[index create edit update destroy]
+    resources :locations, only: %i[show]
+    resources :coaches
+    resources :enrollments, only: %i[new create]
+    resources :annual_programs, only: %i[show index new create destroy]
+    resources :locations, only: %i[create index edit update]
   end
 
   namespace :coaches do
     resources :courses, only: %i[index show]
-    #   member do
-    #     put :update_enrollments
-    #   end
-    # end
     resources :student_profiles, only: %i[show index]
     resources :feedbacks, only: %i[new create]
   end

@@ -6,7 +6,15 @@ class Managers::ActivitiesController < ApplicationController
     @school_period = camp.school_period
     @academy = @school_period.academy
     @locations = @academy.locations
-    authorize([:managers, Activity.new])
+    authorize([:managers, @activity])
+  end
+
+  def new_for_annual
+    @activity = Activity.new
+    @annual_program = AnnualProgram.find(params[:annual_program])
+    @academy = @annual_program.academy
+    @locations = @academy.locations
+    authorize([:managers, @activity])
   end
 
   def create
@@ -41,6 +49,21 @@ class Managers::ActivitiesController < ApplicationController
     end
   end
 
+  def create_for_annual
+    annual_program = AnnualProgram.find(params[:annual_program])
+    activity = annual_program.activities.build(activity_params)
+    coach = User.find_by_id(params[:activity][:coach_id])
+
+    authorize([:managers, activity])
+    if activity.save
+      create_annual_courses_for_activity(params, activity, annual_program, coach)
+      redirect_to managers_annual_program_path(annual_program), notice: "Activité créée"
+    else
+      flash[:alert] = "Une erreur est survenue"
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   def show
     @activity = Activity.find(params[:id])
     @academy = @activity.academy
@@ -54,37 +77,67 @@ class Managers::ActivitiesController < ApplicationController
     @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
   end
 
+  def show_for_annual
+    @activity = Activity.find(params[:activity])
+    @academy = @activity.academy
+    @annual_program = @activity.annual_program
+    @students = @activity.students.sort_by(&:last_name)
+    authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
+    @courses = @activity.next_courses.sort_by(&:starts_at).first(3)
+    category = @activity.category
+    @coach = @activity.lead_coach
+    @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
+  end
+
+  def all_annual_courses
+    @activity = Activity.find(params[:id])
+    @courses = @activity.courses.sort_by(&:starts_at)
+    @academy = @activity.academy
+    @annual_program = @activity.annual_program
+    authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
+  end
+
   def update
     @activity = Activity.find(params[:id])
     authorize([:managers, @activity])
 
     if @activity.update(activity_params)
-      # mettre à jour la liste des coaches
+
       coach = User.find_by_id(params[:activity][:coach_id])
       coaches = params[:activity][:coach_ids].reject { |id| id == "" }
       @activity.coaches = []
-      # @activity.coaches << coach if coach
+
       @activity.coaches << User.where(id: coaches) if coaches.any?
 
-      # update le coach de tous les courses
       @activity.courses.each do |course|
         course.update(coach: coach)
       end
-      redirect_to managers_activity_path(@activity), notice: "L'activité a été mise à jour avec succès."
+      if params[:redirect_to] == "camp"
+        redirect_to managers_activity_path(@activity), notice: "L'activité a été mise à jour avec succès."
+      else
+        redirect_to show_for_annual_managers_activities_path(activity: @activity), notice: "L'activité a été mise à jour avec succès."
+      end
     else
       flash.now[:alert] = "Erreur lors de la mise à jour de l'activité."
-      render :show
+      if params[:redirect_to] == "camp"
+        render :show
+      else
+        render :show_for_annual
+      end
     end
   end
-
-
 
   def destroy
     activity = Activity.find(params[:id])
     authorize([:managers, activity])
     activity.destroy
+    if activity.camp
     redirect_to managers_camp_path(activity.camp)
     flash[:notice] = "Activité supprimée"
+    else
+      redirect_to managers_annual_program_path(activity.annual_program)
+      flash[:notice] = "Activité supprimée"
+    end
   end
 
   private
@@ -94,7 +147,7 @@ class Managers::ActivitiesController < ApplicationController
   end
 
   def camp
-    @camp ||= Camp.find(params[:camp_id])
+    @camp ||= Camp.find(params[:camp])
   end
 
   # Les validations sont plutôt à ajouter dans le modèle si elles sont toujours appliqués
@@ -135,5 +188,21 @@ class Managers::ActivitiesController < ApplicationController
       date += 1
     end
     date
+  end
+
+  def create_annual_courses_for_activity(params, activity, annual_program, coach)
+    start_hour = params.dig(:activity, :day_attributes, "start_time(4i)")
+    start_minute = params.dig(:activity, :day_attributes, "start_time(5i)")
+    end_hour = params.dig(:activity, :day_attributes, "end_time(4i)")
+    end_minute = params.dig(:activity, :day_attributes, "end_time(5i)")
+
+    start_time = "#{start_hour}:#{start_minute}"
+    end_time = "#{end_hour}:#{end_minute}"
+
+    specific_days = annual_program.find_all_specific_days(params[:activity][:day_attributes][:day])
+
+    specific_days.each do |day|
+      Course.create(activity: activity, starts_at: day + start_time.to_i.hours, ends_at: day + end_time.to_i.hours, manager: current_user, coach: coach)
+    end
   end
 end
