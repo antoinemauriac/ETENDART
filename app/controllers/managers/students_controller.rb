@@ -38,6 +38,7 @@ class Managers::StudentsController < ApplicationController
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @student.academies << Academy.find(params[:student][:academy1_id])
     @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
+    @student.academies << Academy.find(params[:student][:academy3_id]) if params[:student][:academy3_id].present?
     @academy = Academy.find(params[:student][:academy1_id])
     excel_serial_date = (@student.date_of_birth - Date.new(1899, 12, 30)).to_i
     username = "#{@student.first_name.downcase}#{@student.last_name.downcase}#{excel_serial_date }"
@@ -54,7 +55,8 @@ class Managers::StudentsController < ApplicationController
   def edit
     @student = Student.find(params[:id])
     @academy1 = @student.academies.first if @student.academies.any?
-    @academy2 = @student.academies.second if @student.academies.count == 2
+    @academy2 = @student.academies.second if @student.academies.second
+    @academy3 = @student.academies.third if @student.academies.third
     @academy = @student.first_academy
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
   end
@@ -68,7 +70,7 @@ class Managers::StudentsController < ApplicationController
       flash[:notice] = "Informations modifiées avec succès"
     else
       flash[:error] = "Une erreur est survenue"
-      render :edit, status: :unprocessable_entity
+      redirect_to managers_student_path(@student, academy_id: @student.first_academy.id)
     end
   end
 
@@ -76,6 +78,7 @@ class Managers::StudentsController < ApplicationController
     @student.academies.clear
     @student.academies << Academy.find(params[:student][:academy1_id]) if params[:student][:academy1_id].present?
     @student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
+    @student.academies << Academy.find(params[:student][:academy3_id]) if params[:student][:academy3_id].present?
   end
 
   def update_photo

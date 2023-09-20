@@ -6,7 +6,7 @@ class Student < ApplicationRecord
 
   scope :today_birthday, -> { where('EXTRACT(month FROM date_of_birth) = ? AND EXTRACT(day FROM date_of_birth) = ?', Date.today.month, Date.today.day).order("created_at DESC") }
 
-  attr_accessor :academy1_id, :academy2_id
+  attr_accessor :academy1_id, :academy2_id, :academy3_id
 
   has_one_attached :photo
 

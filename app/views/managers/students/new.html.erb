@@ -1,7 +1,7 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
-  <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_academy_students_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_students_path(academy: @academy) %></div>
   <div class="header-nav-item active">NOUVEL ÉLÈVE</div>
 </div>
 <div class="yellow-title">AJOUTER UN ÉLÈVE</div>
@@ -17,6 +17,7 @@
         <%= form.input :address, label: "Adresse" %>
         <%= form.input :city, label: "Ville" %>
         <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true %>
+        <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true %>
       </div>
       <div class="col-6">
         <%= form.input :first_name, label: "Prénom", required: true %>
