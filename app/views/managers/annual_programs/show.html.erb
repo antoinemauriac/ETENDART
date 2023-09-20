@@ -14,7 +14,8 @@
       <tr>
         <th>Activité</th>
         <th>Jour</th>
-        <th>Heure</th>
+        <th>Début</th>
+        <th>Fin</th>
         <th>Catégorie</th>
         <th>Lieu</th>
         <th>Coach Référent</th>
@@ -27,7 +28,8 @@
         <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activities_path(activity: activity) %>">
           <td><%= activity.name %></td>
           <td><%= l(activity.courses.first.starts_at, format: :day_name ) %></td>
-          <td><%= l(activity.courses.first.starts_at, format: :hour ) %></td>
+          <td><%= l(activity.courses.first.starts_at, format: :hour_min ) %></td>
+          <td><%= l(activity.courses.first.ends_at, format: :hour_min ) %></td>
           <td><%= activity.category.name %></td>
           <td><%= activity.location.name %></td>
           <td><%= activity.lead_coach.try(:full_name) || "" %></td>

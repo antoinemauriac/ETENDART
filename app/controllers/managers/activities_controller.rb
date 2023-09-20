@@ -192,19 +192,31 @@ class Managers::ActivitiesController < ApplicationController
     date
   end
 
-  def create_annual_courses_for_activity(params, activity, annual_program, coach)
-    start_hour = params.dig(:activity, :day_attributes, "start_time(4i)")
-    start_minute = params.dig(:activity, :day_attributes, "start_time(5i)")
-    end_hour = params.dig(:activity, :day_attributes, "end_time(4i)")
-    end_minute = params.dig(:activity, :day_attributes, "end_time(5i)")
+  # def create_annual_courses_for_activity(params, activity, annual_program, coach)
+  #   start_hour = params.dig(:activity, :day_attributes, "start_time(4i)")
+  #   start_minute = params.dig(:activity, :day_attributes, "start_time(5i)")
+  #   end_hour = params.dig(:activity, :day_attributes, "end_time(4i)")
+  #   end_minute = params.dig(:activity, :day_attributes, "end_time(5i)")
 
-    start_time = "#{start_hour}:#{start_minute}"
-    end_time = "#{end_hour}:#{end_minute}"
+  #   start_time = "#{start_hour}:#{start_minute}"
+  #   end_time = "#{end_hour}:#{end_minute}"
+
+  #   specific_days = annual_program.find_all_specific_days(params[:activity][:day_attributes][:day])
+
+  #   specific_days.each do |day|
+  #     Course.create(activity: activity, starts_at: day + start_time.to_i.hours, ends_at: day + end_time.to_i.hours, manager: current_user, coach: coach, annual: true)
+  #   end
+  # end
+  def create_annual_courses_for_activity(params, activity, annual_program, coach)
+    start_time_str = params[:activity][:day_attributes]["start_time(4i)"] + ":" + params[:activity][:day_attributes]["start_time(5i)"]
+    end_time_str = params[:activity][:day_attributes]["end_time(4i)"] + ":" + params[:activity][:day_attributes]["end_time(5i)"]
 
     specific_days = annual_program.find_all_specific_days(params[:activity][:day_attributes][:day])
 
     specific_days.each do |day|
-      Course.create(activity: activity, starts_at: day + start_time.to_i.hours, ends_at: day + end_time.to_i.hours, manager: current_user, coach: coach, annual: true)
+      start_time = Time.parse("#{day} #{start_time_str}")
+      end_time = Time.parse("#{day} #{end_time_str}")
+      Course.create(activity: activity, starts_at: start_time, ends_at: end_time, manager: current_user, coach: coach, annual: true)
     end
   end
 end

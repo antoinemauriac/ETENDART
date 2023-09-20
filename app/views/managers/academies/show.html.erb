@@ -1,13 +1,13 @@
 <%= render "shared/academy_header" %>
 <div class="row justify-content-center align-items-center mt-3">
   <%= link_to managers_students_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students.jpeg') %>')">
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('student.jpeg') %>')">
       LES ÉLÈVES
     </div>
   <% end %>
 
   <%= link_to managers_coaches_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students4.jpeg') %>')">
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('coachs.jpeg') %>')">
       LES COACHS
     </div>
   <% end %>
@@ -20,19 +20,19 @@
     <% end %>
   <% else %>
     <%= link_to managers_school_periods_path(academy: @academy), class: "col-sm-12 col-md-3 mb-3"  do %>
-      <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students2.jpeg') %>')">
+      <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('camps.jpeg') %>')">
         LES STAGES
       </div>
     <% end %>
   <% end %>
   <%= link_to managers_locations_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students3.jpeg') %>')">
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('locations.jpeg') %>')">
       LES ADRESSES
     </div>
   <% end %>
 
   <%= link_to managers_categories_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('students5.jpeg') %>')">
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('categories.jpeg') %>')">
       LES CATÉGORIES
     </div>
   <% end %>

@@ -35,7 +35,7 @@ class AnnualProgram < ApplicationRecord
   }
 
   def can_import?
-    true
+    program_periods.first.start_date > Time.current
   end
 
   def today_courses
