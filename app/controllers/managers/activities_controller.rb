@@ -214,8 +214,8 @@ class Managers::ActivitiesController < ApplicationController
     specific_days = annual_program.find_all_specific_days(params[:activity][:day_attributes][:day])
 
     specific_days.each do |day|
-      start_time = Time.parse("#{day} #{start_time_str}")
-      end_time = Time.parse("#{day} #{end_time_str}")
+      start_time = Time.zone.parse("#{day} #{start_time_str}")
+      end_time = Time.zone.parse("#{day} #{end_time_str}")
       Course.create(activity: activity, starts_at: start_time, ends_at: end_time, manager: current_user, coach: coach, annual: true)
     end
   end
