@@ -20,7 +20,7 @@
       <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_annual_program_path(annual_program) %>">
         <td><%= annual_program.academy.name %></td>
         <td><%= annual_program.start_year %> - <%= annual_program.end_year %></td>
-        <td>A faire</td>
+        <td><%= annual_program.annual_program_enrollments.count %></td>
         <td>
         <% if !annual_program.started? %>
           <%= link_to managers_annual_program_path(annual_program), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce programme ?" } do %>

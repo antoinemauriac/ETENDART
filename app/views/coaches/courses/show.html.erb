@@ -1,11 +1,11 @@
-<div class="yellow-title"><%= @course.activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %></div>
+<div class="yellow-title"><%= @course.activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %> à <%= l(@course.ends_at, format: :hour_min) %></div>
 
 
 <div class="flexy justify-content-center">
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
     <div class="header-info header-info-coach">INFOS</div>
     <div class="content-info content-info-coach">
-      <p>ADRESSE : <strong><%= @course.activity.location.address %> - <%= @course.activity.location.city %></strong></p>
+      <p>ADRESSE : <strong><%= @course.activity.location.address %></strong></p>
       <p>TOTAL ÉLÈVES : <strong><%= @activity.students.count %></strong></p>
       <% if @course.status %>
         <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>

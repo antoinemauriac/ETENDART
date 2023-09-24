@@ -20,13 +20,13 @@
 <% end %>
 
 <div class="yellow-title mb-0">FEUILLE D'APPEL</div>
-<div class="black-title"><%= @activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %></div>
+<div class="black-title"><%= @activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %> à <%= l(@course.ends_at, format: :hour_min) %></div>
 
 <div class="flexy justify-content-center presence-sheet-container">
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
     <div class="header-info">INFOS</div>
     <div class="content-info">
-      <p>ADRESSE : <strong><%= @activity.location.address %> - <%= @activity.location.city %></strong></p>
+      <p>ADRESSE : <strong><%= @activity.location.address %></strong></p>
       <p>NB ÉLÈVES ATTENDUS: <strong><%= @course.students.count %></strong></p>
       <% if @course.status %>
         <p class="green-text">NB PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
