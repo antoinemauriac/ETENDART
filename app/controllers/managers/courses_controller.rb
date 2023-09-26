@@ -72,7 +72,7 @@ class Managers::CoursesController < ApplicationController
         end
 
 
-        if academy.name == "Rudy Gobert" && course.activity.category.name != "Accompagnement"
+        if academy.banished && course.activity.category.name != "Accompagnement"
           camp_enrollment = student.camp_enrollments.find_by(camp: course.activity.camp)
           if enrollment_params[1][:present].to_i == 0 && enrollment.present == true
             camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)

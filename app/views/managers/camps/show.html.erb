@@ -83,7 +83,7 @@
       <tr>
         <th>Nom</th>
         <th>Prénom</th>
-        <% if @academy.name == "Rudy Gobert" %>
+        <% if @academy.banished %>
           <th>Banni ?</th>
         <% end %>
         <th>Age</th>
@@ -98,7 +98,7 @@
         <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @camp.academy.id) %>'">
           <td><%= student.last_name %></td>
           <td><%= student.first_name %></td>
-          <% if @academy.name == "Rudy Gobert" %>
+          <% if @academy.banished %>
             <td><%= student.camp_enrollments.where(camp: @camp).first.banished ? "Oui" : "" %></td>
           <% end %>
           <td><%= student.age %> ans</td>

@@ -53,7 +53,7 @@
               <th>Début</th>
               <th>Fin</th>
               <th>Total élèves</th>
-              <% if @academy.name == "Rudy Gobert" %>
+              <% if @academy.banished %>
                 <th>Nb exclus</th>
               <% end %>
               <th>Nb présents</th>
@@ -70,7 +70,7 @@
               <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
               <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
               <td class="align-middle"><%= course.activity.students.count %></td>
-              <% if @academy.name == "Rudy Gobert" %>
+              <% if @academy.banished %>
                 <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.activity.banished_students.where.not(id: course.course_enrollments.joins(:student).pluck(:student_id)).count, style: 'font-weight:bold;') : "-" %></td>
               <% end %>
               <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.present_students_count, style: 'color:green; font-weight:bold;') : "-" %></td>
@@ -93,103 +93,181 @@
       <% end %>
     </div>
   </div>
-  <%# LES EXCLUS %>
-  <% if @academy.name == "Rudy Gobert" %>
 
-  <div class="col-12 col-xxl-11 mb-4">
-    <div class="header-info header-info-academy">
-      ÉLÈVES EXCLUS DE LA SEMAINE
-      <%= link_to export_banished_students_csv_managers_camp_path(format: :csv) do %>
-        <i class="fa-solid fa-download fa-download-white"></i>
-      <% end %>
+  <%# LES APPELS EN RETARD %>
+  <% if @old_presence_sheet.present? %>
+    <div class="col-12 col-xxl-11 mt-2 mb-4">
+      <div class="header-info header-info-academy">
+        <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;FEUILLE DE PRÉSENCE EN RETARD&nbsp;<i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <div class="content-info">
+          <table class="table table-striped table-responsive table-center">
+            <thead>
+              <tr>
+                <th>Activité</th>
+                <th>Coach Référent</th>
+                <th>Telephone</th>
+                <th>Date</th>
+                <th>Appel fait ?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @old_presence_sheet.each do |course| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
+                <td class="align-middle"><%= course.activity.name %></td>
+                <td class="align-middle"><%= course.activity.lead_coach.try(:full_name) || "" %></td>
+                <td class="align-middle"><%= course.activity.lead_coach.try(:phone_number) || "" %></td>
+                <td class="align-middle"><%= l(course.starts_at, format: :short) %></td>
+                <td class="align-middle">
+                  <% if course.starts_at < Time.current %>
+                    <% if course.status %>
+                      <i class="fa-solid fa-check text-success fa-big"></i>
+                    <% else %>
+                      <i class="fa-solid fa-xmark text-danger fa-big"></i>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+      </div>
     </div>
-    <div class="content-info">
-    <% if @banished_students.present? %>
-      <table class="table table-striped table-responsive table-center">
-        <thead>
-          <tr>
-            <th>Élève</th>
-            <th>Téléphone</th>
-            <th>Email</th>
-            <th>Exclu depuis</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @banished_students.each do |student| %>
-            <tr class="banish-student-row">
-              <td class="align-middle">
-                <%= link_to student.full_name_separator, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
-              </td>
-              <td class="align-middle">
-                <%= link_to student.phone_modified, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
-              </td>
-              <td class="align-middle">
-                <%= link_to student.email, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
-              </td>
-              <% banishment_day = student.camp_enrollments.where(camp: @camp).first&.banishment_day %>
-              <td class="align-middle">
-                <%= link_to banishment_day.present? ? l(banishment_day, format: :abbr_bis) : '-', managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
-              </td>
-              <td class="align-middle">
-                <%= link_to "Réintégrer", unban_student_managers_course_path(@course, camp_id: @camp.id, student_id: student.id), method: :post, data: { turbo_method: :post, turbo_confirm: "Êtes-vous sûr de vouloir réintégrer l'élève?" }, class: "btn btn-etendart btn-reintegrer" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <p style="text-align:center">Aucun élève exclu cette semaine.</p>
-    <% end %>
-    </div>
-  </div>
   <% end %>
-  <%# LES ABSENTS %>
+
+  <%# LES ABSENTS DE LA JOURNÉE %>
+  <% if @today_absent_students.present? %>
+    <div class="col-12 col-xxl-11 mb-4" data-controller="missing-students-table">
+      <div class="header-info header-info-academy">
+        ÉLÈVES ABSENTS AUJOURD'HUI
+        <%= link_to export_absent_students_csv_managers_academy_path(format: :csv) do %>
+          <i class="fa-solid fa-download fa-download-white"></i>
+        <% end %>
+      </div>
+      <div class="content-info">
+          <table class="table table-striped table-responsive table-center">
+            <thead>
+              <tr>
+                <th>Élève</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Heure</th>
+                <th>Activité</th>
+                <th>Academie</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @today_absent_students.each do |student| %>
+                <% student.unattended_today_courses.each do |course_enrollment| %>
+                  <% if course_enrollment.course.academy.name == @academy.name %>
+                    <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
+                      <td class="align-middle"><%= student.full_name %></td>
+                      <td class="align-middle"><%= student.phone_modified %></td>
+                      <td class="align-middle"><%= student.email %></td>
+                      <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
+                      <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
+                      <td class="align-middle"><%= course_enrollment.course.academy.name %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        <div class="flexy">
+          <%= link_to "Voir tous", today_absent_students_managers_academy_path, class: "btn-etendart" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# LES ABSENTS DE LA SEMAINE %>
+  <% if @week_absent_enrollments.present? %>
   <div class="col-12 col-xxl-11 mb-4" data-controller="missing-students-table">
     <div class="header-info header-info-academy">
-      ÉLÈVES ABSENTS AUJOURD'HUI
+      ÉLÈVES ABSENTS DE LA SEMAINE
       <%= link_to export_absent_students_csv_managers_academy_path(format: :csv) do %>
         <i class="fa-solid fa-download fa-download-white"></i>
       <% end %>
     </div>
     <div class="content-info">
-      <% if @today_absent_students.present? %>
-        <table id="missing-students" class="table table-striped table-responsive table-center">
+        <table class="table table-striped table-responsive table-center">
+          <thead>
+            <tr>
+              <th>Jour</th>
+              <th>Activité</th>
+              <th>Élève</th>
+              <th>Téléphone</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @week_absent_enrollments.each do |enrollment| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(enrollment.student, academy_id: @academy) %>'">
+                <td class="align-middle"><%= l(enrollment.course.starts_at, format: :day_name) %></td>
+                <td class="align-middle"><%= enrollment.activity.name %></td>
+                <td class="align-middle"><%= enrollment.student.full_name %></td>
+                <td class="align-middle"><%= enrollment.student.phone_modified %></td>
+                <td class="align-middle"><%= enrollment.student.email %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <div class="flexy">
+        <%= link_to "Voir tous", week_absent_students_managers_academy_path, class: "btn-etendart" %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+
+
+
+
+  <%# LES EXCLUS %>
+  <% if @academy.banished && @banished_students.present? %>
+    <div class="col-12 col-xxl-11 mb-4">
+      <div class="header-info header-info-academy">
+        ÉLÈVES EXCLUS DE LA SEMAINE
+        <%= link_to export_banished_students_csv_managers_camp_path(format: :csv) do %>
+          <i class="fa-solid fa-download fa-download-white"></i>
+        <% end %>
+      </div>
+      <div class="content-info">
+        <table class="table table-striped table-responsive table-center">
           <thead>
             <tr>
               <th>Élève</th>
               <th>Téléphone</th>
               <th>Email</th>
-              <th>Heure</th>
-              <th>Activité</th>
-              <th>Academie</th>
+              <th>Exclu depuis</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            <% @today_absent_students.each do |student| %>
-              <% student.unattended_today_courses.each do |course_enrollment| %>
-                <% if course_enrollment.course.academy.name == @academy.name %>
-                  <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
-                    <td class="align-middle"><%= student.full_name %></td>
-                    <td class="align-middle"><%= student.phone_modified %></td>
-                    <td class="align-middle"><%= student.email %></td>
-                    <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
-                    <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
-                    <td class="align-middle"><%= course_enrollment.course.academy.name %></td>
-                  </tr>
-                <% end %>
-              <% end %>
+            <% @banished_students.each do |student| %>
+              <tr class="banish-student-row">
+                <td class="align-middle">
+                  <%= link_to student.full_name_separator, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                </td>
+                <td class="align-middle">
+                  <%= link_to student.phone_modified, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                </td>
+                <td class="align-middle">
+                  <%= link_to student.email, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                </td>
+                <% banishment_day = student.camp_enrollments.where(camp: @camp).first&.banishment_day %>
+                <td class="align-middle">
+                  <%= link_to banishment_day.present? ? l(banishment_day, format: :abbr_bis) : '-', managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                </td>
+                <td class="align-middle">
+                  <%= link_to "Réintégrer", unban_student_managers_course_path(@course, camp_id: @camp.id, student_id: student.id), method: :post, data: { turbo_method: :post, turbo_confirm: "Êtes-vous sûr de vouloir réintégrer l'élève?" }, class: "btn btn-etendart btn-reintegrer" %>
+                </td>
+              </tr>
             <% end %>
           </tbody>
         </table>
-      <% else %>
-        <p style="text-align:center">Aucun élève absent aujourd'hui.</p>
-      <% end %>
-      <div class="flexy">
-        <%= link_to "Voir tous", all_absent_students_managers_academy_path, class: "btn-etendart" %>
       </div>
     </div>
-  </div>
+  <% end %>
 
   <%# LES FEEDBACKS %>
   <div class="col-12 col-xxl-11 mb-4">
@@ -221,6 +299,7 @@
       <% end %>
     </div>
   </div>
+
   <%# DEMAIN %>
   <div class="col-12 col-xxl-11 mt-2 mb-4">
     <div class="header-info header-info-academy">DEMAIN</div>

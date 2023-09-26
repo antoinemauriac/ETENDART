@@ -11,7 +11,7 @@
         <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
         <p class="red-text">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
       <% end %>
-      <% if @academy.name == "Rudy Gobert" %>
+      <% if @academy.banished %>
         <p>EXCLUS : <strong><%= @banished_students.count %></strong></p>
       <% end %>
       <% if @course.status %>
