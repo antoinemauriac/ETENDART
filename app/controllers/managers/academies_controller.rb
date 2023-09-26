@@ -25,9 +25,11 @@ class Managers::AcademiesController < ApplicationController
 
     @annual_program = @academy.annual_programs.select { |annual_program| annual_program.starts_at <= Time.current && annual_program.ends_at >= Time.current }.first
     if @annual_program.present?
-      @week_absent_enrollments = @annual_program.week_absent_enrollments_sorted_by_day
+      @week_absent_enrollments = @annual_program.week_absent_enrollments_sorted_by_day.first(5)
     end
-    @old_presence_sheet = @academy.old_presence_sheet
+    @old_presence_sheet = @academy.old_presence_sheet if @camp
+    @old_presence_sheet = @annual_program.old_presence_sheet if @annual_program
+
   end
 
   def export_absent_students_csv
