@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_18_125900) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_26_070401) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -21,6 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_18_125900) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "annual", default: false
+    t.boolean "banished", default: false
     t.index ["manager_id"], name: "index_academies_on_manager_id"
   end
 

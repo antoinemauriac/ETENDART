@@ -11,7 +11,15 @@ class Managers::AcademyPolicy < ApplicationPolicy
     user.manager? && record.manager == user
   end
 
-  def all_absent_students?
+  def export_week_absent_students_csv?
+    user.manager? && record.manager == user
+  end
+
+  def today_absent_students?
+    user.manager? && record.manager == user
+  end
+
+  def week_absent_students?
     user.manager? && record.manager == user
   end
 

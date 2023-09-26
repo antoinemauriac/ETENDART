@@ -48,4 +48,8 @@ class Academy < ApplicationRecord
            .order(:last_name)
   end
 
+  def old_presence_sheet
+    courses.where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
+  end
+
 end

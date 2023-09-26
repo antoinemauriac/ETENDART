@@ -32,7 +32,7 @@
         <p class="green-text">NB PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
         <p class="red-text">NB ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
       <% end %>
-      <% if @academy.name == "Rudy Gobert" %>
+      <% if @academy.banished %>
         <p>NB ÉLÈVES EXCLUS : <strong><%= @banished_students.count %></strong></p>
       <% end %>
       <% if @course.status %>
@@ -102,7 +102,7 @@
     <% end %>
   </div>
 
-  <% if @academy.name == "Rudy Gobert" && @banished_students.any? %>
+  <% if @academy.banished && @banished_students.any? %>
     <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
       <div class="header-info">ÉLÈVES EXCLUS</div>
       <div class="content-info">

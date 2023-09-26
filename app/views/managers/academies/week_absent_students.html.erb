@@ -1,0 +1,43 @@
+<%= render "shared/academy_header" %>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item active">ÉLÈVES ABSENTS DE LA SEMAINE</div>
+</div>
+<div class="row justify-content-center align-items-stretch mt-3">
+<div class="col-12 col-xxl-11 mb-4" data-controller="missing-students-table">
+    <div class="header-info header-info-yellow header-info-academy">
+      ÉLÈVES ABSENTS CETTE SEMAINE
+      <%= link_to export_week_absent_students_csv_managers_academy_path(format: :csv) do %>
+        <i class="fa-solid fa-download fa-download-black"></i>
+      <% end %>
+    </div>
+    <div class="content-info">
+    <% if @week_absent_enrollments.present? %>
+      <table class="table table-striped table-responsive table-center">
+          <thead>
+            <tr>
+              <th>Jour</th>
+              <th>Activité</th>
+              <th>Élève</th>
+              <th>Téléphone</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @week_absent_enrollments.each do |enrollment| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(enrollment.student, academy_id: @academy) %>'">
+                <td class="align-middle"><%= l(enrollment.course.starts_at, format: :day_name) %></td>
+                <td class="align-middle"><%= enrollment.course.activity.name %></td>
+                <td class="align-middle"><%= enrollment.student.full_name %></td>
+                <td class="align-middle"><%= enrollment.student.phone_modified %></td>
+                <td class="align-middle"><%= enrollment.student.email %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+    <% else %>
+      <p style="text-align:center">Aucun élève absent cette semaine.</p>
+    <% end %>
+    </div>
+  </div>
+</div>

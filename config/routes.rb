@@ -67,7 +67,9 @@ Rails.application.routes.draw do
     resources :academies, only: %i[show index] do
       member do
         get :export_absent_students_csv
-        get :all_absent_students
+        get :export_week_absent_students_csv
+        get :today_absent_students
+        get :week_absent_students
       end
     end
 
