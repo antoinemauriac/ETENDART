@@ -26,7 +26,7 @@
 
   <div data-controller="hidden-forms">
     <div class="flexy">
-      <button class="btn-etendart-square" data-action="click->hidden-forms#displayLocationForm">Ajouter une adresse</button>
+      <button class="btn-etendart-square" data-action="click->hidden-forms#displayLocationForm"><i class="fa-solid fa-square-plus"></i> AJOUTER <i class="fa-solid fa-square-plus"></i></button>
         <%= simple_form_for(@location, method: :post, :url => managers_locations_path(academy: @academy), html: {class: "hidden-form form-container-hidden", style: "width: 500px;"}, data: { hidden_forms_target: "locationForm" }) do |form| %>
           <div class="form-group">
             <%= form.input :name, class: "form-control", label: "Nom", placeholder: "Terrain pricipal", required: true %>

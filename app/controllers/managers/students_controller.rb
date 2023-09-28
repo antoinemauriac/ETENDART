@@ -44,6 +44,7 @@ class Managers::StudentsController < ApplicationController
     username = "#{@student.first_name.downcase}#{@student.last_name.downcase}#{excel_serial_date }"
     @student.update(username: username)
     if @student.save
+      @student.update_phone_number
       redirect_to managers_student_path(@student, academy_id: @academy.id)
       flash[:notice] = "Élève ajouté"
     else
@@ -65,6 +66,7 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     if @student.update(student_params)
+      student.update_phone_number
       update_academies
       redirect_to managers_student_path(@student, academy_id: @student.first_academy.id)
       flash[:notice] = "Informations modifiées avec succès"

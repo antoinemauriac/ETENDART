@@ -43,8 +43,10 @@ class Managers::ImportStudentsController < ApplicationController
 
       if student.new_record?
         student.save
+        student.update_phone_number
       else
         student.update(student_params_upload(row))
+        student.update_phone_number
       end
 
       student.academies << academy unless student.academies.include?(academy)

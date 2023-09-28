@@ -21,15 +21,16 @@ class Managers::CategoriesController < ApplicationController
 
   def edit
     @category = Category.find(params[:id])
-    @academy = current_user.academies_as_manager.first
+    @academy = Academy.find(params[:academy])
     authorize([:managers, @category])
   end
 
   def update
     @category = Category.find(params[:id])
+    @academy = Academy.find(params[:academy])
     authorize([:managers, @category])
     if @category.update(category_params)
-      redirect_to managers_categories_path
+      redirect_to managers_categories_path(academy: @academy)
       flash[:notice] = "Catégorie modifiée"
     else
       render :edit, status: :unprocessable_entity

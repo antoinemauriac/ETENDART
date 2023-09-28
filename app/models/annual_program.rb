@@ -96,4 +96,8 @@ class AnnualProgram < ApplicationRecord
   def old_presence_sheet
     courses.where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
   end
+
+  def past_course_enrollments
+    course_enrollments.joins(:course).where('courses.ends_at < ?', Time.current).order('courses.starts_at')
+  end
 end

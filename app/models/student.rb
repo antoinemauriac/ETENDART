@@ -209,6 +209,21 @@ class Student < ApplicationRecord
     end
   end
 
+  def update_phone_number
+    # Supprime les espaces du numéro de téléphone
+    phone_number = self.phone_number.gsub(/\s+/, '')
+
+    # Si le numéro de téléphone a une longueur de 9 chiffres, ajoute un "0" devant
+    if phone_number.length == 9
+      self.update(phone_number: "0" + phone_number)
+    end
+
+    # Si le numéro de téléphone commence par "33", remplace "33" par "0"
+    if phone_number.start_with?("33")
+      self.update(phone_number: "0" + phone_number[2..-1])
+    end
+  end
+
   def self.find_duplicates(threshold = 2)
     all_students = all.to_a
 
