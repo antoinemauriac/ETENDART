@@ -5,6 +5,19 @@
 </div>
 <div class="yellow-title">LES CATÉGORIES D'ACTIVITÉ</div>
 <div class="container flexy" style="max-width:500px">
+  <div data-controller="hidden-forms">
+    <div class="flexy">
+      <button class="btn-etendart-square mt-0" data-action="click->hidden-forms#displayCategoryForm"><i class="fa-solid fa-square-plus"></i> AJOUTER <i class="fa-solid fa-square-plus"></i></button>
+      <%= simple_form_for @category, url: managers_categories_path, method: :post, html: { class: "hidden-form form-container-hidden", id: "category-form"}, data: { hidden_forms_target: "categoryForm" } do |form| %>
+        <%= form.input :name, label: "Nom :" %>
+        <%= form.input :super_category, label: "Super catégorie :", collection: ['Sport', 'Eveil', 'Cuisine', 'Accompagnement'], input_html: { class: "form-control" } %>
+        <div class="flex-btn">
+          <%= form.button :submit, "Valider", class: "btn-etendart" %>
+          <button class="btn-etendart-black" data-action="click->hidden-forms#hideCategoryForm" type="button">Annuler</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
   <table class="table table-striped form-container table-center table-responsive">
     <thead>
       <tr>
@@ -29,17 +42,4 @@
   </table>
 
 
-  <div data-controller="hidden-forms">
-    <div class="flexy">
-      <button class="btn-etendart-square" data-action="click->hidden-forms#displayCategoryForm"><i class="fa-solid fa-square-plus"></i> AJOUTER <i class="fa-solid fa-square-plus"></i></button>
-      <%= simple_form_for @category, url: managers_categories_path, method: :post, html: { class: "hidden-form form-container-hidden", id: "category-form"}, data: { hidden_forms_target: "categoryForm" } do |form| %>
-        <%= form.input :name, label: "Nom :" %>
-        <%= form.input :super_category, label: "Super catégorie :", collection: ['Sport', 'Eveil', 'Cuisine', 'Accompagnement'], input_html: { class: "form-control" } %>
-        <div class="flex-btn">
-          <%= form.button :submit, "Valider", class: "btn-etendart" %>
-          <button class="btn-etendart-black" data-action="click->hidden-forms#hideCategoryForm" type="button">Annuler</button>
-        </div>
-      <% end %>
-    </div>
-  </div>
 </div>
