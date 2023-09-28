@@ -48,14 +48,15 @@
       <% end %>
     </tbody>
   </table>
-  <div class="flexy">
-    <%= link_to "AJOUTER UNE ACTIVITÉ", new_for_annual_managers_activities_path(annual_program: @annual_program), class: "btn-etendart-square" %>
-  </div>
 </div>
 
-<div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
 
+
+<div class="flexy">
+  <%= link_to "AJOUTER UNE ACTIVITÉ", new_for_annual_managers_activities_path(annual_program: @annual_program), class: "btn-etendart-square mt-0" %>
+</div>
 <% if @annual_program.can_import? %>
+<div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
   <div class="flexy" data-controller="import-csv">
     <div class="loader d-none" data-import-csv-target="spinner"></div>
     <div class="container flexy">
@@ -70,6 +71,9 @@
       </div>
     </div>
   </div>
-<% else %>
-  <p class="text-center">Vous ne pouvez plus importer de fichier csv pour ce programme</p>
 <% end %>
+
+<div class="yellow-title mt-3">LES ÉLÈVES</div>
+<div class="flexy">
+  <%= link_to "EXPORTER PRESENCE", export_past_enrollments_managers_annual_program_path(format: :csv), class: "btn-etendart-square mt-0 mb-3" %>
+</div>

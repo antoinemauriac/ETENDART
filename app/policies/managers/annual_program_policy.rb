@@ -18,4 +18,8 @@ class Managers::AnnualProgramPolicy < ApplicationPolicy
   def destroy?
     user.manager? && record.academy.manager == user
   end
+
+  def export_past_enrollments?
+    user.manager? && record.academy.manager == user
+  end
 end

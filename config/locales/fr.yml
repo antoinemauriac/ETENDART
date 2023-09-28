@@ -21,6 +21,7 @@ fr:
   time:
     formats:
       default: "%d/%m - %Hh%M"
+      default_long: "%d/%m/%Y - %Hh%M"
       short: "%d %b %Y"
       long: "%A %e %B %Y"
       date: "%d/%m/%Y"
@@ -31,6 +32,7 @@ fr:
       abbr: "%a %d %b %Y"
       abbr_bis: "%a %d %b à %Hh"
       day_name: "%A"
+      week: "Semaine %W"
   activerecord:
     attributes:
       camp:

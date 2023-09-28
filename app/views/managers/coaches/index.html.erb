@@ -35,5 +35,7 @@
       <% end %>
     </tbody>
   </table>
-  <%= link_to 'Ajouter un coach', new_managers_coach_path(academy_id: @academy.id), class: 'btn-etendart-square' %>
+  <%= link_to new_managers_coach_path(academy_id: @academy.id), class: 'btn-etendart-square' do %>
+    <i class="fa-solid fa-square-plus"></i> AJOUTER <i class="fa-solid fa-square-plus"></i>
+  <% end %>
 </div>

@@ -55,6 +55,29 @@ class Managers::AnnualProgramsController < ApplicationController
     flash[:notice] = "Activité supprimée"
   end
 
+  def export_past_enrollments
+    annual_program = AnnualProgram.find(params[:id])
+    authorize [:managers, annual_program]
+    past_course_enrollments = annual_program.past_course_enrollments
+    respond_to do |format|
+      format.csv do
+        headers['Content-Type'] = 'text/csv; charset=UTF-8'
+        headers['Content-Disposition'] = 'attachment; filename=feuille_presence.csv'
+
+        csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
+          csv << ["Semaine", "Jour", "Heure", "Activité", "Nom", "Prénom", "Genre", "Telephone", "Email", "Presence"]
+
+          past_course_enrollments.each do |enrollment|
+            student = enrollment.student
+            csv << [l(enrollment.course.starts_at, format: :week), l(enrollment.course.starts_at, format: :date), l(enrollment.course.starts_at, format: :hour_min), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.phone_modified, student.email, enrollment.present ? "present" : "absent"]
+          end
+        end
+
+        send_data(csv_data, filename: "feuille_presence.csv")
+      end
+    end
+  end
+
   private
 
   def annual_program_params

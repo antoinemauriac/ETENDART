@@ -6,7 +6,9 @@
 <div class="yellow-title">LES ÉLÈVES</div>
 <div class="container">
   <div class="flexy">
-    <%= link_to "AJOUTER UN ÉLÈVE", new_managers_student_path(academy_id: @academy.id), class: "btn-etendart-square mt-3 mb-2" %>
+    <%= link_to new_managers_student_path(academy_id: @academy.id), class: "btn-etendart-square mt-3 mb-2" do %>
+      <i class="fa-solid fa-square-plus"></i> AJOUTER UN ÉLÈVE <i class="fa-solid fa-square-plus"></i>
+    <% end %>
   </div>
   <div data-controller="student-table" class="form-container table-center">
     <table id="myTable" class="table table-striped table-responsive">

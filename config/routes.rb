@@ -79,6 +79,12 @@ Rails.application.routes.draw do
         get :export_banished_students_csv
       end
     end
+
+    resources :annual_programs, only: %i[show index new create destroy] do
+      member do
+        get :export_past_enrollments
+      end
+    end
     resources :annual_enrollments, only: %i[create]
     resources :feedbacks, only: %i[new create]
     resources :activity_enrollments, only: %i[destroy]
@@ -86,7 +92,6 @@ Rails.application.routes.draw do
     resources :locations, only: %i[show]
     resources :coaches
     resources :enrollments, only: %i[new create]
-    resources :annual_programs, only: %i[show index new create destroy]
     resources :locations, only: %i[create index edit update]
   end
 
