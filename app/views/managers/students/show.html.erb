@@ -278,7 +278,7 @@
           </thead>
           <tbody>
             <% @next_camp_courses.each do |course| %>
-              <tr>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
                 <td class="align-middle"><%= course.academy.name %></td>
                 <td class="align-middle"><%= course.school_period.full_name %></td>
                 <td class="align-middle"><%= course.camp.name %></td>
@@ -294,6 +294,7 @@
       <% end %>
     </div>
   </div>
+
   <div data-controller="annual-courses" data-annual-courses-target="header" class="col-6 mt-4">
     <div class="header-info">COURS A VENIR - PROGRAMME ANNUEL</div>
     <div class="content-info">
@@ -313,7 +314,7 @@
           </thead>
           <tbody>
             <% @next_annual_courses.each do |course| %>
-              <tr>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
                 <td class="align-middle"><%= course.academy.name %></td>
                 <td class="align-middle"><%= course.annual_program.start_year %> - <%= course.annual_program.end_year %></td>
                 <td class="align-middle"><%= course.activity.name %></td>
@@ -330,7 +331,7 @@
   </div>
 
   <div data-controller="past-camp-courses" data-past-camp-courses-target="header" class="col-12 mt-4">
-    <div class="header-info">COURS PASSÉS</div>
+    <div class="header-info">COURS PASSÉS - STAGES</div>
     <div class="content-info">
       <table data-past-camp-courses-target="table" class="table table-responsive table-center show-more">
         <thead>
@@ -345,7 +346,7 @@
         </thead>
         <tbody>
           <% @past_camp_courses.each do |course| %>
-            <tr style="<%= course.student_presence(@student) ? '' : 'background-color: orange !important;' %>">
+            <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'" style="<%= course.student_presence(@student) ? '' : 'background-color: orange' %>">
               <td class="align-middle"><%= course.academy.name %></td>
               <td class="align-middle"><%= course.school_period.full_name %></td>
               <td class="align-middle"><%= course.camp.name %></td>
@@ -376,7 +377,7 @@
         </thead>
         <tbody>
           <% @past_annual_courses.each do |course| %>
-            <tr style="<%= course.student_presence(@student) ? '' : 'background-color: orange !important;' %>">
+            <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'" style="<%= course.student_presence(@student) ? '' : 'background-color: orange;' %>">
               <td class="align-middle"><%= course.academy.name %></td>
               <td class="align-middle"><%= course.annual_program.start_year %> - <%= course.annual_program.end_year %></td>
               <td class="align-middle"><%= course.activity.name %></td>

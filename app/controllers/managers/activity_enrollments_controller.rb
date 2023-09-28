@@ -1,5 +1,6 @@
 class Managers::ActivityEnrollmentsController < ApplicationController
   def destroy
+    raise
     @activity_enrollment = ActivityEnrollment.find(params[:id])
     authorize([:managers, @activity_enrollment])
     # @activity_enrollment.destroy

@@ -46,6 +46,9 @@ application.register("missing-students-table", MissingStudentsTableController)
 import NavbarController from "./navbar_controller"
 application.register("navbar", NavbarController)
 
+import PastAnnualCoursesController from "./past_annual_courses_controller"
+application.register("past-annual-courses", PastAnnualCoursesController)
+
 import PastCampCoursesController from "./past_camp_courses_controller"
 application.register("past-camp-courses", PastCampCoursesController)
 
