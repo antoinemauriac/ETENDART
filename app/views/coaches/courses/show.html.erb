@@ -60,7 +60,7 @@
               </td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
-                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: (@course.ends_at + 3.hour) < Time.current }, 1, 0 %>
+                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current }, 1, 0 %>
                   <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
                 </div>
               </td>
@@ -84,7 +84,7 @@
         </tbody>
       </table>
       <div class="flexy">
-        <%= form.submit "Valider", class: "btn-etendart btn-presence" %>
+        <%= form.submit "Valider", class: "btn-etendart btn-presence #{'disabled' if (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current}", disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current %>
       </div>
     <% end %>
   </div>

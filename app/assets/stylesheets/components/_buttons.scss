@@ -25,6 +25,16 @@
   margin: 0em 1em 1em 1em!important;
 }
 
+.btn-presence.disabled {
+  background-color: gray;
+  color: white;
+  cursor: not-allowed;
+}
+.btn-presence.disabled:hover {
+  background-color: gray!important;
+  color: white!important;
+}
+
 .btn-etendart:hover {
   background-color: $yellow;
   color: black;
