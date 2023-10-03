@@ -18,28 +18,28 @@ class Managers::ActivitiesController < ApplicationController
   end
 
   def create
-    @activity = camp.activities.build(activity_params)
-    @academy = camp.academy
-    @locations = @academy.locations
-    @school_period = camp.school_period
-    authorize([:managers, @activity])
+    activity = camp.activities.build(activity_params)
+    academy = camp.academy
+    # locations = academy.locations
+    # school_period = camp.school_period
+    authorize([:managers, activity])
 
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
     coach = User.find_by_id(params[:activity][:coach_id])
     coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
     # @activity.coaches << coach if coach
-    @activity.coaches << User.where(id: coaches) if coaches.any?
+    activity.coaches << User.where(id: coaches) if coaches.any?
 
-    if @activity.errors.any?
+    if activity.errors.any?
       return render :new, status: :unprocessable_entity
     end
 
     if validate_start_time_before_end_time
-      if @activity.save
+      if activity.save
         activity.update(annual: false)
-        create_courses_for_activity(@activity, coach, days)
+        create_courses_for_activity(activity, coach, days)
 
-        redirect_to managers_camp_path(@camp), notice: "Activité créée"
+        redirect_to managers_camp_path(camp), notice: "Activité créée"
       else
         flash[:alert] = "Une erreur est survenue"
         render :new, status: :unprocessable_entity
@@ -71,7 +71,7 @@ class Managers::ActivitiesController < ApplicationController
     @academy = @activity.academy
     @camp = @activity.camp
     @school_period = @camp.school_period
-    @students = @activity.students.sort_by(&:last_name)
+    @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
     category = @activity.category
@@ -83,7 +83,7 @@ class Managers::ActivitiesController < ApplicationController
     @activity = Activity.find(params[:activity])
     @academy = @activity.academy
     @annual_program = @activity.annual_program
-    @students = @activity.students.sort_by(&:last_name)
+    @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.next_courses.sort_by(&:starts_at).first(3)
     category = @activity.category
@@ -141,6 +141,29 @@ class Managers::ActivitiesController < ApplicationController
       flash[:notice] = "Activité supprimée"
     end
   end
+
+  def export_activity_students
+    activity = Activity.find(params[:activity])
+    authorize([:managers, activity])
+    students = activity.students.sort_by(&:last_name)
+    respond_to do |format|
+      format.csv do
+        headers['Content-Type'] = 'text/csv; charset=UTF-8'
+        headers['Content-Disposition'] = "attachment; filename=liste_élèves_#{activity.name}.csv"
+
+        csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
+          csv << ["Activité", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
+
+          students.each do |student|
+            csv << [activity.name, student.last_name, student.first_name, student.gender, student.age, student.phone_modified, student.email]
+          end
+        end
+
+        send_data(csv_data, filename: "liste_élèves_#{activity.name}.csv")
+      end
+    end
+  end
+
 
   private
 

@@ -8,7 +8,10 @@
 
 <div class="yellow-title">LES ACTIVITÉS</div>
 
-<div class="container">
+<div class="container flexy">
+  <%= link_to new_for_annual_managers_activity_path(annual_program: @annual_program), class: 'btn-etendart-square mt-0' do %>
+    <i class="fa-solid fa-square-plus"></i> AJOUTER <i class="fa-solid fa-square-plus"></i>
+  <% end %>
   <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
     <thead>
       <tr>
@@ -25,7 +28,7 @@
     </thead>
     <tbody>
       <% @activities.each do |activity| %>
-        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activities_path(activity: activity) %>">
+        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activity_path(activity: activity) %>">
           <td><%= activity.name %></td>
           <td><%= l(activity.courses.first.starts_at, format: :day_name ) %></td>
           <td><%= l(activity.courses.first.starts_at, format: :hour_min ) %></td>
@@ -50,11 +53,6 @@
   </table>
 </div>
 
-
-
-<div class="flexy">
-  <%= link_to "AJOUTER UNE ACTIVITÉ", new_for_annual_managers_activities_path(annual_program: @annual_program), class: "btn-etendart-square mt-0" %>
-</div>
 <% if @annual_program.can_import? %>
 <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
   <div class="flexy" data-controller="import-csv">
@@ -73,7 +71,34 @@
   </div>
 <% end %>
 
-<div class="yellow-title mt-3">LES ÉLÈVES</div>
-<div class="flexy">
-  <%= link_to "EXPORTER PRESENCE", export_past_enrollments_managers_annual_program_path(format: :csv), class: "btn-etendart-square mt-0 mb-3" %>
+<div class="yellow-title yellow-title-flex mt-3 mb-3">
+  LES ÉLÈVES
+  <%= link_to export_annual_students_managers_annual_program_path(format: :csv) do %>
+    <i class="fa-solid fa-download fa-download-black"></i>
+  <% end %>
+  <%= link_to "EXPORTER PRESENCE", export_past_enrollments_managers_annual_program_path(format: :csv), class: "btn-etendart-square mt-0" %>
+</div>
+<div class="container" data-controller="clickable-table">
+  <table class="table table-striped table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Age</th>
+        <th>Téléphone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student, academy_id: @academy.id) %>">
+          <td class="align-middle"><%= student.last_name %></td>
+          <td class="align-middle"><%= student.first_name %></td>
+          <td class="align-middle"><%= student.age %> ans</td>
+          <td class="align-middle"><%= student.phone_modified %></td>
+          <td class="align-middle"><%= student.email %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

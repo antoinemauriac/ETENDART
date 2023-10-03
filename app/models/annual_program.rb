@@ -54,6 +54,10 @@ class AnnualProgram < ApplicationRecord
     program_periods.first.start_date
   end
 
+  def name
+    "#{start_date.year} - #{start_date.year + 1}"
+  end
+
   def find_all_specific_days(day_name)
     specific_days = []
     wday = DAY_TO_WDAY[day_name]

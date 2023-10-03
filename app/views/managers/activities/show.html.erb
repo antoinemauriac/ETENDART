@@ -65,7 +65,12 @@
   </div>
 </div>
 
-<div class="yellow-title">LISTE DES ÉLÈVES</div>
+<div class="yellow-title yellow-title-flex">
+  LISTE DES ÉLÈVES
+  <%= link_to export_activity_students_managers_activity_path(activity: @activity, format: :csv) do %>
+    <i class="fa-solid fa-download fa-download-black"></i>
+  <% end %>
+</div>
 <div class="container" data-controller="clickable-table">
   <table class="table table-striped table-responsive table-center form-container">
     <thead>
@@ -74,6 +79,7 @@
         <th>Prénom</th>
         <th>Age</th>
         <th>Téléphone</th>
+        <th>Email</th>
         <th>Supprimer</th>
       </tr>
     </thead>
@@ -84,8 +90,9 @@
           <td class="align-middle"><%= student.first_name %></td>
           <td class="align-middle"><%= student.age %> ans</td>
           <td class="align-middle"><%= student.phone_modified %></td>
+          <td class="align-middle"><%= student.email %></td>
           <td class="align-middle">
-            <%= link_to managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id)), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>
+            <%= link_to managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id), origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>
               <i class="fas fa-trash trash"></i>
             <% end %>
           </td>

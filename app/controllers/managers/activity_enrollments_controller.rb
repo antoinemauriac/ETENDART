@@ -1,6 +1,5 @@
 class Managers::ActivityEnrollmentsController < ApplicationController
   def destroy
-    raise
     @activity_enrollment = ActivityEnrollment.find(params[:id])
     authorize([:managers, @activity_enrollment])
     # @activity_enrollment.destroy
@@ -14,6 +13,8 @@ class Managers::ActivityEnrollmentsController < ApplicationController
     if course_enrollments.empty?
       student.activity_enrollments.where(activity: activity).destroy_all
     end
+
+    @activity_enrollment.update(deleted: true) if @activity_enrollment.present?
 
     if params[:origin] == 'camp'
       camp = activity.camp
@@ -37,10 +38,18 @@ class Managers::ActivityEnrollmentsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        if params[:redirect_to] == 'student'
-          redirect_to managers_student_path(@activity_enrollment.student), notice: "Élève retiré de l'activité."
+        if params[:origin] == 'camp'
+          if params[:redirect_to] == 'student'
+            redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
+          else
+            redirect_to managers_activity_path(activity), notice: "Élève retiré de l'activité."
+          end
         else
-          redirect_to managers_activity_path(@activity_enrollment.activity), notice: "Élève retiré de l'activité."
+          if params[:redirect_to] == 'student'
+            redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
+          else
+            redirect_to show_for_annual_managers_activity_path(activity: activity), notice: "Élève retiré de l'activité."
+          end
         end
       end
       format.json { head :no_content }

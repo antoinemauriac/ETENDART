@@ -74,7 +74,6 @@ class Activity < ApplicationRecord
             .distinct
   end
 
-
   # def absenteeism_rate
   #   total_enrollments = course_enrollments.count
   #   absent_enrollments = course_enrollments.where(present: false).count
@@ -86,6 +85,10 @@ class Activity < ApplicationRecord
   #     return 0
   #   end
   # end
+
+  def students_with_next_activity_enrollments
+    students.joins(:activity_enrollments).where(activity_enrollments: { deleted: false }).uniq
+  end
 
   def absenteeism_rate
     enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
