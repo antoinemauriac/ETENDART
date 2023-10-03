@@ -44,6 +44,14 @@ class Managers::ActivityPolicy < ApplicationPolicy
     user.manager? && record.annual_program.academy.manager == user
   end
 
+  def export_activity_students?
+    if record.camp
+      user.manager? && record.camp.school_period.academy.manager == user
+    else
+      user.manager? && record.annual_program.academy.manager == user
+    end
+  end
+
   class Scope < Scope
     def resolve
 

@@ -14,7 +14,7 @@ class Managers::AnnualEnrollmentsController < ApplicationController
       redirect_to managers_student_path(@student)
       flash[:alert] = "L'élève est déjà inscrit à cette activité"
     else
-      @student.courses << activity.courses
+      @student.courses << activity.next_courses
       @student.activities << activity
       redirect_to managers_student_path(@student)
       flash[:notice] = "Inscription validée"

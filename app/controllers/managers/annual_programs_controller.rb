@@ -44,6 +44,7 @@ class Managers::AnnualProgramsController < ApplicationController
     @academy = @annual_program.academy
     authorize [:managers, @annual_program]
     @activities = @annual_program.sorted_activities
+    @students = @annual_program.students
   end
 
   def destroy
@@ -77,6 +78,29 @@ class Managers::AnnualProgramsController < ApplicationController
       end
     end
   end
+
+  def export_annual_students
+    annual_program = AnnualProgram.find(params[:id])
+    authorize [:managers, annual_program]
+    students = annual_program.students
+    respond_to do |format|
+      format.csv do
+        headers['Content-Type'] = 'text/csv; charset=UTF-8'
+        headers['Content-Disposition'] = "attachment; filename=liste_élèves_#{annual_program.name}.csv"
+
+        csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
+          csv << ["Académie", "Programme", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
+
+          students.each do |student|
+            csv << [annual_program.academy.name, annual_program.name, student.last_name, student.first_name, student.gender, student.age, student.phone_modified, student.email]
+          end
+        end
+
+        send_data(csv_data, filename: "liste_élèves_#{annual_program.name}.csv")
+      end
+    end
+  end
+
 
   private
 

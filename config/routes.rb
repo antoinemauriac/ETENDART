@@ -47,13 +47,12 @@ Rails.application.routes.draw do
     end
 
     resources :activities, only: %i[new create show destroy update] do
-      collection do
-        get 'new_for_annual'
-        post 'create_for_annual'
-        get 'show_for_annual'
-      end
       member do
+        get :new_for_annual
+        post :create_for_annual
+        get :show_for_annual
         get :all_annual_courses
+        get :export_activity_students
       end
     end
 
@@ -83,6 +82,7 @@ Rails.application.routes.draw do
     resources :annual_programs, only: %i[show index new create destroy] do
       member do
         get :export_past_enrollments
+        get :export_annual_students
       end
     end
     resources :annual_enrollments, only: %i[create]

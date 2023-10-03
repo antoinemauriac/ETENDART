@@ -9,7 +9,7 @@
 
 <div class="flexy container">
   <div class="form-container form-min-width">
-    <%= simple_form_for @activity, url: create_for_annual_managers_activities_path(annual_program: @annual_program), method: :post, data: { controller: 'activity-form' } do |f| %>
+    <%= simple_form_for @activity, url: create_for_annual_managers_activity_path(annual_program: @annual_program), method: :post, data: { controller: 'activity-form' } do |f| %>
       <%= f.input :name, label: "Nom", input_html: { class: "activity-input" } %>
       <%= f.input :category_id, as: :select, collection: Category.all.order(:name), label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", academy_id: @academy.id, action: 'change->activity-form#onCategoryChange' }, class: "activity-input" } %>
       <div class="d-none" data-activity-form-target="toto">
