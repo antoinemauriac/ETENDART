@@ -57,7 +57,7 @@ class Managers::CoursesController < ApplicationController
     school_period = course.school_period
     academy = course.activity.academy
     enrollments_params = params[:enrollments]
-    authorize([:managers, @enrollments], policy_class: Managers::CoursePolicy)
+    authorize([:managers, course], policy_class: Managers::CoursePolicy)
 
     if enrollments_params.present?
       enrollments_params.each do |enrollment_params|

@@ -4,10 +4,10 @@ class Coaches::CoursePolicy < ApplicationPolicy
   end
 
   def show?
-    user.coach? || user.manager?
+    record.all_coaches.include?(user) || user.manager?
   end
 
   def update_enrollments?
-    user.coach? || user.manager?
+    record.all_coaches.include?(user) || user.manager?
   end
 end

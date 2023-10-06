@@ -29,11 +29,11 @@ class Course < ApplicationRecord
   end
 
   def lead_coach
-    if coach_id.nil?
-      "Pas de coach"
-    else
-      User.find_by(id: coach_id)
-    end
+    User.find_by(id: coach_id) if coach_id
+  end
+
+  def all_coaches
+    activity.all_coaches
   end
 
   # def banished_students

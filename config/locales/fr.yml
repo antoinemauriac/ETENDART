@@ -22,7 +22,7 @@ fr:
     formats:
       default: "%d/%m - %Hh%M"
       default_long: "%d/%m/%Y - %Hh%M"
-      short: "%d %b %Y"
+      short: "%A %d/%m/%Y"
       long: "%A %e %B %Y"
       date: "%d/%m/%Y"
       date_short: "%d/%m"
