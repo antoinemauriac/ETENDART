@@ -80,7 +80,7 @@ class Managers::ActivitiesController < ApplicationController
   end
 
   def show_for_annual
-    @activity = Activity.find(params[:activity])
+    @activity = Activity.find(params[:id])
     @academy = @activity.academy
     @annual_program = @activity.annual_program
     @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
@@ -117,7 +117,7 @@ class Managers::ActivitiesController < ApplicationController
       if params[:redirect_to] == "camp"
         redirect_to managers_activity_path(@activity), notice: "L'activité a été mise à jour avec succès."
       else
-        redirect_to show_for_annual_managers_activity_path(activity: @activity), notice: "L'activité a été mise à jour avec succès."
+        redirect_to show_for_annual_managers_activity_path(@activity), notice: "L'activité a été mise à jour avec succès."
       end
     else
       flash.now[:alert] = "Erreur lors de la mise à jour de l'activité."

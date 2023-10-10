@@ -30,14 +30,14 @@ class Managers::CoursesController < ApplicationController
       if params[:redirect_to] == "camp"
         redirect_to managers_activity_path(course.activity), notice: "Cours mis à jour"
       else
-        redirect_to show_for_annual_managers_activities_path(activity: course.activity), notice: "Cours mis à jour"
+        redirect_to show_for_annual_managers_activity_path(course.activity), notice: "Cours mis à jour"
       end
     else
       flash[:alert] = "L'heure de début doit être avant l'heure de fin"
       if params[:redirect_to] == "camp"
         redirect_to managers_activity_path(course.activity)
       else
-        redirect_to show_for_annual_managers_activities_path(activity: course.activity), notice: "Cours mis à jour"
+        redirect_to show_for_annual_managers_activity_path(course.activity), notice: "Cours mis à jour"
       end
     end
   end
@@ -48,7 +48,7 @@ class Managers::CoursesController < ApplicationController
     if params[:redirect_to] == "camp"
       redirect_to managers_activity_path(course.activity), notice: "Cours supprimé"
     else
-      redirect_to show_for_annual_managers_activities_path(activity: course.activity), notice: "Cours supprimé"
+      redirect_to show_for_annual_managers_activity_path(course.activity), notice: "Cours supprimé"
     end
   end
 

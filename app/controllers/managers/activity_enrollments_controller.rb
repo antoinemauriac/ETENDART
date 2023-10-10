@@ -48,7 +48,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
           if params[:redirect_to] == 'student'
             redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
           else
-            redirect_to show_for_annual_managers_activity_path(activity: activity), notice: "Élève retiré de l'activité."
+            redirect_to show_for_annual_managers_activity_path(activity), notice: "Élève retiré de l'activité."
           end
         end
       end

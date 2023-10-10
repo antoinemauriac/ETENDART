@@ -28,7 +28,7 @@
     </thead>
     <tbody>
       <% @activities.each do |activity| %>
-        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activity_path(activity: activity) %>">
+        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activity_path(activity) %>">
           <td><%= activity.name %></td>
           <td><%= l(activity.courses.first.starts_at, format: :day_name ) %></td>
           <td><%= l(activity.courses.first.starts_at, format: :hour_min ) %></td>
