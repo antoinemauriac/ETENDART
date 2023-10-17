@@ -1,48 +1,66 @@
-<div class="yellow-title">COURS A VENIR</div>
-<% if @next_courses.any? %>
-  <table class="container table table-striped table-responsive table-center coach-container">
-    <thead>
-      <tr>
-        <th>Académie</th>
-        <th>Activité</th>
-        <th style="min-width:100px">Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @next_courses.each do |course| %>
-      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
-        <td class="align-middle coach-font"><%= course.academy.name %></td>
-        <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="flexy">
-    <%= link_to "Retour", "/", class: "btn-etendart-small" %>
+
+<div data-controller="coach-courses">
+  <div class="tab-container">
+    <button class="tab-item left active" data-action="click->coach-courses#showFuture" data-coach-courses-target="future">
+      <i class="fas fa-clock"></i> À VENIR
+    </button>
+    <button class="tab-item right" data-action="click->coach-courses#showPast" data-coach-courses-target="past">
+      <i class="fas fa-history"></i> PASSÉS
+    </button>
   </div>
-<% end %>
-<% if @past_courses.any? %>
-  <div class="black-title">COURS PASSÉS</div>
-  <table class="container table table-striped table-responsive table-center coach-container">
-    <thead>
-      <tr>
-        <th>Académie</th>
-        <th>Activité</th>
-        <th style="min-width:100px">Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @past_courses.each do |course| %>
-      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
-        <td class="align-middle coach-font"><%= course.academy.name %></td>
-        <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="flexy">
-    <%= link_to "Retour", "/", class: "btn-etendart-small" %>
+
+  <div data-coach-courses-target="futureCourses">
+    <% if @next_courses.any? %>
+      <table class="container table table-striped table-responsive table-center coach-container">
+        <thead>
+          <tr>
+            <th>Académie</th>
+            <th>Activité</th>
+            <th style="min-width:100px">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @next_courses.each do |course| %>
+          <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+            <td class="align-middle coach-font"><%= course.academy.name %></td>
+            <td class="align-middle coach-font"><%= course.activity.name %></td>
+            <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="flexy">
+        <%= link_to "Retour", "/", class: "btn-etendart-small" %>
+      </div>
+    <% else %>
+      <p style="text-align:center">Aucun cours à venir.</p>
+    <% end %>
   </div>
-<% end %>
+  <div class="d-none" data-coach-courses-target="pastCourses">
+    <% if @past_courses.any? %>
+      <table class="container table table-striped table-responsive table-center coach-container">
+        <thead>
+          <tr>
+            <th>Académie</th>
+            <th>Activité</th>
+            <th style="min-width:100px">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @past_courses.each do |course| %>
+          <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+            <td class="align-middle coach-font"><%= course.academy.name %></td>
+            <td class="align-middle coach-font"><%= course.activity.name %></td>
+            <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="flexy">
+        <%= link_to "Retour", "/", class: "btn-etendart-small" %>
+      </div>
+    <% else %>
+      <p style="text-align:center">Aucun cours passés.</p>
+    <% end %>
+  </div>
+</div>

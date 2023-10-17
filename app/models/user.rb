@@ -81,7 +81,7 @@ class User < ApplicationRecord
   end
 
   def past_courses
-    all_courses.where('ends_at < ?', Time.current).order(:starts_at)
+    all_courses.where('ends_at < ?', Time.current).order(starts_at: :desc)
   end
 
   def today_courses

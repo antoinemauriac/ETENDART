@@ -1,0 +1,41 @@
+
+.tab-container {
+  display: flex;
+  width: 100%;
+  background-color: #f0f0f0; /* Couleur de fond globale */
+
+  overflow: hidden;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  background-color: transparent;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  // transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab-item.active.left {
+  background-color: $yellow;
+  color: black;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.tab-item.active.right {
+  background-color: $yellow;
+  color: black;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+/* Styles pour les icônes (Font Awesome) */
+.tab-item i {
+  margin-right: 5px;
+  font-size: 18px;
+}
