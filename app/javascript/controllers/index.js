@@ -22,6 +22,9 @@ application.register("camp-courses", CampCoursesController)
 import ClickableTableController from "./clickable_table_controller"
 application.register("clickable-table", ClickableTableController)
 
+import CoachCoursesController from "./coach_courses_controller"
+application.register("coach-courses", CoachCoursesController)
+
 import DatePickerController from "./date_picker_controller"
 application.register("date-picker", DatePickerController)
 
