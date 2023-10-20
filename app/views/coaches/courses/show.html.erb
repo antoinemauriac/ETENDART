@@ -60,7 +60,11 @@
               </td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
-                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current }, 1, 0 %>
+                  <% if @academy.banished %>
+                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current }, 1, 0 %>
+                  <% else %>
+                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: @course.starts_at > Time.current }, 1, 0 %>
+                  <% end %>
                   <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
                 </div>
               </td>
@@ -84,12 +88,16 @@
         </tbody>
       </table>
       <div class="flexy">
-        <%= form.submit "Valider", class: "btn-etendart btn-presence #{'disabled' if (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current}", disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current %>
+        <% if @academy.banished %>
+          <%= form.submit "Valider", class: "btn-etendart btn-presence #{'disabled' if (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current}", disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current %>
+        <% else %>
+          <%= form.submit "Valider", class: "btn-etendart btn-presence #{'disabled' if @course.starts_at > Time.current}", disabled: @course.starts_at > Time.current %>
+        <% end %>
       </div>
     <% end %>
   </div>
 
-  <% if @school_period && @academy.name == "Rudy Gobert" %>
+  <% if @school_period && @academy.banished %>
     <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
       <div class="header-info header-info-coach">ÉLÈVES EXCLUS</div>
       <div class="content-info content-info-coach">
