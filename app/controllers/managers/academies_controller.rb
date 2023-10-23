@@ -80,7 +80,7 @@ class Managers::AcademiesController < ApplicationController
     end
   end
 
-  def all_absent_students
+  def today_absent_students
     @academy = Academy.find(params[:id])
     authorize [:managers, @academy]
     @absent_students = @academy.today_absent_students
