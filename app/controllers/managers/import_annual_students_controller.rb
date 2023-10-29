@@ -28,7 +28,6 @@ class Managers::ImportAnnualStudentsController < ApplicationController
       username = row['username'].to_s.strip
       if username.empty?
         flash[:alert] = "Le 'username' doit être présent pour chaque élève"
-        # supprimer les enrollments crées pour tous le students
         redirect_to managers_annual_program_path(annual_program) and return
       end
 
