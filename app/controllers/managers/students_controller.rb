@@ -66,7 +66,7 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     if @student.update(student_params)
-      student.update_phone_number
+      @student.update_phone_number
       update_academies
       redirect_to managers_student_path(@student, academy_id: @student.first_academy.id)
       flash[:notice] = "Informations modifiées avec succès"
