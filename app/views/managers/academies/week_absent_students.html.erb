@@ -28,7 +28,7 @@
               <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(enrollment.student, academy_id: @academy) %>'">
                 <td class="align-middle"><%= l(enrollment.course.starts_at, format: :day_name) %></td>
                 <td class="align-middle"><%= enrollment.course.activity.name %></td>
-                <td class="align-middle"><%= enrollment.student.full_name %></td>
+                <td class="align-middle"><%= enrollment.student.full_name_separator %></td>
                 <td class="align-middle"><%= enrollment.student.phone_modified %></td>
                 <td class="align-middle"><%= enrollment.student.email %></td>
               </tr>

@@ -19,7 +19,7 @@ class Managers::AcademiesController < ApplicationController
 
     @camp = @academy.camps.where("starts_at <= ? AND ends_at >= ?", Time.current, Time.current - 2.day).first
     if @camp.present? && @academy.banished
-      @banished_students = @camp.banished_students.sort_by { |student| student.camp_enrollments.find_by(camp: @camp)&.banishment_day }.reverse
+      @banished_students = @camp.banished_students.sort_by { |student| [student.camp_enrollments.find_by(camp: @camp)&.banishment_day, student.last_name] }.reverse
     end
     @today_absent_students = @academy.today_absent_students.first(5) if @camp.present?
 
