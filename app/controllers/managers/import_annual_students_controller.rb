@@ -18,28 +18,33 @@ class Managers::ImportAnnualStudentsController < ApplicationController
     end
 
     annual_program.students.each do |student|
-      if student.courses.empty?
-        student.destroy
+      student.destroy if student.courses.empty?
+    end
+
+    # vérifier que chaque champ prénom, nom et date-naissance n'est pas empty
+    csv.each do |row|
+      row = row.to_hash
+      first_name = row['prénom']
+      last_name = row['nom']
+      date_of_birth = row['date-naissance']
+      username = row['username']
+      if first_name.nil? || last_name.nil? || date_of_birth.nil? || username.nil?
+        flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
+        redirect_to managers_annual_program_path(annual_program) and return
       end
     end
 
     csv.each do |row|
       row = row.to_hash
-      username = row['username'].to_s.strip
-      if username.empty?
-        flash[:alert] = "Le 'username' doit être présent pour chaque élève"
-        redirect_to managers_annual_program_path(annual_program) and return
-      end
+      username = row['username'].to_s.strip.downcase.gsub(/\s+/, '')
 
-      student = Student.where("lower(unaccent(replace(username, ' ', ''))) = unaccent(?)", username.downcase.gsub(/\s+/, '')).first_or_initialize
+      student = Student.where("lower(unaccent(username)) = unaccent(?)", username).first_or_initialize
       student.assign_attributes(student_params_upload(row))
 
       if student.new_record?
         student.save
-        student.update_phone_number
       else
         student.update(student_params_upload(row))
-        student.update_phone_number
       end
 
       student.academies << academy unless student.academies.include?(academy)
@@ -90,9 +95,6 @@ class Managers::ImportAnnualStudentsController < ApplicationController
         key
       end
     end
-
-    row['first_name'] = row['first_name'].split.map(&:capitalize).join(' ') if row['first_name'].present?
-    row['last_name'] = row['last_name'].split.map(&:capitalize).join(' ') if row['last_name'].present?
 
     ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :allergy)
   end

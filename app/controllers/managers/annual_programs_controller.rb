@@ -70,7 +70,7 @@ class Managers::AnnualProgramsController < ApplicationController
 
           past_course_enrollments.each do |enrollment|
             student = enrollment.student
-            csv << [l(enrollment.course.starts_at, format: :week), l(enrollment.course.starts_at, format: :date), l(enrollment.course.starts_at, format: :hour_min), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.phone_modified, student.email, enrollment.present ? "present" : "absent"]
+            csv << [l(enrollment.course.starts_at, format: :week), l(enrollment.course.starts_at, format: :date), l(enrollment.course.starts_at, format: :hour_min), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.phone_number, student.email, enrollment.present ? "present" : "absent"]
           end
         end
 
@@ -92,7 +92,7 @@ class Managers::AnnualProgramsController < ApplicationController
           csv << ["Académie", "Programme", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
 
           students.each do |student|
-            csv << [annual_program.academy.name, annual_program.name, student.last_name, student.first_name, student.gender, student.age, student.phone_modified, student.email]
+            csv << [annual_program.academy.name, annual_program.name, student.last_name, student.first_name, student.gender, student.age, student.phone_number, student.email]
           end
         end
 

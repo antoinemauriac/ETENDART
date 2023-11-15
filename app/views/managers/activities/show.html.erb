@@ -91,7 +91,7 @@
           <td class="align-middle"><%= student.last_name %></td>
           <td class="align-middle"><%= student.first_name %></td>
           <td class="align-middle"><%= student.age %> ans</td>
-          <td class="align-middle"><%= student.phone_modified %></td>
+          <td class="align-middle"><%= student.phone_number %></td>
           <td class="align-middle"><%= student.email %></td>
           <td class="align-middle">
             <%= link_to managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id), origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>

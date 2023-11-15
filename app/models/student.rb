@@ -1,6 +1,6 @@
 class Student < ApplicationRecord
 
-  validates :username, presence: true
+  validates :username, :first_name, :last_name, :date_of_birth, presence: true
 
   DEFAULT_AVATAR = "xkhgd88iqzlk5ctay2hu.png"
 
@@ -30,30 +30,15 @@ class Student < ApplicationRecord
   has_many :annual_program_enrollments, dependent: :destroy
   has_many :annual_programs, through: :annual_program_enrollments
 
+  before_validation :normalize_fields, :normalize_phone_number
+
   def full_name
-    if first_name && last_name
-      "#{first_name} #{last_name}"
-    elsif first_name && !last_name
-      first_name
-    elsif !first_name && last_name
-      last_name
-    else
-      "No name"
-    end
+    "#{first_name} #{last_name}"
   end
 
   def full_name_separator
-    if first_name && last_name
-      "#{last_name.upcase} - #{first_name}"
-    elsif first_name && !last_name
-      first_name
-    elsif !first_name && last_name
-      last_name.upcase
-    else
-      "No name"
-    end
+    "#{last_name.upcase} - #{first_name}"
   end
-
 
   def courses_sorted
     courses.order(starts_at: :asc)
@@ -197,33 +182,6 @@ class Student < ApplicationRecord
     end
   end
 
-  def phone_modified
-    if phone_number
-      if phone_number.length == 9
-        "0#{phone_number}"
-      else
-        phone_number
-      end
-    else
-      "No phone number"
-    end
-  end
-
-  def update_phone_number
-    # Supprime les espaces du numéro de téléphone
-    phone_number = self.phone_number.gsub(/\s+/, '')
-
-    # Si le numéro de téléphone a une longueur de 9 chiffres, ajoute un "0" devant
-    if phone_number.length == 9
-      self.update(phone_number: "0" + phone_number)
-    end
-
-    # Si le numéro de téléphone commence par "33", remplace "33" par "0"
-    if phone_number.start_with?("33")
-      self.update(phone_number: "0" + phone_number[2..-1])
-    end
-  end
-
   def self.find_duplicates(threshold = 2)
     all_students = all.to_a
 
@@ -283,4 +241,27 @@ class Student < ApplicationRecord
 
     duplicates
   end
+
+  private
+
+  def normalize_fields
+    self.username = username.strip.downcase.gsub(/\s+/, '') if username.present?
+    self.first_name = first_name.strip.split.map(&:capitalize).join(' ') if first_name.present?
+    self.last_name = last_name.strip.split.map(&:capitalize).join(' ') if last_name.present?
+  end
+
+  def normalize_phone_number
+    if phone_number
+      phone_number = self.phone_number.gsub(/\s+/, '')
+
+      if phone_number.length == 9
+        self.update(phone_number: "0" + phone_number)
+      end
+
+      if phone_number.start_with?("33")
+        self.update(phone_number: "0" + phone_number[2..-1])
+      end
+    end
+  end
+
 end

@@ -155,7 +155,7 @@ class Managers::ActivitiesController < ApplicationController
           csv << ["Activité", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
 
           students.each do |student|
-            csv << [activity.name, student.last_name, student.first_name, student.gender, student.age, student.phone_modified, student.email]
+            csv << [activity.name, student.last_name, student.first_name, student.gender, student.age, student.phone_number, student.email]
           end
         end
 

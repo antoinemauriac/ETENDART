@@ -162,7 +162,7 @@
                   <% if course_enrollment.course.academy.name == @academy.name %>
                     <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
                       <td class="align-middle"><%= student.full_name_separator %></td>
-                      <td class="align-middle"><%= student.phone_modified %></td>
+                      <td class="align-middle"><%= student.phone_number %></td>
                       <td class="align-middle"><%= student.email %></td>
                       <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
                       <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
@@ -206,7 +206,7 @@
                 <td class="align-middle"><%= l(enrollment.course.starts_at, format: :day_name) %></td>
                 <td class="align-middle"><%= enrollment.activity.name %></td>
                 <td class="align-middle"><%= enrollment.student.full_name_separator %></td>
-                <td class="align-middle"><%= enrollment.student.phone_modified %></td>
+                <td class="align-middle"><%= enrollment.student.phone_number %></td>
                 <td class="align-middle"><%= enrollment.student.email %></td>
               </tr>
             <% end %>
@@ -246,7 +246,7 @@
                   <%= link_to student.full_name_separator, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
                 </td>
                 <td class="align-middle">
-                  <%= link_to student.phone_modified, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                  <%= link_to student.phone_number, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
                 </td>
                 <td class="align-middle">
                   <%= link_to student.email, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>

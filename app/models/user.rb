@@ -7,6 +7,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  validates :first_name, :last_name, :email, presence: true
+  validates :email, uniqueness: true
+
   has_many :academies_as_manager, class_name: 'Academy', foreign_key: :manager_id
 
   has_many :coach_academies, foreign_key: :coach_id, dependent: :destroy
@@ -35,6 +38,8 @@ class User < ApplicationRecord
   has_many :activities_as_coach, through: :activity_coaches, source: :activity
   has_many :courses_as_coach, through: :activities_as_coach, source: :courses
 
+  before_validation :normalize_fields, :normalize_phone_number
+
   def all_activities
     Activity.where(id: activities_as_lead.select(:id)).or(Activity.where(id: activities_as_coach.select(:id))).distinct
   end
@@ -56,15 +61,7 @@ class User < ApplicationRecord
   end
 
   def full_name
-    if first_name && last_name
-      "#{first_name.capitalize} #{last_name.capitalize}"
-    elsif first_name && !last_name
-      first_name.capitalize
-    elsif !first_name && last_name
-      last_name.capitalize
-    else
-      "No name"
-    end
+    "#{first_name.capitalize} #{last_name.capitalize}"
   end
 
   # def next_activities
@@ -98,5 +95,16 @@ class User < ApplicationRecord
 
   def academies_ordered
     academies_as_coach.order('coach_academies.created_at')
+  end
+
+  private
+
+  def normalize_fields
+    self.first_name = first_name.strip.split.map(&:capitalize).join(' ') if first_name.present?
+    self.last_name = last_name.strip.split.map(&:capitalize).join(' ') if last_name.present?
+  end
+
+  def normalize_phone_number
+    self.phone_number = phone_number.gsub(/\s+/, '') if phone_number.present?
   end
 end
