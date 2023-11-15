@@ -79,7 +79,7 @@ class Managers::CampsController < ApplicationController
           csv << ["Nom", "Prénom", "Genre", "Telephone", "Email"]
 
           banished_students.each do |student|
-            csv << [student.last_name, student.first_name, student.gender, student.phone_modified, student.email]
+            csv << [student.last_name, student.first_name, student.gender, student.phone_number, student.email]
           end
         end
 

@@ -22,31 +22,27 @@ class Managers::ImportStudentsController < ApplicationController
 
     csv.each do |row|
       row = row.to_hash
-      username = row['username'].to_s.strip
-      if username.empty?
-        flash[:alert] = "Le 'username' doit être présent pour chaque élève"
-        SchoolPeriodEnrollment.where(school_period: school_period).each do |school_period_enrollment|
-          camps = school_period_enrollment.student.camps.where(school_period: school_period)
-          if camps == [camp] || camps.empty?
-            school_period_enrollment.destroy
-          end
-        end
-        camp.camp_enrollments.destroy_all
-        ActivityEnrollment.joins(activity: :camp).where(camps: { id: camp.id }).destroy_all
-        CourseEnrollment.joins(course: { activity: :camp }).where(camps: { id: camp.id }).destroy_all
+      first_name = row['prénom']
+      last_name = row['nom']
+      date_of_birth = row['date-naissance']
+      username = row['username']
+      if first_name.nil? || last_name.nil? || date_of_birth.nil? || username.nil?
+        flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
         redirect_to managers_school_period_path(school_period) and return
       end
+    end
 
-      student = Student.where("lower(unaccent(replace(username, ' ', ''))) = unaccent(?)", username.downcase.gsub(/\s+/, '')).first_or_initialize
+    csv.each do |row|
+      row = row.to_hash
+      username = row['username'].to_s.strip.downcase.gsub(/\s+/, '')
 
+      student = Student.where("lower(unaccent(username)) = unaccent(?)", username).first_or_initialize
       student.assign_attributes(student_params_upload(row))
 
       if student.new_record?
         student.save
-        student.update_phone_number
       else
         student.update(student_params_upload(row))
-        student.update_phone_number
       end
 
       student.academies << academy unless student.academies.include?(academy)
@@ -98,9 +94,6 @@ class Managers::ImportStudentsController < ApplicationController
         key
       end
     end
-
-    row['first_name'] = row['first_name'].split.map(&:capitalize).join(' ') if row['first_name'].present?
-    row['last_name'] = row['last_name'].split.map(&:capitalize).join(' ') if row['last_name'].present?
 
     ActionController::Parameters.new(row).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :allergy)
   end

@@ -20,7 +20,7 @@
       <p class="text-break">PRÉNOM : <strong><%= @student.first_name.try(:upcase) %></strong></p>
       <p><%= @student.gender %> - <%= @student.age %> ans </p>
       <p class="text-break">EMAIL : <%= @student.email %></p>
-      <p class="text-break">TEL : <%= @student.phone_modified %></p>
+      <p class="text-break">TEL : <%= @student.phone_number %></p>
       <% if params[:precedent] %>
         <%= link_to params[:precedent], class:"menu__item" do %>
           <i class="fa-solid fa-arrow-rotate-left icones"></i>

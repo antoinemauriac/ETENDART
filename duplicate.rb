@@ -9,6 +9,27 @@
 #   puts "-----------------------"
 # end
 
+# students with same first_name last_name pair
+# students_with_duplicates = Student
+#   .select('LOWER(first_name) AS first_name, LOWER(last_name) AS last_name, COUNT(*) AS count, phone_number')
+#   .group('first_name, last_name, phone_number')
+#   .having('COUNT(*) > 1')
+#   .order('first_name, last_name, phone_number')
+#   .map do |student|
+#     students_with_same_name = Student
+#       .where('LOWER(first_name) = ? AND LOWER(last_name) = ? AND phone_number = ?', student.first_name, student.last_name, student.phone_number)
+#       .pluck(:id, :first_name, :last_name)
+#       .map { |s| "#{s[1]} #{s[2]} (id #{s[0]})" }
+#       .join(" et ")
+#     full_name = "#{student.first_name.capitalize} #{student.last_name.capitalize}" # Nom complet
+#     tel_info = "tel : #{student.phone_number}" # Informations sur le téléphone
+
+#     {
+#       full_name: "#{full_name} (#{students_with_same_name}) #{tel_info}",
+#       students: students_with_same_name
+#     }
+#   end
+
 # identifier le main student et le duplicate
 
 # main = Student.find(1)
@@ -16,6 +37,7 @@
 
 
 # duplicate.academy_enrollments.where.not(academy_id: main.academies.ids).update_all(student_id: main.id)
+# duplicate.annual_program_enrollments.where.not(annual_program_id: main.annual_programs.ids).update_all(student_id: main.id)
 # duplicate.school_period_enrollments.where.not(school_period_id: main.school_periods.ids).update_all(student_id: main.id)
 # duplicate.camp_enrollments.where.not(camp_id: main.camps.ids).update_all(student_id: main.id)
 # duplicate.activity_enrollments.where.not(activity_id: main.activities.ids).update_all(student_id: main.id)
@@ -25,10 +47,10 @@
 # students = Student.where(username: nil).order(:created_at)
 
 # students.each do |student|
-#   first_name = student.first_name.downcase
-#   last_name = student.last_name.downcase
-#   excel_serial_date = (student.date_of_birth - Date.new(1899, 12, 30)).to_i
+  # first_name = student.first_name.downcase
+  # last_name = student.last_name.downcase
+  # excel_serial_date = (student.date_of_birth - Date.new(1899, 12, 30)).to_i
 
-#   username = "#{first_name}#{last_name}#{excel_serial_date }"
-#   student.update(username: username)
+  # username = "#{first_name}#{last_name}#{excel_serial_date }"
+  # student.update(username: username)
 # end

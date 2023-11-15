@@ -46,7 +46,7 @@ class Managers::AcademiesController < ApplicationController
           csv << ["Nom", "Prénom", "Genre", "Telephone", "Email"]
 
           today_absent_students.each do |student|
-            csv << [student.last_name, student.first_name, student.gender, student.phone_modified, student.email]
+            csv << [student.last_name, student.first_name, student.gender, student.phone_number, student.email]
           end
         end
 
@@ -71,7 +71,7 @@ class Managers::AcademiesController < ApplicationController
 
           week_absent_enrollments.each do |enrollment|
             student = enrollment.student
-            csv << [l(enrollment.course.starts_at, format: :day_name), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.phone_modified, student.email]
+            csv << [l(enrollment.course.starts_at, format: :day_name), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.phone_number, student.email]
           end
         end
 
