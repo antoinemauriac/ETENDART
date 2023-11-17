@@ -122,6 +122,10 @@ class Student < ApplicationRecord
     activities.where(camp: camp)
   end
 
+  def student_activities_without_acc(camp)
+    activities.where.not(category: Category.find_by(name: "Accompagnement")).where(camp: camp)
+  end
+
   def age
     if date_of_birth
       now = Time.current
@@ -248,6 +252,7 @@ class Student < ApplicationRecord
     self.username = username.strip.downcase.gsub(/\s+/, '') if username.present?
     self.first_name = first_name.strip.split.map(&:capitalize).join(' ') if first_name.present?
     self.last_name = last_name.strip.split.map(&:capitalize).join(' ') if last_name.present?
+    self.email = email.strip.downcase if email.present?
   end
 
   def normalize_phone_number

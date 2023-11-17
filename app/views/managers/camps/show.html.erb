@@ -84,7 +84,7 @@
         <th>Nom</th>
         <th>Prénom</th>
         <% if @academy.banished %>
-          <th>Banni ?</th>
+          <th>Exclu ?</th>
         <% end %>
         <th>Age</th>
         <th>Activité 1</th>
@@ -102,10 +102,10 @@
             <td><%= student.camp_enrollments.where(camp: @camp).first.banished ? "Oui" : "" %></td>
           <% end %>
           <td><%= student.age %> ans</td>
-          <td><%= student.student_activities(@camp).first.name %></td>
-          <td><%= "#{student.unattended_rate(student.student_activities(@camp).first)}%"%></td>
-          <td><%= student.student_activities(@camp).second.name if student.student_activities(@camp).second.present? %></td>
-          <td><%= "#{student.unattended_rate(student.student_activities(@camp).second)}%" if student.student_activities(@camp).second.present? %></td>
+          <td><%= student.student_activities_without_acc(@camp).first.name %></td>
+          <td><%= "#{student.unattended_rate(student.student_activities_without_acc(@camp).first)}%"%></td>
+          <td><%= student.student_activities_without_acc(@camp).second.name if student.student_activities_without_acc(@camp).second.present? %></td>
+          <td><%= "#{student.unattended_rate(student.student_activities_without_acc(@camp).second)}%" if student.student_activities_without_acc(@camp).second.present? %></td>
         </tr>
       <% end %>
     </tbody>
