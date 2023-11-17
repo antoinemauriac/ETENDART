@@ -85,12 +85,20 @@ Rails.application.routes.draw do
         get :export_annual_students
       end
     end
+
+    resources :coaches do
+      member do
+        patch :update_infos
+      end
+    end
+
+    resources :coach_feedbacks, only: %i[create destroy]
+
     resources :annual_enrollments, only: %i[create]
     resources :feedbacks, only: %i[new create]
     resources :activity_enrollments, only: %i[destroy]
     resources :categories, only: %i[index create edit update destroy]
     resources :locations, only: %i[show]
-    resources :coaches
     resources :enrollments, only: %i[new create]
     resources :locations, only: %i[create index edit update]
   end

@@ -251,17 +251,14 @@ class Student < ApplicationRecord
   end
 
   def normalize_phone_number
-    if phone_number
-      phone_number = self.phone_number.gsub(/\s+/, '')
-
-      if phone_number.length == 9
-        self.update(phone_number: "0" + phone_number)
-      end
-
-      if phone_number.start_with?("33")
-        self.update(phone_number: "0" + phone_number[2..-1])
-      end
+    return unless phone_number
+    new_phone = phone_number.gsub(/[^0-9]/, '')
+    if new_phone.length == 9
+      self.phone_number = "0#{new_phone}"
+    elsif new_phone.length == 10
+      self.phone_number = new_phone
+    elsif new_phone.length == 11 && new_phone.start_with?('33')
+      self.phone_number = "0#{new_phone[2..-1]}"
     end
   end
-
 end

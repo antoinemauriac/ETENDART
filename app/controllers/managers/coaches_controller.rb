@@ -12,6 +12,8 @@ class Managers::CoachesController < ApplicationController
     @coach = User.find(params[:id])
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
     @academies = current_user.academies_as_manager
+    @coach_feedback = CoachFeedback.new
+    @coach_feedbacks = @coach.coach_feedbacks.order(created_at: :desc)
     @categories = Category.all
     academies_ordered = @coach.academies_ordered
     @academy1 = academies_ordered.first ? academies_ordered.first.id : ""
@@ -87,6 +89,14 @@ class Managers::CoachesController < ApplicationController
     redirect_to managers_coach_path(@coach)
   end
 
+  def update_infos
+    @coach = User.find(params[:id])
+    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
+    @coach.update(coach_params)
+    flash[:notice] = "Coach mis à jour."
+    redirect_to managers_coach_path(@coach)
+  end
+
   def category_coaches
     category = Category.find(params[:category_id])
     authorize([:managers, category])
@@ -98,6 +108,6 @@ class Managers::CoachesController < ApplicationController
   private
 
   def coach_params
-    params.require(:user).permit(:email, :first_name, :last_name, :password, :phone_number)
+    params.require(:user).permit(:email, :first_name, :last_name, :password, :phone_number, :gender)
   end
 end

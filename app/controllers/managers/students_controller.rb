@@ -17,6 +17,7 @@ class Managers::StudentsController < ApplicationController
     @academies = current_user.academies_as_manager
     @academy = Academy.find(params[:academy_id])
     @feedback = Feedback.new
+    @feedbacks = @student.feedbacks.order(created_at: :desc)
     @next_camp_activities = @student.next_camp_activities.reject { |activity| @student.next_courses_by_activity(activity).empty? }
     @next_annual_activities = @student.next_annual_activities.reject { |activity| @student.next_courses_by_activity(activity).empty? }
     next_courses = @student.next_courses

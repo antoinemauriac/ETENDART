@@ -12,6 +12,7 @@
     <div class="col-6">
       <%= form.input :last_name, label: "Nom :", input_html: { class: "form-control" } %>
       <%= form.input :email, label: "Email :", input_html: { class: "form-control" } %>
+      <%= form.input :gender, label: "Genre:", collection: ["Garçon", "Fille"], input_html: { class: "form-control" } %>
       <%= form.input :academy_1_id, label: "Académie 1 :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, required: true, input_html: { class: "form-control", validate: ["not_blank"] } %>
       <%= form.input :academy_2_id, label: "Académie 2 (optionnel) :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
       <%= form.input :academy_3_id, label: "Académie 3 (optionnel) :", collection: @academies, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
@@ -19,6 +20,7 @@
     <div class="col-6">
       <%= form.input :first_name, label: "Prénom :", input_html: { class: "form-control" } %>
       <%= form.input :phone_number, label: "Numéro de téléphone :", input_html: { class: "form-control" } %>
+      <div style="height: 86px;"></div>
       <%= form.input :category_1_id, label: "Catégorie 1 :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, required: true, input_html: { class: "form-control", validate: ["not_blank"] } %>
       <%= form.input :category_2_id, label: "Catégorie 2 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
       <%= form.input :category_3_id, label: "Catégorie 3 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
