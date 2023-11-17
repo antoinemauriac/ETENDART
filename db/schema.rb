@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_16_115157) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_16_181227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -177,6 +177,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_16_115157) do
     t.index ["coach_id"], name: "index_coach_categories_on_coach_id"
   end
 
+  create_table "coach_feedbacks", force: :cascade do |t|
+    t.text "content"
+    t.bigint "coach_id", null: false
+    t.bigint "manager_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coach_id"], name: "index_coach_feedbacks_on_coach_id"
+    t.index ["manager_id"], name: "index_coach_feedbacks_on_manager_id"
+  end
+
   create_table "course_enrollments", force: :cascade do |t|
     t.bigint "student_id", null: false
     t.bigint "course_id", null: false
@@ -315,6 +325,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_16_115157) do
     t.string "phone_number"
     t.string "status"
     t.boolean "admin", default: false, null: false
+    t.string "gender"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -345,6 +356,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_16_115157) do
   add_foreign_key "coach_camps", "users", column: "coach_id"
   add_foreign_key "coach_categories", "categories"
   add_foreign_key "coach_categories", "users", column: "coach_id"
+  add_foreign_key "coach_feedbacks", "users", column: "coach_id"
+  add_foreign_key "coach_feedbacks", "users", column: "manager_id"
   add_foreign_key "course_enrollments", "courses"
   add_foreign_key "course_enrollments", "students"
   add_foreign_key "courses", "activities"

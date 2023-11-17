@@ -8,7 +8,7 @@
 
 <div class="row justify-content-center align-items-stretch">
 
-  <div class="col-lg-7 col-sm-12 mt-3" data-controller="upload-photo">
+  <div class="col-lg-5 col-md-7 col-sm-12 mt-3" data-controller="upload-photo">
     <div class="header-info">INFORMATIONS</div>
     <div class="content-info">
       <div class="student-info">
@@ -38,14 +38,69 @@
     </div>
   </div>
 
-  <div class="col-lg-5 col-sm-12 mt-3">
+  <div class="col-lg-2 col-md-5 col-sm-12 mt-3">
     <div class="header-info">HISTORIQUE</div>
     <div class="content-info">
       <div>
-        <p><%= "Nb total stages : #{@student.camps_count}" %></p>
-        <p><%= "Nb de cours passés : #{@student.past_courses_count}" %></p>
-        <p><%= "Nb absences : #{@student.unattended_courses_count}" %></p>
-        <p><%= "Taux d'absentéisme : #{@student.unattended_rate}%" %></p>
+        <p><%= "STAGES : #{@student.camps_count}" %></p>
+        <p><%= "COURS : #{@student.past_courses_count}" %></p>
+        <p><%= "DONT ABSENCES: #{@student.unattended_courses_count}" %></p>
+        <p><%= "TAUX ABS : #{@student.unattended_rate}%" %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5 col-sm-12 mt-3">
+    <div class="header-info">FEEDBACKS</div>
+    <div class="content-info">
+      <div>
+        <table class="table table-striped table-responsive">
+          <thead>
+            <tr>
+              <th>Auteur</th>
+              <th>Date</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @feedbacks.each do |feedback| %>
+            <tr>
+              <td class="align-middle"><%= feedback.coach.full_name %></td>
+              <td class="align-middle"><%= l(feedback.created_at, format: :date)  %></td>
+              <td class="align-middle"><%= feedback.content %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div data-controller="feedback-form">
+        <div class="flexy">
+          <button type="button" class="btn-etendart-yellow" data-action="click->feedback-form#openFeedbackModal" style="width:300px">
+            Ajouter un feedback
+          </button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" data-feedback-form-target="feedbackModal" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= "Ajouter un feedback pour #{@student.first_name} #{@student.last_name}" %></h5>
+                <i class="fas fa-times" data-action="click->feedback-form#closeFeedbackModal" style="cursor: pointer;"></i>
+              </div>
+              <div class="modal-body">
+                <%= form_with(model: @feedback, url: managers_feedbacks_path(student_id: @student.id ,academy_id: @academy.id), local: true) do |form| %>
+                  <div class="form-group">
+                    <%= form.text_area :content, class: "form-control", placeholder: "Ecrivez votre commentaire ici...", required: true %>
+                  </div>
+                  <div class="d-flex justify-content-around mt-3">
+                    <%= form.submit "Valider", class: "btn-etendart" %>
+                    <button class="btn-etendart-black" type="button" data-action="click->feedback-form#closeFeedbackModal">Annuler</button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -194,61 +249,6 @@
                       <%= form.submit "Valider", class: "btn-etendart" %>
                       <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
                     </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-lg-8 col-sm-12 mt-4">
-    <div class="header-info">FEEDBACKS</div>
-    <div class="content-info">
-      <div>
-        <table class="table table-striped table-responsive">
-          <thead>
-            <tr>
-              <th>Auteur</th>
-              <th>Date</th>
-              <th>Message</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @student.feedbacks.each do |feedback| %>
-            <tr>
-              <td class="align-middle"><%= feedback.coach.full_name %></td>
-              <td class="align-middle"><%= l(feedback.created_at, format: :date)  %></td>
-              <td class="align-middle"><%= feedback.content %></td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-      <div data-controller="feedback-form">
-        <div class="flexy">
-          <button type="button" class="btn-etendart-yellow" data-action="click->feedback-form#openFeedbackModal" style="width:300px">
-            Ajouter un feedback
-          </button>
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" data-feedback-form-target="feedbackModal" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title"><%= "Ajouter un feedback pour #{@student.first_name} #{@student.last_name}" %></h5>
-                <i class="fas fa-times" data-action="click->feedback-form#closeFeedbackModal" style="cursor: pointer;"></i>
-              </div>
-              <div class="modal-body">
-                <%= form_with(model: @feedback, url: managers_feedbacks_path(student_id: @student.id ,academy_id: @academy.id), local: true) do |form| %>
-                  <div class="form-group">
-                    <%= form.text_area :content, class: "form-control", placeholder: "Ecrivez votre commentaire ici...", required: true %>
-                  </div>
-                  <div class="d-flex justify-content-around mt-3">
-                    <%= form.submit "Valider", class: "btn-etendart" %>
-                    <button class="btn-etendart-black" type="button" data-action="click->feedback-form#closeFeedbackModal">Annuler</button>
-                  </div>
                 <% end %>
               </div>
             </div>

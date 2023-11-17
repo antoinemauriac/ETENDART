@@ -38,7 +38,10 @@ class User < ApplicationRecord
   has_many :activities_as_coach, through: :activity_coaches, source: :activity
   has_many :courses_as_coach, through: :activities_as_coach, source: :courses
 
-  before_validation :normalize_fields, :normalize_phone_number
+  has_many :coach_feedbacks, foreign_key: :coach_id, dependent: :destroy
+
+  before_validation :normalize_fields
+  before_validation :normalize_phone_number
 
   def all_activities
     Activity.where(id: activities_as_lead.select(:id)).or(Activity.where(id: activities_as_coach.select(:id))).distinct
@@ -73,6 +76,22 @@ class User < ApplicationRecord
     Activity.joins(:camp).where(id: activity_ids).where('camps.ends_at > ?', Time.current).order(:starts_at)
   end
 
+  # def next_annual_activities
+  #   activity_ids = Activity.where(id: activities_as_lead.select(:id)).or(Activity.where(id: activities_as_coach.select(:id))).select(:id)
+  #   Activity.joins(:annual_program).where(id: activity_ids).where('annual_programs.ends_at > ?', Time.current).order(:starts_at)
+  # end
+
+  def next_annual_activities
+    activity_ids = Activity.where(id: activities_as_lead.select(:id))
+                        .or(Activity.where(id: activities_as_coach.select(:id)))
+                        .select(:id)
+
+    activities = Activity.joins(:annual_program)
+                         .where(id: activity_ids)
+
+    activities.select { |activity| activity.annual_program.ends_at > Time.current }
+  end
+
   def next_courses
     all_courses.where('starts_at > ?', Time.current).order(:starts_at)
   end
@@ -105,6 +124,14 @@ class User < ApplicationRecord
   end
 
   def normalize_phone_number
-    self.phone_number = phone_number.gsub(/\s+/, '') if phone_number.present?
+    return unless phone_number
+    new_phone = phone_number.gsub(/[^0-9]/, '')
+    if new_phone.length == 9
+      self.phone_number = "0#{new_phone}"
+    elsif new_phone.length == 10
+      self.phone_number = new_phone
+    elsif new_phone.length == 11 && new_phone.start_with?('33')
+      self.phone_number = "0#{new_phone[2..-1]}"
+    end
   end
 end

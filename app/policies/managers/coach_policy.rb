@@ -16,6 +16,10 @@ class Managers::CoachPolicy < ApplicationPolicy
     user.manager?
   end
 
+  def update_infos?
+    user.manager?
+  end
+
   class Scope < Scope
     def resolve
     end
