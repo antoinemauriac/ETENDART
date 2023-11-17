@@ -99,7 +99,8 @@ class Student < ApplicationRecord
     end
   end
 
-  def unattended_rate(activity = nil)
+  def unattended_rate(activity)
+    return 0 if activity.nil?
     past_count = past_courses_count(activity)
     unattended_count = unattended_courses_count(activity: activity)
 
