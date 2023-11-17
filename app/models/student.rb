@@ -119,11 +119,11 @@ class Student < ApplicationRecord
   end
 
   def student_activities(camp)
-    activities.where(camp: camp)
+    activities.where(camp: camp).order(name: :desc)
   end
 
   def student_activities_without_acc(camp)
-    activities.where.not(category: Category.find_by(name: "Accompagnement")).where(camp: camp)
+    activities.where.not(category: Category.find_by(name: "Accompagnement")).where(camp: camp).order(name: :desc)
   end
 
   def age
