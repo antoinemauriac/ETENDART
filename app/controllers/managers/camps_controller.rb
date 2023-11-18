@@ -50,7 +50,7 @@ class Managers::CampsController < ApplicationController
           csv << ["Nom", "Prénom", "Age", "Genre", "Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
 
           students.each do |student|
-            csv << [student.last_name, student.first_name, student.age, student.gender, student.student_activities(@camp).first.name, student.unattended_rate(student.student_activities(@camp).first), student.student_activities(@camp).second&.name, student.unattended_rate(student.student_activities(@camp).second), student.student_activities(@camp).third&.name, student.unattended_rate(student.student_activities(@camp).third)]
+            csv << [student.last_name, student.first_name, student.age, student.gender, student.student_activities(@camp).first.name, student.unattended_activity_rate(student.student_activities(@camp).first), student.student_activities(@camp).second&.name, student.unattended_activity_rate(student.student_activities(@camp).second), student.student_activities(@camp).third&.name, student.unattended_activity_rate(student.student_activities(@camp).third)]
           end
         end
 

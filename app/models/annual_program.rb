@@ -39,11 +39,11 @@ class AnnualProgram < ApplicationRecord
   end
 
   def today_courses
-    courses.where(starts_at: Time.current.all_day).order(:starts_at)
+    courses.includes(:activity).where(starts_at: Time.current.all_day).order(:starts_at)
   end
 
   def tomorrow_courses
-    courses.where(starts_at: Time.current.tomorrow.all_day).order(:starts_at)
+    courses.includes(:activity).where(starts_at: Time.current.tomorrow.all_day).order(:starts_at)
   end
 
   def started?
@@ -89,6 +89,10 @@ class AnnualProgram < ApplicationRecord
     program_periods.last.end_date
   end
 
+  def end_at
+    program_periods.last.end_date
+  end
+
   def week_absent_enrollments_sorted_by_day
     enrollments = course_enrollments.where(present: false).where(courses: { starts_at: Time.current.beginning_of_week..Time.current.end_of_week }).distinct
 
@@ -98,7 +102,7 @@ class AnnualProgram < ApplicationRecord
   end
 
   def old_presence_sheet
-    courses.where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
+    courses.includes(:activity).where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
   end
 
   def past_course_enrollments

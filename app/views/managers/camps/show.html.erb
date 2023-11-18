@@ -103,9 +103,9 @@
           <% end %>
           <td><%= student.age %> ans</td>
           <td><%= student.student_activities_without_acc(@camp).first.name %></td>
-          <td><%= "#{student.unattended_rate(student.student_activities_without_acc(@camp).first)}%"%></td>
+          <td><%= "#{student.unattended_activity_rate(student.student_activities_without_acc(@camp).first)}%"%></td>
           <td><%= student.student_activities_without_acc(@camp).second.name if student.student_activities_without_acc(@camp).second.present? %></td>
-          <td><%= "#{student.unattended_rate(student.student_activities_without_acc(@camp).second)}%" if student.student_activities_without_acc(@camp).second.present? %></td>
+          <td><%= "#{student.unattended_activity_rate(student.student_activities_without_acc(@camp).second)}%" if student.student_activities_without_acc(@camp).second.present? %></td>
         </tr>
       <% end %>
     </tbody>

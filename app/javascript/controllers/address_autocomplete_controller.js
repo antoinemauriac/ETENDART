@@ -12,6 +12,7 @@ export default class extends Controller {
       accessToken: this.apiKeyValue,
       types: "country,region,place,postcode,locality,neighborhood,address",
       countries: 'FR',
+      proximity: { longitude: 2.352222, latitude: 48.856613 },
       container: "address-container", // ID of the container where you want to render the geocoder control
       placeholder: "12 rue Jean Jaurès...", // Placeholder text for the geocoder control
       className: "form-control",

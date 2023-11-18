@@ -17,7 +17,7 @@ class Academy < ApplicationRecord
   has_many :students, through: :academy_enrollments
 
   def today_camp_courses
-    courses.where(starts_at: Time.current.all_day).order(:starts_at)
+    courses.includes(:activity).where(starts_at: Time.current.all_day).order(:starts_at)
   end
 
   def today_annual_courses
@@ -25,7 +25,7 @@ class Academy < ApplicationRecord
   end
 
   def tomorrow_camp_courses
-    courses.where(starts_at: Time.current.tomorrow.all_day).order(:starts_at)
+    courses.includes(:activity).where(starts_at: Time.current.tomorrow.all_day).order(:starts_at)
   end
 
   def tomorrow_annual_courses
@@ -49,6 +49,6 @@ class Academy < ApplicationRecord
   end
 
   def old_presence_sheet
-    courses.where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
+    courses.includes(:activity).where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
   end
 end
