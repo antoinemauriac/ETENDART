@@ -8,6 +8,8 @@ class AnnualProgram < ApplicationRecord
   has_many :program_periods, dependent: :destroy
   has_many :activities, dependent: :destroy
   has_many :activity_enrollments, through: :activities
+  has_many :activity_coaches, through: :activities
+  has_many :coaches, -> { distinct }, through: :activity_coaches
   has_many :courses, through: :activities
   has_many :course_enrollments, through: :courses
 

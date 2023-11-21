@@ -5,6 +5,7 @@ class SchoolPeriod < ApplicationRecord
   belongs_to :academy
   has_many :camps, dependent: :destroy
   has_many :camp_enrollments, through: :camps
+  has_many :coaches, -> { distinct },  through: :camps
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps

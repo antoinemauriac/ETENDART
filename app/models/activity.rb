@@ -9,6 +9,7 @@ class Activity < ApplicationRecord
   }
 
   belongs_to :camp, optional: true
+  belongs_to :coach, class_name: 'User', foreign_key: :coach_id, optional: true
   has_one :school_period, through: :camp
   # has_one :academy, through: :school_period
 
