@@ -13,6 +13,7 @@ class Managers::ActivitiesController < ApplicationController
     @activity = Activity.new
     @annual_program = AnnualProgram.find(params[:annual_program])
     @academy = @annual_program.academy
+    @coaches = @academy.coaches
     @locations = @academy.locations
     authorize([:managers, @activity])
   end
@@ -20,15 +21,15 @@ class Managers::ActivitiesController < ApplicationController
   def create
     activity = camp.activities.build(activity_params)
     academy = camp.academy
-    # locations = academy.locations
-    # school_period = camp.school_period
+
     authorize([:managers, activity])
 
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
-    coach = User.find_by_id(params[:activity][:coach_id])
+    coach = User.find(params[:activity][:coach_id])
     coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
-    # @activity.coaches << coach if coach
+
     activity.coaches << User.where(id: coaches) if coaches.any?
+    activity.coaches << coach if coach
 
     if activity.errors.any?
       return render :new, status: :unprocessable_entity
@@ -53,7 +54,12 @@ class Managers::ActivitiesController < ApplicationController
   def create_for_annual
     annual_program = AnnualProgram.find(params[:annual_program])
     activity = annual_program.activities.build(activity_params)
+
     coach = User.find_by_id(params[:activity][:coach_id])
+    coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
+
+    activity.coaches << User.where(id: coaches) if coaches.any?
+    activity.coaches << coach if coach
 
     authorize([:managers, activity])
     if activity.save
@@ -107,9 +113,10 @@ class Managers::ActivitiesController < ApplicationController
 
       coach = User.find_by_id(params[:activity][:coach_id])
       coaches = params[:activity][:coach_ids].reject { |id| id == "" }
-      @activity.coaches = []
+      @activity.coaches.clear
 
       @activity.coaches << User.where(id: coaches) if coaches.any?
+      @activity.coaches << coach if coach
 
       @activity.courses.each do |course|
         course.update(coach: coach)

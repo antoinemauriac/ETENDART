@@ -1,4 +1,6 @@
 class Managers::CoachFeedbacksController < ApplicationController
+
+  before_action :coach_feedback, only: %i[destroy]
   def create
     coach_feedback = CoachFeedback.new(coach_feedback_params)
     @coach = User.find(params[:coach])
@@ -14,9 +16,20 @@ class Managers::CoachFeedbacksController < ApplicationController
     end
   end
 
+  def destroy
+    authorize([:managers, @coach_feedback], policy_class: Managers::CoachFeedbackPolicy)
+    @coach_feedback.destroy
+    flash[:notice] = "Feedback supprimé avec succès."
+    redirect_to managers_coach_path(@coach_feedback.coach)
+  end
+
   private
 
   def coach_feedback_params
     params.require(:coach_feedback).permit(:content)
+  end
+
+  def coach_feedback
+    @coach_feedback ||= CoachFeedback.find(params[:id])
   end
 end

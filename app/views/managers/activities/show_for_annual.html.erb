@@ -60,7 +60,7 @@
       <%= simple_form_for @activity, url: managers_activity_path(@activity), method: :patch do |f| %>
 
       <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select" } } %>
-      <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" },  selected: @activity.coaches.reject { |coach| coach == @coach } } %>
+      <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches.reject { |coach| coach == @coach }, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" }, selected: @coaches.reject { |coach| coach == @coach } } %>
       <div class="flexy">
         <%= f.button :submit, "Valider", class: "btn btn-etendart-yellow" %>
       </div>
