@@ -6,7 +6,7 @@
     <div class="header-info header-info-coach">INFOS</div>
     <div class="content-info content-info-coach">
       <p>ADRESSE : <strong><%= @course.activity.location.address %></strong></p>
-      <p>TOTAL ÉLÈVES : <strong><%= @activity.students.count %></strong></p>
+      <p>TOTAL ÉLÈVES : <strong><%= @course.students.count %></strong></p>
       <% if @course.status %>
         <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
         <p class="red-text">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>

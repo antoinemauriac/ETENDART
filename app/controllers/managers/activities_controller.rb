@@ -77,7 +77,8 @@ class Managers::ActivitiesController < ApplicationController
     @academy = @activity.academy
     @camp = @activity.camp
     @school_period = @camp.school_period
-    @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
+    # @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
+    @students = @activity.students.sort_by(&:last_name)
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
     category = @activity.category
@@ -89,7 +90,8 @@ class Managers::ActivitiesController < ApplicationController
     @activity = Activity.find(params[:id])
     @academy = @activity.academy
     @annual_program = @activity.annual_program
-    @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
+    # @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
+    @students = @activity.students.sort_by(&:last_name)
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.next_courses.sort_by(&:starts_at).first(3)
     category = @activity.category

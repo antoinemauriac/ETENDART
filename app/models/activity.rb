@@ -83,9 +83,9 @@ class Activity < ApplicationRecord
   #   end
   # end
 
-  def students_with_next_activity_enrollments
-    students.joins(:activity_enrollments).where(activity_enrollments: { deleted: false }).uniq
-  end
+  # def students_with_next_activity_enrollments
+  #   students.joins(:activity_enrollments).where(activity_enrollments: { deleted: false }).uniq
+  # end
 
   def absenteeism_rate
     enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)

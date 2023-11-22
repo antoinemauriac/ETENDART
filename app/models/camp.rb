@@ -29,23 +29,32 @@ class Camp < ApplicationRecord
   end
 
   def show_students
-    ids = course_enrollments.joins(:student)
-                            .group(:student_id)
-                            .having("SUM(CASE WHEN present = true THEN 1 ELSE 0 END) >= 1")
-                            .count.keys
-    Student.where(id: ids)
+    @show_students ||= begin
+      ids = course_enrollments.joins(:student)
+                              .group(:student_id)
+                              .having("SUM(CASE WHEN present = true THEN 1 ELSE 0 END) >= 1")
+                              .count.keys
+      Student.where(id: ids)
+    end
   end
 
+  # def show_students
+  #   activity_enrollments.joins(:student)
+  #                       .where(present: true)
+  #                       .distinct
+  #                       .order(:last_name)
+  # end
+
   def show_count
-    show_students.count
+    @show_students.count
   end
 
   def no_show_students
-    ids = course_enrollments.joins(:student)
-                            .group(:student_id)
-                            .having("COUNT(*) = SUM(CASE WHEN present = false THEN 1 ELSE 0 END)")
-                            .count.keys
-    Student.where(id: ids)
+    # S'assurer que @show_students est initialisé
+    show_students unless @show_students
+
+    # Effectuer la requête
+    students.where.not(id: @show_students.pluck(:id))
   end
 
   def no_show_count
