@@ -28,7 +28,7 @@ class Managers::ImportStudentsController < ApplicationController
       username = row['username']
       if first_name.nil? || last_name.nil? || date_of_birth.nil? || username.nil?
         flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
-        redirect_to managers_school_period_path(school_period) and return
+        redirect_to managers_camp_path(camp) and return
       end
     end
 
@@ -58,13 +58,13 @@ class Managers::ImportStudentsController < ApplicationController
             student.courses << activity.courses
           else
             flash[:alert] = "Une erreur est survenue. L'activité '#{activity_name}' ne correspond pas à une activité créée sur l'application"
-            redirect_to managers_school_period_path(school_period) and return
+            redirect_to managers_camp_path(camp) and return
           end
         end
       end
     end
 
-    redirect_to managers_school_period_path(school_period), notice: "Le fichier CSV a été importé avec succès."
+    redirect_to managers_camp_path(camp), notice: "Le fichier CSV a été importé avec succès."
   end
 
   private
