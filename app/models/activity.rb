@@ -71,6 +71,21 @@ class Activity < ApplicationRecord
             .distinct
   end
 
+  def enrollments_without_no_show
+    course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: self, present: true).nil?) && (ce.course.ends_at < Time.current) }
+  end
+
+  def present_enrollments_count
+    enrollments_without_no_show.select { |enrollment| enrollment.present }.count
+  end
+
+  def absent_enrollments_count
+    enrollments_without_no_show.select { |enrollment| !enrollment.present }.count
+  end
+
+  # enrollments_without_no_show = activity.course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: activity, present: true).nil?) && (ce.course.ends_at < Time.current) }
+  # present_enrollments_count = enrollments_without_no_show.select { |enrollment| enrollment.present }.count
+  # absent_enrollments_count = enrollments_without_no_show.select { |enrollment| !enrollment.present }.count
   def absenteeism_rate
     # enrollments = course_enrollments.joins(course: { student: :activity_enrollments })
                                       # .where("courses.ends_at < ?", Time.current)

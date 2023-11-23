@@ -122,11 +122,22 @@ class SchoolPeriod < ApplicationRecord
   #   end
   # end
 
+  # def absenteeism_rate_by_category(category)
+  #   total_enrollments = camps.sum { |camp| camp.total_enrollments_count_by_category(category) }
+  #   absent_enrollments = camps.sum { |camp| camp.absent_enrollments_count_by_category(category) }
+  #   if total_enrollments.positive?
+  #     ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
+  #   else
+  #     0
+  #   end
+  # end
+
   def absenteeism_rate_by_category(category)
-    total_enrollments = camps.sum { |camp| camp.total_enrollments_count_by_category(category) }
-    absent_enrollments = camps.sum { |camp| camp.absent_enrollments_count_by_category(category) }
-    if total_enrollments.positive?
-      ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
+    activities = Activity.where(camp: camps, category: category)
+    total_enrollments_count = activities.sum { |activity| activity.enrollments_without_no_show.count }
+    absent_enrollments_count = activities.sum { |activity| activity.absent_enrollments_count }
+    if total_enrollments_count.positive?
+      ((absent_enrollments_count.to_f / total_enrollments_count) * 100).round(0)
     else
       0
     end
