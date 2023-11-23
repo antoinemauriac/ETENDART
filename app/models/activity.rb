@@ -72,11 +72,14 @@ class Activity < ApplicationRecord
   end
 
   def absenteeism_rate
-    enrollments = course_enrollments.joins(course: { activity: :activity_enrollments })
-                                    .where("courses.ends_at < ?", Time.current)
-                                    .where("activity_enrollments.present = ?", true)
+    # enrollments = course_enrollments.joins(course: { student: :activity_enrollments })
+                                      # .where("courses.ends_at < ?", Time.current)
+                                      # .where("activity_enrollments.present = ?", true)
+                                      # .where(student_id: show_students)
+    enrollments = course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: self, present: true).nil?) && (ce.course.ends_at < Time.current) }
+
     total_enrollments = enrollments.count
-    absent_enrollments = enrollments.unattended.count
+    absent_enrollments = enrollments.select { |enrollment| !enrollment.present }.count
 
     if total_enrollments.positive?
       ((absent_enrollments.to_f / total_enrollments) * 100).round(0)

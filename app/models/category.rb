@@ -11,7 +11,12 @@ class Category < ApplicationRecord
   has_many :coaches, through: :coach_categories
 
   # def absenteeism_rate_by_school_period(school_period)
-  #   enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current).where("courses.school_period_id = ?", school_period.id)
+  #   enrollments = course_enrollments.joins(course: { activity: :activity_enrollments })
+  #                                   .where("courses.ends_at < ?", Time.current)
+  #                                   .where("activity_enrollments.present = ?", true)
+  #                                   .where("activities.camps = ?", school_period.camps).distinct
+  #   absent_enrollments = enrollments.unattended.count
+
   #   total_enrollments = enrollments.count
   #   absent_enrollments = enrollments.unattended.count
 
@@ -21,5 +26,7 @@ class Category < ApplicationRecord
   #     0
   #   end
   # end
+
+
 
 end
