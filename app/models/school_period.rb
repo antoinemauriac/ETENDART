@@ -109,11 +109,14 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def absenteeism_rate_by_category(category)
-    total_enrollments = camps.sum { |camp| camp.total_enrollments_count_by_category(category) }
-    absent_enrollments = camps.sum { |camp| camp.absent_enrollments_count_by_category(category) }
+    all_enrollments = course_enrollments.joins(course: { activity: { category: :activity_enrollments } })
+                                        .where("courses.ends_at < ?", Time.current)
+                                        .where("activity_enrollments.present = ?", true)
+                                        .where("categories.id = ?", category.id)
+    absent_enrollments = all_enrollments.unattended.count
 
-    if total_enrollments.positive?
-      ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
+    if all_enrollments.count.positive?
+      ((absent_enrollments.to_f / all_enrollments.count) * 100).round(0)
     else
       0
     end
@@ -121,14 +124,14 @@ class SchoolPeriod < ApplicationRecord
 
   def number_of_students_by_category(category)
     activity_enrollments.joins(:activity)
-                        .where(students: show_students)
+                        .where(present: true)
                         .where(activities: { category: category })
                         .count
   end
 
   def number_of_students_by_category_and_gender(category, gender)
     activity_enrollments.joins(:student, activity: :category)
-                        .where(students: show_students)
+                        .where(present: true)
                         .where(activities: { category: category }, students: { gender: gender })
                         .count
   end

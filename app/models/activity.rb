@@ -72,8 +72,9 @@ class Activity < ApplicationRecord
   end
 
   def absenteeism_rate
-    enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
-                                                   .where.not(student_id: no_show_students)
+    enrollments = course_enrollments.joins(course: { activity: :activity_enrollments })
+                                    .where("courses.ends_at < ?", Time.current)
+                                    .where("activity_enrollments.present = ?", true)
     total_enrollments = enrollments.count
     absent_enrollments = enrollments.unattended.count
 
