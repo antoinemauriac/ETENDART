@@ -54,8 +54,13 @@ class Managers::CoursesController < ApplicationController
 
   def update_enrollments
     course = Course.find(params[:id])
-    school_period = course.school_period
-    academy = course.activity.academy
+    activity = course.activity
+    category = activity.category
+    camp = activity.camp
+    school_period = camp.school_period
+    annual_program = activity.annual_program
+    academy = activity.academy
+
     enrollments_params = params[:enrollments]
     authorize([:managers, course], policy_class: Managers::CoursePolicy)
 
@@ -64,8 +69,10 @@ class Managers::CoursesController < ApplicationController
 
         enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
         student = enrollment.student
-        activity_enrollment = student.activity_enrollments.find_by(activity: course.activity)
-        camp_enrollment = student.camp_enrollments.find_by(camp: course.activity.camp)
+        activity_enrollment = student.activity_enrollments.find_by(activity: activity)
+        camp_enrollment = student.camp_enrollments.find_by(camp: camp)
+        school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
+        annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program)
 
         if school_period && camp_enrollment
           if school_period.paid == true
@@ -73,7 +80,7 @@ class Managers::CoursesController < ApplicationController
           end
 
 
-          if academy.banished && course.activity.category.name != "Accompagnement"
+          if academy.banished && category.name != "Accompagnement"
             if enrollment_params[1][:present].to_i == 0 && enrollment.present == true
               camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
             elsif enrollment_params[1][:present].to_i == 1 && enrollment.present == false
@@ -88,10 +95,17 @@ class Managers::CoursesController < ApplicationController
           end
         end
 
-        # AJOUTER UN CHAMP PRESENT A ACTIVITY_ENROLLMENT POUR FACILITER LES REQUETES STATS
         enrollment.update(present: enrollment_params[1][:present].to_i)
-        if enrollment.present && activity_enrollment.present == false
-          activity_enrollment.update(present: true)
+
+        update_presence_if_needed(activity_enrollment, enrollment.present)
+
+        if school_period && camp_enrollment
+          update_presence_if_needed(camp_enrollment, enrollment.present)
+          update_presence_if_needed(school_period_enrollment, enrollment.present)
+        end
+
+        if annual_program
+          update_presence_if_needed(annual_program_enrollment, enrollment.present)
         end
       end
       course.update(status: true)
@@ -137,6 +151,12 @@ class Managers::CoursesController < ApplicationController
     @course ||= Course.find(params[:id])
   end
 
+  def update_presence_if_needed(enrollment, course_presence)
+    if course_presence && enrollment && !enrollment.present
+      enrollment.update(present: true)
+    end
+  end
+
   def course_params
     params.require(:course).permit(:starts_at, :ends_at)
   end
@@ -163,5 +183,54 @@ class Managers::CoursesController < ApplicationController
       end
       format.json { head :no_content }
     end
+  end
+end
+
+
+ActivityEnrollment.find_each do |activity_enrollment|
+  student = activity_enrollment.student
+  activity = activity_enrollment.activity
+  courses = student.courses.where(activity: activity).where('ends_at < ?', Time.current)
+  course_enrollments = CourseEnrollment.where(student: student, course: courses)
+  if course_enrollments.where(present: true).count >= 1
+    activity_enrollment.update(present: true)
+  else
+    activity_enrollment.update(present: false)
+  end
+end
+
+CampEnrollment.find_each do |camp_enrollment|
+  student = camp_enrollment.student
+  camp = camp_enrollment.camp
+  courses = student.courses.joins(:activity).where(activities: { camp: camp }).where('ends_at < ?', Time.current)
+  course_enrollments = CourseEnrollment.where(student: student, course: courses)
+  if course_enrollments.where(present: true).count >= 1
+    camp_enrollment.update(present: true)
+  else
+    camp_enrollment.update(present: false)
+  end
+end
+
+SchoolPeriodEnrollment.find_each do |school_period_enrollment|
+  student = school_period_enrollment.student
+  school_period = school_period_enrollment.school_period
+  courses = student.courses.joins(activity: :camp).where(camps: { school_period: school_period }).where('courses.ends_at < ?', Time.current)
+  course_enrollments = CourseEnrollment.where(student: student, course: courses)
+  if course_enrollments.where(present: true).count >= 1
+    school_period_enrollment.update(present: true)
+  else
+    school_period_enrollment.update(present: false)
+  end
+end
+
+AnnualProgramEnrollment.find_each do |annual_program_enrollment|
+  student = annual_program_enrollment.student
+  annual_program = annual_program_enrollment.annual_program
+  courses = student.courses.joins(:activity).where(activities: { annual_program: annual_program }).where('ends_at < ?', Time.current)
+  course_enrollments = CourseEnrollment.where(student: student, course: courses)
+  if course_enrollments.where(present: true).count >= 1
+    annual_program_enrollment.update(present: true)
+  else
+    annual_program_enrollment.update(present: false)
   end
 end

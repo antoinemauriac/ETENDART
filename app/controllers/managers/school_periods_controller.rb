@@ -28,10 +28,6 @@ class Managers::SchoolPeriodsController < ApplicationController
 
     @activities = @school_period.activities.order(:camp_id)
     @camps = @school_period.camps.order(:starts_at)
-    @sorted_departments = @school_period.participant_departments.sort_by do |department|
-      -@school_period.number_of_students_by_department(department)
-    end
-    @categories = @school_period.categories.uniq.sort_by { |category| @school_period.number_of_students_by_category(category) }.reverse
   end
 
   # def statistics
@@ -108,7 +104,7 @@ class Managers::SchoolPeriodsController < ApplicationController
           csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
             csv << ["Semaine", "Total Eleves", "Garçons", "Filles", "Age moyen"]
             camps.each do |camp|
-              csv << [camp.name, camp.students_count, camp.number_of_students("Garçon"), camp.number_of_students("Fille"), camp.age_of_students]
+              csv << [camp.name, camp.students_count, camp.number_of_students_by_genre("Garçon"), camp.number_of_students_by_genre("Fille"), camp.age_of_students]
             end
           end
           csv_files << { data: csv_data, filename: "bilan_par_semaine_#{school_period.academy.name}_#{school_period.name}_#{school_period.year}.csv" }
@@ -147,7 +143,7 @@ class Managers::SchoolPeriodsController < ApplicationController
             elsif params[:export_type] == "semaine"
               csv << ["Semaine", "Total Eleves", "Garçons", "Filles", "Age moyen"]
               camps.each do |camp|
-                csv << [camp.name, camp.students_count, camp.number_of_students("Garçon"), camp.number_of_students("Fille"), camp.age_of_students]
+                csv << [camp.name, camp.students_count, camp.number_of_students_by_genre("Garçon"), camp.number_of_students_by_genre("Fille"), camp.age_of_students]
               end
             elsif params[:export_type] == "age"
               csv << ["Age", "Semaine1", "Semaine2"]
