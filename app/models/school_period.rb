@@ -86,7 +86,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def participant_departments
-    show_students.map(&:department).uniq.sort
+    students.map(&:department).uniq.sort
   end
 
   def number_of_students_by_department(department)
@@ -96,41 +96,6 @@ class SchoolPeriod < ApplicationRecord
   def starts_at
     camps.minimum(:starts_at) if camps.any?
   end
-
-  # def absenteeism_rate
-  #   total_enrollments = course_enrollments.count
-  #   absent_enrollments = course_enrollments.where(present: false).count
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
-  #   else
-  #     0
-  #   end
-  # end
-
-  # def absenteeism_rate
-  #   enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
-  #   total_enrollments = enrollments.count
-  #   absent_enrollments = enrollments.unattended.count
-
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100)
-  #   else
-  #     0
-  #   end
-  # end
-
-  # def absenteeism_rate
-  #   enrollments = course_enrollments.joins(course: { activity: :category })
-  #                                  .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
-  #   total_enrollments = enrollments.count
-  #   absent_enrollments = enrollments.unattended.count
-
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100)
-  #   else
-  #     0
-  #   end
-  # end
 
   def absenteeism_rate
     total_enrollments = camps.sum(&:total_enrollments_count)
@@ -143,19 +108,6 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
-
-  # def absenteeism_rate_by_category(category)
-  #   enrollments = course_enrollments.joins({course: :activity})
-  #                                   .where("courses.ends_at < ?", Time.current).where("activities.category_id = ?", category.id)
-  #   total_enrollments = enrollments.count
-  #   absent_enrollments = enrollments.unattended.count
-
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100)
-  #   else
-  #     0
-  #   end
-  # end
   def absenteeism_rate_by_category(category)
     total_enrollments = camps.sum { |camp| camp.total_enrollments_count_by_category(category) }
     absent_enrollments = camps.sum { |camp| camp.absent_enrollments_count_by_category(category) }

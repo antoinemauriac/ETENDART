@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_16_181227) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_23_091236) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -98,6 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_181227) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "deleted", default: false
+    t.boolean "present", default: false
     t.index ["activity_id"], name: "index_activity_enrollments_on_activity_id"
     t.index ["student_id"], name: "index_activity_enrollments_on_student_id"
   end
@@ -107,6 +108,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_181227) do
     t.bigint "annual_program_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "present", default: false
     t.index ["annual_program_id"], name: "index_annual_program_enrollments_on_annual_program_id"
     t.index ["student_id"], name: "index_annual_program_enrollments_on_student_id"
   end
@@ -129,6 +131,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_181227) do
     t.boolean "banished", default: false
     t.integer "number_of_absences", default: 0
     t.datetime "banishment_day"
+    t.boolean "present", default: false
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
   end
@@ -272,6 +275,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_181227) do
     t.bigint "school_period_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "present", default: false
     t.index ["school_period_id"], name: "index_school_period_enrollments_on_school_period_id"
     t.index ["student_id"], name: "index_school_period_enrollments_on_student_id"
   end

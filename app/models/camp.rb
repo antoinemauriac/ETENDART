@@ -27,34 +27,24 @@ class Camp < ApplicationRecord
   def students_count
     students.count
   end
-
-  def show_students
-    @show_students ||= begin
-      ids = course_enrollments.joins(:student)
-                              .group(:student_id)
-                              .having("SUM(CASE WHEN present = true THEN 1 ELSE 0 END) >= 1")
-                              .count.keys
-      Student.where(id: ids)
-    end
-  end
-
   # def show_students
-  #   activity_enrollments.joins(:student)
-  #                       .where(present: true)
-  #                       .distinct
-  #                       .order(:last_name)
+  #     ids = course_enrollments.joins(:student)
+  #                             .group(:student_id)
+  #                             .having("SUM(CASE WHEN present = true THEN 1 ELSE 0 END) >= 1")
+  #                             .count.keys
+  #     Student.where(id: ids)
   # end
 
+  def show_students
+    students.joins(:camp_enrollments).where(camp_enrollments: { present: true }).distinct
+  end
+
   def show_count
-    @show_students.count
+    show_students.count
   end
 
   def no_show_students
-    # S'assurer que @show_students est initialisé
-    show_students unless @show_students
-
-    # Effectuer la requête
-    students.where.not(id: @show_students.pluck(:id))
+    students - show_students
   end
 
   def no_show_count
@@ -77,21 +67,17 @@ class Camp < ApplicationRecord
     end
   end
 
-  def number_of_students(genre)
+  def number_of_students_by_genre(genre)
     camp_enrollments.joins(:student).where(students: { gender: genre }).count
   end
 
-  def percentage_of_students(genre)
-    if show_students.count.positive?
+  def percentage_of_students_by_genre(genre)
+    if show_count.positive?
       genre_students_count = show_students.where(gender: genre).count
-      ((genre_students_count.to_f / show_students.count) * 100).round(0)
+      ((genre_students_count.to_f / show_count) * 100).round(0)
     else
       0
     end
-  end
-
-  def age_of_students
-    (show_students.map(&:age).sum.to_f / show_students.count).round(1)
   end
 
   def students_with_activity_enrollment
@@ -101,12 +87,20 @@ class Camp < ApplicationRecord
             .order(:last_name)
   end
 
-  def can_delete?
+  def can_import?
     if starts_at
       starts_at > Date.today
     else
       true
     end
+  end
+
+  def started?
+    starts_at <= Date.today
+  end
+
+  def age_of_students
+    (show_students.map(&:age).sum.to_f / show_students.count).round(1)
   end
 
   def participant_ages
@@ -121,52 +115,6 @@ class Camp < ApplicationRecord
     show_students.count { |student| student.department == department }
   end
 
-  def can_import?
-    if starts_at
-      starts_at > Date.today
-    else
-      true
-    end
-  end
-
-  def has_begun?
-    starts_at <= Date.today
-  end
-
-  # def absenteeism_rate
-  #   total_enrollments = course_enrollments.count
-  #   absent_enrollments = course_enrollments.where(present: false).count
-  #   if total_enrollments.positive?
-  #     absenteeism_rate = ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
-  #   else
-  #     absenteeism_rate = 0
-  #   end
-  # end
-
-  # def absenteeism_rate
-  #   enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
-  #   total_enrollments = enrollments.count
-  #   absent_enrollments = enrollments.unattended.count
-
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100)
-  #   else
-  #     0
-  #   end
-  # end
-
-  # def absenteeism_rate
-  #   enrollments = course_enrollments.joins(course: { activity: :category })
-  #                                  .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
-  #   total_enrollments = enrollments.count
-  #   absent_enrollments = enrollments.unattended.count
-
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100)
-  #   else
-  #     0
-  #   end
-  # end
 
   def enrollments_without_accompagnement_and_without_no_show
     course_enrollments.joins(course: { activity: :category })

@@ -71,25 +71,9 @@ class Activity < ApplicationRecord
             .distinct
   end
 
-  # def absenteeism_rate
-  #   total_enrollments = course_enrollments.count
-  #   absent_enrollments = course_enrollments.where(present: false).count
-
-  #   if total_enrollments.positive?
-  #     absenteeism_rate = (absent_enrollments.to_f / total_enrollments) * 100
-  #     return absenteeism_rate.round(0)
-  #   else
-  #     return 0
-  #   end
-  # end
-
-  # def students_with_next_activity_enrollments
-  #   students.joins(:activity_enrollments).where(activity_enrollments: { deleted: false }).uniq
-  # end
-
   def absenteeism_rate
     enrollments = course_enrollments.joins(:course).where("courses.ends_at < ?", Time.current)
-                                                   .where.not(student_id: camp.no_show_students)
+                                                   .where.not(student_id: no_show_students)
     total_enrollments = enrollments.count
     absent_enrollments = enrollments.unattended.count
 
@@ -101,20 +85,23 @@ class Activity < ApplicationRecord
   end
 
   def show_students
-    camp.show_students
+    students.joins(:activity_enrollments).where(activity_enrollments: { present: true }).distinct
   end
 
-  def number_of_students(genre)
-    activity_enrollments.joins(:student)
-                        .where(students: { gender: genre, id: show_students }).count
+  def no_show_students
+    students - show_students
+  end
+
+  def number_of_students_by_genre(genre)
+    show_students.where(gender: genre).count
   end
 
   def students_count
-    students.where(id: show_students).count
+    show_students.count
   end
 
   def age_of_students
-    (students.where(id: show_students).map(&:age).sum.to_f / students.where(id: show_students).count).round(1)
+    (show_students.map(&:age).sum.to_f / students_count).round(1)
   end
 
   def can_delete?
