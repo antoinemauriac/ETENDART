@@ -10,6 +10,11 @@ class Managers::ActivityEnrollmentsController < ApplicationController
     activity_enrollment.destroy
     student.course_enrollments.where(course: activity.next_courses).destroy_all
 
+    past_course_enrollments = student.course_enrollments.where(course: activity.courses, present: true)
+    if past_course_enrollments.count.zero?
+      past_course_enrollments.destroy_all
+    end
+
     # course_enrollments = student.course_enrollments.where(course: activity.courses)
     # if course_enrollments.empty?
     #   student.activity_enrollments.find_by(activity: activity).destroy
@@ -24,7 +29,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       student_camp_courses = student.courses.joins(:activity).where("activities.camp_id = ?", camp.id)
       # activities = student.activities.where(camp: camp)
       if student_camp_courses.empty?
-        student.camp_enrollments.find_by(camp: camp).destroy
+        camp_enrollment.destroy
       end
 
       camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)

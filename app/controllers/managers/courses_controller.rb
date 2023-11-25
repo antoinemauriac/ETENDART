@@ -187,50 +187,50 @@ class Managers::CoursesController < ApplicationController
 end
 
 
-ActivityEnrollment.find_each do |activity_enrollment|
-  student = activity_enrollment.student
-  activity = activity_enrollment.activity
-  courses = student.courses.where(activity: activity).where('ends_at < ?', Time.current)
-  course_enrollments = CourseEnrollment.where(student: student, course: courses)
-  if course_enrollments.where(present: true).count >= 1
-    activity_enrollment.update(present: true)
-  else
-    activity_enrollment.update(present: false)
-  end
-end
+# ActivityEnrollment.find_each do |activity_enrollment|
+#   student = activity_enrollment.student
+#   activity = activity_enrollment.activity
+#   courses = student.courses.where(activity: activity).where('ends_at < ?', Time.current)
+#   course_enrollments = CourseEnrollment.where(student: student, course: courses)
+#   if course_enrollments.where(present: true).count >= 1
+#     activity_enrollment.update(present: true)
+#   else
+#     activity_enrollment.update(present: false)
+#   end
+# end
 
-CampEnrollment.find_each do |camp_enrollment|
-  student = camp_enrollment.student
-  camp = camp_enrollment.camp
-  courses = student.courses.joins(:activity).where(activities: { camp: camp }).where('ends_at < ?', Time.current)
-  course_enrollments = CourseEnrollment.where(student: student, course: courses)
-  if course_enrollments.where(present: true).count >= 1
-    camp_enrollment.update(present: true)
-  else
-    camp_enrollment.update(present: false)
-  end
-end
+# CampEnrollment.find_each do |camp_enrollment|
+#   student = camp_enrollment.student
+#   camp = camp_enrollment.camp
+#   courses = student.courses.joins(:activity).where(activities: { camp: camp }).where('ends_at < ?', Time.current)
+#   course_enrollments = CourseEnrollment.where(student: student, course: courses)
+#   if course_enrollments.where(present: true).count >= 1
+#     camp_enrollment.update(present: true)
+#   else
+#     camp_enrollment.update(present: false)
+#   end
+# end
 
-SchoolPeriodEnrollment.find_each do |school_period_enrollment|
-  student = school_period_enrollment.student
-  school_period = school_period_enrollment.school_period
-  courses = student.courses.joins(activity: :camp).where(camps: { school_period: school_period }).where('courses.ends_at < ?', Time.current)
-  course_enrollments = CourseEnrollment.where(student: student, course: courses)
-  if course_enrollments.where(present: true).count >= 1
-    school_period_enrollment.update(present: true)
-  else
-    school_period_enrollment.update(present: false)
-  end
-end
+# SchoolPeriodEnrollment.find_each do |school_period_enrollment|
+#   student = school_period_enrollment.student
+#   school_period = school_period_enrollment.school_period
+#   courses = student.courses.joins(activity: :camp).where(camps: { school_period: school_period }).where('courses.ends_at < ?', Time.current)
+#   course_enrollments = CourseEnrollment.where(student: student, course: courses)
+#   if course_enrollments.where(present: true).count >= 1
+#     school_period_enrollment.update(present: true)
+#   else
+#     school_period_enrollment.update(present: false)
+#   end
+# end
 
-AnnualProgramEnrollment.find_each do |annual_program_enrollment|
-  student = annual_program_enrollment.student
-  annual_program = annual_program_enrollment.annual_program
-  courses = student.courses.joins(:activity).where(activities: { annual_program: annual_program }).where('ends_at < ?', Time.current)
-  course_enrollments = CourseEnrollment.where(student: student, course: courses)
-  if course_enrollments.where(present: true).count >= 1
-    annual_program_enrollment.update(present: true)
-  else
-    annual_program_enrollment.update(present: false)
-  end
-end
+# AnnualProgramEnrollment.find_each do |annual_program_enrollment|
+#   student = annual_program_enrollment.student
+#   annual_program = annual_program_enrollment.annual_program
+#   courses = student.courses.joins(:activity).where(activities: { annual_program: annual_program }).where('ends_at < ?', Time.current)
+#   course_enrollments = CourseEnrollment.where(student: student, course: courses)
+#   if course_enrollments.where(present: true).count >= 1
+#     annual_program_enrollment.update(present: true)
+#   else
+#     annual_program_enrollment.update(present: false)
+#   end
+# end

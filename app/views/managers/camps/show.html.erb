@@ -99,11 +99,12 @@
           <% if @academy.banished %>
             <td><%= student.camp_enrollments.where(camp: @camp).first.banished ? "Oui" : "" %></td>
           <% end %>
+          <% activities = student.student_activities_without_acc(@camp) %>
           <td><%= student.age %> ans</td>
-          <td><%= student.student_activities_without_acc(@camp).first.name %></td>
-          <td><%= "#{student.unattended_activity_rate(student.student_activities_without_acc(@camp).first)}%"%></td>
-          <td><%= student.student_activities_without_acc(@camp).second.name if student.student_activities_without_acc(@camp).second.present? %></td>
-          <td><%= "#{student.unattended_activity_rate(student.student_activities_without_acc(@camp).second)}%" if student.student_activities_without_acc(@camp).second.present? %></td>
+          <td><%= activities.first.name if activities.first.present?  %></td>
+          <td><%= "#{student.unattended_activity_rate(activities.first)}%" if activities.first.present? %></td>
+          <td><%= activities.second.name if activities.second.present? %></td>
+          <td><%= "#{student.unattended_activity_rate(activities.second)}%" if activities.second.present? %></td>
         </tr>
       <% end %>
     </tbody>
