@@ -35,7 +35,7 @@
           <td><%= l(activity.courses.first.ends_at, format: :hour_min ) %></td>
           <td><%= activity.category.name %></td>
           <td><%= activity.location.name %></td>
-          <td><%= activity.lead_coach.try(:full_name) || "" %></td>
+          <td><%= activity.coach.try(:full_name) || "" %></td>
           <td><%= activity.students.count %></td>
 
           <% if activity.can_delete? %>

@@ -82,7 +82,7 @@ class Managers::ActivitiesController < ApplicationController
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
     category = @activity.category
-    @coach = @activity.lead_coach
+    @coach = @activity.coach
     @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
   end
 
@@ -95,7 +95,7 @@ class Managers::ActivitiesController < ApplicationController
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.next_courses.sort_by(&:starts_at).first(3)
     category = @activity.category
-    @coach = @activity.lead_coach
+    @coach = @activity.coach
     @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
   end
 
@@ -184,17 +184,14 @@ class Managers::ActivitiesController < ApplicationController
     @camp ||= Camp.find(params[:camp])
   end
 
-  # Les validations sont plutôt à ajouter dans le modèle si elles sont toujours appliqués
   def validate_start_time_before_end_time
     no_error = true
     Activity::DAYS.each do |day, times|
       start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
       end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
 
-      # Vérifier que les temps de début et de fin sont tous les deux présents
       next unless start_time && end_time
 
-      # Vérifier que le temps de début est inférieur au temps de fin
       if start_time >= end_time
         no_error = false
       end
@@ -224,21 +221,6 @@ class Managers::ActivitiesController < ApplicationController
     date
   end
 
-  # def create_annual_courses_for_activity(params, activity, annual_program, coach)
-  #   start_hour = params.dig(:activity, :day_attributes, "start_time(4i)")
-  #   start_minute = params.dig(:activity, :day_attributes, "start_time(5i)")
-  #   end_hour = params.dig(:activity, :day_attributes, "end_time(4i)")
-  #   end_minute = params.dig(:activity, :day_attributes, "end_time(5i)")
-
-  #   start_time = "#{start_hour}:#{start_minute}"
-  #   end_time = "#{end_hour}:#{end_minute}"
-
-  #   specific_days = annual_program.find_all_specific_days(params[:activity][:day_attributes][:day])
-
-  #   specific_days.each do |day|
-  #     Course.create(activity: activity, starts_at: day + start_time.to_i.hours, ends_at: day + end_time.to_i.hours, manager: current_user, coach: coach, annual: true)
-  #   end
-  # end
   def create_annual_courses_for_activity(params, activity, annual_program, coach)
     start_time_str = params[:activity][:day_attributes]["start_time(4i)"] + ":" + params[:activity][:day_attributes]["start_time(5i)"]
     end_time_str = params[:activity][:day_attributes]["end_time(4i)"] + ":" + params[:activity][:day_attributes]["end_time(5i)"]

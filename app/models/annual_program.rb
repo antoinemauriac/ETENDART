@@ -52,12 +52,8 @@ class AnnualProgram < ApplicationRecord
     program_periods.first.start_date <= Date.today
   end
 
-  def start_date
-    program_periods.first.start_date
-  end
-
   def name
-    "#{start_date.year} - #{start_date.year + 1}"
+    "#{starts_at.year} - #{starts_at.year + 1}"
   end
 
   def find_all_specific_days(day_name)
@@ -81,18 +77,6 @@ class AnnualProgram < ApplicationRecord
     activities.where(disable: false).sort_by do |activity|
       DAY_NAME_TO_NUMBER[activity.day_of_activity]
     end
-  end
-
-  def starts_at
-    program_periods.first.start_date
-  end
-
-  def ends_at
-    program_periods.last.end_date
-  end
-
-  def end_at
-    program_periods.last.end_date
   end
 
   def week_absent_enrollments_sorted_by_day
