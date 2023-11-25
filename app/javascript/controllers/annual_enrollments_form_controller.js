@@ -10,7 +10,9 @@ export default class extends Controller {
 
   updateAnnualPrograms() {
     const academy_id = this.academyTarget.value
+    console.log(`Academy_id : ${academy_id}`);
     const url = `/managers/annual_enrollments/${academy_id}/update_annual_programs`
+    console.log(`URL : ${url}`);
 
     fetch(url)
       .then(response => response.json())
@@ -20,7 +22,7 @@ export default class extends Controller {
         annualPrograms.forEach(annualProgram => {
           const option = document.createElement('option')
           option.value = annualProgram.id
-          option.textContent = `${annualProgram.start_year} - ${annualProgram.end_year}`
+          option.textContent = annualProgram.name
           this.annualProgramTarget.appendChild(option)
         })
       })

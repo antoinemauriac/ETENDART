@@ -25,7 +25,8 @@ class Managers::AnnualEnrollmentsController < ApplicationController
     academy = Academy.find(params[:academy_id])
     authorize([:managers, academy], policy_class: Managers::AnnualEnrollmentPolicy)
     annual_programs = academy.annual_programs
-    render json: annual_programs.select(:id, :start_year, :end_year)
+
+    render json: annual_programs.as_json(only: [:id], methods: :name)
   end
 
   def update_activities
