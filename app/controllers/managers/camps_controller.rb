@@ -6,7 +6,7 @@ class Managers::CampsController < ApplicationController
     authorize([:managers, @camp])
     @activities = @camp.activities
     @activity = Activity.new
-    @students = @camp.students_with_activity_enrollment
+    @students = @camp.students.order(:last_name)
   end
 
   def create
@@ -39,7 +39,7 @@ class Managers::CampsController < ApplicationController
   def export_students_csv
     @camp = Camp.find(params[:id])
     authorize([:managers, @camp])
-    students = @camp.students_with_activity_enrollment.sort_by(&:last_name)
+    students = @camp.students.sort_by(&:last_name)
 
     respond_to do |format|
       format.csv do

@@ -72,13 +72,6 @@ class Camp < ApplicationRecord
     end
   end
 
-  def students_with_activity_enrollment
-    students.joins(:activity_enrollments)
-            .where(activity_enrollments: { activity_id: activities })
-            .distinct
-            .order(:last_name)
-  end
-
   def can_import?
     if starts_at
       starts_at > Date.today
