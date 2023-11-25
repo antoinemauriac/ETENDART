@@ -1,44 +1,30 @@
 class Course < ApplicationRecord
-  # validate :starts_at_before_ends_at
 
   belongs_to :activity
   has_one :category, through: :activity
   has_one :camp, through: :activity
   has_one :school_period, through: :camp
-  # has_one :academy, through: :school_period
 
   has_one :annual_program, through: :activity
 
   belongs_to :manager, class_name: 'User', foreign_key: :manager_id
-  # belongs_to :lead_coach, class_name: 'User', foreign_key: :coach_id
   belongs_to :coach, class_name: 'User', optional: true
 
   has_many :course_enrollments, dependent: :destroy
   has_many :students, through: :course_enrollments
 
+  # validate :starts_at_before_ends_at
   scope :upcoming, ->(time_window) { where('ends_at >= ?', Time.current.in_time_zone('Paris') - time_window) }
 
   def academy
-    if camp
-      camp.academy
-    elsif annual_program
-      annual_program.academy
-    else
-      nil
-    end
+    return camp.academy if camp
+    return annual_program.academy if annual_program
+    nil
   end
 
-  def lead_coach
-    User.find_by(id: coach_id) if coach_id
+  def coaches
+    activity.coaches
   end
-
-  def all_coaches
-    activity.all_coaches
-  end
-
-  # def banished_students
-  #   students.joins(camp_enrollments: :camp).where(camp_enrollments: { banished: true, camps: { id: camp.id } }).uniq
-  # end
 
   def banished_students
     students.joins(camp_enrollments: { camp: { activities: :courses } })

@@ -30,6 +30,8 @@ class Managers::AnnualProgramsController < ApplicationController
     academy = Academy.find(params[:academy])
     annual_program = academy.annual_programs.build(annual_program_params)
     annual_program.update(end_year: annual_program.start_year + 1)
+    annual_program.update(starts_at: annual_program.program_periods.first.start_date)
+    annual_program.update(ends_at: annual_program.program_periods.last.end_date)
     authorize [:managers, annual_program]
 
     if annual_program.save

@@ -8,50 +8,33 @@ class Activity < ApplicationRecord
     Vendredi: { start_time: nil, end_time: nil }
   }
 
+  has_many :activity_enrollments, dependent: :destroy
+  has_many :students, through: :activity_enrollments
+
   belongs_to :camp, optional: true
-  belongs_to :coach, class_name: 'User', foreign_key: :coach_id, optional: true
   has_one :school_period, through: :camp
-  # has_one :academy, through: :school_period
 
   belongs_to :annual_program, optional: true
 
   belongs_to :category
-  # belongs_to :lead_coach, class_name: 'User', foreign_key: :coach_id
+  belongs_to :location
+
+  belongs_to :coach, class_name: 'User', foreign_key: :coach_id, optional: true
+  has_many :activity_coaches, dependent: :destroy
+  has_many :coaches, through: :activity_coaches, source: :coach
+
   has_many :courses, dependent: :destroy
   has_many :course_enrollments, through: :courses
   accepts_nested_attributes_for :courses
 
-  belongs_to :location
-
   validates :name, presence: true
   validates :category_id, presence: true
   validates :location_id, presence: true
-  # validates :coach_id, presence: true
-
-  has_many :activity_enrollments, dependent: :destroy
-  has_many :students, through: :activity_enrollments
-  # has_many :days
-
-  has_many :activity_coaches, dependent: :destroy
-  has_many :coaches, through: :activity_coaches, source: :coach
 
   def academy
-    if camp
-      camp.academy
-    elsif annual_program
-      annual_program.academy
-    else
-      nil
-    end
-  end
-
-  def lead_coach
-    User.find_by(id: coach_id) if coach_id
-  end
-
-  def all_coaches
-    coaches << lead_coach if lead_coach
-    coaches.uniq
+    return camp.academy if camp
+    return annual_program.academy if annual_program
+    nil
   end
 
   def day_of_activity
@@ -75,17 +58,10 @@ class Activity < ApplicationRecord
     course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: self, present: true).nil?) && (ce.course.ends_at < Time.current) }
   end
 
-  def present_enrollments_count
-    enrollments_without_no_show.select { |enrollment| enrollment.present }.count
-  end
-
   def absent_enrollments_count
     enrollments_without_no_show.select { |enrollment| !enrollment.present }.count
   end
 
-  # enrollments_without_no_show = activity.course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: activity, present: true).nil?) && (ce.course.ends_at < Time.current) }
-  # present_enrollments_count = enrollments_without_no_show.select { |enrollment| enrollment.present }.count
-  # absent_enrollments_count = enrollments_without_no_show.select { |enrollment| !enrollment.present }.count
   def absenteeism_rate
     # enrollments = course_enrollments.joins(course: { student: :activity_enrollments })
                                       # .where("courses.ends_at < ?", Time.current)
@@ -124,18 +100,11 @@ class Activity < ApplicationRecord
   end
 
   def can_delete?
-    if camp
-      if camp.starts_at
-        camp.starts_at > Date.today
-      else
-        true
-      end
-    elsif annual_program
-      if annual_program.program_periods.first.start_date
-        annual_program.program_periods.first.start_date > Date.today
-      else
-        true
-      end
+    return true unless camp || annual_program
+    if camp && camp.starts_at
+      camp.starts_at > Date.today
+    elsif annual_program && annual_program.program_periods.first
+      annual_program.program_periods.first.start_date > Date.today
     else
       true
     end

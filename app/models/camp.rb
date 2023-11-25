@@ -1,24 +1,23 @@
 class Camp < ApplicationRecord
   belongs_to :school_period
   has_one :academy, through: :school_period
-  has_one :academy, through: :school_period
-  has_many :coach_academies, through: :academy
-  has_many :coaches, through: :coach_academies
-
-  has_many :activities, dependent: :destroy
-  has_many :courses, through: :activities
-  has_many :course_enrollments, through: :courses
-
-  has_many :activity_enrollments, through: :activities
 
   has_many :camp_enrollments, dependent: :destroy
   has_many :students, through: :camp_enrollments
 
-  has_many :coach_camps, dependent: :destroy
-  has_many :coaches, through: :coach_camps
+  has_many :activities, dependent: :destroy
+  has_many :activity_coaches, through: :activities
+
+  has_many :activity_enrollments, through: :activities
+
+  has_many :courses, through: :activities
+  has_many :course_enrollments, through: :courses
 
   validates :name, presence: true
   validate :starts_at_must_be_before_ends_at
+
+  scope :banished, -> { where(banished: true) }
+
 
   def banished_students
     students.joins(:camp_enrollments).where(camp_enrollments: { banished: true }).uniq
@@ -27,13 +26,6 @@ class Camp < ApplicationRecord
   def students_count
     students.count
   end
-  # def show_students
-  #     ids = course_enrollments.joins(:student)
-  #                             .group(:student_id)
-  #                             .having("SUM(CASE WHEN present = true THEN 1 ELSE 0 END) >= 1")
-  #                             .count.keys
-  #     Student.where(id: ids)
-  # end
 
   def show_students
     students.joins(:camp_enrollments).where(camp_enrollments: { present: true }).distinct
@@ -115,13 +107,6 @@ class Camp < ApplicationRecord
     show_students.count { |student| student.department == department }
   end
 
-
-  # def enrollments_without_accompagnement_and_without_no_show
-  #   course_enrollments.joins(course: { activity: :category })
-  #                     .where("courses.ends_at < ? AND categories.name != ?", Time.current, "Accompagnement")
-  #                     .where.not(student_id: no_show_students)
-  # end
-
   def enrollments_without_no_show
     course_enrollments.joins(course: { activity: :category })
                       .where("courses.ends_at < ?", Time.current)
@@ -136,17 +121,6 @@ class Camp < ApplicationRecord
     enrollments_without_no_show.unattended.count
   end
 
-  # def absenteeism_rate
-  #   enrollments = enrollments_without_accompagnement_and_without_no_show
-  #   total_enrollments = enrollments.count
-  #   absent_enrollments = enrollments.unattended.count
-
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
-  #   else
-  #     0
-  #   end
-  # end
   def absenteeism_rate
     if total_enrollments_count.positive?
       ((absent_enrollments_count.to_f / total_enrollments_count) * 100).round(0)
@@ -154,12 +128,6 @@ class Camp < ApplicationRecord
       0
     end
   end
-
-  # def enrollments_without_no_show
-  #   course_enrollments.joins(course: { activity: :category })
-  #                     .where("courses.ends_at < ?", Time.current)
-  #                     .where(student_id: show_students)
-  # end
 
   def enrollments_without_no_show_by_category(category)
     enrollments_without_no_show.joins(course: { activity: :category })
@@ -172,6 +140,18 @@ class Camp < ApplicationRecord
 
   def absent_enrollments_count_by_category(category)
     enrollments_without_no_show_by_category(category).unattended.count
+  end
+
+  def coaches
+    activity_coaches.map(&:coach).uniq
+  end
+
+  def coaches_count
+    coaches.count
+  end
+
+  def coaches_by_gender(genre)
+    coaches.select { |coach| coach.gender == genre }
   end
 
   private

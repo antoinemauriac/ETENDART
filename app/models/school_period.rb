@@ -5,7 +5,7 @@ class SchoolPeriod < ApplicationRecord
   belongs_to :academy
   has_many :camps, dependent: :destroy
   has_many :camp_enrollments, through: :camps
-  has_many :coaches, -> { distinct },  through: :camps
+
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps
@@ -15,11 +15,7 @@ class SchoolPeriod < ApplicationRecord
   has_many :course_enrollments, through: :courses
 
   has_many :school_period_enrollments, dependent: :destroy
-  # has_many :students, through: :school_period_enrollments
-
-  # def students
-  #   school_period_enrollments.map(&:student)
-  # end
+  has_many :students, through: :school_period_enrollments
 
   def full_name
     "#{name} - #{year}"
@@ -108,30 +104,6 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
-  # def absenteeism_rate_by_category(category)
-  #   all_enrollments = school_period.course_enrollments.joins(course: { activity: :activity_enrollments })
-  #                                       .where("activity_enrollments.present = ?", true)
-  #                                       .where("courses.ends_at < ?", Time.current)
-  #                                       .where("categories.name = ?", category.name).distinct
-  #   absent_enrollments = all_enrollments.unattended.count
-
-  #   if all_enrollments.count.positive?
-  #     ((absent_enrollments.to_f / all_enrollments.count) * 100).round(0)
-  #   else
-  #     0
-  #   end
-  # end
-
-  # def absenteeism_rate_by_category(category)
-  #   total_enrollments = camps.sum { |camp| camp.total_enrollments_count_by_category(category) }
-  #   absent_enrollments = camps.sum { |camp| camp.absent_enrollments_count_by_category(category) }
-  #   if total_enrollments.positive?
-  #     ((absent_enrollments.to_f / total_enrollments) * 100).round(0)
-  #   else
-  #     0
-  #   end
-  # end
-
   def absenteeism_rate_by_category(category)
     activities = Activity.where(camp: camps, category: category)
     total_enrollments_count = activities.sum { |activity| activity.enrollments_without_no_show.count }
@@ -165,15 +137,23 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
-  def include_accompagnement?
-    activities.where(category: Category.find_by(name: "Accompagnement")).any?
-  end
-
   def can_import?
     if starts_at
       starts_at > Date.today
     else
       true
     end
+  end
+
+  def coaches
+    camps.map(&:coaches).flatten.uniq
+  end
+
+  def coaches_count
+    coaches.count
+  end
+
+  def coaches_by_genre(genre)
+    coaches.select { |coach| coach.gender == genre }
   end
 end

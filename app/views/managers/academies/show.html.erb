@@ -65,8 +65,8 @@
             <% @today_courses.each do |course| %>
             <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
               <td class="align-middle"><%= course.activity.name %></td>
-              <td class="align-middle"><%= course.activity.lead_coach.try(:full_name) || "" %></td>
-              <td class="align-middle"><%= course.activity.lead_coach.try(:phone_number) || "" %></td>
+              <td class="align-middle"><%= course.activity.coach.try(:full_name) || "" %></td>
+              <td class="align-middle"><%= course.activity.coach.try(:phone_number) || "" %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
               <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
               <td class="align-middle"><%= course.students.count %></td>
@@ -115,8 +115,8 @@
               <% @old_presence_sheet.each do |course| %>
               <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
                 <td class="align-middle"><%= course.activity.name %></td>
-                <td class="align-middle"><%= course.activity.lead_coach.try(:full_name) || "" %></td>
-                <td class="align-middle"><%= course.activity.lead_coach.try(:phone_number) || "" %></td>
+                <td class="align-middle"><%= course.activity.coach.try(:full_name) || "" %></td>
+                <td class="align-middle"><%= course.activity.coach.try(:phone_number) || "" %></td>
                 <td class="align-middle"><%= l(course.starts_at, format: :short) %></td>
                 <td class="align-middle">
                   <% if course.starts_at < Time.current %>
@@ -319,8 +319,8 @@
             <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
               <td class="align-middle"><%= course.academy.name %></td>
               <td class="align-middle"><%= course.activity.name %></td>
-              <td class="align-middle"><%= course.activity.lead_coach.try(:full_name) || "" %></td>
-              <td class="align-middle"><%= course.activity.lead_coach.try(:phone_number) || "" %></td>
+              <td class="align-middle"><%= course.activity.coach.try(:full_name) || "" %></td>
+              <td class="align-middle"><%= course.activity.coach.try(:phone_number) || "" %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
               <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
               <td class="align-middle"><%= course.students_count %></td>

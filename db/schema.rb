@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_23_091236) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_25_104433) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -119,6 +119,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_091236) do
     t.bigint "academy_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "starts_at"
+    t.date "ends_at"
     t.index ["academy_id"], name: "index_annual_programs_on_academy_id"
   end
 
