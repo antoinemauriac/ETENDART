@@ -13,7 +13,7 @@
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
   <div class="header-nav-item"><%= link_to "LES PROGRAMMES", managers_annual_programs_path(academy: @academy) %></div>
-  <div class="header-nav-item"><%= link_to "#{@annual_program.start_year} - #{@annual_program.end_year}", managers_annual_program_path(@annual_program)  %></div>
+  <div class="header-nav-item"><%= link_to @annual_program.name, managers_annual_program_path(@annual_program)  %></div>
   <div class="header-nav-item"><%= link_to @activity.name.upcase, show_for_annual_managers_activity_path(@activity) %></div>
   <div class="header-nav-item active"><%= l(@course.starts_at, format: :default) %></div>
 </div>

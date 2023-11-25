@@ -206,7 +206,7 @@
             <% @next_annual_activities.each do |activity| %>
             <tr>
               <td class="align-middle"><%= activity.academy.name %></td>
-              <td class="align-middle"><%= activity.annual_program.start_year %> - <%= activity.annual_program.end_year %></td>
+              <td class="align-middle"><%= activity.annual_program.name %></td>
               <td class="align-middle"><%= activity.name %></td>
               <td class="align-middle">
                 <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
@@ -316,7 +316,7 @@
             <% @next_annual_courses.each do |course| %>
               <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
                 <td class="align-middle"><%= course.academy.name %></td>
-                <td class="align-middle"><%= course.annual_program.start_year %> - <%= course.annual_program.end_year %></td>
+                <td class="align-middle"><%= course.annual_program.name %></td>
                 <td class="align-middle"><%= course.activity.name %></td>
                 <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
               </tr>
@@ -379,7 +379,7 @@
           <% @past_annual_courses.each do |course| %>
             <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'" style="<%= course.student_presence(@student) ? '' : 'background-color: orange;' %>">
               <td class="align-middle"><%= course.academy.name %></td>
-              <td class="align-middle"><%= course.annual_program.start_year %> - <%= course.annual_program.end_year %></td>
+              <td class="align-middle"><%= course.annual_program.name %></td>
               <td class="align-middle"><%= course.activity.name %></td>
               <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
               <td class="align-middle"><%= course.student_presence(@student) ? 'présent' : 'absent' %></td>
