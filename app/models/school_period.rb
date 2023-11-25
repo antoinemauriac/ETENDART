@@ -5,6 +5,7 @@ class SchoolPeriod < ApplicationRecord
   belongs_to :academy
   has_many :camps, dependent: :destroy
   has_many :camp_enrollments, through: :camps
+  has_many :students, through: :camp_enrollments
 
   has_many :students, through: :camp_enrollments
 
@@ -15,7 +16,7 @@ class SchoolPeriod < ApplicationRecord
   has_many :course_enrollments, through: :courses
 
   has_many :school_period_enrollments, dependent: :destroy
-  has_many :students, through: :school_period_enrollments
+  # has_many :students, through: :school_period_enrollments
 
   def full_name
     "#{name} - #{year}"

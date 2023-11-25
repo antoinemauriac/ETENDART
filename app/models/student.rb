@@ -172,7 +172,7 @@ class Student < ApplicationRecord
 
   def next_annual_activities
     activities.joins(:annual_program)
-              .where('annual_programs.end_year >= ?', Date.current.year)
+              .where('annual_programs.ends_at >= ?', Date.current)
   end
 
   def self.today_absent_students(manager)

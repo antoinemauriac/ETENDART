@@ -29,7 +29,6 @@ class Managers::AnnualProgramsController < ApplicationController
   def create
     academy = Academy.find(params[:academy])
     annual_program = academy.annual_programs.build(annual_program_params)
-    annual_program.update(end_year: annual_program.start_year + 1)
     annual_program.update(starts_at: annual_program.program_periods.first.start_date)
     annual_program.update(ends_at: annual_program.program_periods.last.end_date)
     authorize [:managers, annual_program]
@@ -107,6 +106,6 @@ class Managers::AnnualProgramsController < ApplicationController
   private
 
   def annual_program_params
-    params.require(:annual_program).permit(:start_year, program_periods_attributes: [:id, :start_date, :end_date, :_destroy])
+    params.require(:annual_program).permit(program_periods_attributes: [:id, :start_date, :end_date, :_destroy])
   end
 end
