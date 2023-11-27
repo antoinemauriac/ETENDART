@@ -43,7 +43,7 @@
             </td>
           <% end %>
             <td class="align-middle">
-              <% if course.starts_at > Time.current  %>
+              <% if course.starts_at > Time.current - 1.week  %>
                 <%= link_to managers_course_path(course), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce cours ?"} do %>
                   <i class="fas fa-trash trash"></i>
                 <% end %>
