@@ -52,10 +52,39 @@ class Managers::CoursesController < ApplicationController
     end
   end
 
+  # def update_enrollments
+  #   course = Course.find(params[:id])
+  #   enrollments_params = params[:enrollments]
+  #   authorize([:managers, course], policy_class: Managers::CoursePolicy)
+
+  #   if enrollments_params.present?
+  #     enrollments_params.each do |enrollment_params|
+  #       enrollment = CourseEnrollment.find(enrollment_params[0].to_i)
+  #       enrollment.update(present: enrollment_params[1][:present].to_i)
+  #     end
+  #     course.update(status: true)
+
+  #     # Appel du job avec les paramètres nécessaires
+  #     UpdateEnrollmentsJob.perform_later(course.id, enrollments_params)
+
+  #     redirection(course, params, "Appel validé", "notice")
+  #   else
+  #     redirection(course, params, "Aucun élève dans ce cours", "alert")
+  #   end
+  # end
+
   def update_enrollments
     course = Course.find(params[:id])
     # enrollments_params = params[:enrollments]
     enrollments_params = permitted_enrollments_params.to_h
+    activity = course.activity
+    category = activity.category
+    camp = activity.camp
+    school_period = camp.school_period if camp
+    annual_program = activity.annual_program
+    academy = activity.academy
+
+    enrollments_params = params[:enrollments]
     authorize([:managers, course], policy_class: Managers::CoursePolicy)
 
     if enrollments_params.present?
