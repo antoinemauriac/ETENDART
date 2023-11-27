@@ -31,8 +31,6 @@ class Activity < ApplicationRecord
   validates :category_id, presence: true
   validates :location_id, presence: true
 
-  before_save :starts_at_before_ends_at?
-
   def academy
     return camp.academy if camp
     return annual_program.academy if annual_program
@@ -111,6 +109,4 @@ class Activity < ApplicationRecord
       true
     end
   end
-
-  private
 end
