@@ -1,0 +1,17 @@
+.page-link {
+  color: black!important;
+}
+
+
+.page-item.active > .page-link {
+  background-color: $yellow!important;
+  border-color: $yellow!important;
+}
+
+.page-item.prev.disabled > .page-link {
+  color: rgb(191, 189, 189)!important;
+}
+
+.page-item.next.disabled > .page-link {
+  color: rgb(191, 189, 189)!important;
+}

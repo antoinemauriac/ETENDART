@@ -24,7 +24,7 @@ class Managers::CoursePolicy < ApplicationPolicy
   end
 
   def update_enrollments?
-    record.academy.manager == user || record.all_coaches.include?(user)
+    record.academy.manager == user || record.coaches.include?(user)
   end
 
   def unban_student?

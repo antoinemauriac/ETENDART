@@ -11,6 +11,8 @@ gem "cloudinary"
 gem "rails_admin", "3.0"
 gem 'text'
 gem 'sidekiq'
+gem 'will_paginate', '~> 4.0'
+gem 'pagy'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4", ">= 7.0.4.2"

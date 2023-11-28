@@ -6,10 +6,16 @@ class Managers::StudentsController < ApplicationController
     @academy = Academy.find(params[:academy])
     @students = Student.joins(academy_enrollments: :academy)
                        .where(academies: @academy)
+                       .order(:last_name)
                        .distinct
+
+    # Utilisez Pagy pour paginer les résultats
+    @pagy, @students = pagy(@students)
+
     skip_policy_scope
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
   end
+
 
   def show
     @student = Student.find(params[:id])
