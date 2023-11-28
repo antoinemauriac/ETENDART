@@ -10,7 +10,7 @@ class Managers::StudentsController < ApplicationController
                        .distinct
 
     # Utilisez Pagy pour paginer les résultats
-    @pagy, @students = pagy(@students)
+    # @pagy, @students = pagy(@students)
 
     skip_policy_scope
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
