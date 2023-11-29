@@ -28,23 +28,22 @@ class Managers::EnrollmentsController < ApplicationController
   def update_school_periods
     academy = Academy.find(params[:academy_id])
     authorize([:managers, academy], policy_class: Managers::EnrollmentPolicy)
-    school_periods = academy.school_periods.select(:id, :name, :year)
+    school_periods = academy.school_periods.select(:id, :name, :year).select { |school_period| school_period.ends_at >= Date.today }
     render json: school_periods.as_json(methods: :full_name)
   end
-
 
   def update_camps
     school_period = SchoolPeriod.find(params[:school_period_id])
     authorize([:managers, school_period], policy_class: Managers::EnrollmentPolicy)
     camps = school_period.camps
-    render json: camps.select(:id, :name)
+    render json: camps.select(:id, :name).where('ends_at >= ?', Date.today).order(:starts_at)
   end
 
   def update_activities
     camp = Camp.find(params[:camp_id])
     authorize([:managers, camp], policy_class: Managers::EnrollmentPolicy)
     activities = camp.activities
-    render json: activities.select(:id, :name)
+    render json: activities.select(:id, :name).order(:name)
   end
 
 end

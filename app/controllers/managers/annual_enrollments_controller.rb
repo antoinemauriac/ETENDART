@@ -24,7 +24,7 @@ class Managers::AnnualEnrollmentsController < ApplicationController
   def update_annual_programs
     academy = Academy.find(params[:academy_id])
     authorize([:managers, academy], policy_class: Managers::AnnualEnrollmentPolicy)
-    annual_programs = academy.annual_programs
+    annual_programs = academy.annual_programs.where('ends_at >= ?', Date.today).order(:starts_at)
 
     render json: annual_programs.as_json(only: [:id], methods: :name)
   end
@@ -32,7 +32,7 @@ class Managers::AnnualEnrollmentsController < ApplicationController
   def update_activities
     annual_program = AnnualProgram.find(params[:annual_program_id])
     authorize([:managers, annual_program], policy_class: Managers::AnnualEnrollmentPolicy)
-    activities = annual_program.activities
+    activities = annual_program.activities.order(:name)
     render json: activities.select(:id, :name)
   end
 end

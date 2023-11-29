@@ -26,7 +26,6 @@ class Managers::StudentsController < ApplicationController
     end
   end
 
-
   def show
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
