@@ -94,6 +94,10 @@ class SchoolPeriod < ApplicationRecord
     camps.minimum(:starts_at) if camps.any?
   end
 
+  def ends_at
+    camps.maximum(:ends_at) if camps.any?
+  end
+
   def absenteeism_rate
     total_enrollments = camps.sum(&:total_enrollments_count)
     absent_enrollments = camps.sum(&:absent_enrollments_count)
