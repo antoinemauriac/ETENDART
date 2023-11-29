@@ -20,40 +20,36 @@ class Managers::ActivitiesController < ApplicationController
 
   def create
     activity = camp.activities.build(activity_params)
-    academy = camp.academy
+    @academy = camp.academy
+    school_period = camp.school_period
 
     authorize([:managers, activity])
 
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
-    coach = User.find(params[:activity][:coach_id])
+    coach = User.find(params[:activity][:coach_id]) if params[:activity][:coach_id].present?
     coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
 
     activity.coaches << User.where(id: coaches) if coaches.any?
     activity.coaches << coach if coach
 
-    if activity.errors.any?
-      return render :new, status: :unprocessable_entity
-    end
-
-    if validate_start_time_before_end_time
+    if validate_courses
       if activity.save
-        activity.update(annual: false)
         create_courses_for_activity(activity, coach, days)
-
         redirect_to managers_camp_path(camp), notice: "Activité créée"
       else
         flash[:alert] = "Une erreur est survenue"
-        render :new, status: :unprocessable_entity
+        redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
       end
     else
       flash[:alert] = "L'heure de début doit être avant l'heure de fin"
-      render :new, status: :unprocessable_entity
+      redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
     end
   end
 
   def create_for_annual
     annual_program = AnnualProgram.find(params[:annual_program])
     activity = annual_program.activities.build(activity_params)
+    authorize([:managers, activity])
 
     coach = User.find_by_id(params[:activity][:coach_id])
     coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
@@ -61,14 +57,18 @@ class Managers::ActivitiesController < ApplicationController
     activity.coaches << User.where(id: coaches) if coaches.any?
     activity.coaches << coach if coach
 
-    authorize([:managers, activity])
-    if activity.save
-      activity.update(annual: true)
-      create_annual_courses_for_activity(params, activity, annual_program, coach)
-      redirect_to managers_annual_program_path(annual_program), notice: "Activité créée"
+    if validate_annual_courses
+      if activity.save
+        activity.update(annual: true)
+        create_annual_courses_for_activity(params, activity, annual_program, coach)
+        redirect_to managers_annual_program_path(annual_program), notice: "Activité créée"
+      else
+        flash[:alert] = "Une erreur est survenue"
+        render :new, status: :unprocessable_entity
+      end
     else
-      flash[:alert] = "Une erreur est survenue"
-      render :new, status: :unprocessable_entity
+      flash[:alert] = "L'heure de début doit être avant l'heure de fin"
+      redirect_to new_for_annual_managers_activity_path(annual_program: annual_program, academy: annual_program.academy)
     end
   end
 
@@ -184,7 +184,7 @@ class Managers::ActivitiesController < ApplicationController
     @camp ||= Camp.find(params[:camp])
   end
 
-  def validate_start_time_before_end_time
+  def validate_courses
     no_error = true
     Activity::DAYS.each do |day, times|
       start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
@@ -195,6 +195,17 @@ class Managers::ActivitiesController < ApplicationController
       if start_time >= end_time
         no_error = false
       end
+    end
+    no_error
+  end
+
+  def validate_annual_courses
+    no_error = true
+    start_time = Time.zone.parse("#{params[:activity][:day_attributes]["start_time(4i)"]}:#{params[:activity][:day_attributes]["start_time(5i)"]}")
+    end_time = Time.zone.parse("#{params[:activity][:day_attributes]["end_time(4i)"]}:#{params[:activity][:day_attributes]["end_time(5i)"]}")
+
+    if start_time >= end_time
+      no_error = false
     end
     no_error
   end

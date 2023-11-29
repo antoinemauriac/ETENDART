@@ -75,14 +75,13 @@ class Managers::CoursesController < ApplicationController
 
   def update_enrollments
     course = Course.find(params[:id])
-    # enrollments_params = params[:enrollments]
     enrollments_params = permitted_enrollments_params.to_h
-    activity = course.activity
-    category = activity.category
-    camp = activity.camp
-    school_period = camp.school_period if camp
-    annual_program = activity.annual_program
-    academy = activity.academy
+
+    # activity = course.activity
+    # camp = activity.camp
+    # school_period = camp.school_period if camp
+    # annual_program = activity.annual_program
+    # academy = activity.academy
 
     enrollments_params = params[:enrollments]
     authorize([:managers, course], policy_class: Managers::CoursePolicy)

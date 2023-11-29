@@ -3,9 +3,18 @@ class Managers::CoachesController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy])
-    @coaches = @academy.coach_academies.includes(:coach).map(&:coach).sort_by(&:last_name)
+    if params[:query].present?
+      @coaches = @academy.coaches.search_by_query(params[:query]).order(:last_name)
+    else
+      @coaches = @academy.coaches.order(:last_name)
+    end
     skip_policy_scope
     authorize([:managers, @coaches], policy_class: Managers::CoachPolicy)
+    @pagy, @coaches = pagy(@coaches, items: 100)
+    respond_to do |format|
+      format.html # Follow regular flow of Rails
+      format.text { render partial: "managers/coaches/list", locals: {coaches: @coaches}, formats: [:html] }
+    end
   end
 
   def show
@@ -34,27 +43,22 @@ class Managers::CoachesController < ApplicationController
   end
 
   def create
-    @coach = User.new(coach_params)
-    @academy = Academy.find(params[:user][:academy_1_id])
-    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
-    @coach.password = Devise.friendly_token[0, 8]
-    if @coach.save
-      @coach.roles << Role.find_by(name: "coach")
-      @coach.academies_as_coach << Academy.find(params[:user][:academy_1_id])
-      @coach.academies_as_coach << Academy.find(params[:user][:academy_2_id]) if params[:user][:academy_2_id].present?
-      @coach.academies_as_coach << Academy.find(params[:user][:academy_3_id]) if params[:user][:academy_3_id].present?
-      @coach.categories << Category.find(params[:user][:category_1_id])
-      @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
-      @coach.categories << Category.find(params[:user][:category_3_id]) if params[:user][:category_3_id].present?
-
-      @coach.update(status: "creation")
+    coach = User.new(coach_params)
+    academy = Academy.find(params[:user][:academy_1_id])
+    authorize([:managers, coach], policy_class: Managers::CoachPolicy)
+    coach.password = Devise.friendly_token[0, 8]
+    if coach.save
+      coach.roles << Role.find_by(name: "coach")
+      update_academies(coach, params)
+      update_categories(coach, params)
+      coach.update(status: "creation")
       # Envoie l'e-mail avec le lien de réinitialisation de mot de passe
-      @coach.send_reset_password_instructions
+      coach.send_reset_password_instructions
 
-      @coach.update(status: "")
+      coach.update(status: "")
 
       flash[:notice] = "Coach ajouté avec succès."
-      redirect_to managers_coaches_path(academy: @academy)
+      redirect_to managers_coaches_path(academy: academy)
     else
       @academies = Academy.all
       @categories = Category.all
@@ -63,30 +67,16 @@ class Managers::CoachesController < ApplicationController
     end
   end
 
-  # def edit
-  #   @coach = User.find(params[:id])
-  #   authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
-  #   @academies = Academy.all
-  #   @categories = Category.all
-  #   @academy1 = @coach.academies_as_coach.first ? @coach.academies_as_coach.first.id : ""
-  #   @academy2 = @coach.academies_as_coach.second ? @coach.academies_as_coach.second.id : ""
-  #   @category1 = @coach.categories.first ? @coach.categories.first.id : ""
-  #   @category2 = @coach.categories.second ? @coach.categories.second.id : ""
-  # end
-
   def update
-    @coach = User.find(params[:id])
-    authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
-    @coach.academies_as_coach.clear
-    @coach.academies_as_coach << Academy.find(params[:user][:academy_1_id])
-    @coach.academies_as_coach << Academy.find(params[:user][:academy_2_id]) if params[:user][:academy_2_id].present?
-    @coach.academies_as_coach << Academy.find(params[:user][:academy_3_id]) if params[:user][:academy_3_id].present?
-    @coach.categories.clear
-    @coach.categories << Category.find(params[:user][:category_1_id])
-    @coach.categories << Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
-    @coach.categories << Category.find(params[:user][:category_3_id]) if params[:user][:category_3_id].present?
+    coach = User.find(params[:id])
+    authorize([:managers, coach], policy_class: Managers::CoachPolicy)
+    coach.academies_as_coach.clear
+    update_academies(coach, params)
+    coach.categories.clear
+    update_categories(coach, params)
+
     flash[:notice] = "Coach mis à jour."
-    redirect_to managers_coach_path(@coach)
+    redirect_to managers_coach_path(coach)
   end
 
   def update_infos
@@ -106,6 +96,27 @@ class Managers::CoachesController < ApplicationController
   end
 
   private
+
+  def update_academies(coach, params)
+    first_academy = Academy.find(params[:user][:academy_1_id]) if params[:user][:academy_1_id].present?
+    second_academy = Academy.find(params[:user][:academy_2_id]) if params[:user][:academy_2_id].present?
+    third_academy = Academy.find(params[:user][:academy_3_id]) if params[:user][:academy_3_id].present?
+
+    coach.academies_as_coach << first_academy unless coach.academies_as_coach.include?(first_academy) || first_academy.nil?
+    coach.academies_as_coach << second_academy unless coach.academies_as_coach.include?(second_academy) || second_academy.nil?
+    coach.academies_as_coach << third_academy unless coach.academies_as_coach.include?(third_academy) || third_academy.nil?
+  end
+
+  def update_categories(coach, params)
+    first_category = Category.find(params[:user][:category_1_id]) if params[:user][:category_1_id].present?
+    second_category = Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
+    third_category = Category.find(params[:user][:category_3_id]) if params[:user][:category_3_id].present?
+
+    coach.categories << first_category unless coach.categories.include?(first_category) || first_category.nil?
+    coach.categories << second_category unless coach.categories.include?(second_category) || second_category.nil?
+    coach.categories << third_category unless coach.categories.include?(third_category) || third_category.nil?
+  end
+
 
   def coach_params
     params.require(:user).permit(:email, :first_name, :last_name, :password, :phone_number, :gender)

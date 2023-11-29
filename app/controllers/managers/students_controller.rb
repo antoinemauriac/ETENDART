@@ -4,16 +4,26 @@ class Managers::StudentsController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy])
-    @students = Student.joins(academy_enrollments: :academy)
-                       .where(academies: @academy)
-                       .order(:last_name)
-                       .distinct
 
-    # Utilisez Pagy pour paginer les résultats
-    # @pagy, @students = pagy(@students)
+    if params[:query].present?
+      @students = Student.search_by_query(params[:query])
+                         .joins(academy_enrollments: :academy)
+                         .where(academies: { id: @academy.id })
+                         .order(:last_name)
+    else
+      @students = Student.joins(academy_enrollments: :academy)
+                         .where(academies: { id: @academy.id })
+                         .order(:last_name)
+                         .distinct
+    end
 
+    @pagy, @students = pagy(@students, items: 100)
     skip_policy_scope
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
+    respond_to do |format|
+      format.html # Follow regular flow of Rails
+      format.text { render partial: "managers/students/list", locals: {students: @students}, formats: [:html] }
+    end
   end
 
 

@@ -11,8 +11,8 @@ export default class extends Controller {
 
   // School Period Form
   displaySchoolPeriodForm() {
-    this.schoolPeriodFormTarget.classList.add("show");
-    this.schoolPeriodFormTarget.classList.add("add-padding");
+    this.schoolPeriodFormTarget.classList.toggle("show");
+    this.schoolPeriodFormTarget.classList.toggle("add-padding");
   };
 
   hideSchoolPeriodForm() {
@@ -21,8 +21,8 @@ export default class extends Controller {
   };
   // Camp Form
   displayCampForm() {
-    this.campFormTarget.classList.add("show");
-    this.campFormTarget.classList.add("add-padding");
+    this.campFormTarget.classList.toggle("show");
+    this.campFormTarget.classList.toggle("add-padding");
   };
 
   hideCampForm() {
@@ -32,8 +32,8 @@ export default class extends Controller {
 
   // Category Form
   displayCategoryForm() {
-    this.categoryFormTarget.classList.add("show");
-    this.categoryFormTarget.classList.add("add-padding");
+    this.categoryFormTarget.classList.toggle("show");
+    this.categoryFormTarget.classList.toggle("add-padding");
   };
 
   hideCategoryForm() {
@@ -43,8 +43,8 @@ export default class extends Controller {
 
   // Location Form
   displayLocationForm() {
-    this.locationFormTarget.classList.add("show");
-    this.locationFormTarget.classList.add("add-padding");
+    this.locationFormTarget.classList.toggle("show");
+    this.locationFormTarget.classList.toggle("add-padding");
   };
 
   hideLocationForm() {
@@ -54,8 +54,8 @@ export default class extends Controller {
 
   // Feedback Form
   displayFeedbackForm() {
-    this.feedbackFormTarget.classList.add("show");
-    this.feedbackFormTarget.classList.add("add-margin-and-padding");
+    this.feedbackFormTarget.classList.toggle("show");
+    this.feedbackFormTarget.classList.toggle("add-margin-and-padding");
   }
   hideFeedbackForm() {
     this.feedbackFormTarget.classList.remove("show");

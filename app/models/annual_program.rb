@@ -14,6 +14,8 @@ class AnnualProgram < ApplicationRecord
   has_many :course_enrollments, through: :courses
 
   accepts_nested_attributes_for :program_periods, reject_if: :all_blank, allow_destroy: true
+  validate :validate_program_periods
+
 
   DAY_TO_WDAY = {
     "Dimanche" => 0,
@@ -93,5 +95,15 @@ class AnnualProgram < ApplicationRecord
 
   def past_course_enrollments
     course_enrollments.joins(:course).where('courses.ends_at < ?', Time.current).order('courses.starts_at')
+  end
+
+  private
+
+  def validate_program_periods
+    program_periods.each do |period|
+      unless period.start_date_before_end_date
+        errors.add(:base, "Période #{program_periods.index(period) + 1} : la date de début doit être antérieure à la date de fin.")
+      end
+    end
   end
 end

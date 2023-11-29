@@ -4,40 +4,28 @@
   <div class="header-nav-item active">LES ÉLÈVES</div>
 </div>
 <div class="yellow-title">LES ÉLÈVES</div>
-<div class="container">
-  <div class="flexy">
-    <%= link_to new_managers_student_path(academy_id: @academy.id), class: "btn-etendart-square mt-0 mb-4" do %>
-      <i class="fa-solid fa-square-plus"></i> AJOUTER UN ÉLÈVE <i class="fa-solid fa-square-plus"></i>
-    <% end %>
+<div class="container" data-controller="search-student">
+  <div class="student-list-header mt-2 mb-3">
+    <div  style="width:350px">
+      <%= form_with url: managers_students_path, method: :get, html: {class: "d-flex", data: {search_student_target: "form"}} do |f| %>
+        <%= f.text_field :query,
+              class: "student-input-search",
+              placeholder: "Rechercher",
+              value: params[:query],
+              data: {
+                search_student_target: "input",
+                academy_id: @academy.id,
+                action: "keyup->search-student#update"
+              },
+              autofocus: false %>
+      <% end %>
+    </div>
+      <%= link_to new_managers_student_path(academy_id: @academy.id), class: "btn-add-student" do %>
+        <i class="fa-solid fa-square-plus fa-square-bigger"></i> AJOUTER <i class="fa-solid fa-square-plus fa-square-bigger"></i>
+      <% end %>
   </div>
-  <%# <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
-
-  <div data-controller="student-table" class="form-container table-center">
-    <table id="myTable" class="table table-striped table-responsive">
-      <thead>
-        <tr>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="nom">Nom</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="prenom">Prénom</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="genre">Genre</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="email">Email</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="phone">Téléphone</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="datenaissance">Date de naissance</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="city">Ville</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @students.each do |student| %>
-          <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
-            <td><%= student.last_name %></td>
-            <td><%= student.first_name %></td>
-            <td><%= student.gender %></td>
-            <td><%= student.email %></td>
-            <td><%= student.phone_number %></td>
-            <td><%= student.date_of_birth %></td>
-            <td><%= student.city %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+  <%= render "list", students: @students %>
+  <div class="flexy mb-3">
+    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
   </div>
 </div>

@@ -5,9 +5,9 @@ class UpdateEnrollmentsJob < ApplicationJob
     course = Course.find(course_id)
     activity = course.activity
     category = activity.category
-    camp = activity.camp
+    camp = activity.camp if activity.camp
     school_period = camp.school_period if camp
-    annual_program = activity.annual_program
+    annual_program = activity.annual_program if activity.annual_program
     academy = activity.academy
 
     enrollments_params.each do |enrollment_id, data|

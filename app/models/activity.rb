@@ -31,6 +31,8 @@ class Activity < ApplicationRecord
   validates :category_id, presence: true
   validates :location_id, presence: true
 
+  # before_save :starts_at_before_ends_at
+
   def academy
     return camp.academy if camp
     return annual_program.academy if annual_program
@@ -109,4 +111,19 @@ class Activity < ApplicationRecord
       true
     end
   end
+
+  # def starts_at_before_ends_at
+  #   courses = self.courses
+  #   raise
+  #   if courses.any?
+  #     courses.each do |course|
+  #       if course.starts_at >= course.ends_at
+  #         errors.add(:base, "L'heure de début doit être avant l'heure de fin")
+  #         return false
+  #       end
+  #     end
+  #   else
+  #     return true
+  #   end
+  # end
 end
