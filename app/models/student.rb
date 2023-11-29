@@ -1,4 +1,10 @@
 class Student < ApplicationRecord
+  include PgSearch::Model
+
+  pg_search_scope :search_by_query, against: [:first_name, :last_name, :gender, :email, :phone_number, :city],
+    using: {
+      tsearch: { prefix: true }
+    }
 
   validates :username, :first_name, :last_name, :date_of_birth, presence: true
 
@@ -273,6 +279,14 @@ class Student < ApplicationRecord
       self.phone_number = new_phone
     elsif new_phone.length == 11 && new_phone.start_with?('33')
       self.phone_number = "0#{new_phone[2..-1]}"
+    end
+  end
+
+  students = []
+  Student.find_each do |student|
+    academy_enrollments = student.academy_enrollments
+    academy_enrollments.each do |academy_enrollment|
+      students << student if academy_enrollments.where(academy_id: academy_enrollment.academy_id).count > 1
     end
   end
 end

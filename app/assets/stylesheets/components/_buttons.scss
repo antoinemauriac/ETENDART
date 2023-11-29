@@ -11,6 +11,28 @@
   margin: 1em 1em 0em 1em;
 }
 
+.btn-add-student {
+  text-align: center;
+  padding: 7px;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  width: 200px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.fa-square-bigger {
+  font-size: 20px;
+}
+.btn-add-student:hover {
+  color: $yellow;
+  transition: 0.3s;
+}
+
 .btn-reintegrer {
   margin: 0em 0em 0em 0em!important;
   padding: 4px!important;
@@ -103,7 +125,7 @@
   background-color: black;
   color: $yellow;
   border: none;
-  min-width: 140px;
+  min-width: 205px;
   font-size: 16px;
   // font-weight: 900;
   margin: 1em 1em 0em 1em;

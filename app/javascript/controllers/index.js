@@ -58,6 +58,12 @@ application.register("past-camp-courses", PastCampCoursesController)
 import PresenceSheetController from "./presence_sheet_controller"
 application.register("presence-sheet", PresenceSheetController)
 
+import SearchCoachController from "./search_coach_controller"
+application.register("search-coach", SearchCoachController)
+
+import SearchStudentController from "./search_student_controller"
+application.register("search-student", SearchStudentController)
+
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)
 

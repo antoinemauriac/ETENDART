@@ -1,6 +1,16 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  include PgSearch::Model
+
+  pg_search_scope :search_by_query, against: [:first_name, :last_name],
+  associated_against: {
+    academies_as_coach: [:name],
+    categories: [:name]
+  },
+  using: {
+    tsearch: { prefix: true }
+  }
 
   attr_accessor :academy_1_id, :academy_2_id, :academy_3_id, :category_1_id, :category_2_id, :category_3_id
 

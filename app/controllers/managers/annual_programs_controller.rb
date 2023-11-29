@@ -8,6 +8,7 @@ class Managers::AnnualProgramsController < ApplicationController
   end
 
   def new
+    # raise
     @academy = Academy.find(params[:academy])
     @annual_program = AnnualProgram.new
     @annual_program.academy = @academy
@@ -28,6 +29,7 @@ class Managers::AnnualProgramsController < ApplicationController
 
   def create
     academy = Academy.find(params[:academy])
+
     annual_program = academy.annual_programs.build(annual_program_params)
     annual_program.update(starts_at: annual_program.program_periods.first.start_date)
     annual_program.update(ends_at: annual_program.program_periods.last.end_date)
@@ -36,7 +38,8 @@ class Managers::AnnualProgramsController < ApplicationController
     if annual_program.save
       redirect_to managers_annual_program_path(annual_program), notice: 'Le programme annuel a été créé avec succès.'
     else
-      render :new
+      error_messages = annual_program.errors.full_messages.join(', ')
+      redirect_to new_managers_annual_program_path(academy: academy), alert: "#{error_messages}"
     end
   end
 

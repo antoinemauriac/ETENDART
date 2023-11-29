@@ -14,6 +14,8 @@ gem 'sidekiq'
 gem 'will_paginate', '~> 4.0'
 gem 'pagy'
 
+gem 'pg_search'
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4", ">= 7.0.4.2"
 

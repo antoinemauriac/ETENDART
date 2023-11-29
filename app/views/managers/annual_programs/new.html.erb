@@ -1,26 +1,33 @@
+<%= render "shared/academy_header" %>
+<div class="header-nav">
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to "LES PROGRAMMES", managers_annual_programs_path(academy: @academy) %></div>
+  <div class="header-nav-item active">NOUVEAU PROGRAMME</div>
+</div>
+<div class="yellow-title">NOUVEAU PROGRAMME ANNUEL</div>
 <div class="container">
-  <div class="form-container flexy">
-    <%= form_with model: @annual_program, url: managers_annual_programs_path(academy: @academy) do |f| %>
+  <div class="flexy">
+    <%= form_with model: @annual_program, url: managers_annual_programs_path(academy: @academy), html: { style: 'width: 100%;' } do |f| %>
 
       <div class="program-periods">
         <% @default_program_periods.each_with_index do |default_period, index| %>
-          <div class="program-period">
-            <h5>Période <%= index + 1 %></h5> <!-- Affichage du numéro de la période -->
+          <div>
+            <div class="period-header">Période <%= index + 1 %></div>
+            <div class="period-content">
+              <%= f.fields_for :program_periods, default_period do |program_period| %>
+                <%= program_period.label :start_date, 'Du' %>
+                <%= program_period.date_field :start_date, class: "form-control" %>
 
-            <!-- Ajout de data-controller="date-picker" pour le champ start_date -->
-            <%= f.fields_for :program_periods, default_period do |program_period| %>
-              <%= program_period.label :start_date, 'Date de début' %>
-              <%= program_period.date_field :start_date, class: "form-control" %>
-
-              <%= program_period.label :end_date, 'Date de fin' %>
-              <%= program_period.date_field :end_date, class: "form-control" %>
-            <% end %>
+                <%= program_period.label :end_date, 'Au (inclus)' %>
+                <%= program_period.date_field :end_date, class: "form-control" %>
+              <% end %>
+            </div>
           </div>
         <% end %>
       </div>
 
-      <div class="actions">
-        <%= f.submit 'Créer', class: 'btn btn-primary' %>
+      <div class="flexy mt-3">
+        <%= f.submit 'VALIDER', class: 'btn-etendart-yellow' %>
       </div>
     <% end %>
   </div>

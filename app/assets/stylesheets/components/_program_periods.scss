@@ -1,0 +1,33 @@
+.program-periods {
+  display: flex;
+  justify-content: space-between;
+}
+
+.program-period {
+  line-height: 50px;
+  padding: 30px;
+  background-color: white;
+  border-radius: 20px;
+}
+
+.period-header {
+  background-color: black;
+  color: $yellow;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  text-align: center;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.period-content {
+  background-color: white;
+  padding: 20px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  line-height: 40px;
+}
