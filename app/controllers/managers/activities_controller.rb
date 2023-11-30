@@ -27,10 +27,17 @@ class Managers::ActivitiesController < ApplicationController
 
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
     coach = User.find(params[:activity][:coach_id]) if params[:activity][:coach_id].present?
-    coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
+    coaches_ids = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
+    coaches = User.where(id: coaches_ids)
 
-    activity.coaches << User.where(id: coaches) if coaches.any?
+    activity.coaches << coaches if coaches.any?
     activity.coaches << coach if coach
+
+    coaches.each do |coach|
+      camp.coaches << coach unless camp.coaches.include?(coach)
+    end
+    camp.coaches << coach if coach && !camp.coaches.include?(coach)
+
 
     if validate_courses
       if activity.save
@@ -108,25 +115,43 @@ class Managers::ActivitiesController < ApplicationController
   end
 
   def update
-    @activity = Activity.find(params[:id])
-    authorize([:managers, @activity])
+    activity = Activity.find(params[:id])
+    authorize([:managers, activity])
+    camp = activity.camp
 
-    if @activity.update(activity_params)
+    if camp
+      activity.coaches.each do |coach|
+        activities = coach.activities.where(camp: activity.camp)
+        if activities.count == 1
+          camp.coaches.delete(coach)
+        end
+      end
+    end
+
+    if activity.update(activity_params)
 
       coach = User.find_by_id(params[:activity][:coach_id])
-      coaches = params[:activity][:coach_ids].reject { |id| id == "" }
-      @activity.coaches.clear
+      coaches_ids = params[:activity][:coach_ids].reject { |id| id == "" }
+      coaches = User.where(id: coaches_ids)
 
-      @activity.coaches << User.where(id: coaches) if coaches.any?
-      @activity.coaches << coach if coach
+      activity.coaches.clear
+      activity.coaches << coaches if coaches.any?
+      activity.coaches << coach if coach
 
-      @activity.courses.each do |course|
+      if camp
+        coaches.each do |coach|
+          camp.coaches << coach unless camp.coaches.include?(coach)
+        end
+        camp.coaches << coach if coach && !camp.coaches.include?(coach)
+      end
+
+      activity.courses.each do |course|
         course.update(coach: coach)
       end
       if params[:redirect_to] == "camp"
-        redirect_to managers_activity_path(@activity), notice: "L'activité a été mise à jour avec succès."
+        redirect_to managers_activity_path(activity), notice: "L'activité a été mise à jour avec succès."
       else
-        redirect_to show_for_annual_managers_activity_path(@activity), notice: "L'activité a été mise à jour avec succès."
+        redirect_to show_for_annual_managers_activity_path(activity), notice: "L'activité a été mise à jour avec succès."
       end
     else
       flash.now[:alert] = "Erreur lors de la mise à jour de l'activité."

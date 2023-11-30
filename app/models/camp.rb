@@ -138,18 +138,6 @@ class Camp < ApplicationRecord
     enrollments_without_no_show_by_category(category).unattended.count
   end
 
-  # def coaches
-  #   activity_coaches.map(&:coach).uniq
-  # end
-
-  # def coaches_count
-  #   coaches.count
-  # end
-
-  # def coaches_by_gender(genre)
-  #   coaches.select { |coach| coach.gender == genre }
-  # end
-
   private
 
   def starts_at_must_be_before_ends_at

@@ -30,19 +30,6 @@ class Managers::SchoolPeriodsController < ApplicationController
     @camps = @school_period.camps.order(:starts_at)
   end
 
-  # def statistics
-  #   @school_period = SchoolPeriod.find(params[:id])
-  #   authorize([:managers, @school_period])
-
-  #   @academy = @school_period.academy
-  #   @activities = @school_period.activities.order(:camp_id)
-  #   @camps = @school_period.camps.order(:starts_at)
-  #   @sorted_departments = @school_period.participant_departments.sort_by do |department|
-  #     -@school_period.number_of_students_by_department(department)
-  #   end
-  #   @categories = @school_period.categories.uniq.sort_by { |category| @school_period.number_of_students_by_category(category) }.reverse
-  # end
-
   def statistics
     @school_period = SchoolPeriod.includes(
       camps: [
