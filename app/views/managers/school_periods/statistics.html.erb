@@ -20,6 +20,7 @@
         <th>Fille (%)</th>
         <th>Âge moyen</th>
         <th>Taux abs</th>
+        <th>Nb Coach</th>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +34,7 @@
           <td><%= camp.started? ? "#{camp.percentage_of_students_by_genre("Fille")} %" : "-" %></td>
           <td><%= camp.started? ? "#{camp.age_of_students} ans" : "-" %></td>
           <td><%= camp.started? ? "#{camp.absenteeism_rate} %" : "-" %></td>
+          <td><%= camp.started? ? camp.coaches.count : "-" %></td>
         </tr>
       <% end %>
         <tr class="total-row">
@@ -44,6 +46,7 @@
           <td><%= "#{@school_period.percentage_of_students("Fille")} %" %></td>
           <td><%= @school_period.age_of_students %> ans</td>
           <td><%= "#{@school_period.absenteeism_rate} %" %></td>
+          <td><%= @school_period.coaches.uniq.count %></td>
         </tr>
     </tbody>
   </table>
@@ -59,6 +62,7 @@
         <th>Garçon (%)</th>
         <th>Fille (%)</th>
         <th>Taux abs</th>
+        <th>Nb Coach</th>
       </tr>
     </thead>
     <tbody>
@@ -69,6 +73,7 @@
           <td><%= "#{@school_period.percentage_of_students_by_category_and_gender(category, "Garçon")} %" %></td>
           <td><%= "#{@school_period.percentage_of_students_by_category_and_gender(category, "Fille")} %" %></td>
           <td><%= "#{@school_period.absenteeism_rate_by_category(category)} %" %></td>
+          <td><%= @school_period.number_of_coaches_by_category(category) %></td>
         </tr>
       <% end %>
     </tbody>
@@ -140,6 +145,7 @@
         <th>Nb Fille</th>
         <th>Âge moyen</th>
         <th>Taux abs</th>
+        <th>Nb Coach</th>
       </tr>
     </thead>
     <tbody>
@@ -152,6 +158,7 @@
           <td><%= camp.started? ? activity.number_of_students_by_genre("Fille") : "-" %></td>
           <td><%= camp.started? ? "#{activity.age_of_students} ans" : "-" %></td>
           <td><%= camp.started? ? "#{activity.absenteeism_rate} %" : "-" %></td>
+          <td><%= activity.coaches.count %></td>
         </tr>
       <% end %>
     </tbody>

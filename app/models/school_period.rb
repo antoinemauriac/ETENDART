@@ -4,6 +4,7 @@ class SchoolPeriod < ApplicationRecord
 
   belongs_to :academy
   has_many :camps, dependent: :destroy
+  has_many :coaches, through: :camps
   has_many :camp_enrollments, through: :camps
   has_many :students, through: :camp_enrollments
 
@@ -142,20 +143,19 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
+  def number_of_coaches_by_category(category)
+    coaches.joins(activities: :camp)
+           .where('activities.category_id = ? AND activities.camp_id IN (?)', category.id, camps.pluck(:id))
+           .distinct
+           .count
+  end
+
   def can_import?
     if starts_at
       starts_at > Date.today
     else
       true
     end
-  end
-
-  def coaches
-    camps.map(&:coaches).flatten.uniq
-  end
-
-  def coaches_count
-    coaches.count
   end
 
   def coaches_by_genre(genre)
