@@ -24,11 +24,14 @@ class User < ApplicationRecord
 
   has_many :coach_academies, foreign_key: :coach_id, dependent: :destroy
   has_many :academies_as_coach, through: :coach_academies, source: :academy
-  has_many :school_periods, through: :academies_as_coach
-  has_many :camps, through: :school_periods
+  # has_many :school_periods, through: :academies_as_coach
+  # has_many :camps, through: :school_periods
 
   has_many :coach_categories, foreign_key: :coach_id, dependent: :destroy
   has_many :categories, through: :coach_categories
+
+  has_many :coach_camps, foreign_key: :coach_id, dependent: :destroy
+  has_many :camps, through: :coach_camps
 
   has_many :feedbacks, foreign_key: :coach_id
 

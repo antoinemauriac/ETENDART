@@ -13,6 +13,9 @@ class Camp < ApplicationRecord
   has_many :courses, through: :activities
   has_many :course_enrollments, through: :courses
 
+  has_many :coach_camps, dependent: :destroy
+  has_many :coaches, through: :coach_camps, source: :coach
+
   validates :name, presence: true
   validate :starts_at_must_be_before_ends_at
 
@@ -135,17 +138,17 @@ class Camp < ApplicationRecord
     enrollments_without_no_show_by_category(category).unattended.count
   end
 
-  def coaches
-    activity_coaches.map(&:coach).uniq
-  end
+  # def coaches
+  #   activity_coaches.map(&:coach).uniq
+  # end
 
-  def coaches_count
-    coaches.count
-  end
+  # def coaches_count
+  #   coaches.count
+  # end
 
-  def coaches_by_gender(genre)
-    coaches.select { |coach| coach.gender == genre }
-  end
+  # def coaches_by_gender(genre)
+  #   coaches.select { |coach| coach.gender == genre }
+  # end
 
   private
 
