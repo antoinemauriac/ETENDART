@@ -19,6 +19,8 @@ class SchoolPeriod < ApplicationRecord
   has_many :school_period_enrollments, dependent: :destroy
   # has_many :students, through: :school_period_enrollments
 
+  has_one :school_period_stat, dependent: :destroy
+
   def full_name
     "#{name} - #{year}"
   end
@@ -88,7 +90,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def number_of_students_by_department(department)
-    show_students.map(&:department).count(department)
+    show_students.map(&:department).count(department.to_s)
   end
 
   def starts_at
@@ -97,6 +99,10 @@ class SchoolPeriod < ApplicationRecord
 
   def ends_at
     camps.maximum(:ends_at) if camps.any?
+  end
+
+  def ended?
+    ends_at <= Date.today
   end
 
   def absenteeism_rate

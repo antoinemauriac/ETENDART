@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_25_110340) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_01_120326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -103,6 +103,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_110340) do
     t.index ["student_id"], name: "index_activity_enrollments_on_student_id"
   end
 
+  create_table "activity_stats", force: :cascade do |t|
+    t.bigint "activity_id", null: false
+    t.integer "students_count", default: 0
+    t.integer "coaches_count", default: 0
+    t.integer "number_of_boy", default: 0
+    t.integer "number_of_girl", default: 0
+    t.float "age_of_students", default: 0.0
+    t.integer "absenteeism_rate", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_id"], name: "index_activity_stats_on_activity_id"
+  end
+
   create_table "annual_program_enrollments", force: :cascade do |t|
     t.bigint "student_id", null: false
     t.bigint "annual_program_id", null: false
@@ -134,6 +147,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_110340) do
     t.boolean "present", default: false
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
+  end
+
+  create_table "camp_stats", force: :cascade do |t|
+    t.bigint "camp_id", null: false
+    t.integer "show_count", default: 0
+    t.integer "no_show_count", default: 0
+    t.integer "show_rate", default: 0
+    t.integer "no_show_rate", default: 0
+    t.integer "absenteeism_rate", default: 0
+    t.integer "percentage_of_boy", default: 0
+    t.integer "percentage_of_girl", default: 0
+    t.float "age_of_students", default: 0.0
+    t.integer "participant_ages", default: [], array: true
+    t.jsonb "student_count_by_age", default: {}
+    t.integer "participant_departments", default: [], array: true
+    t.jsonb "student_count_by_department", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "students_count"
+    t.integer "coaches_count"
+    t.index ["camp_id"], name: "index_camp_stats_on_camp_id"
   end
 
   create_table "camps", force: :cascade do |t|
@@ -280,6 +314,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_110340) do
     t.index ["student_id"], name: "index_school_period_enrollments_on_student_id"
   end
 
+  create_table "school_period_stats", force: :cascade do |t|
+    t.bigint "school_period_id", null: false
+    t.integer "students_count", default: 0
+    t.integer "show_count", default: 0
+    t.integer "no_show_count", default: 0
+    t.integer "show_rate", default: 0
+    t.integer "no_show_rate", default: 0
+    t.integer "absenteeism_rate", default: 0
+    t.integer "percentage_of_boy", default: 0
+    t.integer "percentage_of_girl", default: 0
+    t.integer "coaches_count", default: 0
+    t.float "age_of_students", default: 0.0
+    t.integer "category_ids", default: [], array: true
+    t.jsonb "percentage_of_boy_by_category", default: {}
+    t.jsonb "percentage_of_girl_by_category", default: {}
+    t.jsonb "absenteisme_rate_by_category", default: {}
+    t.jsonb "number_of_coaches_by_category", default: {}
+    t.integer "participant_ages", default: [], array: true
+    t.jsonb "student_count_by_age", default: {}
+    t.integer "participant_departments", default: [], array: true
+    t.jsonb "student_count_by_department", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "students_count_by_category", default: {}
+    t.index ["school_period_id"], name: "index_school_period_stats_on_school_period_id"
+  end
+
   create_table "school_periods", force: :cascade do |t|
     t.string "name"
     t.bigint "academy_id", null: false
@@ -348,11 +409,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_110340) do
   add_foreign_key "activity_coaches", "users", column: "coach_id"
   add_foreign_key "activity_enrollments", "activities"
   add_foreign_key "activity_enrollments", "students"
+  add_foreign_key "activity_stats", "activities"
   add_foreign_key "annual_program_enrollments", "annual_programs"
   add_foreign_key "annual_program_enrollments", "students"
   add_foreign_key "annual_programs", "academies"
   add_foreign_key "camp_enrollments", "camps"
   add_foreign_key "camp_enrollments", "students"
+  add_foreign_key "camp_stats", "camps"
   add_foreign_key "camps", "school_periods"
   add_foreign_key "coach_academies", "academies"
   add_foreign_key "coach_academies", "users", column: "coach_id"
@@ -374,6 +437,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_110340) do
   add_foreign_key "program_periods", "annual_programs"
   add_foreign_key "school_period_enrollments", "school_periods"
   add_foreign_key "school_period_enrollments", "students"
+  add_foreign_key "school_period_stats", "school_periods"
   add_foreign_key "school_periods", "academies"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"

@@ -25,28 +25,29 @@
     </thead>
     <tbody>
       <% @camps.each do |camp| %>
+        <% camp_stat = camp.camp_stat %>
         <tr>
           <td><%= camp.name %></td>
           <td><%= camp.started? ? camp.students_count : "-" %></td>
-          <td><%= camp.started? ? "#{camp.no_show_count} (#{camp.no_show_rate}%)": "-" %></td>
-          <td><%= camp.started? ? "#{camp.show_count} (#{camp.show_rate}%)": "-" %></td>
-          <td><%= camp.started? ? "#{camp.percentage_of_students_by_genre("Garçon")} %" : "-" %></td>
-          <td><%= camp.started? ? "#{camp.percentage_of_students_by_genre("Fille")} %" : "-" %></td>
-          <td><%= camp.started? ? "#{camp.age_of_students} ans" : "-" %></td>
-          <td><%= camp.started? ? "#{camp.absenteeism_rate} %" : "-" %></td>
+          <td><%= camp.started? ? "#{camp_stat.no_show_count} (#{camp_stat.no_show_rate}%)": "-" %></td>
+          <td><%= camp.started? ? "#{camp_stat.show_count} (#{camp_stat.show_rate}%)": "-" %></td>
+          <td><%= camp.started? ? "#{camp_stat.percentage_of_boy} %" : "-" %></td>
+          <td><%= camp.started? ? "#{camp_stat.percentage_of_girl} %" : "-" %></td>
+          <td><%= camp.started? ? "#{camp_stat.age_of_students} ans" : "-" %></td>
+          <td><%= camp.started? ? "#{camp_stat.absenteeism_rate} %" : "-" %></td>
           <td><%= camp.started? ? camp.coaches.count : "-" %></td>
         </tr>
       <% end %>
         <tr class="total-row">
           <td>TOTAL</td>
-          <td><%= @school_period.students_count %></td>
-          <td><%= "#{@school_period.no_show_count} (#{@school_period.no_show_rate}%)"%></td>
-          <td><%= "#{@school_period.show_count} (#{@school_period.show_rate}%)"%></td>
-          <td><%= "#{@school_period.percentage_of_students("Garçon")} %" %></td>
-          <td><%= "#{@school_period.percentage_of_students("Fille")} %" %></td>
-          <td><%= @school_period.age_of_students %> ans</td>
-          <td><%= "#{@school_period.absenteeism_rate} %" %></td>
-          <td><%= @school_period.coaches.uniq.count %></td>
+          <td><%= @school_period.ended? ? @school_period_stat.students_count : "" %></td>
+          <td><%= @school_period.ended? ? "#{@school_period_stat.no_show_count} (#{@school_period_stat.no_show_rate}%)" : "" %></td>
+          <td><%= @school_period.ended? ? "#{@school_period_stat.show_count} (#{@school_period_stat.show_rate}%)" : "" %></td>
+          <td><%= @school_period.ended? ? "#{@school_period_stat.percentage_of_boy} %" : "" %></td>
+          <td><%= @school_period.ended? ? "#{@school_period_stat.percentage_of_girl} %" : "" %></td>
+          <td><%= @school_period.ended? ? "#{@school_period_stat.age_of_students} ans" : ""  %></td>
+          <td><%= @school_period.ended? ? "#{@school_period_stat.absenteeism_rate} %" : "" %></td>
+          <td><%= @school_period.ended? ? @school_period_stat.coaches_count  : "" %></td>
         </tr>
     </tbody>
   </table>
@@ -66,14 +67,14 @@
       </tr>
     </thead>
     <tbody>
-      <% @categories.each do |category| %>
+      <% @category_ids.each do |id| %>
         <tr>
-          <td><%= category.name %></td>
-          <td><%= @school_period.number_of_students_by_category(category) %></td>
-          <td><%= "#{@school_period.percentage_of_students_by_category_and_gender(category, "Garçon")} %" %></td>
-          <td><%= "#{@school_period.percentage_of_students_by_category_and_gender(category, "Fille")} %" %></td>
-          <td><%= "#{@school_period.absenteeism_rate_by_category(category)} %" %></td>
-          <td><%= @school_period.number_of_coaches_by_category(category) %></td>
+          <td><%= Category.find(id).name %></td>
+          <td><%= @school_period_stat.students_count_by_category[id.to_s] %></td>
+          <td><%= "#{@school_period_stat.percentage_of_boy_by_category[id.to_s]} %" %></td>
+          <td><%= "#{@school_period_stat.percentage_of_girl_by_category[id.to_s]} %" %></td>
+          <td><%= "#{@school_period_stat.absenteisme_rate_by_category[id.to_s]} %" %></td>
+          <td><%= @school_period_stat.number_of_coaches_by_category[id.to_s] %></td>
         </tr>
       <% end %>
     </tbody>
@@ -93,13 +94,14 @@
       </tr>
     </thead>
     <tbody>
-      <% @school_period.participant_ages.each do |age| %>
+      <% @school_period_stat.participant_ages.each do |age| %>
         <tr>
           <td><%= "#{age} ans" %></td>
           <% @school_period.camps.each do |camp| %>
-            <td><%= camp.started? ? camp.number_of_students_by_age(age) : "-" %></td>
+            <% camp_stat = camp.camp_stat %>
+            <td><%= camp.started? ? camp_stat.student_count_by_age[age.to_s] : "-" %></td>
           <% end %>
-          <td class="total-row"><%= @school_period.number_of_students_by_age(age) %></td>
+          <td class="total-row"><%= @school_period_stat.student_count_by_age[age.to_s] %></td>
         </tr>
       <% end %>
     </tbody>
@@ -123,9 +125,10 @@
         <tr>
           <td><%= department %></td>
           <% @school_period.camps.each do |camp| %>
-            <td><%= camp.started? ? camp.number_of_students_by_dpt(department) : "-" %></td>
+            <% camp_stat = camp.camp_stat %>
+            <td><%= camp.started? ? camp_stat.student_count_by_department[department.to_s] : "-" %></td>
           <% end %>
-          <td class="total-row"><%= @school_period.number_of_students_by_department(department) %></td>
+          <td class="total-row"><%= @school_period_stat.student_count_by_department[department.to_s] %></td>
         </tr>
       <% end %>
     </tbody>
@@ -151,14 +154,15 @@
     <tbody>
       <% camp.activities.each do |activity| %>
         <tr>
+          <% activity_stat = activity.activity_stat %>
           <td><%= activity.camp.name %></td>
           <td><%= activity.name %></td>
-          <td><%= camp.started? ? activity.students_count : "-" %></td>
-          <td><%= camp.started? ? activity.number_of_students_by_genre("Garçon") : "-" %></td>
-          <td><%= camp.started? ? activity.number_of_students_by_genre("Fille") : "-" %></td>
-          <td><%= camp.started? ? "#{activity.age_of_students} ans" : "-" %></td>
-          <td><%= camp.started? ? "#{activity.absenteeism_rate} %" : "-" %></td>
-          <td><%= activity.coaches.count %></td>
+          <td><%= camp.started? ? activity_stat.students_count : "-" %></td>
+          <td><%= camp.started? ? activity_stat.number_of_boy : "-" %></td>
+          <td><%= camp.started? ? activity_stat.number_of_girl : "-" %></td>
+          <td><%= camp.started? ? "#{activity_stat.age_of_students} ans" : "-" %></td>
+          <td><%= camp.started? ? "#{activity_stat.absenteeism_rate} %" : "-" %></td>
+          <td><%= activity_stat.coaches_count %></td>
         </tr>
       <% end %>
     </tbody>
