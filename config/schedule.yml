@@ -1,7 +1,3 @@
 UpdateStatisticsJob:
   cron: '0 22 * * *' # Exécution tous les jours à 2h du matin
   class: UpdateStatisticsJob
-
-SayHelloJob:
-  cron: '*/1 * * * *' # Exécution toutes les minutes
-  class: SayHelloJob
