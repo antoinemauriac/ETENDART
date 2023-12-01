@@ -16,11 +16,10 @@ class Camp < ApplicationRecord
   has_many :coach_camps, dependent: :destroy
   has_many :coaches, through: :coach_camps, source: :coach
 
+  has_one :camp_stat, dependent: :destroy
+
   validates :name, presence: true
   validate :starts_at_must_be_before_ends_at
-
-  scope :banished, -> { where(banished: true) }
-
 
   def banished_students
     students.joins(:camp_enrollments).where(camp_enrollments: { banished: true }).uniq
@@ -95,12 +94,16 @@ class Camp < ApplicationRecord
     show_students.map(&:age).uniq.sort
   end
 
+  def participant_departments
+    show_students.map(&:department).uniq.sort
+  end
+
   def number_of_students_by_age(age)
     show_students.count { |student| student.age == age }
   end
 
   def number_of_students_by_dpt(department)
-    show_students.count { |student| student.department == department }
+    show_students.count { |student| student.department == department.to_s }
   end
 
   def enrollments_without_no_show

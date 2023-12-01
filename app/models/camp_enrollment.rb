@@ -4,4 +4,6 @@ class CampEnrollment < ApplicationRecord
 
   scope :attended, -> { where(present: true) }
   scope :unattended, -> { where(present: false) }
+
+  scope :banished, -> { where(banished: true) }
 end
