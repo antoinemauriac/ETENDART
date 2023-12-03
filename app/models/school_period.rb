@@ -102,7 +102,11 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def ended?
-    ends_at <= Date.today
+    ends_at <= Date.current
+  end
+
+  def current?
+    ends_at >= Date.current - 1.day if ends_at
   end
 
   def absenteeism_rate

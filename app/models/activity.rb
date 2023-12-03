@@ -35,6 +35,14 @@ class Activity < ApplicationRecord
 
   # before_save :starts_at_before_ends_at
 
+  def ends_at
+    courses.maximum(:ends_at) if courses.any?
+  end
+
+  def current?
+    ends_at >= Time.current - 1.day if ends_at
+  end
+
   def academy
     return camp.academy if camp
     return annual_program.academy if annual_program

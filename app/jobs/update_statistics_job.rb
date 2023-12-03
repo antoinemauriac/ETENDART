@@ -12,7 +12,8 @@ class UpdateStatisticsJob < ApplicationJob
   private
 
   def update_school_period_stats
-    SchoolPeriod.all.each do |school_period|
+    SchoolPeriod.find_each do |school_period|
+      next unless school_period.current?
       if school_period.school_period_stat.nil?
         school_period_stat = SchoolPeriodStat.new(school_period: school_period)
       else
@@ -63,7 +64,8 @@ class UpdateStatisticsJob < ApplicationJob
   end
 
   def update_camp_stats
-    Camp.all.each do |camp|
+    Camp.find_each do |camp|
+      next unless camp.current?
       if camp.camp_stat.nil?
         camp_stat = CampStat.new(camp: camp)
       else
@@ -101,7 +103,8 @@ class UpdateStatisticsJob < ApplicationJob
   end
 
   def update_activity_stats
-    Activity.all.each do |activity|
+    Activity.find_each do |activity|
+      next unless activity.current?
       if activity.activity_stat.nil?
         activity_stat = ActivityStat.new(activity: activity)
       else
