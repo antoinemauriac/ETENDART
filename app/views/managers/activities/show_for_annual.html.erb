@@ -96,7 +96,7 @@
           <td class="align-middle"><%= student.phone_number %></td>
           <td class="align-middle"><%= student.email %></td>
           <td class="align-middle">
-            <%= link_to managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id)), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>
+            <%= link_to managers_activity_enrollment_path(@activity.activity_enrollments.find_by(student_id: student.id), origin: 'annual_program'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?" } do %>
               <i class="fas fa-trash trash"></i>
             <% end %>
           </td>

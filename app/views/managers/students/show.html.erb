@@ -209,7 +209,7 @@
               <td class="align-middle"><%= activity.annual_program.name %></td>
               <td class="align-middle"><%= activity.name %></td>
               <td class="align-middle">
-                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student', origin: 'annual_program'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
                   <i class="fas fa-trash trash"></i>
                 <% end %>
               </td>

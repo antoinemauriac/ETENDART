@@ -72,11 +72,12 @@
 <% end %>
 
 <div class="yellow-title yellow-title-flex mt-3 mb-3">
-  LES ÉLÈVES
-  <%= link_to export_annual_students_managers_annual_program_path(format: :csv) do %>
-    <i class="fa-solid fa-download fa-download-black"></i>
+  <%= link_to export_annual_students_managers_annual_program_path(format: :csv), class: 'btn-etendart-square btn-download mt-0' do %>
+    LES ÉLÈVES<i class="fa-solid fa-download"></i>
   <% end %>
-  <%= link_to "EXPORTER PRESENCE", export_past_enrollments_managers_annual_program_path(format: :csv), class: "btn-etendart-square mt-0" %>
+  <%= link_to export_past_enrollments_managers_annual_program_path(format: :csv), class: "btn-etendart-square btn-download mt-0" do %>
+    LES ABSENCES<i class="fa-solid fa-download"></i>
+  <% end %>
 </div>
 <div class="container" data-controller="clickable-table">
   <table class="table table-striped table-responsive table-center form-container">

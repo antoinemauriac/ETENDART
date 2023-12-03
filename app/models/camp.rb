@@ -19,7 +19,14 @@ class Camp < ApplicationRecord
   has_one :camp_stat, dependent: :destroy
 
   validates :name, presence: true
+  validates :starts_at, presence: true
+  validates :ends_at, presence: true
+
   validate :starts_at_must_be_before_ends_at
+
+  def current?
+    ends_at >= Time.current - 1.day
+  end
 
   def banished_students
     students.joins(:camp_enrollments).where(camp_enrollments: { banished: true }).uniq
