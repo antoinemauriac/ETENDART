@@ -21,7 +21,7 @@ class UpdateEnrollmentsJob < ApplicationJob
 
       if school_period && camp_enrollment
         if school_period.paid == true
-          camp_enrollment&.update(has_paid: enrollment_params[1][:has_paid])
+          camp_enrollment&.update(has_paid: data[:has_paid])
         end
 
         if academy.banished && category.name != "Accompagnement"
