@@ -91,7 +91,7 @@
               <% @coach_feedbacks.each do |feedback| %>
               <tr>
                 <td class="align-middle"><%= feedback.manager.full_name %></td>
-                <td class="align-middle"><%= l(feedback.created_at, format: :date)  %></td>
+                <td class="align-middle"><%= l(feedback.created_at, format: :date_short_year)  %></td>
                 <td class="align-middle"><%= feedback.content %></td>
                 <% if feedback.manager == current_user %>
                   <td class="text-center">

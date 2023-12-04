@@ -60,14 +60,24 @@
               <th>Auteur</th>
               <th>Date</th>
               <th>Message</th>
+              <th class="text-center">Supprimer</th>
             </tr>
           </thead>
           <tbody>
             <% @feedbacks.each do |feedback| %>
             <tr>
               <td class="align-middle"><%= feedback.coach.full_name %></td>
-              <td class="align-middle"><%= l(feedback.created_at, format: :date)  %></td>
+              <td class="align-middle"><%= l(feedback.created_at, format: :date_short_year)  %></td>
               <td class="align-middle"><%= feedback.content %></td>
+              <% if feedback.coach == current_user %>
+                <td class="text-center">
+                  <%= link_to managers_feedback_path(feedback), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce feedback ?", turbo_confirm_class: "confirmation-message" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
+                </td>
+              <% else %>
+                <td></td>
+              <% end %>
             </tr>
             <% end %>
           </tbody>

@@ -21,11 +21,11 @@
 
       <%= form.input :gender, as: :select, collection: ["Garçon", "Fille"], label: "Genre", required: true %>
 
-      <%= form.input :address, label: "Adresse", required: true %>
+      <%= form.input :address, label: "Adresse" %>
 
-      <%= form.input :zipcode, label: "Code Postal", required: true %>
+      <%= form.input :zipcode, label: "Code Postal" %>
 
-      <%= form.input :city, label: "Ville", required: true %>
+      <%= form.input :city, label: "Ville" %>
 
       <%= form.input :academy1_id, label: "Académie 1", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, required: true, selected: @academy1&.id %>
 

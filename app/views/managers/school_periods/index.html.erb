@@ -4,6 +4,34 @@
   <div class="header-nav-item active">LES STAGES</div>
 </div>
 <div class="yellow-title">LES STAGES</div>
+<div data-controller="hidden-forms">
+  <div class="flexy">
+    <button class="btn-etendart-square mt-0" data-action="click->hidden-forms#displaySchoolPeriodForm">AJOUTER UN STAGE</button>
+    <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
+      <%= form.label :name, "Nom :" %>
+      <%= form.text_field :name, { class: "form-control", required: true } %>
+      <%= form.label :year, "Année :" %>
+      <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
+      <div class="paid">
+        <%= form.label :paid, "Payant :" %>
+        <div>
+          <%= form.radio_button :paid, true, id: "school_period_paid_true" %>
+          <%= form.label "school_period_paid_true", "Oui" %>
+        </div>
+        <div>
+          <%= form.radio_button :paid, false, id: "school_period_paid_false" %>
+          <%= form.label "school_period_paid_false", "Non" %>
+        </div>
+      </div>
+      <%= form.label :price, "Prix :" %>
+      <%= form.text_field :price, { class: "form-control" } %>
+      <div class="flex-btn">
+        <%= form.submit "Valider", class: "btn-etendart" %>
+        <button class="btn-etendart-black" data-action="click->hidden-forms#hideSchoolPeriodForm" type="button">Annuler</button>
+      </div>
+    <% end %>
+  </div>
+</div>
 <div class="container" data-controller="clickable-table">
   <table class="table table-striped table-responsive table-center form-container">
     <thead>
@@ -33,33 +61,4 @@
       <% end %>
     </tbody>
   </table>
-
-  <div data-controller="hidden-forms">
-    <div class="flexy">
-      <button class="btn-etendart-square" data-action="click->hidden-forms#displaySchoolPeriodForm">AJOUTER UN STAGE</button>
-      <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
-        <%= form.label :name, "Nom :" %>
-        <%= form.text_field :name, { class: "form-control", required: true } %>
-        <%= form.label :year, "Année :" %>
-        <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
-        <div class="paid">
-          <%= form.label :paid, "Payant :" %>
-          <div>
-            <%= form.radio_button :paid, true, id: "school_period_paid_true" %>
-            <%= form.label "school_period_paid_true", "Oui" %>
-          </div>
-          <div>
-            <%= form.radio_button :paid, false, id: "school_period_paid_false" %>
-            <%= form.label "school_period_paid_false", "Non" %>
-          </div>
-        </div>
-        <%= form.label :price, "Prix :" %>
-        <%= form.text_field :price, { class: "form-control" } %>
-        <div class="flex-btn">
-          <%= form.submit "Valider", class: "btn-etendart" %>
-          <button class="btn-etendart-black" data-action="click->hidden-forms#hideSchoolPeriodForm" type="button">Annuler</button>
-        </div>
-      <% end %>
-    </div>
-  </div>
 </div>

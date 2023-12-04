@@ -14,18 +14,46 @@
       <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
         <td class="align-middle coach-font"><%= course.activity.name %></td>
         <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
+        <% if course.starts_at < Time.current %>
+          <td class="align-middle coach-font">
+            <% if course.status %>
+              <i class="fa-solid fa-check text-success fa-big"></i>
+            <% else %>
+              <i class="fa-solid fa-xmark text-danger fa-big"></i>
+            <% end %>
+          </td>
+        <% else %>
+          <td></td>
+        <% end %>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+<% if @missing_attendes.any? %>
+  <div class="black-title">APPEL EN RESTARD</div>
+    <table class="container table table-striped table-responsive table-center coach-container mb-0">
+    <thead>
+      <tr>
+        <th>Activité</th>
+        <th>Date</th>
+        <th>Appel</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @missing_attendes.each do |course| %>
+      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+        <td class="align-middle coach-font"><%= course.activity.name %></td>
+        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
         <td class="align-middle coach-font">
-          <% if course.status %>
-            <i class="fa-solid fa-check text-success fa-big"></i>
-          <% else %>
-            <i class="fa-solid fa-xmark text-danger fa-big"></i>
-          <% end %>
+          <i class="fa-solid fa-xmark text-danger fa-big"></i>
         </td>
       </tr>
       <% end %>
     </tbody>
   </table>
 <% end %>
+
 <% if @next_courses.any? %>
   <div class="black-title">PROCHAINS COURS</div>
   <table class="container table table-striped table-responsive table-center coach-container">
