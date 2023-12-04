@@ -15,9 +15,9 @@ class UpdateEnrollmentsJob < ApplicationJob
       enrollment = CourseEnrollment.find(enrollment_id.to_i)
       student = enrollment.student
       activity_enrollment = student.activity_enrollments.find_by(activity: activity)
-      camp_enrollment = student.camp_enrollments.find_by(camp: camp)
-      school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
-      annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program)
+      camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
+      school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) if school_period
+      annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program) if annual_program
 
       if school_period && camp_enrollment
         if school_period.paid == true
