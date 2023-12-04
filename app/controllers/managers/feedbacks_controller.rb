@@ -21,6 +21,14 @@ class Managers::FeedbacksController < ApplicationController
     end
   end
 
+  def destroy
+    @feedback = Feedback.find(params[:id])
+    authorize([:managers, @feedback], policy_class: Managers::FeedbackPolicy)
+    @feedback.destroy
+    redirect_to managers_student_path(@feedback.student)
+    flash[:notice] = "Feedback supprimé avec succès"
+  end
+
   private
 
   def feedback_params

@@ -102,7 +102,7 @@ Rails.application.routes.draw do
     resources :coach_feedbacks, only: %i[create destroy]
 
     resources :annual_enrollments, only: %i[create]
-    resources :feedbacks, only: %i[new create]
+    resources :feedbacks, only: %i[new create destroy]
     resources :activity_enrollments, only: %i[destroy]
     resources :categories, only: %i[index create edit update destroy]
     resources :locations, only: %i[show]

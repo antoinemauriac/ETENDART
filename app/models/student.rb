@@ -193,6 +193,13 @@ class Student < ApplicationRecord
     academies.first
   end
 
+  # def photo_or_default
+  #   if photo.attached? && photo.download.present?
+  #     photo.key
+  #   else
+  #     DEFAULT_AVATAR
+  #   end
+  # end
   def photo_or_default
     if photo.attached?
       photo.key

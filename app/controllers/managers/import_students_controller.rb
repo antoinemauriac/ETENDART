@@ -7,52 +7,43 @@ class Managers::ImportStudentsController < ApplicationController
     academy = camp.academy
     file = params[:camp][:csv_file]
     file = File.open(file)
-    csv = CSV.parse(file, headers: true, col_sep: ';')
+
+    school_period.school_period_enrollments.each do |school_period_enrollment|
+      camps = school_period_enrollment.student.camps.where(school_period: school_period)
+          if camps == [camp] || camps.empty?
+            school_period_enrollment.destroy
+          end
+        end
+      camp.camp_enrollments.destroy_all
+    ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id).destroy_all
+    CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id).destroy_all
 
     ActiveRecord::Base.transaction do
-      school_period.school_period_enrollments.each do |school_period_enrollment|
-        camps = school_period_enrollment.student.camps.where(school_period: school_period)
-        if camps == [camp] || camps.empty?
-          school_period_enrollment.destroy
-        end
-      end
-
-      camp.camp_enrollments.destroy_all
-      ActivityEnrollment.joins(activity: :camp).where(camps: { id: camp.id }).destroy_all
-      CourseEnrollment.joins(course: { activity: :camp }).where(camps: { id: camp.id }).destroy_all
-
-      csv.each do |row|
+      CSV.foreach(file, headers: true, col_sep: ';') do |row|
         row = row.to_hash
-        first_name = row['prénom']
-        last_name = row['nom']
-        date_of_birth = row['date-naissance']
-        username = row['username']
-        if first_name.nil? || last_name.nil? || date_of_birth.nil? || username.nil?
+        if row['prénom'].nil? || row['nom'].nil? || row['date-naissance'].nil? || row['username'].nil?
           flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
           redirect_to managers_camp_path(camp) and return
-        end
-      end
-
-      csv.each do |row|
-        row = row.to_hash
-        username = row['username'].to_s.strip.downcase.gsub(/\s+/, '')
-
-        student = Student.where("lower(unaccent(username)) = unaccent(?)", username).first_or_initialize
-        student.assign_attributes(student_params_upload(row))
-
-        if student.new_record?
-          student.save
         else
-          student.update(student_params_upload(row))
-        end
+          username = row['username'].to_s.strip.downcase.gsub(/\s+/, '')
 
-        student.academies << academy unless student.academies.include?(academy)
-        student.school_periods << school_period unless student.school_periods.include?(school_period)
-        student.camps << camp unless student.camps.include?(camp)
+          student = Student.where("lower(unaccent(username)) = unaccent(?)", username).first_or_initialize
+          student.assign_attributes(student_params_upload(row))
 
-        (1..3).each do |i|
-          activity_name = row["activite_#{i}"]
-          if activity_name.present?
+          if student.new_record?
+            student.save
+          else
+            student.update(student_params_upload(row))
+          end
+
+          student.academies << academy unless student.academies.include?(academy)
+          student.school_periods << school_period unless student.school_periods.include?(school_period)
+          student.camps << camp unless student.camps.include?(camp)
+
+          (1..3).each do |i|
+            activity_name = row["activite_#{i}"]
+            next unless activity_name.present?
+
             activity = camp.activities.find_by(name: activity_name)
             if activity.present?
               student.activities << activity

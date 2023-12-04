@@ -7,5 +7,6 @@ class Coaches::DashboardsController < ApplicationController
     @next_courses = current_user.next_courses.limit(3)
     @today_courses = current_user.today_courses
     @students = current_user.students.sample(3)
+    @missing_attendes = current_user.missing_attendance
   end
 end
