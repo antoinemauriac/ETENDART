@@ -102,7 +102,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def ended?
-    ends_at <= Date.current
+    ends_at <= Date.current if ends_at
   end
 
   def current?

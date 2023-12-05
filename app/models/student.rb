@@ -90,8 +90,7 @@ class Student < ApplicationRecord
 
     if activity
       course_enrollments.unattended.joins(:course)
-                        .where('courses.ends_at < ?', Time.current)
-                        .where('courses.activity_id = ?', activity.id)
+                        .where('ends_at < ? AND activity_id = ?', Time.current, activity.id)
                         .count
     elsif camp
       course_enrollments.unattended.joins(course: :camp)
@@ -193,13 +192,6 @@ class Student < ApplicationRecord
     academies.first
   end
 
-  # def photo_or_default
-  #   if photo.attached? && photo.download.present?
-  #     photo.key
-  #   else
-  #     DEFAULT_AVATAR
-  #   end
-  # end
   def photo_or_default
     if photo.attached?
       photo.key
@@ -208,65 +200,7 @@ class Student < ApplicationRecord
     end
   end
 
-  def self.find_duplicates(threshold = 2)
-    all_students = all.to_a
 
-    duplicates = []
-
-    until all_students.empty?
-      student = all_students.pop
-      similar_students = [student]
-
-      all_students.each do |other_student|
-        # Calculate the Levenshtein distance for first_name and last_name
-        first_name_distance = Text::Levenshtein.distance(student.first_name, other_student.first_name)
-        last_name_distance = Text::Levenshtein.distance(student.last_name, other_student.last_name)
-
-        # If both first_name and last_name are similar enough, consider them duplicates
-        if first_name_distance <= threshold && last_name_distance <= threshold
-          similar_students << other_student
-        end
-      end
-
-      # Remove the duplicates from the main list to avoid checking them again
-      all_students -= similar_students
-
-      # Add the group of duplicates to the results
-      duplicates << similar_students if similar_students.size > 1
-    end
-
-    duplicates
-  end
-
-  def self.find_duplicates_separate(threshold_first_name = 2, threshold_last_name = 2)
-    all_students = all.to_a
-
-    duplicates = []
-
-    until all_students.empty?
-      student = all_students.pop
-      similar_students = [student]
-
-      all_students.each do |other_student|
-        # Calculate the Levenshtein distance for first_name and last_name separately
-        first_name_distance = Text::Levenshtein.distance(student.first_name, other_student.first_name)
-        last_name_distance = Text::Levenshtein.distance(student.last_name, other_student.last_name)
-
-        # If both first_name and last_name are similar enough, consider them duplicates
-        if first_name_distance <= threshold_first_name && last_name_distance <= threshold_last_name
-          similar_students << other_student
-        end
-      end
-
-      # Remove the duplicates from the main list to avoid checking them again
-      all_students -= similar_students
-
-      # Add the group of duplicates to the results
-      duplicates << similar_students if similar_students.size > 1
-    end
-
-    duplicates
-  end
 
   private
 
@@ -286,14 +220,6 @@ class Student < ApplicationRecord
       self.phone_number = new_phone
     elsif new_phone.length == 11 && new_phone.start_with?('33')
       self.phone_number = "0#{new_phone[2..-1]}"
-    end
-  end
-
-  students = []
-  Student.find_each do |student|
-    academy_enrollments = student.academy_enrollments
-    academy_enrollments.each do |academy_enrollment|
-      students << student if academy_enrollments.where(academy_id: academy_enrollment.academy_id).count > 1
     end
   end
 end

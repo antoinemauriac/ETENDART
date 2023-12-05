@@ -6,6 +6,9 @@
 <div class="yellow-title">LES ÉLÈVES</div>
 <div class="container" data-controller="search-student">
   <div class="student-list-header mt-2 mb-3">
+    <%= link_to new_managers_student_path(academy_id: @academy.id), class: "btn-add-student" do %>
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    <% end %>
     <div  style="width:350px">
       <%= form_with url: managers_students_path, method: :get, html: {class: "d-flex", data: {search_student_target: "form"}} do |f| %>
         <%= f.text_field :query,
@@ -20,9 +23,9 @@
               autofocus: false %>
       <% end %>
     </div>
-      <%= link_to new_managers_student_path(academy_id: @academy.id), class: "btn-add-student" do %>
-        <i class="fa-solid fa-square-plus fa-square-bigger"></i> AJOUTER <i class="fa-solid fa-square-plus fa-square-bigger"></i>
-      <% end %>
+    <%= link_to export_students_csv_managers_student_path(@academy, format: :csv), class: 'btn-add-student' do %>
+      <i class="fa-solid fa-download fa-no-margin"></i>LES ÉLÈVES<i class="fa-solid fa-download fa-no-margin"></i>
+    <% end %>
   </div>
   <%= render "list", students: @students %>
   <div class="flexy mb-3">

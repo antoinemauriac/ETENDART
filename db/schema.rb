@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_01_120326) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_05_161408) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -122,6 +122,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_01_120326) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "present", default: false
+    t.boolean "image_consent", default: true
     t.index ["annual_program_id"], name: "index_annual_program_enrollments_on_annual_program_id"
     t.index ["student_id"], name: "index_annual_program_enrollments_on_student_id"
   end
@@ -145,6 +146,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_01_120326) do
     t.integer "number_of_absences", default: 0
     t.datetime "banishment_day"
     t.boolean "present", default: false
+    t.boolean "image_consent", default: true
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
   end

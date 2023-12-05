@@ -41,6 +41,7 @@ class Managers::ActivitiesController < ApplicationController
 
     if validate_courses
       if activity.save
+        activity.activity_stat = ActivityStat.create(activity: activity)
         create_courses_for_activity(activity, coach, days)
         redirect_to managers_camp_path(camp), notice: "Activité créée"
       else
@@ -67,6 +68,7 @@ class Managers::ActivitiesController < ApplicationController
     if validate_annual_courses
       if activity.save
         activity.update(annual: true)
+        activity.activity_stat = ActivityStat.create(activity: activity)
         create_annual_courses_for_activity(params, activity, annual_program, coach)
         redirect_to managers_annual_program_path(annual_program), notice: "Activité créée"
       else
