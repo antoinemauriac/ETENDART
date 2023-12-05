@@ -224,7 +224,7 @@
     <div class="col-12 col-xxl-11 mb-4">
       <div class="header-info header-info-academy">
         ÉLÈVES EXCLUS DE LA SEMAINE
-        <%= link_to export_banished_students_csv_managers_camp_path(format: :csv) do %>
+        <%= link_to export_banished_students_csv_managers_camp_path(camp_id: @camp, format: :csv) do %>
           <i class="fa-solid fa-download fa-download-white"></i>
         <% end %>
       </div>

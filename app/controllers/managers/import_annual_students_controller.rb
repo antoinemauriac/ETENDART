@@ -39,7 +39,7 @@ class Managers::ImportAnnualStudentsController < ApplicationController
           end
 
           student.academies << academy unless student.academies.include?(academy)
-          student.annual_programs << annual_program unless student.annual_programs.include?(annual_program)
+          AnnualProgramEnrollment.create(student: student, annual_program: annual_program, image_consent: row['droitimage'] == 'oui' ? true : false)
 
           (1..3).each do |i|
             activity_name = row["activite_#{i}"]

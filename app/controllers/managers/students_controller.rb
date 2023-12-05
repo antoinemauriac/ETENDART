@@ -21,7 +21,7 @@ class Managers::StudentsController < ApplicationController
     skip_policy_scope
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
-      format.html # Follow regular flow of Rails
+      format.html
       format.text { render partial: "managers/students/list", locals: {students: @students}, formats: [:html] }
     end
   end
@@ -121,6 +121,26 @@ class Managers::StudentsController < ApplicationController
         end
       end
       format.json { head :no_content }
+    end
+  end
+
+  def export_students_csv
+    academy = Academy.find(params[:id])
+    students = academy.students
+    authorize([:managers, @students], policy_class: Managers::StudentPolicy)
+    respond_to do |format|
+      format.csv do
+
+        csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
+          csv << ["Nom", "Prénom", "Genre", "Telephone", "Email", "Date de naissance", "Adresse", "Code postal", "Ville"]
+
+          students.each do |student|
+            csv << [student.last_name, student.first_name, student.gender, student.phone_number, student.email, student.date_of_birth, student.address, student.zipcode, student.city]
+          end
+        end
+
+        send_data(csv_data, filename: "eleves_#{academy.name}.csv")
+      end
     end
   end
 

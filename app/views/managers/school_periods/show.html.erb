@@ -48,7 +48,7 @@
   <% end %>
 </div>
 <div class="flexy" data-controller="hidden-forms">
-  <button class="btn-etendart-square" data-action="click->hidden-forms#displayCampForm">AJOUTER UNE SEMAINE</button>
+  <button class="btn-etendart-square mt-0" data-action="click->hidden-forms#displayCampForm">AJOUTER UNE SEMAINE</button>
   <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
     <%= form.label :name, "Nom :" %>
     <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: true }, { class: "form-select", required: true } %>
@@ -58,7 +58,7 @@
     <%= form.date_field :ends_at, class: "form-control", required: true %>
     <div class="flex-btn">
       <%= form.submit "Valider", class: "btn-etendart" %>
-      <button class="btn-etendart-black" data-action="click->hidden-forms#hideCampForm" type="button">Annuler</button>
+      <button class="btn-etendart-black" data-action="click->hidden-forms#displayCampForm" type="button">Annuler</button>
     </div>
   <% end %>
 </div>
@@ -66,7 +66,6 @@
 
 <% if false %>
   <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
-
   <div class="flexy" data-controller="import-csv">
     <div class="loader d-none" data-import-csv-target="spinner"></div>
     <div class="container flexy">

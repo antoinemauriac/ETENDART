@@ -82,7 +82,7 @@ class User < ApplicationRecord
   end
 
   def missing_attendance
-    courses.where('starts_at < ?', Time.current).where('status = ?', false)
+    courses.where('ends_at < ?', Time.current).where('status = ?', false)
   end
 
   def students

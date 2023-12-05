@@ -10,11 +10,11 @@ class Managers::ImportStudentsController < ApplicationController
 
     school_period.school_period_enrollments.each do |school_period_enrollment|
       camps = school_period_enrollment.student.camps.where(school_period: school_period)
-          if camps == [camp] || camps.empty?
-            school_period_enrollment.destroy
-          end
-        end
-      camp.camp_enrollments.destroy_all
+      if camps == [camp] || camps.empty?
+        school_period_enrollment.destroy
+      end
+    end
+    camp.camp_enrollments.destroy_all
     ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id).destroy_all
     CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id).destroy_all
 
@@ -38,7 +38,7 @@ class Managers::ImportStudentsController < ApplicationController
 
           student.academies << academy unless student.academies.include?(academy)
           student.school_periods << school_period unless student.school_periods.include?(school_period)
-          student.camps << camp unless student.camps.include?(camp)
+          CampEnrollment.create(student: student, camp: camp, image_consent: row['droitimage'] == 'oui' ? true : false)
 
           (1..3).each do |i|
             activity_name = row["activite_#{i}"]

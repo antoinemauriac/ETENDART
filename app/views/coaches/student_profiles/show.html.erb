@@ -40,7 +40,7 @@
       <%= form.text_area :content, class: "form-control", id:"feedback-content", placeholder: "Ecrivez votre commentaire ici...", required: true %>
       <div class="flex-btn mt-3">
         <%= form.submit "Valider", class: "btn-etendart-small btn-smaller mt-2" %>
-        <button class="btn-etendart-small btn-smaller btn-grey mt-2" data-action="click->hidden-forms#hideFeedbackForm" type="button">Annuler</button>
+        <button class="btn-etendart-small btn-smaller btn-grey mt-2" data-action="click->hidden-forms#displayFeedbackForm" type="button">Annuler</button>
       </div>
     <% end %>
   </div>

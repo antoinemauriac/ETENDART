@@ -13,7 +13,7 @@
         <%= form.input :super_category, label: "Super catégorie :", collection: ['Sport', 'Eveil', 'Cuisine', 'Accompagnement'], input_html: { class: "form-control" } %>
         <div class="flex-btn">
           <%= form.button :submit, "Valider", class: "btn-etendart" %>
-          <button class="btn-etendart-black" data-action="click->hidden-forms#hideCategoryForm" type="button">Annuler</button>
+          <button class="btn-etendart-black" data-action="click->hidden-forms#displayCategoryForm" type="button">Annuler</button>
         </div>
       <% end %>
     </div>

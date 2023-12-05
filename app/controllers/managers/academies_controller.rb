@@ -23,13 +23,12 @@ class Managers::AcademiesController < ApplicationController
     end
     @today_absent_students = @academy.today_absent_students.first(5) if @camp.present?
 
-    @annual_program = @academy.annual_programs.select { |annual_program| annual_program.starts_at <= Time.current && annual_program.ends_at >= Time.current }.first
+    @annual_program = @academy.annual_programs.select { |annual_program| annual_program.starts_at <= Time.current && annual_program.ends_at >= Time.current - 2.day }.first
     if @annual_program.present?
       @week_absent_enrollments = @annual_program.week_absent_enrollments_sorted_by_day.first(5)
     end
-    @old_presence_sheet = @academy.old_presence_sheet if @camp
-    @old_presence_sheet = @annual_program.old_presence_sheet if @annual_program
 
+    @old_presence_sheet = @academy.old_presence_sheet
   end
 
   def export_absent_students_csv
@@ -38,9 +37,6 @@ class Managers::AcademiesController < ApplicationController
     today_absent_students = academy.today_absent_students
     respond_to do |format|
       format.csv do
-
-        headers['Content-Type'] = 'text/csv; charset=UTF-8'
-        headers['Content-Disposition'] = 'attachment; filename=eleves_absents.csv'
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
           csv << ["Nom", "Prénom", "Genre", "Telephone", "Email"]
@@ -62,9 +58,6 @@ class Managers::AcademiesController < ApplicationController
     week_absent_enrollments = annual_program.week_absent_enrollments_sorted_by_day
     respond_to do |format|
       format.csv do
-
-        headers['Content-Type'] = 'text/csv; charset=UTF-8'
-        headers['Content-Disposition'] = 'attachment; filename=eleves_absents.csv'
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
           csv << ["Jour", "Activité", "Nom", "Prénom", "Genre", "Telephone", "Email"]

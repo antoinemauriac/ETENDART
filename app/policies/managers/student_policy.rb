@@ -26,4 +26,8 @@ class Managers::StudentPolicy < ApplicationPolicy
   def update_photo?
     user.manager? || user.coach?
   end
+
+  def export_students_csv?
+    user.manager?
+  end
 end

@@ -9,16 +9,19 @@ class Managers::SchoolPeriodsController < ApplicationController
   end
 
   def create
-    @academy = Academy.find(params[:academy])
-    @school_period = @academy.school_periods.build(school_period_params)
-    authorize([:managers, @school_period])
-    if @school_period.save
-      redirect_to managers_school_periods_path(academy: @academy)
+    academy = Academy.find(params[:academy])
+    school_period = academy.school_periods.build(school_period_params)
+    authorize([:managers, school_period])
+    if school_period.save
+      school_period.school_period_stat = SchoolPeriodStat.create(school_period: school_period)
+      redirect_to managers_school_periods_path(academy: academy)
       flash[:notice] = "Période scolaire créée"
     else
       render :new, status: :unprocessable_entity
     end
   end
+
+
 
   def show
     @school_period = SchoolPeriod.find(params[:id])
