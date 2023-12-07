@@ -46,7 +46,9 @@ class Managers::AcademiesController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "eleves_absents_aujourd'hui.csv")
+        today = I18n.l(Time.current, format: :date_reverse)
+
+        send_data(csv_data, filename: "#{academy.name}_#{today}_eleves_absents.csv")
       end
     end
   end
@@ -68,7 +70,9 @@ class Managers::AcademiesController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "eleves_absents_semaine.csv")
+        week = I18n.l(Time.current, format: :week)
+
+        send_data(csv_data, filename: "#{academy.name}_#{week}_eleves_absents.csv")
       end
     end
   end
