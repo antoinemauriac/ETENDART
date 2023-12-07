@@ -184,8 +184,6 @@ class Managers::ActivitiesController < ApplicationController
     students = activity.students.sort_by(&:last_name)
     respond_to do |format|
       format.csv do
-        headers['Content-Type'] = 'text/csv; charset=UTF-8'
-        headers['Content-Disposition'] = "attachment; filename=liste_élèves_#{activity.name}.csv"
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
           csv << ["Activité", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
@@ -195,7 +193,12 @@ class Managers::ActivitiesController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "liste_élèves_#{activity.name}.csv")
+        if activity.camp
+          filename = "#{activity.camp.academy.name}_#{activity.school_period.name}_#{activity.camp.name}_#{activity.name}.csv"
+        else
+          filename = "#{activity.annual_program.academy.name}_#{activity.annual_program.name}_#{activity.name}.csv"
+        end
+        send_data(csv_data, filename: filename)
       end
     end
   end

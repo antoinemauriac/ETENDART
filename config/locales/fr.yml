@@ -27,7 +27,7 @@ fr:
       date: "%d/%m/%Y"
       date_short_year: "%d/%m/%y"
       date_short: "%d/%m"
-      # datelong: "%"
+      date_reverse: "%Y/%m/%d"
       hour: "%H h"
       hour_min: "%Hh%M"
       abbr: "%a %d %b %Y"

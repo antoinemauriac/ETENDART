@@ -21,8 +21,6 @@ class Managers::SchoolPeriodsController < ApplicationController
     end
   end
 
-
-
   def show
     @school_period = SchoolPeriod.find(params[:id])
     @academy = @school_period.academy
@@ -48,13 +46,12 @@ class Managers::SchoolPeriodsController < ApplicationController
     @category_ids = @school_period_stat.category_ids
   end
 
-
   def destroy
-    @school_period = SchoolPeriod.find(params[:id])
-    @academy = @school_period.academy
-    authorize([:managers, @school_period])
-    @school_period.destroy
-    redirect_to managers_school_periods_path(academy: @academy)
+    school_period = SchoolPeriod.find(params[:id])
+    academy = school_period.academy
+    authorize([:managers, school_period])
+    school_period.destroy
+    redirect_to managers_school_periods_path(academy: academy)
     flash[:notice] = "Période scolaire supprimée"
   end
 
@@ -66,7 +63,6 @@ class Managers::SchoolPeriodsController < ApplicationController
 
     respond_to do |format|
       format.csv do
-        headers['Content-Type'] = 'text/csv; charset=UTF-8'
 
         if params[:export_type] == "all"
           csv_files = []

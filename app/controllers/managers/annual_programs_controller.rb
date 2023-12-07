@@ -66,8 +66,6 @@ class Managers::AnnualProgramsController < ApplicationController
     past_course_enrollments = annual_program.past_course_enrollments
     respond_to do |format|
       format.csv do
-        headers['Content-Type'] = 'text/csv; charset=UTF-8'
-        headers['Content-Disposition'] = 'attachment; filename=feuille_presence.csv'
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
           csv << ["Semaine", "Jour", "Heure", "Activité", "Nom", "Prénom", "Genre", "Telephone", "Email", "Presence"]
@@ -78,7 +76,7 @@ class Managers::AnnualProgramsController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "feuille_presence.csv")
+        send_data(csv_data, filename: "#{annual_program.academy.name}_#{annual_program.name}_feuilles_de_présence.csv")
       end
     end
   end
@@ -89,8 +87,6 @@ class Managers::AnnualProgramsController < ApplicationController
     students = annual_program.students
     respond_to do |format|
       format.csv do
-        headers['Content-Type'] = 'text/csv; charset=UTF-8'
-        headers['Content-Disposition'] = "attachment; filename=liste_élèves_#{annual_program.name}.csv"
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
           csv << ["Académie", "Programme", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
@@ -100,7 +96,7 @@ class Managers::AnnualProgramsController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "liste_élèves_#{annual_program.name}.csv")
+        send_data(csv_data, filename: "#{annual_program.academy.name}_#{annual_program.name}_élèves.csv")
       end
     end
   end

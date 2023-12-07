@@ -54,7 +54,7 @@ class Managers::CampsController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "#{camp.academy.name} - #{camp.school_period.name} - #{camp.name} - eleves_inscrits.csv")
+        send_data(csv_data, filename: "#{camp.academy.name}_#{camp.school_period.name}_#{camp.name}_élèves_inscrits.csv")
       end
     end
   end
@@ -76,7 +76,7 @@ class Managers::CampsController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "eleves_exclus.csv")
+        send_data(csv_data, filename: "#{camp.academy.name}_#{camp.school_period.name}_#{camp.name}_élèves_exclus.csv")
       end
     end
   end
