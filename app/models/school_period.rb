@@ -17,9 +17,12 @@ class SchoolPeriod < ApplicationRecord
   has_many :course_enrollments, through: :courses
 
   has_many :school_period_enrollments, dependent: :destroy
-  # has_many :students, through: :school_period_enrollments
 
   has_one :school_period_stat, dependent: :destroy
+
+  validates :name, uniqueness: { scope: [:year, :academy_id], message: "Un stage avec le même nom et la même année existe déjà pour cette académie." }
+
+  before_save :normalize_name
 
   def full_name
     "#{name} - #{year}"
@@ -170,5 +173,11 @@ class SchoolPeriod < ApplicationRecord
 
   def coaches_by_genre(genre)
     coaches.select { |coach| coach.gender == genre }
+  end
+
+  private
+
+  def normalize_name
+    self.name = name.split.map(&:capitalize).join(' ')
   end
 end

@@ -2,7 +2,7 @@ class Managers::SchoolPeriodsController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy])
-    @school_periods = @academy.school_periods.sort_by(&:year)
+    @school_periods = @academy.school_periods.sort_by { |sp| [-sp.year, -sp.created_at.to_i] }
     @school_period = SchoolPeriod.new
     skip_policy_scope
     authorize([:managers, @school_periods], policy_class: Managers::SchoolPeriodPolicy)
@@ -17,7 +17,8 @@ class Managers::SchoolPeriodsController < ApplicationController
       redirect_to managers_school_periods_path(academy: academy)
       flash[:notice] = "Période scolaire créée"
     else
-      render :new, status: :unprocessable_entity
+      flash[:alert] = "Erreur : #{school_period.errors.full_messages.join(', ')}"
+      redirect_to managers_school_periods_path(academy: academy)
     end
   end
 

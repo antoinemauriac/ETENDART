@@ -33,6 +33,8 @@ class Activity < ApplicationRecord
   validates :category_id, presence: true
   validates :location_id, presence: true
 
+  before_save :normalize_name
+
   # before_save :starts_at_before_ends_at
 
   def ends_at
@@ -136,4 +138,9 @@ class Activity < ApplicationRecord
   #     return true
   #   end
   # end
+  private
+
+  def normalize_name
+    self.name = name.split.map(&:capitalize).join(' ')
+  end
 end

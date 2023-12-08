@@ -6,7 +6,7 @@ class Student < ApplicationRecord
       tsearch: { prefix: true }
     }
 
-  validates :username, :first_name, :last_name, :date_of_birth, presence: true
+  validates :username, :first_name, :last_name, :date_of_birth, :gender, presence: true
 
   DEFAULT_AVATAR = "xkhgd88iqzlk5ctay2hu.png"
 

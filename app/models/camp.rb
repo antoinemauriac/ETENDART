@@ -23,6 +23,7 @@ class Camp < ApplicationRecord
   validates :ends_at, presence: true
 
   validate :starts_at_must_be_before_ends_at
+  validates :name, uniqueness: { scope: [:school_period_id], message: "Une semaine avec le même nom existe déjà pour ce stage" }
 
   def current?
     ends_at >= Time.current - 1.day

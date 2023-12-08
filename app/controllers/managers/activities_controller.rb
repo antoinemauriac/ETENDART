@@ -203,7 +203,6 @@ class Managers::ActivitiesController < ApplicationController
     end
   end
 
-
   private
 
   def activity_params

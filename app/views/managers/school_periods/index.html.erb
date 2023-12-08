@@ -12,19 +12,32 @@
       <%= form.text_field :name, { class: "form-control", required: true } %>
       <%= form.label :year, "Année :" %>
       <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
-      <div class="paid">
-        <%= form.label :paid, "Payant :" %>
+      <div>
+        <%= form.label :paid, "Payant ?" %>
         <div>
-          <%= form.radio_button :paid, true, id: "school_period_paid_true" %>
-          <%= form.label "school_period_paid_true", "Oui" %>
+          <%= form.radio_button :paid, true %>
+          <%= form.label "Oui" %>
         </div>
         <div>
-          <%= form.radio_button :paid, false, id: "school_period_paid_false" %>
-          <%= form.label "school_period_paid_false", "Non" %>
+          <%= form.radio_button :paid, false %>
+          <%= form.label "Non" %>
         </div>
       </div>
-      <%= form.label :price, "Prix :" %>
-      <%= form.text_field :price, { class: "form-control" } %>
+      <div>
+        <%= form.label :price, "Si oui, prix :" %>
+        <%= form.text_field :price, { class: "form-control" } %>
+      </div>
+      <div>
+        <%= form.label :tshirt, "Distribution de T-shirt ?" %>
+        <div>
+          <%= form.radio_button :tshirt, true %>
+          <%= form.label "Oui" %>
+        </div>
+        <div>
+          <%= form.radio_button :tshirt, false %>
+          <%= form.label "Non" %>
+        </div>
+      </div>
       <div class="flex-btn">
         <%= form.submit "Valider", class: "btn-etendart" %>
         <button class="btn-etendart-black" data-action="click->hidden-forms#displaySchoolPeriodForm" type="button">Annuler</button>
