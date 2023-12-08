@@ -93,6 +93,10 @@ class AnnualProgram < ApplicationRecord
     course_enrollments.joins(:course).where('courses.ends_at < ?', Time.current).order('courses.starts_at')
   end
 
+  def old_presence_sheet
+    courses.includes(:activity).where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
+  end
+
   private
 
   def validate_program_periods

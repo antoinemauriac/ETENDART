@@ -29,6 +29,9 @@ class Managers::AcademiesController < ApplicationController
     end
 
     @old_presence_sheet = @academy.old_presence_sheet
+    if @annual_program.present?
+      @old_presence_sheet  = @annual_program.old_presence_sheet
+    end
   end
 
   def export_absent_students_csv
