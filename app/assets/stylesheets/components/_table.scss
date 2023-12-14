@@ -9,7 +9,7 @@
 
 .clickable-coach-tr {
   cursor: pointer;
-  transition: transform 0.1s ease-in-out, background-color 0.1s ease; /* Transitions pour l'échelle et la couleur de fond */
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease; /* Transitions pour l'échelle et la couleur de fond */
 }
 
 .clickable-coach-tr:active,
