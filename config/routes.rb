@@ -89,6 +89,7 @@ Rails.application.routes.draw do
 
     resources :annual_programs, only: %i[show index new create destroy] do
       member do
+        get :statistics
         get :export_past_enrollments
         get :export_annual_students
       end

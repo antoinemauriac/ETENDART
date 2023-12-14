@@ -26,4 +26,8 @@ class Managers::AnnualProgramPolicy < ApplicationPolicy
   def export_annual_students?
     user.manager? && record.academy.manager == user
   end
+
+  def statistics?
+    user.manager? && record.academy.manager == user
+  end
 end

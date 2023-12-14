@@ -1,6 +1,6 @@
 <%= render "shared/academy_header" %>
 <div class="header-nav">
-  <div class="header-nav-item"><%= link_to @school_period.academy.name.upcase, managers_academy_path(@academy) %></div>
+  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
   <div class="header-nav-item"><%= link_to "LES STAGES", managers_school_periods_path(@school_period, academy: @academy) %></div>
   <div class="header-nav-item"><%= link_to "#{@school_period.name.upcase} - #{@school_period.year}", managers_school_period_path(@school_period) %></div>
   <div class="header-nav-item active">BILAN</div>
