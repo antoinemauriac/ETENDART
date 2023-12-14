@@ -7,6 +7,36 @@
 </div>
 <div class="yellow-title mb-0">BILAN - <%= @annual_program.name.upcase %></div>
 
+<div class="black-title mb-3">GLOBAL</div>
+<div class="container">
+  <table class="table table-striped table-responsive table-center form-container">
+    <thead>
+      <tr>
+        <th>Inscrits</th>
+        <th>Présents (%)</th>
+        <th>Absents (%)</th>
+        <th>Garçon (%)</th>
+        <th>Fille (%)</th>
+        <th>Âge moyen</th>
+        <th>Taux abs</th>
+        <th>Nb Coach</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="total-row">
+        <td><%= @annual_program_stat.students_count%></td>
+        <td><%= "#{@annual_program_stat.no_show_count} (#{@annual_program_stat.no_show_rate}%)"%></td>
+        <td><%= "#{@annual_program_stat.show_count} (#{@annual_program_stat.show_rate}%)"%></td>
+        <td><%= "#{@annual_program_stat.percentage_of_boy} %"%></td>
+        <td><%= "#{@annual_program_stat.percentage_of_girl} %"%></td>
+        <td><%= "#{@annual_program_stat.age_of_students} ans" %></td>
+        <td><%= "#{@annual_program_stat.absenteeism_rate} %"%></td>
+        <td><%= @annual_program_stat.coaches_count %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <div class="black-title mb-3">BILAN PAR CATÉGORIE</div>
 <div class="container">
   <table class="table table-striped table-responsive table-center form-container">
