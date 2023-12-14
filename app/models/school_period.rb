@@ -97,11 +97,11 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def starts_at
-    camps.minimum(:starts_at) if camps.any?
+    camps.any? ? camps.minimum(:starts_at) : Date.current
   end
 
   def ends_at
-    camps.maximum(:ends_at) if camps.any?
+    camps.any? ? camps.maximum(:ends_at) : Date.current + 10.days
   end
 
   def ended?
@@ -109,7 +109,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def current?
-    ends_at >= Date.current - 1.day if ends_at
+    ends_at >= Date.current - 7.days if ends_at
   end
 
   def absenteeism_rate
@@ -163,13 +163,13 @@ class SchoolPeriod < ApplicationRecord
            .count
   end
 
-  def can_import?
-    if starts_at
-      starts_at > Date.today
-    else
-      true
-    end
-  end
+  # def can_import?
+  #   if starts_at
+  #     starts_at > Date.today
+  #   else
+  #     true
+  #   end
+  # end
 
   def coaches_by_genre(genre)
     coaches.select { |coach| coach.gender == genre }

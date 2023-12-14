@@ -26,7 +26,7 @@ class Camp < ApplicationRecord
   validates :name, uniqueness: { scope: [:school_period_id], message: "Une semaine avec le même nom existe déjà pour ce stage" }
 
   def current?
-    ends_at >= Time.current - 1.day
+    ends_at >= Time.current - 7.days
   end
 
   def banished_students

@@ -40,11 +40,11 @@ class Activity < ApplicationRecord
   # before_save :starts_at_before_ends_at
 
   def ends_at
-    courses.maximum(:ends_at) if courses.any?
+    courses.any? ? courses.maximum(:ends_at) : Date.current + 10.days
   end
 
   def current?
-    ends_at >= Time.current - 1.day if ends_at
+    ends_at >= Time.current - 7.days if ends_at
   end
 
   def academy

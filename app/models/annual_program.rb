@@ -46,11 +46,11 @@ class AnnualProgram < ApplicationRecord
   end
 
   def ends_at
-    program_periods.maximum(:end_date)
+    program_periods.any? ? program_periods.maximum(:end_date) : Date.current + 10.days
   end
 
   def current?
-    ends_at >= Date.current - 1.day if ends_at
+    ends_at >= Date.current - 7.days if ends_at
   end
 
   def today_courses
