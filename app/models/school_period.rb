@@ -163,13 +163,13 @@ class SchoolPeriod < ApplicationRecord
            .count
   end
 
-  # def can_import?
-  #   if starts_at
-  #     starts_at > Date.today
-  #   else
-  #     true
-  #   end
-  # end
+  def can_import?
+    if starts_at
+      starts_at > Date.today
+    else
+      true
+    end
+  end
 
   def coaches_by_genre(genre)
     coaches.select { |coach| coach.gender == genre }
