@@ -69,15 +69,12 @@
   </div>
 <% end %>
 
-
-
 <div class="yellow-title yellow-title-flex mt-3 mb-3">
     ÉLÈVES INSCRITS
     <%= link_to export_students_csv_managers_camp_path(@camp, format: :csv) do %>
       <i class="fa-solid fa-download fa-download-black ml-3"></i>
     <% end %>
 </div>
-
 
 <% if @students.any? %>
   <div class="container">
