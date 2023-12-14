@@ -8,7 +8,6 @@ class Managers::AnnualProgramsController < ApplicationController
   end
 
   def new
-    # raise
     @academy = Academy.find(params[:academy])
     @annual_program = AnnualProgram.new
     @annual_program.academy = @academy
