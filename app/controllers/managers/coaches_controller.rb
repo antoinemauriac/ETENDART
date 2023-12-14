@@ -1,5 +1,4 @@
 class Managers::CoachesController < ApplicationController
-  # skip_before_action :authenticate_user!, only: [:change_password]
 
   def index
     @academy = Academy.find(params[:academy])
@@ -12,7 +11,7 @@ class Managers::CoachesController < ApplicationController
     authorize([:managers, @coaches], policy_class: Managers::CoachPolicy)
     @pagy, @coaches = pagy(@coaches, items: 100)
     respond_to do |format|
-      format.html # Follow regular flow of Rails
+      format.html
       format.text { render partial: "managers/coaches/list", locals: {coaches: @coaches}, formats: [:html] }
     end
   end
@@ -23,7 +22,7 @@ class Managers::CoachesController < ApplicationController
     @academies = current_user.academies_as_manager
     @coach_feedback = CoachFeedback.new
     @coach_feedbacks = @coach.coach_feedbacks.order(created_at: :desc)
-    @categories = Category.all
+    @categories = Category.order(:name)
     academies_ordered = @coach.academies_ordered
     @academy1 = academies_ordered.first ? academies_ordered.first.id : ""
     @academy2 = academies_ordered.second ? academies_ordered.second.id : ""

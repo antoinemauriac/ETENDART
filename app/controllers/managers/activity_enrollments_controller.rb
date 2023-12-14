@@ -20,7 +20,6 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       school_period = camp.school_period
 
       student_camp_courses = student.courses.joins(:activity).where("activities.camp_id = ?", camp.id)
-      # activities = student.activities.where(camp: camp)
       if student_camp_courses.empty?
         camp_enrollment.destroy
       end
@@ -28,6 +27,12 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
       if camp_enrollments.empty?
         student.school_period_enrollments.find_by(school_period: school_period).destroy
+      end
+
+      if params[:redirect_to] == 'student'
+        redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
+      else
+        redirect_to managers_activity_path(activity), notice: "Élève retiré de l'activité."
       end
     end
 
@@ -39,25 +44,12 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       if student_annual_courses.empty?
         student.annual_program_enrollments.find_by(annual_program: annual_program).destroy
       end
-    end
 
-    respond_to do |format|
-      format.html do
-        if params[:origin] == 'camp'
-          if params[:redirect_to] == 'student'
-            redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
-          else
-            redirect_to managers_activity_path(activity), notice: "Élève retiré de l'activité."
-          end
-        elsif params[:origin] == 'annual_program'
-          if params[:redirect_to] == 'student'
-            redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
-          else
-            redirect_to show_for_annual_managers_activity_path(activity), notice: "Élève retiré de l'activité."
-          end
-        end
+      if params[:redirect_to] == 'student'
+        redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
+      else
+        redirect_to show_for_annual_managers_activity_path(activity), notice: "Élève retiré de l'activité."
       end
-      format.json { head :no_content }
     end
   end
 end

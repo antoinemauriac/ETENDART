@@ -45,13 +45,14 @@
     </table>
   <% end %>
   <div class="flexy">
-    <%= link_to "AJOUTER UNE ACTIVITÉ", new_managers_activity_path(camp: @camp), class: "btn-etendart-square mt-1" %>
+    <%= link_to new_managers_activity_path(camp: @camp), class: "btn-etendart-square btn-flex mt-1" do %>
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    <% end %>
   </div>
 </div>
 
-<div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
-
-
+<% if @camp.can_import? %>
+  <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
   <div class="flexy" data-controller="import-csv">
     <div class="loader d-none" data-import-csv-target="spinner"></div>
     <div class="container flexy">
@@ -66,6 +67,8 @@
       </div>
     </div>
   </div>
+<% end %>
+
 
 
 <div class="yellow-title yellow-title-flex mt-3 mb-3">

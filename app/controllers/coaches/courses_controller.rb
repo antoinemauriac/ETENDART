@@ -13,6 +13,7 @@ class Coaches::CoursesController < ApplicationController
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
     @academy = course.academy
+    @camp = course.camp
     @school_period = course.school_period
     @category = course.category
     @activity = course.activity

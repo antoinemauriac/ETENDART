@@ -240,7 +240,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title"><%= "Inscription de ZOZO" %></h5>
+                <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
                 <i class="fas fa-times" data-action="click->enrollment-form#closeActivityModal" style="cursor: pointer;"></i>
               </div>
               <div class="modal-body">

@@ -15,7 +15,7 @@
         <% end %>
       <% end %>
     </div>
-    <div class="col-7 col-sm-7 col-md-5 col-lg-5  col-xxl-5 coach-student-info">
+    <div class="col-sm-7 col-md-5 col-lg-5 col-xxl-5 coach-student-info">
       <p class="text-break">NOM : <strong><%= @student.last_name.try(:upcase) %></strong></p>
       <p class="text-break">PRÉNOM : <strong><%= @student.first_name.try(:upcase) %></strong></p>
       <p><%= @student.gender %> - <%= @student.age %> ans </p>

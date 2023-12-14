@@ -54,10 +54,11 @@ class Managers::CoursesController < ApplicationController
 
   def update_enrollments
     course = Course.find(params[:id])
-    if params[:enrollments].present?
-      enrollments_params = permitted_enrollments_params.to_h
-    end
-    enrollments_params = params[:enrollments]
+    activity = course.activity
+    camp = activity.camp if activity.camp
+    school_period = camp.school_period if camp
+
+    enrollments_params = permitted_enrollments_params.to_h
     authorize([:managers, course], policy_class: Managers::CoursePolicy)
 
     if enrollments_params.present?
@@ -68,6 +69,12 @@ class Managers::CoursesController < ApplicationController
           enrollments_params[enrollment_id][:changes] = enrollment.changes[:present]
         end
         enrollment.save
+        # mise à jour du paiement
+        student = enrollment.student
+        camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
+        if school_period && school_period.paid == true && camp_enrollment
+          camp_enrollment.update(has_paid: enrollment_params[:has_paid])
+        end
       end
       course.update(status: true)
 
@@ -114,19 +121,14 @@ class Managers::CoursesController < ApplicationController
   end
 
   def redirection(course, params, message, style)
-    respond_to do |format|
-      format.html do
-        if params[:redirect_to] == 'manager'
-          flash[:notice] = message if style == "notice"
-          flash[:alert] = message if style == "alert"
-          redirect_to managers_course_path(course)
-        else
-          flash[:notice] = message if style == "notice"
-          flash[:alert] = message if style == "alert"
-          redirect_to coaches_course_path(course)
-        end
-      end
-      format.json { head :no_content }
+    if params[:redirect_to] == 'manager'
+      flash[:notice] = message if style == "notice"
+      flash[:alert] = message if style == "alert"
+      redirect_to managers_course_path(course)
+    else
+      flash[:notice] = message if style == "notice"
+      flash[:alert] = message if style == "alert"
+      redirect_to coaches_course_path(course)
     end
   end
 end

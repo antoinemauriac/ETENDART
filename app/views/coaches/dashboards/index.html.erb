@@ -11,25 +11,26 @@
     </thead>
     <tbody>
       <% @today_courses.each do |course| %>
-      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
-        <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
-        <% if course.starts_at < Time.current %>
-          <td class="align-middle coach-font">
-            <% if course.status %>
-              <i class="fa-solid fa-check text-success fa-big"></i>
-            <% else %>
-              <i class="fa-solid fa-xmark text-danger fa-big"></i>
-            <% end %>
-          </td>
-        <% else %>
-          <td></td>
-        <% end %>
-      </tr>
+        <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+          <td class="align-middle coach-font"><%= course.activity.name %></td>
+          <td class="align-middle coach-font" style="white-space: nowrap"><%= l(course.starts_at, format: :default) %></td>
+          <% if course.starts_at < Time.current %>
+            <td class="align-middle coach-font">
+              <% if course.status %>
+                <i class="fa-solid fa-check text-success fa-big"></i>
+              <% else %>
+                <i class="fa-solid fa-xmark text-danger fa-big"></i>
+              <% end %>
+            </td>
+          <% else %>
+            <td></td>
+          <% end %>
+        </tr>
       <% end %>
     </tbody>
   </table>
 <% end %>
+
 <% if @missing_attendes.any? %>
   <div class="black-title">APPELS EN RETARD</div>
     <table class="container table table-striped table-responsive table-center coach-container mb-0">
@@ -42,13 +43,13 @@
     </thead>
     <tbody>
       <% @missing_attendes.each do |course| %>
-      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
-        <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font"><%= l(course.starts_at, format: :default) %></td>
-        <td class="align-middle coach-font">
-          <i class="fa-solid fa-xmark text-danger fa-big"></i>
-        </td>
-      </tr>
+        <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+          <td class="align-middle coach-font"><%= course.activity.name %></td>
+          <td class="align-middle coach-font" style="white-space: nowrap"><%= l(course.starts_at, format: :default) %></td>
+          <td class="align-middle coach-font">
+            <i class="fa-solid fa-xmark text-danger fa-big"></i>
+          </td>
+        </tr>
       <% end %>
     </tbody>
   </table>
@@ -66,11 +67,11 @@
     </thead>
     <tbody>
       <% @next_courses.each do |course| %>
-      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
-        <td class="align-middle coach-font"><%= course.academy.name %></td>
-        <td class="align-middle coach-font"><%= course.activity.name %></td>
-        <td class="align-middle coach-font"  style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
-      </tr>
+        <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+          <td class="align-middle coach-font"><%= course.academy.name %></td>
+          <td class="align-middle coach-font"><%= course.activity.name %></td>
+          <td class="align-middle coach-font" style="white-space: nowrap"><%= l(course.starts_at, format: :default) %></td>
+        </tr>
       <% end %>
     </tbody>
   </table>
@@ -92,14 +93,14 @@
     </thead>
     <tbody>
       <% @students.each do |student| %>
-      <tr class="clickable-tr" onclick="window.location.href='<%= coaches_student_profile_path(student, url_origin: coaches_student_profiles_path) %>'">
-        <td class="align-middle coach-font">
-          <%= cl_image_tag student.photo_or_default, class: "avatar-small" %>
-        </td>
-        <td class="align-middle coach-font"><%= student.last_name.try(:upcase) %></td>
-        <td class="align-middle coach-font"><%= student.first_name %></td>
-        <td class="align-middle coach-font"><%= student.age %> ans</td>
-      </tr>
+        <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_student_profile_path(student, url_origin: coaches_student_profiles_path) %>'">
+          <td class="align-middle coach-font">
+            <%= cl_image_tag student.photo_or_default, class: "avatar-small" %>
+          </td>
+          <td class="align-middle coach-font"><%= student.last_name.try(:upcase) %></td>
+          <td class="align-middle coach-font"><%= student.first_name %></td>
+          <td class="align-middle coach-font"><%= student.age %> ans</td>
+        </tr>
       <% end %>
     </tbody>
   </table>

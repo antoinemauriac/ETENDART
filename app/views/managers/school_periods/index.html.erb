@@ -6,25 +6,40 @@
 <div class="yellow-title">LES STAGES</div>
 <div data-controller="hidden-forms">
   <div class="flexy">
-    <button class="btn-etendart-square mt-0" data-action="click->hidden-forms#displaySchoolPeriodForm">AJOUTER UN STAGE</button>
+    <button class="btn-etendart-square btn-flex mt-0" data-action="click->hidden-forms#displaySchoolPeriodForm">
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    </button>
     <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
       <%= form.label :name, "Nom :" %>
       <%= form.text_field :name, { class: "form-control", required: true } %>
       <%= form.label :year, "Année :" %>
       <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
-      <div class="paid">
-        <%= form.label :paid, "Payant :" %>
+      <div>
+        <%= form.label :paid, "Payant ?" %>
         <div>
-          <%= form.radio_button :paid, true, id: "school_period_paid_true" %>
-          <%= form.label "school_period_paid_true", "Oui" %>
+          <%= form.radio_button :paid, true %>
+          <%= form.label "Oui" %>
         </div>
         <div>
-          <%= form.radio_button :paid, false, id: "school_period_paid_false" %>
-          <%= form.label "school_period_paid_false", "Non" %>
+          <%= form.radio_button :paid, false %>
+          <%= form.label "Non" %>
         </div>
       </div>
-      <%= form.label :price, "Prix :" %>
-      <%= form.text_field :price, { class: "form-control" } %>
+      <div>
+        <%= form.label :price, "Si oui, prix :" %>
+        <%= form.text_field :price, { class: "form-control" } %>
+      </div>
+      <div>
+        <%= form.label :tshirt, "Distribution de T-shirt ?" %>
+        <div>
+          <%= form.radio_button :tshirt, true %>
+          <%= form.label "Oui" %>
+        </div>
+        <div>
+          <%= form.radio_button :tshirt, false %>
+          <%= form.label "Non" %>
+        </div>
+      </div>
       <div class="flex-btn">
         <%= form.submit "Valider", class: "btn-etendart" %>
         <button class="btn-etendart-black" data-action="click->hidden-forms#displaySchoolPeriodForm" type="button">Annuler</button>

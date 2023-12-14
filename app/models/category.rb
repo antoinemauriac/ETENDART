@@ -10,4 +10,11 @@ class Category < ApplicationRecord
   has_many :coach_categories
   has_many :coaches, through: :coach_categories
 
+  before_validation :normalize_name
+
+  private
+
+  def normalize_name
+    self.name = name.split.map(&:capitalize).join(' ')
+  end
 end

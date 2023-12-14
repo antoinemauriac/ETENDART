@@ -19,31 +19,22 @@ class UpdateEnrollmentsJob < ApplicationJob
       school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) if school_period
       annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program) if annual_program
 
-      if school_period && camp_enrollment
-        if school_period.paid == true
-          camp_enrollment&.update(has_paid: data[:has_paid])
+      if camp_enrollment && category.name != "Accompagnement" && data[:changes].present?
+      # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
+        previous_value = data[:changes].first
+        present = data[:present].to_i == 1 ? true : false
+        if !present && previous_value == true
+          camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
+        elsif present && previous_value ==  false
+          camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences - 1)
         end
 
-        if academy.banished && category.name != "Accompagnement"
-          # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
-          if data[:changes].present?
-            previous_value = data[:changes].first
-            present = data[:present].to_i == 1 ? true : false
-            if !present && previous_value == true
-              camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
-            elsif present && previous_value ==  false
-              camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences - 1)
-            end
-
-            if camp_enrollment.number_of_absences >= 2 && camp_enrollment.banished == false
-              banishment(camp_enrollment, student, course)
-            elsif camp_enrollment.number_of_absences < 2 && camp_enrollment.banished == true
-              unban_because_of_late(student, camp_enrollment)
-            end
-          end
+        if camp_enrollment.number_of_absences >= 2 && camp_enrollment.banished == false
+          banishment(camp_enrollment, student, course)
+        elsif camp_enrollment.number_of_absences < 2 && camp_enrollment.banished == true
+          unban_because_of_late(student, camp_enrollment)
         end
       end
-      # enrollment.update(present: enrollment_params[1][:present].to_i)
 
       update_presence_if_needed(activity_enrollment, enrollment.present)
 
