@@ -25,6 +25,12 @@
   justify-content: space-evenly;
 }
 
+.btn-flex {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
 .fa-square-bigger {
   font-size: 20px;
 }
@@ -188,6 +194,7 @@
   background-color: $yellow;
   color: black;
   margin: 2em 0em 1em 0em;
+  cursor: pointer;
 }
 
 .btn-photo:hover {

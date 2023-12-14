@@ -1,11 +1,10 @@
-<div class="yellow-title"><%= @course.activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %> à <%= l(@course.ends_at, format: :hour_min) %></div>
-
+<div class="yellow-title"><%= @activity.name.upcase %> - <%= l(@course.starts_at, format: :default) %> à <%= l(@course.ends_at, format: :hour_min) %></div>
 
 <div class="flexy justify-content-center">
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
     <div class="header-info header-info-coach">INFOS</div>
     <div class="content-info content-info-coach">
-      <p>ADRESSE : <strong><%= @course.activity.location.address %></strong></p>
+      <p>ADRESSE : <strong><%= @activity.location.address %></strong></p>
       <p>TOTAL ÉLÈVES : <strong><%= @course.students.count %></strong></p>
       <% if @course.status %>
         <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
@@ -29,30 +28,27 @@
   <div class="form-container form-no-radius container-presence-sheet col-xxl-4 col-lg-6 col-md-8 col-sm-12" data-controller="presence-sheet">
     <div class="header-info header-info-coach">LISTE</div>
     <%= form_with(url: update_enrollments_managers_course_path(@course), method: :put, class: "presence-sheet-form") do |form| %>
-      <table class="table table-striped table-responsive">
+      <table class="table table-striped table-responsive course-table">
         <thead>
           <tr>
-            <th class="presence-head"></th>
-            <th class="presence-head" style="text-align:left">Élève</th>
-            <th class="presence-head" style="text-align:left">Présent ?</th>
-            <% if false %>
-              <th class="presence-head" style="text-align:center"></th>
-            <% end %>
+            <th class="presence-head align-middle"></th>
+            <th class="presence-head align-middle" style="text-align:left">Élève</th>
+            <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Présent ?</th>
             <% if @school_period && @school_period.paid %>
-              <th class="presence-head" style="text-align:center">A payé ?</th>
+              <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Payé ?</th>
             <% end %>
           </tr>
         </thead>
         <tbody>
           <% @enrollments.each do |enrollment| %>
             <tr>
-              <td class="align-middle">
+              <td class="align-middle text-center">
                 <%= link_to coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)) do %>
                     <%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-small" %>
                 <% end %>
               </td>
-              <td class="align-middle" style="text-align:left; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">
-                <%= link_to enrollment.student.last_name.try(:upcase), coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr", style: "white-space: normal;" %><br>
+              <td class="align-middle" style="text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
+                <%= link_to enrollment.student.last_name.try(&:upcase), coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr", style: "white-space: normal;" %><br>
                 <%= link_to enrollment.student.first_name, coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr" %><br>
                 <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
                   <span style="color: red; font-weight: bold;"><%= enrollment.student.allergy %></span>
@@ -61,11 +57,10 @@
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
                   <% if @academy.banished %>
-                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current }, 1, 0 %>
+                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", checked: enrollment.present?, disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current }, 1, 0 %>
                   <% else %>
-                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present?, disabled: @course.starts_at > Time.current }, 1, 0 %>
+                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", checked: enrollment.present?, disabled: @course.starts_at > Time.current }, 1, 0 %>
                   <% end %>
-                  <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
                 </div>
               </td>
               <% if false %>
@@ -74,11 +69,11 @@
               <% if @school_period && @school_period.paid %>
                 <td class="align-middle">
                   <div class="has-paid">
-                    <% if enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp).has_paid %>
-                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", id: "has-paid-#{enrollment.id}", checked: true, readonly: true, disabled: true } %>
+                    <% if enrollment.student.camp_enrollments.find_by(camp: @camp).has_paid %>
+                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", checked: true, readonly: true, disabled: true } %>
                       <%= form.hidden_field "enrollments[#{enrollment.id}][has_paid]", value: true %>
                     <% else %>
-                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", id: "has-paid-#{enrollment.id}", checked: false } %>
+                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", checked: false } %>
                     <% end %>
                   </div>
                 </td>

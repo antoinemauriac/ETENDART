@@ -46,14 +46,14 @@ module ETENDART
     }
 
     # vérifier si l'upload_preset existe déjà
-    # existing_upload_preset = Cloudinary::Api.upload_preset(upload_preset_name)
+    existing_upload_preset = Cloudinary::Api.upload_preset(upload_preset_name)
 
     # # créer l'upload_preset si nécessaire
-    # if existing_upload_preset.nil?
-    #   Cloudinary::Api.create_upload_preset(name: upload_preset_name, **upload_preset_options)
-    # else
-    #   Cloudinary::Api.update_upload_preset(upload_preset_name, upload_preset_options)
-    # end
+    if existing_upload_preset.nil?
+      Cloudinary::Api.create_upload_preset(name: upload_preset_name, **upload_preset_options)
+    else
+      Cloudinary::Api.update_upload_preset(upload_preset_name, upload_preset_options)
+    end
   end
 
 end

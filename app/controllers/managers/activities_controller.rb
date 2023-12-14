@@ -30,27 +30,29 @@ class Managers::ActivitiesController < ApplicationController
     coaches_ids = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
     coaches = User.where(id: coaches_ids)
 
-    activity.coaches << coaches if coaches.any?
-    activity.coaches << coach if coach
+    ActiveRecord::Base.transaction do
+      activity.coaches << coaches if coaches.any?
+      activity.coaches << coach if coach
 
-    coaches.each do |coach|
-      camp.coaches << coach unless camp.coaches.include?(coach)
-    end
-    camp.coaches << coach if coach && !camp.coaches.include?(coach)
+      coaches.each do |coach|
+        camp.coaches << coach unless camp.coaches.include?(coach)
+      end
+      camp.coaches << coach if coach && !camp.coaches.include?(coach)
 
 
-    if validate_courses
-      if activity.save
-        activity.activity_stat = ActivityStat.create(activity: activity)
-        create_courses_for_activity(activity, coach, days)
-        redirect_to managers_camp_path(camp), notice: "Activité créée"
+      if validate_courses
+        if activity.save
+          activity.activity_stat = ActivityStat.create(activity: activity)
+          create_courses_for_activity(activity, coach, days)
+          redirect_to managers_camp_path(camp), notice: "Activité créée"
+        else
+          flash[:alert] = "Erreur : #{activity.errors.full_messages.join(', ')}"
+          redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
+        end
       else
-        flash[:alert] = "Une erreur est survenue"
+        flash[:alert] = "L'heure de début doit être avant l'heure de fin"
         redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
       end
-    else
-      flash[:alert] = "L'heure de début doit être avant l'heure de fin"
-      redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
     end
   end
 
@@ -62,22 +64,24 @@ class Managers::ActivitiesController < ApplicationController
     coach = User.find_by_id(params[:activity][:coach_id])
     coaches = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
 
-    activity.coaches << User.where(id: coaches) if coaches.any?
-    activity.coaches << coach if coach
+    ActiveRecord::Base.transaction do
+      activity.coaches << User.where(id: coaches) if coaches.any?
+      activity.coaches << coach if coach
 
-    if validate_annual_courses
-      if activity.save
-        activity.update(annual: true)
-        activity.activity_stat = ActivityStat.create(activity: activity)
-        create_annual_courses_for_activity(params, activity, annual_program, coach)
-        redirect_to managers_annual_program_path(annual_program), notice: "Activité créée"
+      if validate_annual_courses
+        if activity.save
+          activity.update(annual: true)
+          activity.activity_stat = ActivityStat.create(activity: activity)
+          create_annual_courses_for_activity(params, activity, annual_program, coach)
+          redirect_to managers_annual_program_path(annual_program), notice: "Activité créée"
+        else
+          flash[:alert] = "Erreur : #{activity.errors.full_messages.join(', ')}"
+          redirect_to new_for_annual_managers_activity_path(annual_program: annual_program, academy: annual_program.academy)
+        end
       else
-        flash[:alert] = "Une erreur est survenue"
-        render :new, status: :unprocessable_entity
+        flash[:alert] = "L'heure de début doit être avant l'heure de fin"
+        redirect_to new_for_annual_managers_activity_path(annual_program: annual_program, academy: annual_program.academy)
       end
-    else
-      flash[:alert] = "L'heure de début doit être avant l'heure de fin"
-      redirect_to new_for_annual_managers_activity_path(annual_program: annual_program, academy: annual_program.academy)
     end
   end
 

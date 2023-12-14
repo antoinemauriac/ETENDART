@@ -77,8 +77,7 @@
               </td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
-                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", id: "present-#{enrollment.id}", checked: enrollment.present? }, 1, 0 %>
-                  <label class="form-check-label form-switch-label" for="present-#{enrollment.id}"></label>
+                  <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", checked: enrollment.present? }, 1, 0 %>
                 </div>
               </td>
               <% if false %>
@@ -87,7 +86,7 @@
               <% if @school_period && @school_period.paid %>
                 <td class="align-middle">
                   <div class="has-paid">
-                    <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", id: "has-paid-#{enrollment.id}", checked: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>
+                    <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", checked: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>
                   </div>
                 </td>
               <% end %>

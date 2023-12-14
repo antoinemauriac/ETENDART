@@ -33,7 +33,9 @@ class Activity < ApplicationRecord
   validates :category_id, presence: true
   validates :location_id, presence: true
 
-  before_save :normalize_name
+  validates :name, uniqueness: { scope: [:camp_id, :annual_program_id], message: "Une activité avec le même nom existe déjà" }
+
+  before_validation :normalize_name
 
   # before_save :starts_at_before_ends_at
 

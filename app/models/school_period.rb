@@ -22,7 +22,7 @@ class SchoolPeriod < ApplicationRecord
 
   validates :name, uniqueness: { scope: [:year, :academy_id], message: "Un stage avec le même nom et la même année existe déjà pour cette académie." }
 
-  before_save :normalize_name
+  before_validation :normalize_name
 
   def full_name
     "#{name} - #{year}"

@@ -21,11 +21,11 @@
         </thead>
         <tbody>
           <% @next_courses.each do |course| %>
-          <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
-            <td class="align-middle coach-font"><%= course.academy.name %></td>
-            <td class="align-middle coach-font"><%= course.activity.name %></td>
-            <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
-          </tr>
+            <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+              <td class="align-middle coach-font" style="white-space: nowrap"><%= course.academy.name %></td>
+              <td class="align-middle coach-font"><%= course.activity.name %></td>
+              <td class="align-middle coach-font" style="white-space: nowrap"><%= l(course.starts_at, format: :default) %></td>
+            </tr>
           <% end %>
         </tbody>
       </table>
@@ -48,11 +48,11 @@
         </thead>
         <tbody>
           <% @past_courses.each do |course| %>
-          <tr class="clickable-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
-            <td class="align-middle coach-font"><%= course.academy.name %></td>
-            <td class="align-middle coach-font"><%= course.activity.name %></td>
-            <td class="align-middle coach-font" style="min-width:100px"><%= l(course.starts_at, format: :default) %></td>
-          </tr>
+            <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_course_path(course) %>'">
+              <td class="align-middle coach-font" style="white-space: nowrap"><%= course.academy.name %></td>
+              <td class="align-middle coach-font"><%= course.activity.name %></td>
+              <td class="align-middle coach-font" style="white-space: nowrap"><%= l(course.starts_at, format: :default) %></td>
+            </tr>
           <% end %>
         </tbody>
       </table>

@@ -7,6 +7,22 @@
   cursor: pointer;
 }
 
+.clickable-coach-tr {
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out, background-color 0.1s ease; /* Transitions pour l'échelle et la couleur de fond */
+}
+
+.clickable-coach-tr:active,
+.clickable-coach-tr:focus {
+  transform: scale(1.05) translateZ(0); /* Légère transformation 3D pour éviter le flou du texte */
+  background-color: $yellow;
+}
+
+.table.course-table > :not(caption) > * > * {
+  padding: 0.7rem 0rem; /* Modifiez la valeur de padding selon vos besoins */
+}
+
+
 .table-center {
   text-align: center;
 }
@@ -21,7 +37,7 @@
 .student-mr {
   color: black;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.85em;
 }
 
 .green-text strong {
@@ -51,15 +67,6 @@
   border-radius: 20px!important;
   border: 0.5px solid lightgray!important;
 }
-
-// #missing-students_filter {
-//   position: absolute;
-//   left: 40%;
-// }
-
-// #missing-students_length {
-//   margin-bottom: 24px;
-// }
 
 .total-row {
   font-weight: bold;

@@ -6,7 +6,9 @@
 <div class="yellow-title">LES STAGES</div>
 <div data-controller="hidden-forms">
   <div class="flexy">
-    <button class="btn-etendart-square mt-0" data-action="click->hidden-forms#displaySchoolPeriodForm">AJOUTER UN STAGE</button>
+    <button class="btn-etendart-square btn-flex mt-0" data-action="click->hidden-forms#displaySchoolPeriodForm">
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    </button>
     <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
       <%= form.label :name, "Nom :" %>
       <%= form.text_field :name, { class: "form-control", required: true } %>

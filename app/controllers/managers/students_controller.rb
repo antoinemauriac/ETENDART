@@ -112,15 +112,10 @@ class Managers::StudentsController < ApplicationController
 
     @academy = Academy.find(params[:academy_id]) if params[:academy_id].present?
 
-    respond_to do |format|
-      format.html do
-        if params[:redirect_to] === 'manager'
-          redirect_to managers_student_path(@student, academy_id: @academy.id), notice: "Photo mise à jour"
-        else
-          redirect_to coaches_student_profile_path(@student, precedent: @origin), notice: "Photo mise à jour"
-        end
-      end
-      format.json { head :no_content }
+    if params[:redirect_to] === 'manager'
+      redirect_to managers_student_path(@student, academy_id: @academy.id), notice: "Photo mise à jour"
+    else
+      redirect_to coaches_student_profile_path(@student, precedent: @origin), notice: "Photo mise à jour"
     end
   end
 
