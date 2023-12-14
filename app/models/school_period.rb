@@ -12,7 +12,7 @@ class SchoolPeriod < ApplicationRecord
 
   has_many :activities, through: :camps
   has_many :activity_enrollments, through: :activities
-  has_many :categories, through: :activities
+  has_many :categories, -> { distinct }, through: :activities
   has_many :courses, through: :activities
   has_many :course_enrollments, through: :courses
 

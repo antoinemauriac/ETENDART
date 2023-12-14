@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_12_151420) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_14_124804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -124,6 +124,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_151420) do
     t.boolean "image_consent", default: true
     t.index ["annual_program_id"], name: "index_annual_program_enrollments_on_annual_program_id"
     t.index ["student_id"], name: "index_annual_program_enrollments_on_student_id"
+  end
+
+  create_table "annual_program_stats", force: :cascade do |t|
+    t.bigint "annual_program_id", null: false
+    t.integer "students_count", default: 0
+    t.integer "show_count", default: 0
+    t.integer "no_show_count", default: 0
+    t.integer "show_rate", default: 0
+    t.integer "no_show_rate", default: 0
+    t.integer "absenteeism_rate", default: 0
+    t.integer "percentage_of_boy", default: 0
+    t.integer "percentage_of_girl", default: 0
+    t.integer "coaches_count", default: 0
+    t.integer "age_of_students", default: 0
+    t.integer "category_ids", default: [], array: true
+    t.jsonb "percentage_of_boy_by_category", default: {}
+    t.jsonb "percentage_of_girl_by_category", default: {}
+    t.jsonb "absenteisme_rate_by_category", default: {}
+    t.jsonb "number_of_coaches_by_category", default: {}
+    t.jsonb "students_count_by_category", default: {}
+    t.integer "participant_ages", default: [], array: true
+    t.jsonb "student_count_by_age", default: {}
+    t.integer "participant_departments", default: [], array: true
+    t.jsonb "student_count_by_department", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["annual_program_id"], name: "index_annual_program_stats_on_annual_program_id"
   end
 
   create_table "annual_programs", force: :cascade do |t|
@@ -415,6 +442,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_151420) do
   add_foreign_key "activity_stats", "activities"
   add_foreign_key "annual_program_enrollments", "annual_programs"
   add_foreign_key "annual_program_enrollments", "students"
+  add_foreign_key "annual_program_stats", "annual_programs"
   add_foreign_key "annual_programs", "academies"
   add_foreign_key "camp_enrollments", "camps"
   add_foreign_key "camp_enrollments", "students"

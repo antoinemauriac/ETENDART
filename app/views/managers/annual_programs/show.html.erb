@@ -9,9 +9,13 @@
 <div class="yellow-title">LES ACTIVITÉS</div>
 
 <div class="container flexy">
-  <%= link_to new_for_annual_managers_activity_path(annual_program: @annual_program), class: 'btn-etendart-square btn-flex mt-0' do %>
-    <i class="fa-solid fa-square-plus fa-square-bigger"></i> AJOUTER <i class="fa-solid fa-square-plus fa-square-bigger"></i>
-  <% end %>
+  <div class="d-flex">
+    <%= link_to new_for_annual_managers_activity_path(annual_program: @annual_program), class: 'btn-etendart-square btn-flex mt-0' do %>
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i> AJOUTER <i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    <% end %>
+    <%= link_to "BILAN", statistics_managers_annual_program_path(@annual_program), class: "btn-etendart-square mt-0" %>
+  </div>
+
   <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
     <thead>
       <tr>

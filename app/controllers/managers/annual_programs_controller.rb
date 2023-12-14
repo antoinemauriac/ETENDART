@@ -33,6 +33,7 @@ class Managers::AnnualProgramsController < ApplicationController
     annual_program = academy.annual_programs.build(annual_program_params)
     annual_program.update(starts_at: annual_program.program_periods.first.start_date)
     annual_program.update(ends_at: annual_program.program_periods.last.end_date)
+    annual_program.annual_program_stat = AnnualProgramStat.create(annual_program: annual_program)
     authorize [:managers, annual_program]
 
     if annual_program.save
@@ -99,6 +100,19 @@ class Managers::AnnualProgramsController < ApplicationController
         send_data(csv_data, filename: "#{annual_program.academy.name}_#{annual_program.name}_élèves.csv")
       end
     end
+  end
+
+  def statistics
+    @annual_program = AnnualProgram.find(params[:id])
+    authorize [:managers, @annual_program]
+    @academy = @annual_program.academy
+    @activities = @annual_program.activities
+
+    @annual_program_stat = @annual_program.annual_program_stat
+
+    @sorted_departments = @annual_program_stat.participant_departments
+
+    @category_ids = @annual_program_stat.category_ids
   end
 
 
