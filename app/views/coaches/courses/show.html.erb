@@ -33,9 +33,12 @@
           <tr>
             <th class="presence-head align-middle"></th>
             <th class="presence-head align-middle" style="text-align:left">Élève</th>
-            <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Présent ?</th>
+            <th class="presence-head align-middle" style="text-align:left; padding-right:5px">Présent ?</th>
             <% if @school_period && @school_period.paid %>
               <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Payé ?</th>
+            <% end %>
+            <% if @school_period && @school_period.tshirt %>
+              <th class="presence-head align-middle" style="text-align:center">Tshirt ?</th>
             <% end %>
           </tr>
         </thead>
@@ -70,10 +73,25 @@
                 <td class="align-middle">
                   <div class="has-paid">
                     <% if enrollment.student.camp_enrollments.find_by(camp: @camp).has_paid %>
-                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", checked: true, readonly: true, disabled: true } %>
+                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", style: "background-color:green", checked: true, readonly: true, disabled: true } %>
                       <%= form.hidden_field "enrollments[#{enrollment.id}][has_paid]", value: true %>
                     <% else %>
-                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input", checked: false } %>
+                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", checked: false } %>
+                    <% end %>
+                  </div>
+                </td>
+              <% end %>
+              <% if @school_period && @school_period.tshirt %>
+                <td class="align-middle">
+                  <div class="has-paid">
+                    <% student = enrollment.student %>
+                    <% school_period_enrollments = student.school_period_enrollments.where(school_period: @school_periods) %>
+                    <% has_tshirt = school_period_enrollments.any? { |spe| spe.tshirt_delivered == true } %>
+                    <% if has_tshirt == true %>
+                      <%= form.check_box "enrollments[#{enrollment.id}][tshirt_delivered]", { class: "form-check-input green-check", style: "background-color:green", checked: true, readonly: true, disabled: true } %>
+                      <%= form.hidden_field "enrollments[#{enrollment.id}][tshirt_delivered]", value: true %>
+                    <% else %>
+                      <%= form.check_box "enrollments[#{enrollment.id}][tshirt_delivered]", { class: "form-check-input green-check", checked: false } %>
                     <% end %>
                   </div>
                 </td>

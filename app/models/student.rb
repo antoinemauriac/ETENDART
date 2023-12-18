@@ -132,6 +132,10 @@ class Student < ApplicationRecord
     camps.count
   end
 
+  def annual_programs_count
+    annual_programs.count
+  end
+
   def student_activities(camp)
     activities.where(camp: camp).order(name: :desc)
   end

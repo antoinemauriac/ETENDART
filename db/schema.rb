@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_14_124804) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_18_075531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -338,6 +338,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_14_124804) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "present", default: false
+    t.boolean "tshirt_delivered", default: false
     t.index ["school_period_id"], name: "index_school_period_enrollments_on_school_period_id"
     t.index ["student_id"], name: "index_school_period_enrollments_on_student_id"
   end

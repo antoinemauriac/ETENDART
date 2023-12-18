@@ -3,6 +3,7 @@ class Managers::CampsController < ApplicationController
     @camp = Camp.find(params[:id])
     @school_period = @camp.school_period
     @academy = @school_period.academy
+    @school_periods = @academy.school_periods
     authorize([:managers, @camp])
     @activities = @camp.activities
     @activity = Activity.new
@@ -46,11 +47,14 @@ class Managers::CampsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Age", "Genre", "Droit à l'image", "Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
+          csv << ["Nom", "Prénom", "Age", "Genre", "Droit à l'image ?", "T-hsirt reçu ?","Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
           students.each do |student|
-            image_consent = !student.camp_enrollments.find_by(camp: camp).image_consent ? "Non" : "Oui"
+            image_consent = student.camp_enrollments.find_by(camp: camp).image_consent ? "Oui" : "Non"
+            school_periods = student.school_periods.where(academy: camp.academy)
+            school_period_enrollments = student.school_period_enrollments.where(school_period: school_periods)
+            thsirt_delivered = school_period_enrollments.any?(&:tshirt_delivered) ? "Oui" : "Non"
             activities = student.student_activities(camp)
-            csv << [student.last_name, student.first_name, student.age, student.gender, image_consent, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
+            csv << [student.last_name, student.first_name, student.age, student.gender, image_consent, thsirt_delivered, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
           end
         end
 
