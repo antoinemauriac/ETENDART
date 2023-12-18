@@ -158,7 +158,7 @@ class Managers::SchoolPeriodsController < ApplicationController
   end
 
   def school_period_params
-    params.require(:school_period).permit(:name, :year, :paid, :price)
+    params.require(:school_period).permit(:name, :year, :paid, :price, :tshirt)
   end
 
 end

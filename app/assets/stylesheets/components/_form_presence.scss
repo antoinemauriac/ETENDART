@@ -1,6 +1,15 @@
-.form-check-input:checked {
-  background-color: black;
+.green-check:checked {
+  background-color: green;
   border: none!important;
+}
+
+.form-switch-input:checked {
+  background-color: #8bbf8f;
+  border: none!important;
+}
+
+.form-switch-input {
+  margin-top: 6px;
 }
 
 .table-small a {

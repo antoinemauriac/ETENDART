@@ -10,6 +10,7 @@ class Managers::CoursesController < ApplicationController
   def show
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
     @academy = course.academy
+    @school_periods = @academy.school_periods
     @activity = course.activity
     @school_period = course.school_period if course.school_period
     @camp = course.camp if course.camp
@@ -74,6 +75,11 @@ class Managers::CoursesController < ApplicationController
         camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
         if school_period && school_period.paid == true && camp_enrollment
           camp_enrollment.update(has_paid: enrollment_params[:has_paid])
+        end
+        # mise à jour du tshirt
+        if school_period && school_period.tshirt == true
+          school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
+          school_period_enrollment.update(tshirt_delivered: enrollment_params[:tshirt_delivered])
         end
       end
       course.update(status: true)

@@ -97,7 +97,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def starts_at
-    camps.any? ? camps.minimum(:starts_at) : Date.current
+    camps.any? ? camps.minimum(:starts_at) : Date.current + 1.day
   end
 
   def ends_at
@@ -165,7 +165,7 @@ class SchoolPeriod < ApplicationRecord
 
   def can_import?
     if starts_at
-      starts_at > Date.today
+      starts_at > Date.current
     else
       true
     end
