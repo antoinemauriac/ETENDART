@@ -175,6 +175,10 @@ class SchoolPeriod < ApplicationRecord
     coaches.select { |coach| coach.gender == genre }
   end
 
+  def new_students_count
+    camps.sum(&:new_students_count)
+  end
+
   private
 
   def normalize_name

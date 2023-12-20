@@ -21,6 +21,7 @@ class UpdateSchoolPeriodStatsJob < ApplicationJob
         school_period_stat.percentage_of_boy = school_period.percentage_of_students("Garçon")
         school_period_stat.percentage_of_girl = school_period.percentage_of_students("Fille")
 
+        school_period_stat.new_students_count = school_period.new_students_count
 
         school_period_stat.age_of_students = school_period.age_of_students
 

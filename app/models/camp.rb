@@ -149,6 +149,18 @@ class Camp < ApplicationRecord
     enrollments_without_no_show_by_category(category).unattended.count
   end
 
+  def new_students_count
+    students.select { |student| student.camps.where('starts_at < ?', starts_at).empty? }.count
+  end
+
+  def new_students_rate
+    if students_count.positive?
+      ((count_new_students.to_f / students_count) * 100).round(0)
+    else
+      0
+    end
+  end
+
   private
 
   def starts_at_must_be_before_ends_at
