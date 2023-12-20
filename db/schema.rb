@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_075531) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_20_132908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -195,6 +195,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_075531) do
     t.datetime "updated_at", null: false
     t.integer "students_count"
     t.integer "coaches_count"
+    t.integer "new_students_count", default: 0
+    t.integer "new_students_rate", default: 0
     t.index ["camp_id"], name: "index_camp_stats_on_camp_id"
   end
 
@@ -367,6 +369,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_075531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "students_count_by_category", default: {}
+    t.integer "new_students_count", default: 0
     t.index ["school_period_id"], name: "index_school_period_stats_on_school_period_id"
   end
 

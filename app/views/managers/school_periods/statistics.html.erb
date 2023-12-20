@@ -21,6 +21,7 @@
         <th>Âge moyen</th>
         <th>Taux abs</th>
         <th>Nb Coach</th>
+        <th>Nouveaux élèves (%)</th>
       </tr>
     </thead>
     <tbody>
@@ -35,7 +36,8 @@
           <td><%= camp.started? ? "#{camp_stat.percentage_of_girl} %" : "-" %></td>
           <td><%= camp.started? ? "#{camp_stat.age_of_students} ans" : "-" %></td>
           <td><%= camp.started? ? "#{camp_stat.absenteeism_rate} %" : "-" %></td>
-          <td><%= camp.started? ? camp.coaches.count : "-" %></td>
+          <td><%= camp.started? ? camp_stat.coaches.count : "-" %></td>
+          <td><%= camp.started? ? "#{camp_stat.new_students_count} (#{camp_stat.new_students_rate}%)" : "-" %></td>
         </tr>
       <% end %>
         <tr class="total-row">
@@ -48,6 +50,7 @@
           <td><%= @school_period.ended? ? "#{@school_period_stat.age_of_students} ans" : ""  %></td>
           <td><%= @school_period.ended? ? "#{@school_period_stat.absenteeism_rate} %" : "" %></td>
           <td><%= @school_period.ended? ? @school_period_stat.coaches_count  : "" %></td>
+          <td><%= @school_period.ended? ? @school_period_stat.new_students_count : "" %></td>
         </tr>
     </tbody>
   </table>

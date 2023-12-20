@@ -21,6 +21,8 @@ class UpdateCampStatsJob < ApplicationJob
         camp_stat.percentage_of_boy = camp.percentage_of_students_by_genre("Garçon")
         camp_stat.percentage_of_girl = camp.percentage_of_students_by_genre("Fille")
 
+        camp_stat.new_students_count = camp.new_students_count
+        camp_stat.new_students_rate = camp.new_students_rate
 
         camp_stat.age_of_students = camp.age_of_students
 
