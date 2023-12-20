@@ -213,7 +213,6 @@ class Student < ApplicationRecord
     self.email = email.strip.downcase if email.present?
     self.city = city.strip.split.map(&:capitalize).join(' ') if city.present?
     self.address = address.strip.split.map(&:capitalize).join(' ') if address.present?
-    self.zipcode = zipcode.strip if zipcode.present?
   end
 
   def normalize_phone_number
@@ -228,3 +227,8 @@ class Student < ApplicationRecord
     end
   end
 end
+
+# Student.find_each do |student|
+#   student.address = student.address.strip.split.map(&:capitalize).join(' ') if student.address.present?
+#   student.save!
+# end

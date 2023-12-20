@@ -30,6 +30,17 @@
 #     }
 #   end
 
+# Student.select(:first_name, :last_name)
+#        .group(:first_name, :last_name)
+#        .having('COUNT(*) > 1')
+#        .each do |student|
+#   duplicates = Student.where(first_name: student.first_name, last_name: student.last_name)
+#   puts "#{student.first_name} #{student.last_name}:"
+#   duplicates.each_with_index do |duplicate, index|
+#     puts "#{index + 1} - ID : #{duplicate.id} - Date de naissance: #{duplicate.date_of_birth}, Phone Number: #{duplicate.phone_number}"
+#   end
+# end
+
 # identifier le main student et le duplicate
 
 # main = Student.find(1)
@@ -53,4 +64,22 @@
 
   # username = "#{first_name}#{last_name}#{excel_serial_date }"
   # student.update(username: username)
+# end
+
+# CSV.open("students_duplicates.csv", "wb") do |csv|
+#   # En-têtes pour le fichier CSV
+#   csv << ["First-name / Last-name", "ID", "Date-of_birth", "Phone_number"]
+
+#   # Votre requête existante
+#   Student.select(:first_name, :last_name)
+#          .group(:first_name, :last_name)
+#          .having('COUNT(*) > 1')
+#          .each do |student|
+#     duplicates = Student.where(first_name: student.first_name, last_name: student.last_name)
+
+#     duplicates.each do |duplicate|
+#       # Écrire chaque doublon dans le fichier CSV
+#       csv << ["#{duplicate.first_name} #{duplicate.last_name}", duplicate.id, duplicate.date_of_birth, duplicate.phone_number]
+#     end
+#   end
 # end
