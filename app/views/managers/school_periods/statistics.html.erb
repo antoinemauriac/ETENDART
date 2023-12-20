@@ -36,7 +36,7 @@
           <td><%= camp.started? ? "#{camp_stat.percentage_of_girl} %" : "-" %></td>
           <td><%= camp.started? ? "#{camp_stat.age_of_students} ans" : "-" %></td>
           <td><%= camp.started? ? "#{camp_stat.absenteeism_rate} %" : "-" %></td>
-          <td><%= camp.started? ? camp_stat.coaches.count : "-" %></td>
+          <td><%= camp.started? ? camp_stat.coaches_count : "-" %></td>
           <td><%= camp.started? ? "#{camp_stat.new_students_count} (#{camp_stat.new_students_rate}%)" : "-" %></td>
         </tr>
       <% end %>
