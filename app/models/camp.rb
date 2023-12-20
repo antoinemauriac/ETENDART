@@ -155,7 +155,7 @@ class Camp < ApplicationRecord
 
   def new_students_rate
     if students_count.positive?
-      ((count_new_students.to_f / students_count) * 100).round(0)
+      ((new_students_count.to_f / students_count) * 100).round(0)
     else
       0
     end
