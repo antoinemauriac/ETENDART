@@ -10,7 +10,8 @@ gem 'pundit'
 gem "cloudinary"
 gem "rails_admin", "3.0"
 gem 'text'
-gem 'sidekiq'
+gem "sidekiq", "< 7"
+gem "sidekiq-failures", "~> 1.0"
 gem 'will_paginate', '~> 4.0'
 gem 'pagy'
 gem 'sidekiq-cron'

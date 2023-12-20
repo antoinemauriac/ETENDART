@@ -13,7 +13,7 @@
       <%= form.label :name, "Nom :" %>
       <%= form.text_field :name, { class: "form-control", required: true } %>
       <%= form.label :year, "Année :" %>
-      <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
+      <%= form.select :year, (Time.current.year - 1..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
       <div>
         <%= form.label :paid, "Payant ?" %>
         <div>
