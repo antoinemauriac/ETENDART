@@ -71,7 +71,13 @@ class Activity < ApplicationRecord
   end
 
   def enrollments_without_no_show
-    course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: self, present: true).nil?) && (ce.course.ends_at < Time.current) }
+    if camp.present?
+      show_students = camp.show_students
+    elsif annual_program.present?
+      show_students = annual_program.show_students
+    end
+    # course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: self, present: true).nil?) && (ce.course.ends_at < Time.current) }
+    course_enrollments.select { |ce| show_students.include?(ce.student) && ce.course.ends_at < Time.current }
   end
 
   def absent_enrollments_count
@@ -79,11 +85,13 @@ class Activity < ApplicationRecord
   end
 
   def absenteeism_rate
-    # enrollments = course_enrollments.joins(course: { student: :activity_enrollments })
-                                      # .where("courses.ends_at < ?", Time.current)
-                                      # .where("activity_enrollments.present = ?", true)
-                                      # .where(student_id: show_students)
-    enrollments = course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: self, present: true).nil?) && (ce.course.ends_at < Time.current) }
+    if camp.present?
+      show_students = camp.show_students
+    elsif annual_program.present?
+      show_students = annual_program.show_students
+    end
+    # enrollments = course_enrollments.select { |ce| (!ce.student.activity_enrollments.find_by(activity: self, present: true).nil?) && (ce.course.ends_at < Time.current) }
+    enrollments = course_enrollments.select { |ce| show_students.include?(ce.student) && ce.course.ends_at < Time.current }
 
     total_enrollments = enrollments.count
     absent_enrollments = enrollments.select { |enrollment| !enrollment.present }.count
