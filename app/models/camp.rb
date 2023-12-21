@@ -115,7 +115,7 @@ class Camp < ApplicationRecord
   end
 
   def enrollments_without_no_show
-    course_enrollments.joins(course: { activity: :category })
+    course_enrollments.joins(:course)
                       .where("courses.ends_at < ?", Time.current)
                       .where(student_id: show_students).distinct
   end
