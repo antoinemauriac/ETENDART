@@ -136,6 +136,12 @@ class SchoolPeriod < ApplicationRecord
 
   def number_of_students_by_category(category)
     activity_enrollments.joins(:activity)
+                        .where(activities: { category: category })
+                        .count
+  end
+
+  def number_of_present_students_by_category(category)
+    activity_enrollments.joins(:activity)
                         .where(present: true)
                         .where(activities: { category: category })
                         .count

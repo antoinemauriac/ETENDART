@@ -43,7 +43,8 @@ class UpdateAnnualProgramStatsJob < ApplicationJob
         end.reverse.pluck(:id)
 
         annual_program_stat.category_ids.each do |id|
-          annual_program_stat.students_count_by_category[id] = annual_program.number_of_students_by_category(Category.find(id))
+          annual_program_stat.enrolled_students_count_by_category[id] = annual_program.number_of_students_by_category(Category.find(id))
+          annual_program_stat.students_count_by_category[id] = annual_program.number_of_present_students_by_category(Category.find(id))
           annual_program_stat.percentage_of_boy_by_category[id] = annual_program.percentage_of_students_by_category_and_gender(Category.find(id), "Garçon")
           annual_program_stat.percentage_of_girl_by_category[id] = annual_program.percentage_of_students_by_category_and_gender(Category.find(id), "Fille")
           annual_program_stat.absenteisme_rate_by_category[id] = annual_program.absenteeism_rate_by_category(Category.find(id))

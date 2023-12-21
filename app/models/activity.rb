@@ -119,6 +119,10 @@ class Activity < ApplicationRecord
     show_students.count
   end
 
+  def enrolled_students_count
+    students.count
+  end
+
   def age_of_students
     (show_students.map(&:age).sum.to_f / students_count).round(1)
   end

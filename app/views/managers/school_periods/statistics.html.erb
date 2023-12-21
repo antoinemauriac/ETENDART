@@ -62,6 +62,7 @@
     <thead>
       <tr>
         <th>Catégorie</th>
+        <th>Inscrits</th>
         <th>Présents</th>
         <th>Garçon (%)</th>
         <th>Fille (%)</th>
@@ -73,6 +74,7 @@
       <% @category_ids.each do |id| %>
         <tr>
           <td><%= Category.find(id).name %></td>
+          <td><%= @school_period_stat.enrolled_students_count_by_category[id.to_s] %></td>
           <td><%= @school_period_stat.students_count_by_category[id.to_s] %></td>
           <td><%= "#{@school_period_stat.percentage_of_boy_by_category[id.to_s]} %" %></td>
           <td><%= "#{@school_period_stat.percentage_of_girl_by_category[id.to_s]} %" %></td>
@@ -146,6 +148,7 @@
       <tr>
         <th>Semaine</th>
         <th>Activité</th>
+        <th>Inscrits</th>
         <th>Présents</th>
         <th>Nb Garçon</th>
         <th>Nb Fille</th>
@@ -160,6 +163,7 @@
           <% activity_stat = activity.activity_stat %>
           <td><%= activity.camp.name %></td>
           <td><%= activity.name %></td>
+          <td><%= camp.started? ? activity_stat.enrolled_students_count : "-" %></td>
           <td><%= camp.started? ? activity_stat.students_count : "-" %></td>
           <td><%= camp.started? ? activity_stat.number_of_boy : "-" %></td>
           <td><%= camp.started? ? activity_stat.number_of_girl : "-" %></td>
