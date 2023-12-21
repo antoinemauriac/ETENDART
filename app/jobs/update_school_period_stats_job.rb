@@ -44,7 +44,8 @@ class UpdateSchoolPeriodStatsJob < ApplicationJob
         end.reverse.pluck(:id)
 
         school_period_stat.category_ids.each do |id|
-          school_period_stat.students_count_by_category[id] = school_period.number_of_students_by_category(Category.find(id))
+          school_period_stat.enrolled_students_count_by_category[id] = school_period.number_of_students_by_category(Category.find(id))
+          school_period_stat.students_count_by_category[id] = school_period.number_of_present_students_by_category(Category.find(id))
           school_period_stat.percentage_of_boy_by_category[id] = school_period.percentage_of_students_by_category_and_gender(Category.find(id), "Garçon")
           school_period_stat.percentage_of_girl_by_category[id] = school_period.percentage_of_students_by_category_and_gender(Category.find(id), "Fille")
           school_period_stat.absenteisme_rate_by_category[id] = school_period.absenteeism_rate_by_category(Category.find(id))

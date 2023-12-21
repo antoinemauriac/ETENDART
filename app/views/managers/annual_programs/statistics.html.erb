@@ -43,6 +43,7 @@
     <thead>
       <tr>
         <th>Catégorie</th>
+        <th>Inscrits</th>
         <th>Présents</th>
         <th>Garçon (%)</th>
         <th>Fille (%)</th>
@@ -54,6 +55,7 @@
       <% @category_ids.each do |id| %>
         <tr>
           <td><%= Category.find(id).name %></td>
+          <td><%= @annual_program_stat.enrolled_students_count_by_category[id.to_s] %></td>
           <td><%= @annual_program_stat.students_count_by_category[id.to_s] %></td>
           <td><%= "#{@annual_program_stat.percentage_of_boy_by_category[id.to_s]} %" %></td>
           <td><%= "#{@annual_program_stat.percentage_of_girl_by_category[id.to_s]} %" %></td>
@@ -72,6 +74,7 @@
       <tr>
         <th>Activité</th>
         <th>Jour</th>
+        <th>Inscrits</th>
         <th>Présents</th>
         <th>Nb Garçon</th>
         <th>Nb Fille</th>
@@ -86,6 +89,7 @@
           <% activity_stat = activity.activity_stat %>
           <td><%= activity.name %></td>
           <td><%= l(activity.courses.first.starts_at, format: :day_name ) %></td>
+          <td><%= activity_stat.enrolled_students_count%></td>
           <td><%= activity_stat.students_count%></td>
           <td><%= activity_stat.number_of_boy%></td>
           <td><%= activity_stat.number_of_girl%></td>

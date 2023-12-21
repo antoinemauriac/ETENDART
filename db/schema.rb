@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_20_132908) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_21_100915) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -112,6 +112,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_20_132908) do
     t.integer "absenteeism_rate", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "enrolled_students_count", default: 0
     t.index ["activity_id"], name: "index_activity_stats_on_activity_id"
   end
 
@@ -150,6 +151,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_20_132908) do
     t.jsonb "student_count_by_department", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "enrolled_students_count_by_category", default: {}
     t.index ["annual_program_id"], name: "index_annual_program_stats_on_annual_program_id"
   end
 
@@ -370,6 +372,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_20_132908) do
     t.datetime "updated_at", null: false
     t.jsonb "students_count_by_category", default: {}
     t.integer "new_students_count", default: 0
+    t.jsonb "enrolled_students_count_by_category", default: {}
     t.index ["school_period_id"], name: "index_school_period_stats_on_school_period_id"
   end
 
