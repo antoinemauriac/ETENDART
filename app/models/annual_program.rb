@@ -228,8 +228,8 @@ class AnnualProgram < ApplicationRecord
   end
 
   def percentage_of_students_by_category_and_gender(category, gender)
-    if number_of_students_by_category(category).positive?
-      ((number_of_students_by_category_and_gender(category, gender).to_f / number_of_students_by_category(category)) * 100).round(0)
+    if number_of_present_students_by_category(category).positive?
+      ((number_of_students_by_category_and_gender(category, gender).to_f / number_of_present_students_by_category(category)) * 100).round(0)
     else
       0
     end

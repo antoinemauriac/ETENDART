@@ -227,8 +227,3 @@ class Student < ApplicationRecord
     end
   end
 end
-
-# Student.find_each do |student|
-#   student.address = student.address.strip.split.map(&:capitalize).join(' ') if student.address.present?
-#   student.save!
-# end
