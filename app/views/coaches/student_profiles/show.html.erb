@@ -7,11 +7,11 @@
       <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
       <% if @student.photo.attached? %>
         <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, origin: @url), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-          <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*" }, label_html: { class: "btn-coach-photo" } %>
+          <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*", capture: "environment" }, label_html: { class: "btn-coach-photo" } %>
         <% end %>
       <% else %>
         <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, origin: @url), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-          <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*" }, label_html: { class: "btn-coach-photo" } %>
+          <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', id: 'photo-input', style: 'display:none;cursor:pointer', accept: "image/*", capture: "environment"  }, label_html: { class: "btn-coach-photo" } %>
         <% end %>
       <% end %>
     </div>
