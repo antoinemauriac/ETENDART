@@ -55,6 +55,7 @@ class Managers::CoursesController < ApplicationController
 
   def update_enrollments
     course = Course.find(params[:id])
+    academy = course.academy
     activity = course.activity
     camp = activity.camp if activity.camp
     school_period = camp.school_period if camp
@@ -77,9 +78,10 @@ class Managers::CoursesController < ApplicationController
           camp_enrollment.update(has_paid: enrollment_params[:has_paid])
         end
         # mise à jour du tshirt
-        if school_period && school_period.tshirt == true
-          school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
-          school_period_enrollment.update(tshirt_delivered: enrollment_params[:tshirt_delivered])
+        school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
+        if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false && enrollment_params[:tshirt_delivered] == "1"
+          school_period_enrollment.update(tshirt_delivered: true)
+          student.update(number_of_tshirts: student.number_of_tshirts + 1)
         end
       end
       course.update(status: true)

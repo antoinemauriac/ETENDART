@@ -42,10 +42,10 @@ class Academy < ApplicationRecord
 
   def today_absent_students
     students.joins(courses: :course_enrollments)
-           .where(course_enrollments: { present: false })
-           .where(courses: { starts_at: Time.current.all_day })
-           .distinct
-           .order(:last_name)
+            .where(course_enrollments: { present: false })
+            .where(courses: { starts_at: Time.current.all_day })
+            .distinct
+            .order(:last_name)
   end
 
   def old_presence_sheet

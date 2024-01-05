@@ -25,12 +25,14 @@
 # User.destroy_all
 # Student.destroy_all
 
-# Category.create!(name: 'Tennis')
-# Category.create!(name: 'Basket')
+# Category.create!(name: 'Tennis', super_category: 'Sport')
+# Category.create!(name: 'Manga', super_category: 'Eveil')
 
 # Role.create!(name: 'manager')
 # Role.create!(name: 'coach')
 
+# antoine = User.create(email: "mauriac.antoine@gmail.com", password: 123456, admin: true)
+# antoine.roles << Role.find_by(name: 'manager')
 # ornella = User.create!(email: 'ornella@etendart.org', password: 123456)
 # ornella.roles << Role.find_by(name: 'manager')
 
@@ -62,20 +64,17 @@
 # clichy_levallois.image.attach(io: clichy_levallois_image, filename: 'clichy-levallois.png', content_type: 'image/png')
 # clichy_levallois.save
 
-
-
 # strasbourg_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/sr6nqll54ykkr03jqvgn.jpg')
 # strasbourg.image.attach(io: strasbourg_image, filename: 'strasbourg-court.jpg', content_type: 'image/jpg')
 # strasbourg.save
 
-
-# djoko = Academy.create!(name: 'Djokovic', manager: celine)
-# djoko = Academy.find_by(name: 'Djoko')
+# Academy.create!(name: 'Djokovic', manager: antoine)
+# djoko = Academy.find_by(name: 'Djokovic')
 # djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/sr6nqll54ykkr03jqvgn.jpg')
 # djoko.image.attach(io: djoko_image, filename: 'djoko-court.jpg', content_type: 'image/jpg')
 # djoko.save
 
-# rudy = Academy.create!(name: 'Rudy Gobert', manager: celine)
+# Academy.create!(name: 'Rudy Gobert', manager: antoine)
 # rudy = Academy.find_by(name: 'Rudy Gobert')
 # rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/b5cmmg95x1kuvmtm9ysu.jpg')
 # rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
@@ -89,16 +88,22 @@
 # manager2 = User.create!(email: 'manager2@gmail.com', password: 123456)
 # manager2.roles << Role.find_by(name: 'manager')
 
-# coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Remi", last_name: "Martin")
-# coach1.roles << Role.find_by(name: 'coach')
-# coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Lucie", last_name: "Durand")
-# coach2.roles << Role.find_by(name: 'coach')
-# coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
-# coach3.roles << Role.find_by(name: 'coach')
-# coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
-# coach4.roles << Role.find_by(name: 'coach')
-# coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
-# coach5.roles << Role.find_by(name: 'coach')
+coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Remi", last_name: "Martin")
+coach1.roles << Role.find_by(name: 'coach')
+coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Lucie", last_name: "Durand")
+coach2.roles << Role.find_by(name: 'coach')
+coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
+coach3.roles << Role.find_by(name: 'coach')
+coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
+coach4.roles << Role.find_by(name: 'coach')
+coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
+coach5.roles << Role.find_by(name: 'coach')
+
+coach1.academies_as_coach << djoko
+coach2.academies_as_coach << djoko
+coach3.academies_as_coach << djoko
+coach4.academies_as_coach << djoko
+coach5.academies_as_coach << djoko
 
 
 # coaches = [coach1, coach2, coach3]

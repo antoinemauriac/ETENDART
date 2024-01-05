@@ -20,7 +20,7 @@ class UpdateEnrollmentsJob < ApplicationJob
       annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program) if annual_program
 
       if camp_enrollment && category.name != "Accompagnement" && data[:changes].present?
-      # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
+        # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
         previous_value = data[:changes].first
         present = data[:present].to_i == 1 ? true : false
         if !present && previous_value == true
@@ -34,6 +34,13 @@ class UpdateEnrollmentsJob < ApplicationJob
         elsif camp_enrollment.number_of_absences < 2 && camp_enrollment.banished == true
           unban_because_of_late(student, camp_enrollment)
         end
+      end
+
+      if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true
+        school_period_enrollments = student.school_period_enrollments
+                                           .joins(:school_period)
+                                           .where(school_periods: { academy_id: academy.id })
+        school_period_enrollments.update_all(tshirt_delivered: true)
       end
 
       update_presence_if_needed(activity_enrollment, enrollment.present)
