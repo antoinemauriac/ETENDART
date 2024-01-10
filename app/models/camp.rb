@@ -150,12 +150,12 @@ class Camp < ApplicationRecord
   end
 
   def new_students_count
-    students.select { |student| student.camps.where('starts_at < ?', starts_at).empty? }.count
+    show_students.select { |student| student.camps.where('starts_at < ?', starts_at).empty? }.count
   end
 
   def new_students_rate
-    if students_count.positive?
-      ((new_students_count.to_f / students_count) * 100).round(0)
+    if show_count.positive?
+      ((new_students_count.to_f / show_count) * 100).round(0)
     else
       0
     end

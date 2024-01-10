@@ -14,7 +14,7 @@
       <%= form.text_field :name, { class: "form-control", required: true } %>
       <%= form.label :year, "Année :" %>
       <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "Sélectionnez une année" }, { class: "form-control", required: true } %>
-      <div>
+      <div class="mt-3">
         <%= form.label :paid, "Payant ?" %>
         <div>
           <%= form.radio_button :paid, true %>
@@ -25,11 +25,11 @@
           <%= form.label "Non" %>
         </div>
       </div>
-      <div>
-        <%= form.label :price, "Si oui, prix :" %>
+      <div class="mt-3">
+        <%= form.label :price, "Si oui, prix (€) :" %>
         <%= form.text_field :price, { class: "form-control" } %>
       </div>
-      <div>
+      <div class="mt-3">
         <%= form.label :tshirt, "Distribution de T-shirt ?" %>
         <div>
           <%= form.radio_button :tshirt, true %>
