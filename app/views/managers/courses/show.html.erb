@@ -96,8 +96,8 @@
               <% if @school_period && @school_period.tshirt %>
                 <td class="align-middle">
                   <% student = enrollment.student %>
-                  <% school_period_enrollments = student.school_period_enrollments.where(school_period: @school_periods) %>
-                  <% has_tshirt = school_period_enrollments.any? { |spe| spe.tshirt_delivered == true } %>
+                  <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: @school_period) %>
+                  <% has_tshirt = school_period_enrollment.tshirt_delivered %>
                   <div class="has-paid">
                     <%= form.check_box "enrollments[#{enrollment.id}][tshirt_delivered]", { class: "form-check-input green-check", checked: has_tshirt || false } %>
                   </div>

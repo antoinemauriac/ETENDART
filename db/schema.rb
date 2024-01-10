@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_21_100915) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_05_110152) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -403,6 +403,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_21_100915) do
     t.string "city"
     t.integer "zipcode"
     t.string "allergy"
+    t.integer "number_of_tshirts", default: 0
   end
 
   create_table "user_roles", force: :cascade do |t|

@@ -76,7 +76,7 @@ class Student < ApplicationRecord
     courses.count
   end
 
-  def past_courses_count(activity=nil)
+  def past_courses_count(activity = nil)
     if activity
       courses.where('ends_at < ? AND activity_id = ?', Time.current, activity.id).count
     else

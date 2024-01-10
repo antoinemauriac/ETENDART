@@ -4,7 +4,7 @@ class UpdateCampStatsJob < ApplicationJob
   def perform
     ActiveRecord::Base.transaction do
       Camp.find_each do |camp|
-        next unless camp.current?
+        # next unless camp.current?
         if camp.camp_stat.nil?
           camp_stat = CampStat.new(camp: camp)
         else
@@ -43,5 +43,4 @@ class UpdateCampStatsJob < ApplicationJob
       end
     end
   end
-
 end

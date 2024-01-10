@@ -182,6 +182,11 @@
 
                     <%= form.label :activity, "Activité" %>
                     <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
+
+                    <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
+                    <%= form.radio_button :image_consent, true %> Oui
+                    <%= form.radio_button :image_consent, false, checked: true %> Non
+
                     <div class="d-flex justify-content-around mt-3">
                       <%= form.submit "Valider", class: "btn-etendart" %>
                       <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
@@ -256,6 +261,11 @@
 
                     <%= form.label :activity, "Activité" %>
                     <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'activity' } } %>
+
+                    <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
+                    <%= form.radio_button :image_consent, true %> Oui
+                    <%= form.radio_button :image_consent, false, checked: true %> Non
+
                     <div class="d-flex justify-content-around mt-3">
                       <%= form.submit "Valider", class: "btn-etendart" %>
                       <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>

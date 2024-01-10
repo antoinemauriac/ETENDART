@@ -14,6 +14,7 @@ class Managers::ImportStudentsController < ApplicationController
         school_period_enrollment.destroy
       end
     end
+
     camp.camp_enrollments.destroy_all
     ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id).destroy_all
     CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id).destroy_all
@@ -38,6 +39,19 @@ class Managers::ImportStudentsController < ApplicationController
 
           student.academies << academy unless student.academies.include?(academy)
           student.school_periods << school_period unless student.school_periods.include?(school_period)
+
+          # vérifier si le student à un school_period_enrollment avec un tshirt_delivered à true
+          if school_period.tshirt == true
+            school_period_enrollments = student.school_period_enrollments
+                                               .joins(:school_period)
+                                               .where(school_periods: { academy_id: academy.id })
+
+            school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
+            if school_period_enrollments.any? { |school_period_enrollment| school_period_enrollment.tshirt_delivered == true }
+              school_period_enrollment.update(tshirt_delivered: true)
+            end
+          end
+
           CampEnrollment.create(student: student, camp: camp, image_consent: row['droitimage'] == 'oui' ? true : false)
 
           (1..3).each do |i|

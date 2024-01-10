@@ -16,9 +16,9 @@ class Managers::ImportAnnualStudentsController < ApplicationController
       course.course_enrollments.destroy_all
     end
 
-    annual_program.students.each do |student|
-      student.destroy if student.courses.empty?
-    end
+    # annual_program.students.each do |student|
+    #   student.destroy if student.courses.empty?
+    # end
 
     ActiveRecord::Base.transaction do
       CSV.foreach(file, headers: true, col_sep: ';') do |row|
