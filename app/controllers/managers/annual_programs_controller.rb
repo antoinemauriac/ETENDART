@@ -1,5 +1,4 @@
 class Managers::AnnualProgramsController < ApplicationController
-
   def index
     @academy = Academy.find(params[:academy])
     @annual_programs = @academy.annual_programs
@@ -13,12 +12,15 @@ class Managers::AnnualProgramsController < ApplicationController
     @annual_program.academy = @academy
     authorize [:managers, @annual_program]
 
+    current_year = Date.today.year
+    next_year = current_year + 1
+
     program_periods_defaults = [
-      { start_date: Date.parse('25/09/2023'), end_date: Date.parse('20/10/2023') },
-      { start_date: Date.parse('30/10/2023'), end_date: Date.parse('15/12/2023') },
-      { start_date: Date.parse('08/01/2024'), end_date: Date.parse('16/02/2024') },
-      { start_date: Date.parse('04/03/2024'), end_date: Date.parse('12/04/2024') },
-      { start_date: Date.parse('22/04/2024'), end_date: Date.parse('14/06/2024') }
+      { start_date: Date.parse("25/09/#{current_year}"), end_date: Date.parse("20/10/#{current_year}") },
+      { start_date: Date.parse("30/10/#{current_year}"), end_date: Date.parse("15/12/#{current_year}") },
+      { start_date: Date.parse("08/01/#{next_year}"), end_date: Date.parse("16/02/#{next_year}") },
+      { start_date: Date.parse("04/03/#{next_year}"), end_date: Date.parse("12/04/#{next_year}") },
+      { start_date: Date.parse("22/04/#{next_year}"), end_date: Date.parse("14/06/#{next_year}") }
     ]
 
     @default_program_periods = program_periods_defaults.map do |period_params|

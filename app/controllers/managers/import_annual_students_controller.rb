@@ -41,19 +41,19 @@ class Managers::ImportAnnualStudentsController < ApplicationController
           student.academies << academy unless student.academies.include?(academy)
           AnnualProgramEnrollment.create(student: student, annual_program: annual_program, image_consent: row['droitimage'] == 'oui' ? true : false)
 
-          # (1..3).each do |i|
-          #   activity_name = row["activite_#{i}"]
-          #   if activity_name.present?
-          #     activity = annual_program.activities.find_by(name: activity_name)
-          #     if activity.present?
-          #       student.activities << activity
-          #       student.courses << activity.courses
-          #     else
-          #       flash[:alert] = "Une erreur est survenue. L'activité '#{activity_name}' ne correspond pas à une activité créée sur l'application"
-          #       redirect_to managers_annual_program_path(annual_program) and return
-          #     end
-          #   end
-          # end
+          (1..3).each do |i|
+            activity_name = row["activite_#{i}"]
+            if activity_name.present?
+              activity = annual_program.activities.find_by(name: activity_name)
+              if activity.present?
+                student.activities << activity
+                student.courses << activity.courses
+              else
+                flash[:alert] = "Une erreur est survenue. L'activité '#{activity_name}' ne correspond pas à une activité créée sur l'application"
+                redirect_to managers_annual_program_path(annual_program) and return
+              end
+            end
+          end
         end
       end
       redirect_to managers_annual_program_path(annual_program), notice: "Le fichier CSV a été importé avec succès."

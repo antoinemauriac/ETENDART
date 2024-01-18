@@ -13,7 +13,9 @@
     <%= link_to new_for_annual_managers_activity_path(annual_program: @annual_program), class: 'btn-etendart-square btn-flex mt-0' do %>
       <i class="fa-solid fa-square-plus fa-square-bigger"></i> AJOUTER <i class="fa-solid fa-square-plus fa-square-bigger"></i>
     <% end %>
-    <%= link_to "BILAN", statistics_managers_annual_program_path(@annual_program), class: "btn-etendart-square mt-0" %>
+    <% if @annual_program.new %>
+      <%= link_to "BILAN", statistics_managers_annual_program_path(@annual_program), class: "btn-etendart-square mt-0" %>
+    <% end %>
   </div>
 
   <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
@@ -57,7 +59,7 @@
   </table>
 </div>
 
-
+<% if @annual_program.can_import? %>
   <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
   <div class="flexy" data-controller="import-csv">
     <div class="loader d-none" data-import-csv-target="spinner"></div>
@@ -73,7 +75,7 @@
       </div>
     </div>
   </div>
-
+<% end %>
 
 
 <div class="yellow-title yellow-title-flex mt-3 mb-3">
