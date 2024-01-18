@@ -103,10 +103,18 @@ class Managers::ActivitiesController < ApplicationController
     @activity = Activity.find(params[:id])
     @academy = @activity.academy
     @annual_program = @activity.annual_program
+    @last_course = @activity.courses.max_by(&:starts_at)
+    @last_course_day = AnnualProgram::DAY_EN_TO_FR[@last_course.starts_at.strftime('%A')] if @last_course
+    @last_course_start_time = @last_course.starts_at.to_time if @last_course
+    @last_course_end_time = @last_course.ends_at.to_time if @last_course
     # @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
     @students = @activity.students.sort_by(&:last_name)
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
-    @courses = @activity.next_courses.sort_by(&:starts_at).first(3)
+    if @activity.next_courses.size >= 5
+      @courses = @activity.next_courses.sort_by(&:starts_at).first(5)
+    else
+      @courses = @activity.courses.sort_by(&:starts_at).last(5)
+    end
     category = @activity.category
     @coach = @activity.coach
     @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
@@ -124,6 +132,7 @@ class Managers::ActivitiesController < ApplicationController
     activity = Activity.find(params[:id])
     authorize([:managers, activity])
     camp = activity.camp
+    annual_program = activity.annual_program
 
     if camp
       activity.coaches.each do |coach|
@@ -151,7 +160,11 @@ class Managers::ActivitiesController < ApplicationController
         camp.coaches << coach if coach && !camp.coaches.include?(coach)
       end
 
-      activity.courses.each do |course|
+      if annual_program
+        update_annual_courses(activity, params)
+      end
+
+      activity.next_courses.each do |course|
         course.update(coach: coach)
       end
       if params[:redirect_to] == "camp"
@@ -275,6 +288,27 @@ class Managers::ActivitiesController < ApplicationController
       start_time = Time.zone.parse("#{day} #{start_time_str}")
       end_time = Time.zone.parse("#{day} #{end_time_str}")
       Course.create(activity: activity, starts_at: start_time, ends_at: end_time, manager: current_user, coach: coach, annual: true)
+    end
+  end
+
+  def update_annual_courses(activity, params)
+    new_day = params[:activity][:day_attributes][:day]
+    new_day_number = AnnualProgram::DAY_TO_WDAY[new_day]
+
+    start_time_str = params[:activity][:day_attributes]["start_time(4i)"] + ":" + params[:activity][:day_attributes]["start_time(5i)"]
+    end_time_str = params[:activity][:day_attributes]["end_time(4i)"] + ":" + params[:activity][:day_attributes]["end_time(5i)"]
+
+    activity.next_courses.each do |course|
+      # Ajuster le jour
+      day_difference = new_day_number - course.starts_at.wday
+      new_start_date = course.starts_at + day_difference.days
+      new_end_date = course.ends_at + day_difference.days
+
+      # Ajuster l'heure
+      new_start_time = new_start_date.change(hour: start_time_str.split(':')[0].to_i, min: start_time_str.split(':')[1].to_i)
+      new_end_time = new_end_date.change(hour: end_time_str.split(':')[0].to_i, min: end_time_str.split(':')[1].to_i)
+
+      course.update(starts_at: new_start_time, ends_at: new_end_time)
     end
   end
 end
