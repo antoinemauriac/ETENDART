@@ -41,6 +41,14 @@ class AnnualProgram < ApplicationRecord
     "No day assigned" => 7
   }
 
+  DAY_EN_TO_FR = {
+    'Monday' => 'Lundi',
+    'Tuesday' => 'Mardi',
+    'Wednesday' => 'Mercredi',
+    'Thursday' => 'Jeudi',
+    'Friday' => 'Vendredi'
+  }
+
   def can_import?
     program_periods.first.start_date > Time.current
   end
@@ -88,7 +96,13 @@ class AnnualProgram < ApplicationRecord
 
   def sorted_activities
     activities.sort_by do |activity|
-      DAY_NAME_TO_NUMBER[activity.day_of_activity]
+      [DAY_NAME_TO_NUMBER[activity.day_of_activity], activity.name]
+    end
+  end
+
+  def active_sorted_activities
+    activities.where(disable: false).sort_by do |activity|
+      [DAY_NAME_TO_NUMBER[activity.day_of_activity], activity.name]
     end
   end
 

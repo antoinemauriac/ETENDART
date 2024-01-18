@@ -30,7 +30,7 @@ class Managers::AcademiesController < ApplicationController
 
     @old_presence_sheet = @academy.old_presence_sheet
     if @annual_program.present?
-      @old_presence_sheet  = @annual_program.old_presence_sheet
+      @old_presence_sheet = @annual_program.old_presence_sheet
     end
   end
 

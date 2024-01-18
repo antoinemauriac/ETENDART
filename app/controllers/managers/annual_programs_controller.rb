@@ -47,7 +47,7 @@ class Managers::AnnualProgramsController < ApplicationController
     @annual_program = AnnualProgram.find(params[:id])
     @academy = @annual_program.academy
     authorize [:managers, @annual_program]
-    @activities = @annual_program.sorted_activities
+    @activities = @annual_program.active_sorted_activities
     @students = @annual_program.students.order(:last_name)
   end
 
@@ -113,7 +113,6 @@ class Managers::AnnualProgramsController < ApplicationController
 
     @category_ids = @annual_program_stat.category_ids
   end
-
 
   private
 
