@@ -54,10 +54,10 @@ class Activity < ApplicationRecord
   end
 
   def day_of_activity
-    first_course = courses.first
-    return "No day assigned" unless first_course&.starts_at
+    last_course = courses.last
+    return "No day assigned" unless last_course&.starts_at
 
-    first_course.starts_at.strftime("%A")
+    last_course.starts_at.strftime("%A")
   end
 
   def next_courses
