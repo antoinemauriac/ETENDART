@@ -60,7 +60,7 @@ class Managers::CampsController < ApplicationController
             camp_enrollment = student.camp_enrollments.find_by(camp: camp)
             image_consent = camp_enrollment.image_consent ? "Oui" : "Non"
             banished = camp_enrollment.banished ? "Oui" : "Non" if academy.banished
-            paid = camp_enrollment.paid ? "Oui" : "Non" if school_period.paid
+            paid = camp_enrollment.has_paid ? "Oui" : "Non" if school_period.paid
             thsirt_delivered = school_period_enrollments.any?(&:tshirt_delivered) ? "Oui" : "Non" if school_period.tshirt
             activities = student.student_activities(camp)
 
