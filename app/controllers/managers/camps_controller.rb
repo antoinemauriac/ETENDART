@@ -45,36 +45,41 @@ class Managers::CampsController < ApplicationController
     authorize([:managers, camp])
     students = camp.students.sort_by(&:last_name)
 
+    column_headers = ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Droit à l'image ?"]
+    column_headers << "Exclu ?" if academy.banished
+    column_headers << "Paiement effectué ?" if school_period.paid
+    column_headers << "T-hsirt reçu ?" if school_period.tshirt
+    column_headers.concat(["Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"])
+
     respond_to do |format|
       format.csv do
-
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          if school_period.tshirt && academy.banished
-            csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Exclu ?", "Droit à l'image ?", "T-hsirt reçu ?", "Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
-          elsif school_period.tshirt
-            csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Droit à l'image ?", "T-hsirt reçu ?", "Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
-          elsif academy.banished
-            csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Exclu ?", "Droit à l'image ?", "Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
-          else
-            csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Droit à l'image ?", "Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
-          end
+          csv << column_headers
+
           students.each do |student|
             camp_enrollment = student.camp_enrollments.find_by(camp: camp)
             image_consent = camp_enrollment.image_consent ? "Oui" : "Non"
-            banished = camp_enrollment.banished ? "Oui" : ""
-            school_periods = student.school_periods.where(academy: academy)
-            school_period_enrollments = student.school_period_enrollments.where(school_period: school_periods)
-            thsirt_delivered = school_period_enrollments.any?(&:tshirt_delivered) ? "Oui" : "Non"
+            banished = camp_enrollment.banished ? "Oui" : "Non" if academy.banished
+            paid = camp_enrollment.paid ? "Oui" : "Non" if school_period.paid
+            thsirt_delivered = school_period_enrollments.any?(&:tshirt_delivered) ? "Oui" : "Non" if school_period.tshirt
             activities = student.student_activities(camp)
-            if school_period.tshirt && academy.banished
-              csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email, banished, image_consent, thsirt_delivered, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
-            elsif school_period.tshirt
-              csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email, image_consent, thsirt_delivered, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
-            elsif academy.banished
-              csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email, banished, image_consent, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
-            else
-              csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email, image_consent, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
-            end
+
+            student_data = [
+              student.last_name, student.first_name, student.gender, student.date_of_birth,
+              student.age, student.phone_number, student.email, image_consent
+            ]
+
+            student_data << banished if academy.banished
+            student_data << paid if school_period.paid
+            student_data << thsirt_delivered if school_period.tshirt
+
+            student_data.concat([
+              activities.first&.name, student.unattended_activity_rate(activities.first),
+              activities.second&.name, student.unattended_activity_rate(activities.second),
+              activities.third&.name, student.unattended_activity_rate(activities.third)
+            ])
+
+            csv << student_data
           end
         end
         send_data(csv_data, filename: "#{academy.name}_#{school_period.name}_#{camp.name}_élèves_inscrits.csv")
@@ -90,7 +95,6 @@ class Managers::CampsController < ApplicationController
     authorize([:managers, camp])
     respond_to do |format|
       format.csv do
-
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
           csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email"]
 
