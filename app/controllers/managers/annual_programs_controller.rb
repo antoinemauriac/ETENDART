@@ -91,10 +91,12 @@ class Managers::AnnualProgramsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Académie", "Programme", "Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email"]
+          csv << ["Académie", "Programme", "Nom", "Prénom", "Genre", "Droit à l'image", "Date de naissance", "Age", "Telephone", "Email"]
 
           students.each do |student|
-            csv << [annual_program.academy.name, annual_program.name, student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email]
+            annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program)
+            image_consent = annual_program_enrollment.image_consent ? "Oui" : "Non"
+            csv << [annual_program.academy.name, annual_program.name, student.last_name, student.first_name, student.gender, image_consent, student.date_of_birth, student.age, student.phone_number, student.email]
           end
         end
 
