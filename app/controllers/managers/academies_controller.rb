@@ -42,10 +42,10 @@ class Managers::AcademiesController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Telephone", "Email"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email"]
 
           today_absent_students.each do |student|
-            csv << [student.last_name, student.first_name, student.gender, student.phone_number, student.email]
+            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email]
           end
         end
 
@@ -65,11 +65,11 @@ class Managers::AcademiesController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Jour", "Activité", "Nom", "Prénom", "Genre", "Telephone", "Email"]
+          csv << ["Jour", "Activité", "Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email"]
 
           week_absent_enrollments.each do |enrollment|
             student = enrollment.student
-            csv << [l(enrollment.course.starts_at, format: :day_name), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.phone_number, student.email]
+            csv << [l(enrollment.course.starts_at, format: :day_name), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email]
           end
         end
 

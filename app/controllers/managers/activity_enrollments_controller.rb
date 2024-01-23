@@ -38,7 +38,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
 
     if params[:origin] == 'annual_program'
       annual_program = activity.annual_program
-      activities = student.activities.where(annual_program: annual_program)
+      # activities = student.activities.where(annual_program: annual_program)
       student_annual_courses = student.courses.joins(:activity).where("activities.annual_program_id = ?", annual_program.id)
 
       if student_annual_courses.empty?

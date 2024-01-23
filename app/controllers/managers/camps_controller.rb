@@ -47,14 +47,14 @@ class Managers::CampsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Age", "Genre", "Droit à l'image ?", "T-hsirt reçu ?","Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Droit à l'image ?", "T-hsirt reçu ?","Activité 1", "Taux abs 1", "Activité 2", "Taux abs 2", "Activité 3", "Taux abs 3"]
           students.each do |student|
             image_consent = student.camp_enrollments.find_by(camp: camp).image_consent ? "Oui" : "Non"
             school_periods = student.school_periods.where(academy: camp.academy)
             school_period_enrollments = student.school_period_enrollments.where(school_period: school_periods)
             thsirt_delivered = school_period_enrollments.any?(&:tshirt_delivered) ? "Oui" : "Non"
             activities = student.student_activities(camp)
-            csv << [student.last_name, student.first_name, student.age, student.gender, image_consent, thsirt_delivered, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
+            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, image_consent, thsirt_delivered, activities.first.name, student.unattended_activity_rate(activities.first), activities.second&.name, student.unattended_activity_rate(activities.second), activities.third&.name, student.unattended_activity_rate(activities.third)]
           end
         end
 
@@ -73,14 +73,14 @@ class Managers::CampsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Telephone", "Email"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email"]
 
           banished_students.each do |student|
-            csv << [student.last_name, student.first_name, student.gender, student.phone_number, student.email]
+            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email]
           end
         end
 
-        send_data(csv_data, filename: "#{camp.academy.name}_#{camp.school_period.name}_#{camp.name}_élèves_exclus.csv")
+        send_data(csv_data, filename: "#{academy.name}_#{camp.school_period.name}_#{camp.name}_élèves_exclus.csv")
       end
     end
   end
@@ -91,14 +91,3 @@ class Managers::CampsController < ApplicationController
     params.require(:camp).permit(:name, :starts_at, :ends_at)
   end
 end
-
-# camp = Camp.find(1)
-# counter = 0
-# camp.camp_enrollments.find_each do |camp_enrollment|
-#   starts_at = camp.starts_at
-#   student = camp_enrollment.student
-#   past_camp_enrollments = student.camp_enrollments.joins(:camp).where('camps.starts_at < ?', starts_at)
-#   if past_camp_enrollments.empty?
-#     counter += 1
-#   end
-# end

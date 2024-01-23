@@ -203,10 +203,10 @@ class Managers::ActivitiesController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Activité", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
+          csv << ["Activité", "Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email"]
 
           students.each do |student|
-            csv << [activity.name, student.last_name, student.first_name, student.gender, student.age, student.phone_number, student.email]
+            csv << [activity.name, student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email]
           end
         end
 
