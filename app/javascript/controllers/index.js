@@ -34,9 +34,6 @@ application.register("enrollment-form", EnrollmentFormController)
 import FeedbackFormController from "./feedback_form_controller"
 application.register("feedback-form", FeedbackFormController)
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
-
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 

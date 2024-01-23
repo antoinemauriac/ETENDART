@@ -127,10 +127,10 @@ class Managers::StudentsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Telephone", "Email", "Date de naissance", "Adresse", "Code postal", "Ville"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville"]
 
           students.each do |student|
-            csv << [student.last_name, student.first_name, student.gender, student.phone_number, student.email, student.date_of_birth, student.address, student.zipcode, student.city]
+            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email, student.address, student.zipcode, student.city]
           end
         end
 
