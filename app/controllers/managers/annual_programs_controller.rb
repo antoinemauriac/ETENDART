@@ -70,11 +70,11 @@ class Managers::AnnualProgramsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Semaine", "Jour", "Heure", "Activité", "Nom", "Prénom", "Genre", "Telephone", "Email", "Presence"]
+          csv << ["Semaine", "Jour", "Heure", "Activité", "Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Presence"]
 
           past_course_enrollments.each do |enrollment|
             student = enrollment.student
-            csv << [l(enrollment.course.starts_at, format: :week), l(enrollment.course.starts_at, format: :date), l(enrollment.course.starts_at, format: :hour_min), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.phone_number, student.email, enrollment.present ? "present" : "absent"]
+            csv << [l(enrollment.course.starts_at, format: :week), l(enrollment.course.starts_at, format: :date), l(enrollment.course.starts_at, format: :hour_min), enrollment.activity.name, student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email, enrollment.present ? "present" : "absent"]
           end
         end
 
@@ -91,10 +91,10 @@ class Managers::AnnualProgramsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Académie", "Programme", "Nom", "Prénom", "Genre", "Age", "Telephone", "Email"]
+          csv << ["Académie", "Programme", "Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email"]
 
           students.each do |student|
-            csv << [annual_program.academy.name, annual_program.name, student.last_name, student.first_name, student.gender, student.age, student.phone_number, student.email]
+            csv << [annual_program.academy.name, annual_program.name, student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email]
           end
         end
 
