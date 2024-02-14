@@ -246,7 +246,7 @@
                   <%= link_to student.full_name_separator, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
                 </td>
                 <td class="align-middle">
-                  <%= link_to student.phone_number.presence? ? student.phone_number : "", managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                  <%= link_to student.phone_number.present? ? student.phone_number : "", managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
                 </td>
                 <td class="align-middle">
                   <%= link_to student.email, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
