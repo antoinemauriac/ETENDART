@@ -162,7 +162,7 @@
                   <% if course_enrollment.course.academy.name == @academy.name %>
                     <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
                       <td class="align-middle"><%= student.full_name_separator %></td>
-                      <td class="align-middle"><%= student.phone_number if !student.phone_number.nil? %></td>
+                      <td class="align-middle"><%= student.phone_number.nil? ? "" : student.phone_number %></td>
                       <td class="align-middle"><%= student.email %></td>
                       <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
                       <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
