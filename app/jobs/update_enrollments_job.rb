@@ -19,7 +19,7 @@ class UpdateEnrollmentsJob < ApplicationJob
       school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) if school_period
       annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program) if annual_program
 
-      if camp_enrollment && category.name != "Accompagnement" && data[:changes].present?
+      if camp_enrollment && category.name != "Accompagnement" && data[:changes].present? && academy.banished
         # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
         previous_value = data[:changes].first
         present = data[:present].to_i == 1 ? true : false
