@@ -36,11 +36,25 @@ class UpdateEnrollmentsJob < ApplicationJob
         end
       end
 
-      if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true
+      # if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true
+      #   school_period_enrollments = student.school_period_enrollments
+      #                                      .joins(:school_period)
+      #                                      .where(school_periods: { academy_id: academy.id })
+      #   school_period_enrollments.update_all(tshirt_delivered: true)
+      # end
+
+      # if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false
+      #   school_period_enrollments = student.school_period_enrollments
+      #                                      .joins(:school_period)
+      #                                      .where(school_periods: { academy_id: academy.id })
+      #   school_period_enrollments.update_all(tshirt_delivered: false)
+      # end
+
+      if school_period && school_period.tshirt
         school_period_enrollments = student.school_period_enrollments
                                            .joins(:school_period)
                                            .where(school_periods: { academy_id: academy.id })
-        school_period_enrollments.update_all(tshirt_delivered: true)
+        school_period_enrollments.update_all(tshirt_delivered: school_period_enrollment.tshirt_delivered)
       end
 
       update_presence_if_needed(activity_enrollment, enrollment.present)

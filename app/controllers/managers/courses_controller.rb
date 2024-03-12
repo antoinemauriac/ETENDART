@@ -82,6 +82,9 @@ class Managers::CoursesController < ApplicationController
         if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false && enrollment_params[:tshirt_delivered] == "1"
           school_period_enrollment.update(tshirt_delivered: true)
           student.update(number_of_tshirts: student.number_of_tshirts + 1)
+        elsif school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true && enrollment_params[:tshirt_delivered] == "0"
+          school_period_enrollment.update(tshirt_delivered: false)
+          student.update(number_of_tshirts: student.number_of_tshirts - 1)
         end
       end
       course.update(status: true)
