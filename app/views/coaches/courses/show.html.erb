@@ -44,17 +44,18 @@
         </thead>
         <tbody>
           <% @enrollments.each do |enrollment| %>
+            <% student = enrollment.student %>
             <tr>
               <td class="align-middle text-center">
-                <%= link_to coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)) do %>
-                    <%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-small" %>
+                <%= link_to coaches_student_profile_path(student, url_origin: coaches_course_path(@course)) do %>
+                    <%= cl_image_tag student.photo_or_default, class: "avatar-small" %>
                 <% end %>
               </td>
               <td class="align-middle" style="text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
-                <%= link_to enrollment.student.last_name.try(&:upcase), coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr", style: "white-space: normal;" %><br>
-                <%= link_to enrollment.student.first_name, coaches_student_profile_path(enrollment.student, url_origin: coaches_course_path(@course)), class: "student-mr" %><br>
+                <%= link_to student.last_name.try(&:upcase), coaches_student_profile_path(student, url_origin: coaches_course_path(@course)), class: "student-mr", style: "white-space: normal;" %><br>
+                <%= link_to student.first_name, coaches_student_profile_path(student, url_origin: coaches_course_path(@course)), class: "student-mr" %><br>
                 <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
-                  <span style="color: red; font-weight: bold;"><%= enrollment.student.allergy %></span>
+                  <span style="color: red; font-weight: bold;"><%= student.allergy %></span>
                 <% end %>
               </td>
               <td class="align-middle">
@@ -72,7 +73,7 @@
               <% if @school_period && @school_period.paid %>
                 <td class="align-middle">
                   <div class="has-paid">
-                    <% if enrollment.student.camp_enrollments.find_by(camp: @camp).has_paid %>
+                    <% if student.camp_enrollments.find_by(camp: @camp).has_paid %>
                       <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", style: "background-color:green", checked: true, readonly: true, disabled: true } %>
                       <%= form.hidden_field "enrollments[#{enrollment.id}][has_paid]", value: true %>
                     <% else %>
@@ -84,7 +85,6 @@
               <% if @school_period && @school_period.tshirt %>
                 <td class="align-middle">
                   <div class="has-paid">
-                    <% student = enrollment.student %>
                     <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: @school_period) %>
                     <% has_tshirt = school_period_enrollment.tshirt_delivered %>
                     <% if has_tshirt == true %>

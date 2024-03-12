@@ -69,13 +69,14 @@
         </thead>
         <tbody>
           <% @enrollments.each do |enrollment| %>
+            <% student = enrollment.student %>
             <tr>
-              <td class="align-middle"><%= cl_image_tag enrollment.student.photo_or_default, class: "avatar-small" %></td>
+              <td class="align-middle"><%= cl_image_tag student.photo_or_default, class: "avatar-small" %></td>
               <td class="align-middle" style="text-align:left; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">
-                <%= link_to enrollment.student.last_name.try(:upcase), managers_student_path(enrollment.student, academy_id: @academy.id), class: "student-mr", style: "white-space: normal;" %><br>
-                <%= link_to enrollment.student.first_name, managers_student_path(enrollment.student, academy_id: @academy.id), class: "student-mr" %><br>
+                <%= link_to student.last_name.try(:upcase), managers_student_path(student, academy_id: @academy.id), class: "student-mr", style: "white-space: normal;" %><br>
+                <%= link_to student.first_name, managers_student_path(student, academy_id: @academy.id), class: "student-mr" %><br>
                 <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
-                  <span style="color: red; font-weight: bold;"><%= enrollment.student.allergy %></span>
+                  <span style="color: red; font-weight: bold;"><%= student.allergy %></span>
                 <% end %>
               </td>
               <td class="align-middle">
@@ -89,13 +90,12 @@
               <% if @school_period && @school_period.paid %>
                 <td class="align-middle">
                   <div class="has-paid">
-                    <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", checked: enrollment.student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>
+                    <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", checked: student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>
                   </div>
                 </td>
               <% end %>
               <% if @school_period && @school_period.tshirt %>
                 <td class="align-middle">
-                  <% student = enrollment.student %>
                   <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: @school_period) %>
                   <% has_tshirt = school_period_enrollment.tshirt_delivered %>
                   <div class="has-paid">
