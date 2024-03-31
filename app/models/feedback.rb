@@ -13,7 +13,7 @@ class Feedback < ApplicationRecord
 
   def self.last_five(academy)
     joins(student: :academies)
-      .where(created_at: 4.week.ago..Time.now)
+      .where(created_at: 10.week.ago..Time.now)
       .where(academies: { id: academy.id })
       .order(created_at: :desc)
       .limit(5)
