@@ -143,7 +143,7 @@
   }
 
 
-  .nav-item:last-child {
+  #deconnection {
     border-right: none;
   }
 
@@ -164,7 +164,7 @@
   }
 
   .dashboard-details {
-    display: none;
+    display: flex;
   }
 
 }
