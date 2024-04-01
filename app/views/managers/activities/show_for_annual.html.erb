@@ -10,7 +10,7 @@
 <div class="yellow-title"><%= @activity.name.upcase %></div>
 <div class="row justify-content-center align-items-stretch">
 
-  <div class="col-8" >
+  <div class="col-8">
     <div class="header-info">PROCHAINS COURS</div>
     <table class="table table-striped table-responsive table-center form-container form-container-activity">
       <thead>
@@ -28,7 +28,7 @@
           <tr>
           <td class="align-middle">
             <div class="d-flex">
-              <%= link_to l(course.starts_at, format: :abbr), managers_course_path(course), class: "btn-etendart-yellow mb-2", style: "width: 80%" %>
+              <%= link_to l(course.starts_at, format: :abbr), managers_course_path(course), class: "btn-etendart-yellow mb-2", style: "width: 80%", data: { turbo: false } %>
             </div>
           </td>
             <td class="align-middle">
@@ -57,7 +57,7 @@
   <div class="col-4">
     <div class="header-info">MODIFIER COACH OU HORAIRE</div>
     <div class="form-container form-container-activity">
-      <%= simple_form_for @activity, url: managers_activity_path(@activity), method: :patch do |f| %>
+      <%= simple_form_for @activity, url: managers_activity_path(@activity), method: :patch, data: { turbo: false } do |f| %>
 
       <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select" } } %>
       <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches.reject { |coach| coach == @coach }, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" }, selected: @coaches.reject { |coach| coach == @coach } } %>

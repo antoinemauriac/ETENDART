@@ -31,7 +31,7 @@
       <table class="table table-striped table-responsive course-table">
         <thead>
           <tr>
-            <th class="presence-head align-middle"></th>
+            <th class="presence-head align-middle"style="min-width: 60px;"></th>
             <th class="presence-head align-middle" style="text-align:left">Élève</th>
             <th class="presence-head align-middle" style="text-align:left; padding-right:5px">Présent ?</th>
             <% if @school_period && @school_period.paid %>
@@ -46,18 +46,18 @@
           <% @enrollments.each do |enrollment| %>
             <% student = enrollment.student %>
             <tr>
-              <td class="align-middle text-center">
-                <%= link_to coaches_student_profile_path(student, url_origin: coaches_course_path(@course)) do %>
-                    <%= cl_image_tag student.photo_or_default, class: "avatar-small" %>
-                <% end %>
-              </td>
-              <td class="align-middle" style="text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
-                <%= link_to student.last_name.try(&:upcase), coaches_student_profile_path(student, url_origin: coaches_course_path(@course)), class: "student-mr", style: "white-space: normal;" %><br>
-                <%= link_to student.first_name, coaches_student_profile_path(student, url_origin: coaches_course_path(@course)), class: "student-mr" %><br>
-                <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
-                  <span style="color: red; font-weight: bold;"><%= student.allergy %></span>
-                <% end %>
-              </td>
+
+              <%= render partial: "coaches/courses/student_photo", locals: { student: student }%>
+
+                <td class="align-middle" style="position:relative;text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
+                  <%= link_to coaches_student_profile_path(student, url_origin: coaches_course_path(@course)), class: "full-width-link" do %>
+                    <span class="student-mr" style="white-space: normal;"><%= student.last_name.try(&:upcase)%></span><br>
+                    <span class="student-mr" style="white-space: normal;"><%= student.first_name %></span><br>
+                    <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
+                      <span style="color: red; font-weight: bold;"><%= student.allergy %></span>
+                    <% end %>
+                  <% end %>
+                </td>
               <td class="align-middle">
                 <div class="form-switch form-switch-lg">
                   <% if @academy.banished %>

@@ -1,6 +1,5 @@
 class Managers::ActivitiesController < ApplicationController
   before_action :camp, only: %i[new create]
-  before_action :set_cache_headers, only: %i[show show_for_annual]
 
   def new
     @activity = Activity.new
@@ -311,11 +310,5 @@ class Managers::ActivitiesController < ApplicationController
 
       course.update(starts_at: new_start_time, ends_at: new_end_time)
     end
-  end
-
-  def set_cache_headers
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
   end
 end

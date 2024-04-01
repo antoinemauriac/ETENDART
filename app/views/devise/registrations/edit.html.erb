@@ -5,7 +5,7 @@
   <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     <%= f.error_notification %>
 
-    <div class="edit-container mt-3 mb-3 row">
+    <div class="edit-container row">
       <div class="col-sm-6 col-lg-6">
           <%= f.input :email, required: true, autofocus: true %>
           <%= f.input :last_name,
@@ -36,7 +36,7 @@
 
 
       <div class="flex-btn">
-        <%= f.button :submit, "Mettre à jour", class: "btn-etendart btn-smaller" %>
+        <%= f.button :submit, "Valider", class: "btn-etendart btn-smaller" %>
         <%= link_to "Annuler", :back, class: "btn-etendart-black btn-smaller" %>
       </div>
     </div>
