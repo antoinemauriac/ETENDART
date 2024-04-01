@@ -13,7 +13,11 @@
       <% @students.each do |student| %>
         <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_student_profile_path(student, url_origin: coaches_student_profiles_path) %>'">
           <td class="align-middle coach-font">
-            <%= cl_image_tag student.photo_or_default, class: "avatar avatar-small" %>
+            <% if student.photo.attached? %>
+              <%= cl_image_tag student.photo.key, class: "avatar-small" %>
+            <% else %>
+              <i class="fa-solid fa-circle-user"></i>
+            <% end %>
           </td>
           <td class="align-middle coach-font"><%= student.last_name.try(:upcase) %></td>
           <td class="align-middle coach-font"><%= student.first_name %></td>

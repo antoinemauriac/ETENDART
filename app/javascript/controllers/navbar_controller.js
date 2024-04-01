@@ -6,7 +6,6 @@ export default class extends Controller {
   static targets = [ "navbar", "navbarCollapse", "navbarToggle" ]
   // Connects to data-action="click->navbar#toggle"
   connect() {
-    console.log("navbar controller connected")
   }
 
   displayMenu() {
@@ -14,5 +13,4 @@ export default class extends Controller {
     this.navbarCollapseTarget.classList.toggle('show');
     this.navbarToggleTarget.classList.toggle('active')
   }
-
 }

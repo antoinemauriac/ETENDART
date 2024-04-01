@@ -112,10 +112,13 @@ class Managers::StudentsController < ApplicationController
 
     @academy = Academy.find(params[:academy_id]) if params[:academy_id].present?
 
-    if params[:redirect_to] === 'manager'
-      redirect_to managers_student_path(@student, academy_id: @academy.id), notice: "Photo mise à jour"
-    else
-      redirect_to coaches_student_profile_path(@student, precedent: @origin), notice: "Photo mise à jour"
+    respond_to do |format|
+      format.html { format.html { redirect_to determine_redirect_path, notice: "Photo ajoutée" } }
+      format.text do
+        partial = choose_partial_based_on_origin
+        render partial: partial, locals: { student: @student }, formats: [:html]
+      end
+      format.text { render partial: 'coaches/courses/student_photo', locals: { student: @student }, formats: [:html] }
     end
   end
 
@@ -143,6 +146,23 @@ class Managers::StudentsController < ApplicationController
 
   def student_params
     params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :photo)
+  end
+
+  def determine_redirect_path
+    if @origin == 'manager'
+      managers_student_path(@student, academy_id: @academy.id)
+    else
+      coaches_student_profile_path(@student, precedent: @origin)
+    end
+  end
+
+  def choose_partial_based_on_origin
+    case @origin
+    when 'course'
+      'coaches/courses/student_photo' # Chemin vers votre partial pour les managers
+    when 'student_profile'
+      'coaches/student_profiles/student_photo'  # Chemin par défaut ou pour les coaches
+    end
   end
 
 end

@@ -32,8 +32,8 @@
   background-color: white;
   padding: 20px;
   border-radius: 12px;
-  margin: 12px 0px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  margin-top: 12px;
 }
 
 // .add-padding {
@@ -96,6 +96,7 @@
 
 @media screen and (max-width: 768px) {
   .edit-container {
-    max-width: 320px;
+    border-radius: 0px;
+    margin-top: 0px;
   }
 }

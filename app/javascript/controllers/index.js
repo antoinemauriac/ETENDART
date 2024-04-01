@@ -34,6 +34,9 @@ application.register("enrollment-form", EnrollmentFormController)
 import FeedbackFormController from "./feedback_form_controller"
 application.register("feedback-form", FeedbackFormController)
 
+import HelloController from "./hello_controller"
+application.register("hello", HelloController)
+
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 
@@ -69,6 +72,9 @@ application.register("student-table", StudentTableController)
 
 import TomSelectController from "./tom_select_controller"
 application.register("tom-select", TomSelectController)
+
+import UpdatePhotoFromCourseController from "./update_photo_from_course_controller"
+application.register("update-photo-from-course", UpdatePhotoFromCourseController)
 
 import UploadPhotoController from "./upload_photo_controller"
 application.register("upload-photo", UploadPhotoController)
