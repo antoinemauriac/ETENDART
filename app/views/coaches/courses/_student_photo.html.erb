@@ -2,9 +2,9 @@
     data-controller="update-photo-from-course"
     data-update-photo-from-course-target="studentPhoto">
   <% if student.photo.attached? %>
-  <%= link_to coaches_student_profile_path(student) do %>
-    <%= cl_image_tag student.photo_or_default, class: "avatar-small" %>
-  <% end %>
+    <%= link_to coaches_student_profile_path(student) do %>
+      <%= cl_image_tag student.photo_or_default, class: "avatar-small" %>
+    <% end %>
   <% else %>
     <input type="file" id="photo_<%= student.id %>"
             data-action="change->update-photo-from-course#submit"
@@ -19,7 +19,7 @@
 <!--          <i class="fa-solid fa-camera student-photo-profile student-photo-profile-small"></i>-->
 <!--          <i class="fa-solid fa-camera-retro student-photo-profile student-photo-profile-small"></i>-->
       <div class="student-photo-profile student-photo-profile-small">
-          <%= image_tag('colorkit.svg', style: "width:40px", alt: 'description de l\'image') %>
+          <%= image_tag('camera-yellow.svg', style: "width:40px", alt: 'description de l\'image') %>
       </div>
     </label>
     <div class="loader-container">
