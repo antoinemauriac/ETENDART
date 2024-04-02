@@ -20,6 +20,8 @@ class User < ApplicationRecord
   validates :first_name, :last_name, :email, presence: true
   validates :email, uniqueness: true
 
+  has_many :memberships, foreign_key: :receiver_id
+
   has_many :academies_as_manager, class_name: 'Academy', foreign_key: :manager_id
 
   has_many :coach_academies, foreign_key: :coach_id, dependent: :destroy
@@ -59,6 +61,10 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name.capitalize} #{last_name.capitalize}"
+  end
+
+  def full_name_reverse
+    "#{last_name.upcase} #{first_name.capitalize}"
   end
 
   def next_activities

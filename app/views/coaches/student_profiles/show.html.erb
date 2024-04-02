@@ -18,6 +18,25 @@
   </div>
 </div>
 
+<% if !@membership.status %>
+  <div class="yellow-title mt-0 mb-0">COTISATION <%= "#{@start_year} - #{@start_year +  1}"  %></div>
+
+  <div class="membership-container special-container mt-0">
+    <%= simple_form_for @membership, url: managers_membership_path(@membership, url: @url), method: :patch do |f| %>
+      <div class="d-flex justify-content-around">
+          <%= f.input :payment_method,
+                      label: false,
+                      wrapper_html: { class: 'mt-3 mb-0', style: 'width:60%;'},
+                      collection: [['Chèque', 'cheque'], ['Espèces', 'cash']],
+                      prompt: "Mode de paiement" %>
+          <%= f.hidden_field :receiver_id, value: current_user.id %>
+        <%= f.submit "Valider", class: "btn-membership" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+
 <div class="yellow-title mt-0">FEEDBACKS</div>
 
 <div data-controller="hidden-forms">
@@ -35,7 +54,7 @@
 </div>
 
 <% if @feedbacks.any? %>
-  <table class="container table table-striped table-responsive coach-container">
+  <table class="container table table-striped table-responsive coach-container special-container">
     <thead>
       <tr>
         <th class="coach-font">Date</th>

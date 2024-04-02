@@ -41,6 +41,9 @@ class Managers::StudentsController < ApplicationController
     past_courses = @student.past_courses
     @past_annual_courses = past_courses.select(&:annual_program)
     @past_camp_courses = past_courses.select(&:camp)
+    @start_year = Date.current.month >= 3 ? Date.current.year : Date.current.year - 1
+    @membership = @student.memberships.find_by(start_year: @start_year)
+    @memberships = @student.memberships.order(start_year: :desc)
   end
 
   def new
