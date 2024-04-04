@@ -30,6 +30,8 @@ class Managers::CoachesController < ApplicationController
     @category1 = @coach.categories.first ? @coach.categories.first.id : ""
     @category2 = @coach.categories.second ? @coach.categories.second.id : ""
     @category3 = @coach.categories.third ? @coach.categories.third.id : ""
+    @category4 = @coach.categories.fourth ? @coach.categories.fourth.id : ""
+    @category5 = @coach.categories.fifth ? @coach.categories.fifth.id : ""
     @academy = Academy.find(params[:academy_id])
   end
 
@@ -110,10 +112,14 @@ class Managers::CoachesController < ApplicationController
     first_category = Category.find(params[:user][:category_1_id]) if params[:user][:category_1_id].present?
     second_category = Category.find(params[:user][:category_2_id]) if params[:user][:category_2_id].present?
     third_category = Category.find(params[:user][:category_3_id]) if params[:user][:category_3_id].present?
+    fourth_category = Category.find(params[:user][:category_4_id]) if params[:user][:category_4_id].present?
+    fifth_category = Category.find(params[:user][:category_5_id]) if params[:user][:category_5_id].present?
 
     coach.categories << first_category unless coach.categories.include?(first_category) || first_category.nil?
     coach.categories << second_category unless coach.categories.include?(second_category) || second_category.nil?
     coach.categories << third_category unless coach.categories.include?(third_category) || third_category.nil?
+    coach.categories << fourth_category unless coach.categories.include?(fourth_category) || fourth_category.nil?
+    coach.categories << fifth_category unless coach.categories.include?(fifth_category) || fifth_category.nil?
   end
 
 

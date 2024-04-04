@@ -24,6 +24,12 @@ class Managers::EnrollmentsController < ApplicationController
     camp = Camp.find(params[:camp])
     student.camps << camp unless student.camps.include?(camp)
 
+    start_year = camp.starts_at.month >= 4 ? camp.starts_at.year : camp.starts_at.year - 1
+    membership = student.memberships.find_by(start_year: start_year)
+    if membership.nil?
+      student.memberships.create(amount: 15, start_year: start_year)
+    end
+
     image_consent = params[:image_consent]
     camp_enrollment = student.camp_enrollments.find_by(camp: camp)
     camp_enrollment.update(image_consent: image_consent)

@@ -9,7 +9,7 @@
 <div class="container" data-controller="clickable-table">
   <% if @school_period.new %>
     <div class="flexy">
-      <%= link_to "BILAN", statistics_managers_school_period_path(@school_period), class: "btn-etendart-square mt-0" %>
+      <%= link_to "BILAN", statistics_managers_school_period_path(@school_period), class: "btn-add-student mt-0" %>
     </div>
   <% end %>
   <% if @school_period.camps.any? %>
@@ -50,7 +50,7 @@
   <% end %>
 </div>
 <div class="flexy" data-controller="hidden-forms">
-  <button class="btn-etendart-square btn-flex mt-1" data-action="click->hidden-forms#displayCampForm">
+  <button class="btn-add-student btn-flex mt-1" data-action="click->hidden-forms#displayCampForm">
     <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
   </button>
   <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
@@ -60,9 +60,9 @@
     <%= form.date_field :starts_at, class: "form-control", required: true %>
     <%= form.label :ends_at, "Date de fin :" %>
     <%= form.date_field :ends_at, class: "form-control", required: true %>
-    <div class="flex-btn">
-      <%= form.submit "Valider", class: "btn-etendart" %>
-      <button class="btn-etendart-black" data-action="click->hidden-forms#displayCampForm" type="button">Annuler</button>
+    <div class="flex-btn mt-3">
+      <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+      <button class="btn-add-student btn-add-student-small btn-add-student-grey" data-action="click->hidden-forms#displayCampForm" type="button">Annuler</button>
     </div>
   <% end %>
 </div>

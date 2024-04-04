@@ -7,13 +7,13 @@
 <div class="container flexy" style="max-width:500px">
   <div data-controller="hidden-forms">
     <div class="flexy">
-      <button class="btn-etendart-square btn-flex mt-0" data-action="click->hidden-forms#displayCategoryForm"><i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i></button>
+      <button class="btn-add-student btn-flex mt-0" data-action="click->hidden-forms#displayCategoryForm"><i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i></button>
       <%= simple_form_for @category, url: managers_categories_path, method: :post, html: { class: "hidden-form form-container-hidden", id: "category-form"}, data: { hidden_forms_target: "categoryForm" } do |form| %>
         <%= form.input :name, label: "Nom :" %>
         <%= form.input :super_category, label: "Super catégorie :", collection: ['Sport', 'Eveil', 'Cuisine', 'Accompagnement'], input_html: { class: "form-control" } %>
         <div class="flex-btn">
-          <%= form.button :submit, "Valider", class: "btn-etendart" %>
-          <button class="btn-etendart-black" data-action="click->hidden-forms#displayCategoryForm" type="button">Annuler</button>
+          <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>
+          <button class="btn-add-student btn-add-student-small btn-add-student-grey" data-action="click->hidden-forms#displayCategoryForm" type="button">Annuler</button>
         </div>
       <% end %>
     </div>

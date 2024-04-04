@@ -71,16 +71,35 @@
         <tbody>
           <% @enrollments.each do |enrollment| %>
             <% student = enrollment.student %>
+            <% membership = student.memberships.find_by(start_year: @start_year) %>
+            <% name_style = membership&.status == false ? "color: red;font-weight:bold;" : "" %>
             <tr style="position:relative">
 <!--            <td>
               <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.3em;color: red;position: absolute;top: 5%;left: 15%;"></i>
             </td>-->
-              <td class="align-middle"><%= cl_image_tag student.photo_or_default, class: "avatar-small" %></td>
+              <td class="align-middle">
+                <%= link_to managers_student_path(student, academy_id: @academy.id) do %>
+                  <% if student.photo.key? %>
+                    <%= cl_image_tag student.photo.key,
+                      class: "avatar-small",
+                      crop: "thumb",
+                      gravity: "face",
+                      width: 300,
+                      height: 300 %>
+                  <% else %>
+                    <div class="student-photo-profile student-photo-profile-small">
+                      <%= image_tag('camera-yellow.svg', style: "width:40px", alt: 'description de l\'image') %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </td>
               <td class="align-middle" style="text-align:left; max-width: 130px; overflow: hidden; text-overflow: ellipsis;">
-                <%= link_to student.last_name.try(:upcase), managers_student_path(student, academy_id: @academy.id), class: "student-mr", style: "white-space: normal;" %>
-                <%= link_to student.first_name, managers_student_path(student, academy_id: @academy.id), class: "student-mr" %><br>
-                <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
-                  <span style="color: red; font-weight: bold;"><%= student.allergy %></span>
+                <%= link_to managers_student_path(student, academy_id: @academy.id), class: "full-width-link" do %>
+                  <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
+                  <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.first_name%></span><br>
+                  <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
+                    <span style="color: red; font-weight: bold;"><%= student.allergy %></span>
+                  <% end %>
                 <% end %>
               </td>
               <td class="align-middle">
@@ -113,7 +132,7 @@
       </table>
       <div class="flexy">
         <%= form.hidden_field :redirect_to, value: "manager" %>
-        <%= form.submit "Valider", class: "btn-etendart btn-presence" %>
+        <%= form.submit "Valider", class: "btn-add-student btn-presence" %>
       </div>
     <% end %>
   </div>

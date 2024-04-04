@@ -25,7 +25,7 @@
         <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true %>
       </div>
       <div class="flexy">
-        <%= form.button :submit, "Valider", class: "btn-etendart" %>
+        <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>
       </div>
     <% end %>
   </div>

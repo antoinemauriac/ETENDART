@@ -12,7 +12,7 @@ class User < ApplicationRecord
     tsearch: { prefix: true }
   }
 
-  attr_accessor :academy_1_id, :academy_2_id, :academy_3_id, :category_1_id, :category_2_id, :category_3_id
+  attr_accessor :academy_1_id, :academy_2_id, :academy_3_id, :category_1_id, :category_2_id, :category_3_id, :category_4_id, :category_5_id
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable

@@ -1,6 +1,6 @@
 <div class="yellow-title mb-0">TABLEAU DE BORD</div>
 <% if @today_courses.any? %>
-  <div class="black-title">AUJOURD'HUI</div>
+  <div class="black-title mb-0">AUJOURD'HUI</div>
     <table class="container table table-striped table-responsive table-center coach-container mb-0">
     <thead>
       <tr>
@@ -32,7 +32,7 @@
 <% end %>
 
 <% if @missing_attendes.any? %>
-  <div class="black-title">APPELS EN RETARD</div>
+  <div class="black-title mb-0">APPELS EN RETARD</div>
     <table class="container table table-striped table-responsive table-center coach-container mb-0">
     <thead>
       <tr>
@@ -56,7 +56,7 @@
 <% end %>
 
 <% if @next_courses.any? %>
-  <div class="black-title">PROCHAINS COURS</div>
+  <div class="black-title mb-0">PROCHAINS COURS</div>
   <table class="container table table-striped table-responsive table-center coach-container">
     <thead>
       <tr>
@@ -76,12 +76,12 @@
     </tbody>
   </table>
   <div class="flexy">
-    <%= link_to "Voir tous", coaches_courses_path, class: "btn-etendart-small" %>
+    <%= link_to "Voir tous", coaches_courses_path, class: "btn-add-student btn-add-student-small mb-3" %>
   </div>
 <% end %>
 
 <% if @students.any? %>
-  <div class="black-title">LES ÉLÈVES</div>
+  <div class="black-title mb-0">LES ÉLÈVES</div>
   <table class="container table-striped table table-responsive table-center coach-container">
     <thead>
       <tr>
@@ -96,7 +96,12 @@
         <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_student_profile_path(student, url_origin: coaches_student_profiles_path) %>'">
           <td class="align-middle coach-font">
             <% if student.photo.attached? %>
-              <%= cl_image_tag student.photo.key, class: "avatar-small" %>
+                    <%= cl_image_tag student.photo_or_default,
+                 class: "avatar-small",
+                 crop: "thumb",
+                 gravity: "face",
+                 width: 300,
+                 height: 300 %>
             <% else %>
               <i class="fa-solid fa-circle-user"></i>
             <% end %>
@@ -109,6 +114,6 @@
     </tbody>
   </table>
   <div class="flexy">
-    <%= link_to "Voir tous", coaches_student_profiles_path, class: "btn-etendart-small" %>
+    <%= link_to "Voir tous", coaches_student_profiles_path, class: "btn-add-student btn-add-student-small mb-3" %>
   </div>
 <% end %>

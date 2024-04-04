@@ -1,5 +1,6 @@
 class Managers::CoursesController < ApplicationController
   before_action :course, only: %i[edit show update destroy]
+  # before_action :set_cache_headers, only: [:show]
 
   def index
     @courses = current_user.courses_as_manager.sort_by(&:starts_at)
@@ -8,6 +9,7 @@ class Managers::CoursesController < ApplicationController
   end
 
   def show
+    @start_year = @course.starts_at.month >= 4 ? Date.current.year : Date.current.year - 1
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
     @academy = course.academy
     @school_periods = @academy.school_periods

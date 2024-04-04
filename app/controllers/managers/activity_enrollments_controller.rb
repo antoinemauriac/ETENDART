@@ -29,6 +29,13 @@ class Managers::ActivityEnrollmentsController < ApplicationController
         student.school_period_enrollments.find_by(school_period: school_period).destroy
       end
 
+      start_year = camp.starts_at.month >= 4 ? camp.starts_at.year : camp.starts_at.year - 1
+      courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 1), Date.new(start_year + 1, 8, 31))
+      membership = student.memberships.find_by(start_year: start_year)
+      if courses_during_civil_year.empty? && membership && membership.status == false
+        membership&.destroy
+      end
+
       if params[:redirect_to] == 'student'
         redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
       else

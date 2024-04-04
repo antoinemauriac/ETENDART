@@ -1,4 +1,7 @@
 class Managers::CampsController < ApplicationController
+
+  before_action :set_cache_headers, only: [:show]
+
   def show
     @camp = Camp.find(params[:id])
     @school_period = @camp.school_period
@@ -8,6 +11,7 @@ class Managers::CampsController < ApplicationController
     @activities = @camp.activities
     @activity = Activity.new
     @students = @camp.students.order(:last_name)
+    @start_year = @camp.starts_at.month >= 4 ? @camp.starts_at.year : @camp.starts_at.year - 1
   end
 
   def create
@@ -111,6 +115,12 @@ class Managers::CampsController < ApplicationController
   end
 
   private
+
+  def set_cache_headers
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate" # Empêche la mise en cache
+    response.headers["Pragma"] = "no-cache" # Pour les versions HTTP 1.0
+    response.headers["Expires"] = "0" # Proscrit l'utilisation d'une copie mise en cache
+  end
 
   def camp_params
     params.require(:camp).permit(:name, :starts_at, :ends_at)

@@ -22,8 +22,8 @@
           APPEL EN ATTENTE <i class="fa-solid fa-xmark text-danger fa-big"></i>
         </p>
       <% end %>
-      <p class="text-center" style="">Merci de rappeler aux élèves en <span style="color:red;font-weight:bold">ROUGE</span> de payer leur cotisation annuelle (15€)<br>
-        Pour valider le paiement par un élève, allez sur le profil de l'élève, sélectionnez un mode de paiement et validez</p>
+<!--      <p class="text-center" style="">Merci de rappeler aux élèves en <span style="color:red;font-weight:bold">ROUGE</span> de payer leur cotisation annuelle (15€)<br>
+        Pour valider le paiement par un élève, allez sur le profil de l'élève, sélectionnez un mode de paiement et validez</p>-->
     </div>
   </div>
 
@@ -52,7 +52,7 @@
 
             <tr>
               <%= render partial: "coaches/courses/student_photo", locals: { student: student }%>
-                <td class="align-middle" style="position:relative;text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
+                <td class="align-middle" style="text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
                   <%= link_to coaches_student_profile_path(student, url_origin: coaches_course_path(@course)), class: "full-width-link" do %>
                     <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
                     <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.first_name %></span><br>
@@ -105,9 +105,9 @@
       </table>
       <div class="flexy">
         <% if @academy.banished %>
-          <%= form.submit "Valider", class: "btn-etendart btn-presence #{'disabled' if (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current}", disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current %>
+          <%= form.submit "Valider", class: "btn-add-student btn-presence #{'disabled' if (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current}", disabled: (@course.ends_at + 3.hour) < Time.current || @course.starts_at > Time.current %>
         <% else %>
-          <%= form.submit "Valider", class: "btn-etendart btn-presence #{'disabled' if @course.starts_at > Time.current}", disabled: @course.starts_at > Time.current %>
+          <%= form.submit "Valider", class: "btn-add-student btn-presence #{'disabled' if @course.starts_at > Time.current}", disabled: @course.starts_at > Time.current %>
         <% end %>
       </div>
     <% end %>

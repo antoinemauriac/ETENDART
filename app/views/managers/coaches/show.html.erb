@@ -35,29 +35,39 @@
     </div>
   </div>
 
-  <div class="col-xl-3 col-md-12 mt-3">
+  <div class="col-xl-8 col-md-12 mt-3">
     <div class="header-info">RÉFÉRENCEMENT</div>
     <div class="coach-info">
       <div>
         <%= form_with(model: @coach, url: managers_coach_path(@coach), method: :put, class: "form") do |form| %>
+          <div class="row">
+            <div class="col-6">
+              <%= form.label :academy_1_id, "Académie 1 :", class: "mb-2" %>
+              <%= form.collection_select :academy_1_id, @academies, :id, :name, { selected: @academy1, include_blank: true }, {class: "form-control"} %>
 
-          <%= form.label :academy_1_id, "Académie 1 :", class: "mb-2" %>
-          <%= form.collection_select :academy_1_id, @academies, :id, :name, { selected: @academy1, include_blank: true }, {class: "form-control"} %>
+              <%= form.label :academy_2_id, "Académie 2 (optionnel) :", class: "mb-2 mt-2" %>
+              <%= form.collection_select :academy_2_id, @academies, :id, :name, { selected: @academy2, include_blank: true }, { class: "form-control" } %>
 
-          <%= form.label :academy_2_id, "Académie 2 (optionnel) :", class: "mb-2 mt-2" %>
-          <%= form.collection_select :academy_2_id, @academies, :id, :name, { selected: @academy2, include_blank: true }, { class: "form-control" } %>
+              <%= form.label :academy_3_id, "Académie 3 (optionnel) :", class: "mb-2 mt-2" %>
+              <%= form.collection_select :academy_3_id, @academies, :id, :name, { selected: @academy3, include_blank: true }, { class: "form-control" } %>
+            </div>
+            <div class="col-6">
+              <%= form.label :category_1_id, "Catégorie 1 :", class: "mb-2" %>
+              <%= form.collection_select :category_1_id, @categories, :id, :name, { selected: @category1, include_blank: true }, {class: "form-control"} %>
 
-          <%= form.label :academy_3_id, "Académie 3 (optionnel) :", class: "mb-2 mt-2" %>
-          <%= form.collection_select :academy_3_id, @academies, :id, :name, { selected: @academy3, include_blank: true }, { class: "form-control" } %>
+              <%= form.label :category_2_id, "Catégorie 2 (optionnel) :", class: "mb-2 mt-2" %>
+              <%= form.collection_select :category_2_id, @categories, :id, :name, { selected: @category2, include_blank: true }, { class: "form-control" } %>
 
-          <%= form.label :category_1_id, "Catégorie 1 :", class: "mb-2 mt-2" %>
-          <%= form.collection_select :category_1_id, @categories, :id, :name, { selected: @category1, include_blank: true }, {class: "form-control"} %>
+              <%= form.label :category_3_id, "Catégorie 3 (optionnel) :", class: "mb-2 mt-2" %>
+              <%= form.collection_select :category_3_id, @categories, :id, :name, { selected: @category3, include_blank: true }, { class: "form-control" } %>
 
-          <%= form.label :category_2_id, "Catégorie 2 (optionnel) :", class: "mb-2 mt-2" %>
-          <%= form.collection_select :category_2_id, @categories, :id, :name, { selected: @category2, include_blank: true }, { class: "form-control" } %>
+              <%= form.label :category_4_id, "Catégorie 4 (optionnel) :", class: "mb-2 mt-2" %>
+              <%= form.collection_select :category_4_id, @categories, :id, :name, { selected: @category4, include_blank: true }, { class: "form-control" } %>
 
-          <%= form.label :category_3_id, "Catégorie 3 (optionnel) :", class: "mb-2 mt-2" %>
-          <%= form.collection_select :category_3_id, @categories, :id, :name, { selected: @category3, include_blank: true }, { class: "form-control" } %>
+              <%= form.label :category_5_id, "Catégorie 5 (optionnel) :", class: "mb-2 mt-2" %>
+              <%= form.collection_select :category_5_id, @categories, :id, :name, { selected: @category5, include_blank: true }, { class: "form-control" } %>
+            </div>
+          </div>
       </div>
 
       <div class="flexy">
@@ -67,49 +77,6 @@
     </div>
   </div>
 
-  <div class="col-xl-5 col-md-12 mt-3">
-    <div class="header-info">FEEDBACK</div>
-    <div class="coach-info">
-      <%= form_with(model: @coach_feedback, url: managers_coach_feedbacks_path(coach: @coach), method: :post, class: "form mt-3") do |form| %>
-          <%= form.text_area :content, class: "form-control" %>
-        <div class="flexy">
-          <%= form.submit "Valider", class: "btn-etendart-yellow" %>
-        </div>
-      <% end %>
-
-      <% if @coach_feedbacks.any? %>
-        <table class="table table-striped table-responsive">
-          <thead>
-            <tr>
-              <th>Auteur</th>
-              <th>Date</th>
-              <th>Message</th>
-              <th class="text-center">Supprimer</th>
-            </tr>
-          </thead>
-          <tbody>
-              <% @coach_feedbacks.each do |feedback| %>
-              <tr>
-                <td class="align-middle"><%= feedback.manager.full_name %></td>
-                <td class="align-middle"><%= l(feedback.created_at, format: :date_short_year)  %></td>
-                <td class="align-middle"><%= feedback.content %></td>
-                <% if feedback.manager == current_user %>
-                  <td class="text-center">
-                    <%= link_to managers_coach_feedback_path(feedback), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce feedback ?" } do %>
-                      <i class="fas fa-trash trash"></i>
-                    <% end %>
-                  </td>
-                <% else %>
-                  <td></td>
-                <% end %>
-              </tr>
-              <% end %>
-          </tbody>
-        </table>
-      <% end %>
-      <div></div>
-    </div>
-  </div>
 
   <div class="col-lg-6 col-sm-12 mt-4">
     <div class="header-info">STAGES - Prochaines Activités</div>
@@ -161,4 +128,47 @@
     </div>
   </div>
 
+  <div class="col-xl-12 col-md-12 mt-3">
+    <div class="header-info">FEEDBACK</div>
+    <div class="coach-info">
+      <%= form_with(model: @coach_feedback, url: managers_coach_feedbacks_path(coach: @coach), method: :post, class: "form mt-3") do |form| %>
+          <%= form.text_area :content, class: "form-control" %>
+        <div class="flexy">
+          <%= form.submit "Valider", class: "btn-etendart-yellow" %>
+        </div>
+      <% end %>
+
+      <% if @coach_feedbacks.any? %>
+        <table class="table table-striped table-responsive">
+          <thead>
+            <tr>
+              <th>Auteur</th>
+              <th>Date</th>
+              <th>Message</th>
+              <th class="text-center">Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+              <% @coach_feedbacks.each do |feedback| %>
+              <tr>
+                <td class="align-middle"><%= feedback.manager.full_name %></td>
+                <td class="align-middle"><%= l(feedback.created_at, format: :date_short_year)  %></td>
+                <td class="align-middle"><%= feedback.content %></td>
+                <% if feedback.manager == current_user %>
+                  <td class="text-center">
+                    <%= link_to managers_coach_feedback_path(feedback), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce feedback ?" } do %>
+                      <i class="fas fa-trash trash"></i>
+                    <% end %>
+                  </td>
+                <% else %>
+                  <td></td>
+                <% end %>
+              </tr>
+              <% end %>
+          </tbody>
+        </table>
+      <% end %>
+      <div></div>
+    </div>
+  </div>
 </div>

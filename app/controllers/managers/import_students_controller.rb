@@ -8,6 +8,9 @@ class Managers::ImportStudentsController < ApplicationController
     file = params[:camp][:csv_file]
     file = File.open(file)
 
+    start_year = camp.starts_at.month >= 4 ? camp.starts_at.year : camp.starts_at.year - 1
+    students = camp.students.to_a
+
     school_period.school_period_enrollments.each do |school_period_enrollment|
       camps = school_period_enrollment.student.camps.where(school_period: school_period)
       if camps == [camp] || camps.empty?
@@ -18,6 +21,16 @@ class Managers::ImportStudentsController < ApplicationController
     camp.camp_enrollments.destroy_all
     ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id).destroy_all
     CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id).destroy_all
+
+
+    students.each do |student|
+      student.destroy if student.courses.empty?
+      courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 1), Date.new(start_year + 1, 8, 31))
+      membership = student.memberships.find_by(start_year: start_year)
+      if courses_during_civil_year.empty? && membership && membership.status == false
+        membership&.destroy
+      end
+    end
 
     ActiveRecord::Base.transaction do
       CSV.foreach(file, headers: true, col_sep: ';') do |row|
@@ -35,6 +48,19 @@ class Managers::ImportStudentsController < ApplicationController
             student.save
           else
             student.update(student_params_upload(row))
+          end
+
+          membership = student.memberships.find_by(start_year: start_year)
+          if membership.nil?
+            membership = student.memberships.create(amount: 15, start_year: start_year)
+          end
+
+          if !["cash", "cheque", "hello_asso", "offert", "virement", nil].include?(row['cotisation'])
+            flash[:alert] = "Le mode de paiement de la cotisation doit être cash, cheque, hello_asso, offert ou virement"
+            redirect_to managers_camp_path(camp) and return
+          end
+          if %w[cash cheque hello_asso offert virement].include?(row['cotisation'])
+            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
 
           student.academies << academy unless student.academies.include?(academy)
