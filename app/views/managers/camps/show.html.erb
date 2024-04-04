@@ -45,13 +45,13 @@
     </table>
   <% end %>
   <div class="flexy">
-    <%= link_to new_managers_activity_path(camp: @camp), class: "btn-etendart-square btn-flex mt-1" do %>
+    <%= link_to new_managers_activity_path(camp: @camp), class: "btn-add-student btn-flex mt-1" do %>
       <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
     <% end %>
   </div>
 </div>
 
-<% if @camp.can_import? %>
+<%# if @camp.can_import? %>
   <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
   <div class="flexy" data-controller="import-csv">
     <div class="loader d-none" data-import-csv-target="spinner"></div>
@@ -67,7 +67,7 @@
       </div>
     </div>
   </div>
-<% end %>
+<%# end %>
 
 
 <div class="yellow-title yellow-title-flex mt-3 mb-3">
@@ -103,9 +103,11 @@
       </thead>
       <tbody>
         <% @students.each do |student| %>
+          <% membership = student.memberships.find_by(start_year: @start_year) %>
+          <% name_style = membership&.status == false ? "color: red;font-weight: bold" : "" %>
           <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @camp.academy.id) %>'">
-            <td class="align-middle"><%= student.last_name %></td>
-            <td class="align-middle"><%= student.first_name %></td>
+            <td class="align-middle" style="<%= name_style %>"><%= student.last_name %></td>
+            <td class="align-middle" style="<%= name_style %>"><%= student.first_name %></td>
             <% if @academy.banished %>
               <td class="align-middle <%= student.camp_enrollments.find_by(camp: @camp)&.banished ? 'non-bg' : '' %>">
                 <%= student.camp_enrollments.find_by(camp: @camp)&.banished ? "Oui" : "" %>

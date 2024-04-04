@@ -8,7 +8,7 @@
 
 <div class="row justify-content-center align-items-stretch">
 
-  <div class="col-lg-5 col-md-7 col-sm-12 mt-3" data-controller="upload-photo">
+  <div class="col-lg-4 col-md-7 col-sm-12 mt-3" data-controller="upload-photo" data-upload-photo-student-id-value="<%=@student.id%>">
     <div class="header-info">INFORMATIONS</div>
     <div class="content-info">
       <div class="student-info">
@@ -20,16 +20,36 @@
         <p>ADRESSE : <%= @student.address %> - <%= @student.zipcode %> - <%= @student.city %></p>
       </div>
       <div class="student-photo">
-        <%= cl_image_tag @student.photo_or_default, class: "avatar", data: { upload_photo_target: "photo" } %>
         <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
+        <%= cl_image_tag @student.photo_or_default,
+                 data: { upload_photo_target: "photo" },
+                 class: "avatar",
+                 crop: "thumb",
+                 gravity: "face",
+                 width: 300,
+                 height: 300 %>
         <% if @student.photo.attached? %>
           <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-            <%= form.input :photo, label: "Changer la photo", as: :file, input_html: { onchange: 'this.form.submit();', style: 'display:none;cursor:pointer' }, label_html: { class: "btn-photo" } %>
+            <%= form.input :photo, as: :file, input_html: { id: 'student_photo_upload', style: 'display:none;cursor:pointer' }, label_html: { style: 'display:none;' } %>
+            <label for="student_photo_upload" style="cursor:pointer;">
+              <div class="change-photo" id="change-photo-manager">
+                <%= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>
+                <p style="margin:0;font-size:12px">Modifier</p>
+              </div>
+            </label>
           <% end %>
         <% else %>
+        <div>
           <%= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-            <%= form.input :photo, label: "Ajouter une photo", as: :file, input_html: { onchange: 'this.form.submit();', style: 'display:none;cursor:pointer' }, label_html: { class: "btn-photo" } %>
+            <%= form.input :photo, as: :file, input_html: { id: 'student_photo_upload', style: 'display:none;' }, label_html: { style: 'display:none;' } %>
+            <label for="student_photo_upload" id="label-photo-new" style="cursor:pointer;">
+              <div class="change-photo" id="change-photo-manager">
+                <%= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>
+                <p style="margin:0;font-size:12px">Ajouter</p>
+              </div>
+            </label>
           <% end %>
+        </div>
         <% end %>
       </div>
       <div class="flexy">
@@ -51,69 +71,60 @@
     </div>
   </div>
 
-  <div class="col-lg-5 col-sm-12 mt-3">
-    <div class="header-info">FEEDBACKS</div>
-    <div class="content-info">
-      <div>
+  <div class="col-lg-6 col-sm-12 mt-3">
+    <div class="header-info"> COTISATIONS </div>
+      <div class="content-info">
         <table class="table table-striped table-responsive">
           <thead>
             <tr>
-              <th>Auteur</th>
-              <th>Date</th>
-              <th>Message</th>
-              <th class="text-center">Supprimer</th>
+              <th>Année</th>
+              <th>Montant</th>
+              <th>Mode de paiement</th>
+              <th>Date du paiement</th>
+              <th>Reçu par</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            <% @feedbacks.each do |feedback| %>
-            <tr>
-              <td class="align-middle"><%= feedback.coach.full_name %></td>
-              <td class="align-middle"><%= l(feedback.created_at, format: :date_short_year)  %></td>
-              <td class="align-middle"><%= feedback.content %></td>
-              <% if feedback.coach == current_user %>
-                <td class="text-center">
-                  <%= link_to managers_feedback_path(feedback), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce feedback ?", turbo_confirm_class: "confirmation-message" } do %>
-                    <i class="fas fa-trash trash"></i>
+            <% @memberships.each do |membership| %>
+              <tr>
+                <td class="align-middle"><%= "#{membership.start_year} - #{membership.start_year + 1}" %></td>
+                <td class="align-middle"><%= "#{membership.amount} €" %></td>
+                <td class="align-middle"><%= membership.payment_method %></td>
+                <td class="align-middle"><%= membership.payment_date %></td>
+                <td class="align-middle"><%= membership.receiver&.full_name %></td>
+                <td class="align-middle">
+                  <% if membership.receiver.nil? %>
+                    <i class="fa-solid fa-xmark text-danger fa-big">
+                  <% else %>
+                    <i class="fa-solid fa-check text-success fa-big">
                   <% end %>
                 </td>
-              <% else %>
-                <td></td>
-              <% end %>
-            </tr>
+              </tr>
             <% end %>
           </tbody>
         </table>
-      </div>
-      <div data-controller="feedback-form">
-        <div class="flexy">
-          <button type="button" class="btn-etendart-yellow" data-action="click->feedback-form#openFeedbackModal" style="width:300px">
-            Ajouter un feedback
-          </button>
+    <% if @membership && !@membership.status %>
+      <div class="header-info-inside"> <%= "#{@start_year} - #{@start_year + 1}" %>  </div>
+      <%= simple_form_for @membership, url: managers_membership_path(@membership, url: "/managers/students/#{@student.id}?academy_id=#{@student.first_academy.id}"), method: :patch do |f| %>
+        <div class="membership-form">
+            <%= f.input :payment_method,
+                        label: "Moyen de paiment",
+                        required: true,
+                        wrapper_html: { class: 'mt-3 mb-0', style: 'width:60%;'},
+                        collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Virement', 'virement'], ['Offert', 'offert']],
+                        prompt: "Sélectionner" %>
+            <%= f.input :receiver_id,
+                        label: "Personne ayant reçu le paiment",
+                        wrapper_html: { class: 'mt-3 mb-0', style: 'width:60%;'},
+                        collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                        selected: @membership.receiver_id.present? ? @membership.receiver_id : current_user.id,
+                        prompt: "Sélectionner" %>
+            <%= f.submit "Valider", class: "btn-add-student" %>
+          <% end %>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" data-feedback-form-target="feedbackModal" tabindex="-1">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title"><%= "Ajouter un feedback pour #{@student.first_name} #{@student.last_name}" %></h5>
-                <i class="fas fa-times" data-action="click->feedback-form#closeFeedbackModal" style="cursor: pointer;"></i>
-              </div>
-              <div class="modal-body">
-                <%= form_with(model: @feedback, url: managers_feedbacks_path(student_id: @student.id ,academy_id: @academy.id), local: true) do |form| %>
-                  <div class="form-group">
-                    <%= form.text_area :content, class: "form-control", placeholder: "Ecrivez votre commentaire ici...", required: true %>
-                  </div>
-                  <div class="d-flex justify-content-around mt-3">
-                    <%= form.submit "Valider", class: "btn-etendart" %>
-                    <button class="btn-etendart-black" type="button" data-action="click->feedback-form#closeFeedbackModal">Annuler</button>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
+      <% end %>
       </div>
-    </div>
   </div>
 
   <div class="col-lg-6 col-sm-12 mt-4">
@@ -188,8 +199,8 @@
                     <%= form.radio_button :image_consent, false, checked: true %> Non
 
                     <div class="d-flex justify-content-around mt-3">
-                      <%= form.submit "Valider", class: "btn-etendart" %>
-                      <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
+                      <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                      <button class="btn-add-student btn-add-student-small btn-add-student-grey" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
                     </div>
                 <% end %>
               </div>
@@ -267,8 +278,8 @@
                     <%= form.radio_button :image_consent, false, checked: true %> Non
 
                     <div class="d-flex justify-content-around mt-3">
-                      <%= form.submit "Valider", class: "btn-etendart" %>
-                      <button class="btn-etendart-black" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
+                      <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                      <button class="btn-add-student btn-add-student-small btn-add-student-grey" type="button" data-action="click->enrollment-form#closeActivityModal">Annuler</button>
                     </div>
                 <% end %>
               </div>
@@ -310,7 +321,7 @@
           </tbody>
         </table>
         <div class="flexy">
-          <button data-action="click->camp-courses#toggleTable" data-camp-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+          <button data-action="click->camp-courses#toggleTable" data-camp-courses-target="button" class="btn-add-student">Voir +</button>
         </div>
       <% end %>
     </div>
@@ -345,7 +356,7 @@
           </tbody>
         </table>
         <div class="flexy">
-          <button data-action="click->annual-courses#toggleTable" data-annual-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+          <button data-action="click->annual-courses#toggleTable" data-annual-courses-target="button" class="btn-add-student">Voir +</button>
         </div>
       <% end %>
     </div>
@@ -379,10 +390,11 @@
         </tbody>
       </table>
       <div class="flexy">
-        <button data-action="click->past-camp-courses#toggleTable" data-past-camp-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+        <button data-action="click->past-camp-courses#toggleTable" data-past-camp-courses-target="button" class="btn-add-student">Voir +</button>
       </div>
     </div>
   </div>
+
   <div data-controller="past-annual-courses" data-past-annual-courses-target="header" class="col-12 mt-4">
     <div class="header-info">COURS PASSÉS - PROGRAMME ANNUEL</div>
     <div class="content-info">
@@ -409,9 +421,71 @@
         </tbody>
       </table>
       <div class="flexy">
-        <button data-action="click->past-annual-courses#toggleTable" data-past-annual-courses-target="button" class="btn-etendart-yellow">Voir +</button>
+        <button data-action="click->past-annual-courses#toggleTable" data-past-annual-courses-target="button" class="btn-add-student">Voir +</button>
       </div>
     </div>
   </div>
 
+  <div class="col-12 mt-4">
+    <div class="header-info">FEEDBACKS</div>
+    <div class="content-info">
+      <div>
+        <table class="table table-striped table-responsive">
+          <thead>
+            <tr>
+              <th>Auteur</th>
+              <th>Date</th>
+              <th>Message</th>
+              <th class="text-center">Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @feedbacks.each do |feedback| %>
+            <tr>
+              <td class="align-middle"><%= feedback.coach.full_name %></td>
+              <td class="align-middle"><%= l(feedback.created_at, format: :date_short_year)  %></td>
+              <td class="align-middle"><%= feedback.content %></td>
+              <% if feedback.coach == current_user %>
+                <td class="text-center">
+                  <%= link_to managers_feedback_path(feedback), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce feedback ?", turbo_confirm_class: "confirmation-message" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
+                </td>
+              <% else %>
+                <td></td>
+              <% end %>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="flexy">
+          <button type="button" class="btn-add-student" style="max-width:250px" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+            <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+          </button>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"><%= "Ajouter un feedback pour #{@student.first_name} #{@student.last_name}" %></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <%= form_with(model: @feedback, url: managers_feedbacks_path(student_id: @student.id ,academy_id: @academy.id), local: true) do |form| %>
+                <div class="form-group">
+                  <%= form.text_area :content, class: "form-control", placeholder: "Ecrivez votre commentaire ici...", required: true %>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+              <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_18_092250) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_01_094506) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -322,6 +322,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_092250) do
     t.index ["academy_id"], name: "index_locations_on_academy_id"
   end
 
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.boolean "status", default: false
+    t.integer "start_year"
+    t.integer "amount"
+    t.string "payment_method"
+    t.date "payment_date"
+    t.bigint "receiver_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_id"], name: "index_memberships_on_receiver_id"
+    t.index ["student_id"], name: "index_memberships_on_student_id"
+  end
+
   create_table "program_periods", force: :cascade do |t|
     t.date "start_date"
     t.date "end_date"
@@ -474,6 +488,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_18_092250) do
   add_foreign_key "feedbacks", "students"
   add_foreign_key "feedbacks", "users", column: "coach_id"
   add_foreign_key "locations", "academies"
+  add_foreign_key "memberships", "students"
+  add_foreign_key "memberships", "users", column: "receiver_id"
   add_foreign_key "program_periods", "annual_programs"
   add_foreign_key "school_period_enrollments", "school_periods"
   add_foreign_key "school_period_enrollments", "students"

@@ -26,8 +26,14 @@
            data-update-photo-from-course-target="label"
            style="position:relative">
         <% if @student.photo.attached? %>
-          <%= cl_image_tag @student.photo_or_default, class: "avatar", data: { upload_photo_target: "photo" } %>
-          <div id="change-photo">
+              <%= cl_image_tag student.photo.key,
+                 data: { upload_photo_target: "photo" },
+                 class: "avatar",
+                 crop: "thumb",
+                 gravity: "face",
+                 width: 300,
+                 height: 300 %>
+          <div class="change-photo" id="change-photo-coach">
             <%= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>
             <p style="margin:0;font-size:12px">Modifier</p>
           </div>

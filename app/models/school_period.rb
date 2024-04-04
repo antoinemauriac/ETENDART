@@ -21,6 +21,7 @@ class SchoolPeriod < ApplicationRecord
   has_one :school_period_stat, dependent: :destroy
 
   validates :name, uniqueness: { scope: [:year, :academy_id], message: "Un stage avec le même nom et la même année existe déjà pour cette académie." }
+  validates :name, inclusion: { in: %w[Février Printemps Été Toussaint], message: "Le nom du stage doit être Automne, Hiver, Printemps ou Été." }
 
   before_validation :normalize_name
 

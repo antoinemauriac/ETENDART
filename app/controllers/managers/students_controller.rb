@@ -41,6 +41,9 @@ class Managers::StudentsController < ApplicationController
     past_courses = @student.past_courses
     @past_annual_courses = past_courses.select(&:annual_program)
     @past_camp_courses = past_courses.select(&:camp)
+    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    @membership = @student.memberships.find_by(start_year: @start_year)
+    @memberships = @student.memberships.order(start_year: :desc)
   end
 
   def new
@@ -114,11 +117,12 @@ class Managers::StudentsController < ApplicationController
 
     respond_to do |format|
       format.html { format.html { redirect_to determine_redirect_path, notice: "Photo ajoutée" } }
+      format.json { render json: { imageUrl: url_for(@student.photo) } }
       format.text do
         partial = choose_partial_based_on_origin
         render partial: partial, locals: { student: @student }, formats: [:html]
       end
-      format.text { render partial: 'coaches/courses/student_photo', locals: { student: @student }, formats: [:html] }
+      # format.text { render partial: 'coaches/courses/student_photo', locals: { student: @student }, formats: [:html] }
     end
   end
 

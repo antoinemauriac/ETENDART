@@ -24,10 +24,12 @@
       <%= form.input :category_1_id, label: "Catégorie 1 :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, required: true, input_html: { class: "form-control", validate: ["not_blank"] } %>
       <%= form.input :category_2_id, label: "Catégorie 2 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
       <%= form.input :category_3_id, label: "Catégorie 3 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
+      <%= form.input :category_4_id, label: "Catégorie 4 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
+      <%= form.input :category_5_id, label: "Catégorie 5 (optionnel) :", collection: @categories, value_method: :id, label_method: :name, include_blank: true, input_html: { class: "form-control" } %>
     </div>
     <div class="flex-btn">
-      <%= form.button :submit, "Valider", class: "btn-etendart" %>
-      <%= link_to "Annuler", managers_coaches_path(academy: @academy), class: "btn-etendart-black" %>
+      <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>
+      <%= link_to "Annuler", managers_coaches_path(academy: @academy), class: "btn-add-student btn-add-student-small btn-add-student-grey" %>
     </div>
     <% end %>
   </div>

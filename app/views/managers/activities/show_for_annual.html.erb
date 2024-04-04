@@ -51,7 +51,7 @@
       </tbody>
     </table>
     <div class="flexy">
-      <%= link_to "Voir tous", all_annual_courses_managers_activity_path(@activity), class: "btn-etendart mb-2 mt-0" %>
+      <%= link_to "Voir tous", all_annual_courses_managers_activity_path(@activity), class: "btn-add-student mb-2 mt-0" %>
     </div>
   </div>
   <div class="col-4">
@@ -67,7 +67,7 @@
         <%= activity_period.input :end_time, as: :time, label: 'Heure de fin', selected: @last_course_end_time, input_html: { class: 'activity-input' }, minute_step: 15 %>
       <% end %>
       <div class="flexy">
-        <%= f.button :submit, "Valider", class: "btn btn-etendart-yellow" %>
+        <%= f.button :submit, "Valider", class: "btn-add-student btn-no-hover" %>
       </div>
       <% end %>
     </div>

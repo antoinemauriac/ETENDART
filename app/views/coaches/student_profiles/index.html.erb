@@ -14,7 +14,13 @@
         <tr class="clickable-coach-tr" onclick="window.location.href='<%= coaches_student_profile_path(student, url_origin: coaches_student_profiles_path) %>'">
           <td class="align-middle coach-font">
             <% if student.photo.attached? %>
-              <%= cl_image_tag student.photo.key, class: "avatar-small" %>
+              <%= cl_image_tag student.photo.key,
+                 data: { upload_photo_target: "photo" },
+                 class: "avatar-small",
+                 crop: "thumb",
+                 gravity: "face",
+                 width: 300,
+                 height: 300 %>
             <% else %>
               <i class="fa-solid fa-circle-user"></i>
             <% end %>
@@ -27,6 +33,6 @@
     </tbody>
   </table>
   <div class="flexy">
-    <%= link_to "Retour", "/", class: "btn-etendart-small" %>
+    <%= link_to "Retour", "/", class: "btn-add-student btn-add-student-small mb-3" %>
   </div>
 <% end %>

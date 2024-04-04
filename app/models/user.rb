@@ -12,13 +12,15 @@ class User < ApplicationRecord
     tsearch: { prefix: true }
   }
 
-  attr_accessor :academy_1_id, :academy_2_id, :academy_3_id, :category_1_id, :category_2_id, :category_3_id
+  attr_accessor :academy_1_id, :academy_2_id, :academy_3_id, :category_1_id, :category_2_id, :category_3_id, :category_4_id, :category_5_id
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
   validates :first_name, :last_name, :email, presence: true
   validates :email, uniqueness: true
+
+  has_many :memberships, foreign_key: :receiver_id
 
   has_many :academies_as_manager, class_name: 'Academy', foreign_key: :manager_id
 
@@ -59,6 +61,10 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name.capitalize} #{last_name.capitalize}"
+  end
+
+  def full_name_reverse
+    "#{last_name.upcase} #{first_name.capitalize}"
   end
 
   def next_activities
