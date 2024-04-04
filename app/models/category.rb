@@ -12,6 +12,10 @@ class Category < ApplicationRecord
 
   before_validation :normalize_name
 
+  def short_name
+    name.length > 9 ? name[0...6] + '...' : name
+  end
+
   private
 
   def normalize_name

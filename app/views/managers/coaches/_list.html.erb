@@ -16,16 +16,16 @@
     <tbody>
       <% @coaches.each do |coach| %>
         <tr class="clickable-tr" onclick="window.location.href='<%= managers_coach_path(coach, academy_id: @academy.id) %>'">
-          <td><%= coach.last_name %></td>
-          <td><%= coach.first_name %></td>
-          <td><%= coach.categories[0]&.name %></td>
-          <td><%= coach.categories[1]&.name %></td>
-          <td><%= coach.categories[2]&.name %></td>
-          <td><%= coach.categories[3]&.name %></td>
-          <td><%= coach.categories[4]&.name %></td>
-          <td><%= coach.academies_as_coach.first.name %></td>
-          <td><%= coach.academies_as_coach.second.name if coach.academies_as_coach.second %></td>
-          <td><%= coach.academies_as_coach.third.name if coach.academies_as_coach.third %></td>
+          <td class="align-middle"><%= coach.last_name %></td>
+          <td class="align-middle"><%= coach.first_name %></td>
+          <td class="align-middle"><%= coach.categories[0]&.short_name %></td>
+          <td class="align-middle"><%= coach.categories[1]&.short_name %></td>
+          <td class="align-middle"><%= coach.categories[2]&.short_name %></td>
+          <td class="align-middle"><%= coach.categories[3]&.short_name %></td>
+          <td class="align-middle"><%= coach.categories[4]&.short_name %></td>
+          <td class="align-middle"><%= coach.academies_as_coach.first.name %></td>
+          <td class="align-middle"><%= coach.academies_as_coach.second.name if coach.academies_as_coach.second %></td>
+          <td class="align-middle"><%= coach.academies_as_coach.third.name if coach.academies_as_coach.third %></td>
         </tr>
       <% end %>
     </tbody>
