@@ -4,7 +4,7 @@
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
     <div class="header-info header-info-coach">INFOS</div>
     <div class="content-info content-info-coach">
-      <p class="mb-1">ADRESSE : <strong><%= @activity.location.address %></strong></p>
+      <p class="mb-1">ADRESSE : <strong><%= @activity.location.name %></strong></p>
       <p class="mb-1">TOTAL ÉLÈVES : <strong><%= @course.students.count %></strong></p>
       <% if @course.status %>
         <p class="green-text mb-1">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
