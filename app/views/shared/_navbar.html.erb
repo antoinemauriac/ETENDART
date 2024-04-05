@@ -21,12 +21,39 @@
             </li>
           </ul>
         <% end %>
+        <%# if current_user.manager? %>
+          <%# current_user.academies_as_manager.each do |academy| %>
+<!--            <li class="nav-item">-->
+              <%#= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small" %>
+<!--            </li>-->
+          <%# end %>
+        <%# end %>
         <% if current_user.manager? %>
-          <% current_user.academies_as_manager.each do |academy| %>
-            <li class="nav-item">
-              <%= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small" %>
+          <div class="dropdown">
+            <li class="nav-item d-flex align-items-center" style="margin-right:1px">
+              <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
+              <i class="fa fa-caret-down"></i>
             </li>
-          <% end %>
+            <div class="dropdown-content">
+              <% current_user.academies_as_manager.each do |academy| %>
+                <div class="dropdown-sub">
+                  <span class="full-width-link">
+                    <%= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small"   %>
+                  </span>
+                  <div class="sub-content">
+                    <%= link_to "STAGES", managers_school_periods_path(academy: academy) %>
+                    <% if academy.annual %>
+                      <%= link_to "PROGRAMME ANNUEL", managers_annual_programs_path(academy: academy) %>
+                    <% end %>
+                    <%= link_to "ÉLÈVES", managers_students_path(academy: academy) %>
+                    <%= link_to "COACHS", managers_coaches_path(academy: academy) %>
+                    <%= link_to "CATEGORIES", managers_categories_path(academy: academy) %>
+                    <%= link_to "ADRESSES", managers_locations_path(academy: academy) %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
         <% end %>
         <li class="nav-item">
           <%= link_to "MON PROFIL",  edit_user_registration_path, class: "nav-link" %>
@@ -35,7 +62,7 @@
           <%= link_to "SE DÉCONNECTER", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link"%>
         </li>
       <% else %>
-        <li class="nav-item">
+        <li class="nav-item no-border">
           <%= link_to "SE CONNECTER", new_user_session_path, class: "nav-link"%>
         </li>
       <% end %>
