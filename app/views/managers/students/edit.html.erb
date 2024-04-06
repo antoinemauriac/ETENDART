@@ -34,7 +34,7 @@
       <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true, selected: @academy3&.id || 'Sélectionnez une académie' %>
 
       <div class="flex-btn">
-        <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small" %>
+        <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>
         <%= link_to "Annuler", managers_student_path(@student, academy_id: @academy.id), class: "btn-add-student btn-add-student-small btn-add-student-grey" %>
       </div>
     <% end %>

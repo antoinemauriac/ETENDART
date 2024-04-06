@@ -30,7 +30,7 @@
         <%# end %>
         <% if current_user.manager? %>
           <div class="dropdown">
-            <li class="nav-item d-flex align-items-center" style="margin-right:1px">
+            <li class="nav-item d-flex align-items-center justify-content-center">
               <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
               <i class="fa fa-caret-down"></i>
             </li>
@@ -38,7 +38,7 @@
               <% current_user.academies_as_manager.each do |academy| %>
                 <div class="dropdown-sub">
                   <span class="full-width-link">
-                    <%= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small"   %>
+                    <%= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small nav-academy" %>
                   </span>
                   <div class="sub-content">
                     <%= link_to "STAGES", managers_school_periods_path(academy: academy) %>
@@ -54,6 +54,9 @@
               <% end %>
             </div>
           </div>
+          <li class="nav-item">
+            <%= link_to "FINANCE",  managers_finances_path, class: "nav-link" %>
+          </li>
         <% end %>
         <li class="nav-item">
           <%= link_to "MON PROFIL",  edit_user_registration_path, class: "nav-link" %>
