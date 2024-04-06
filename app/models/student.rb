@@ -198,6 +198,33 @@ class Student < ApplicationRecord
     academies.first
   end
 
+  # methode qui retrouve l'academy du student dans laquelle il a suivi le plus de courses
+
+  def main_academy
+    # Collecter tous les cours et leurs académies associées
+    academy_counts = courses.each_with_object(Hash.new(0)) do |course, counts|
+      # Déterminer si le cours appartient à un camp ou à un programme annuel
+      academy = if course.activity.camp
+                  course.activity.camp.school_period.academy
+                else
+                  course.activity.annual_program.academy
+                end
+      counts[academy] += 1
+    end
+
+    # Trouver l'académie avec le nombre maximum de cours
+    academy_counts.max_by { |_academy, count| count }&.first
+  end
+
+  # def main_academy
+  #   Academy.joins(courses: { course_enrollments: :student, activity: [:camp, :annual_program] })
+  #          .where(course_enrollments: { student_id: id })
+  #          .select('academies.*, COUNT(courses.id) AS courses_count')
+  #          .group('academies.id')
+  #          .order('courses_count DESC')
+  #          .first
+  # end
+
   def photo_or_default
     if photo.attached?
       photo.key

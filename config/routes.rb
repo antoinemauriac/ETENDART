@@ -40,6 +40,8 @@ Rails.application.routes.draw do
     post 'import_students', to: 'import_students#import'
     post 'import_annual_students', to: 'import_annual_students#import'
 
+    resources :finances, only: %i[index]
+
     resources :courses, only: %i[index show edit update destroy] do
       member do
         put :update_enrollments

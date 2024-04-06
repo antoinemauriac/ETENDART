@@ -1,0 +1,116 @@
+<div class="yellow-title mb-3">COTISATIONS <%= "#{@start_year} - #{@start_year + 1}" %></div>
+<div class="row justify-content-center align-items-stretch">
+  <div class="col-lg-4 col-sm-12">
+    <div class="header-info">GLOBAL</div>
+    <div class="content-info">
+      <table class="table table-membership">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Total</th>
+            <th>Payées</th>
+            <th>En attente</th>
+            <th>Offert</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Nombre de cotisations</td>
+            <td><%= @current_year_memberships_count %></td>
+            <td><%= @current_year_paid_memberships_count %></td>
+            <td><%= @current_year_unpaid_memberships_count %></td>
+            <td><%= @current_year_offered_memberships_count %></td>
+          </tr>
+          <tr>
+            <td>Revenu</td>
+            <td><%= @current_year_expected_revenue %>€</td>
+            <td><%= @current_year_received_revenue %>€</td>
+            <td><%= @current_year_missing_revenue %>€</td>
+            <td><%= @current_year_offered_revenue %>€</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-sm-12">
+    <div class="header-info">DÉTAILS PAR MOYEN DE PAIEMENT</div>
+    <div class="content-info">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Total Reçu</th>
+            <th>Cash</th>
+            <th>Chèque</th>
+            <th>Hello Asso</th>
+            <th>Virement</th>
+            <th>Offert</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= @current_year_received_revenue %>€</td>
+            <% ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
+              <td><%= @current_year_memberships.where(payment_method: method).sum(:amount) %>€</td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-10 col-sm-12 mt-4">
+    <div class="header-info">DÉTAILS PAR UTILISATEUR</div>
+    <div class="content-info">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Total Reçu</th>
+            <th>Cash</th>
+            <th>Chèque</th>
+            <th>Hello Asso</th>
+            <th>Virement</th>
+            <th>Offert</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @revenue_by_user.each do |receiver_id, total_received| %>
+            <% receiver = User.find_by(id: receiver_id) %>
+            <tr>
+              <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
+              <td><%= total_received %>€</td>
+              <% ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
+                <td><%= @payment_details_by_user[[receiver_id, method]] || 0 %>€</td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<!--  <div class="col-lg-6 col-sm-12 mt-4">
+    <div class="header-info">DÉTAILS PAR ACADÉMIE</div>
+    <div class="content-info">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Total Attendu</th>
+            <th>Payées</th>
+            <th>En attente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <%# @academies.each do |academy| %>-->
+<!--            <td><%#= @current_year_memberships.where(academy: academy).count %>€</td>-->
+            <%# ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
+<!--              <td><%#= @current_year_memberships.where(payment_method: method).sum(:amount) %>€</td>-->
+            <%# end %>
+<!--          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>-->
+</div>

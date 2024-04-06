@@ -5,7 +5,7 @@ class Managers::MembershipsController < ApplicationController
     @student = @membership.student
     authorize([:managers, @membership])
     if @membership.update(membership_params)
-      @membership.update(status: true, payment_date: Date.current)
+      @membership.update(status: true, payment_date: Date.current, academy: @student.main_academy)
       if params[:url]
         flash[:notice] = "Cotisation de #{@student.first_name} validée"
         redirect_to params[:url]
