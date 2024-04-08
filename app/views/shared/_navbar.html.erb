@@ -29,7 +29,7 @@
           <%# end %>
         <%# end %>
         <% if current_user.manager? %>
-          <div class="dropdown">
+          <div class="dropdown" style="margin-left: -1px;">
             <li class="nav-item d-flex align-items-center justify-content-center">
               <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
               <i class="fa fa-caret-down"></i>
@@ -54,9 +54,24 @@
               <% end %>
             </div>
           </div>
-          <li class="nav-item">
-            <%= link_to "FINANCE",  managers_finances_path, class: "nav-link" %>
-          </li>
+          <div class="dropdown" style="margin-left: -1px;">
+            <li class="nav-item d-flex align-items-center justify-content-center">
+              <div class="nav-link nav-link-small" style="cursor:pointer">FINANCE</div>
+              <i class="fa fa-caret-down"></i>
+            </li>
+            <div class="dropdown-content">
+                <div class="dropdown-sub">
+                  <span class="full-width-link">
+                    <%= link_to "COTISATION", membership_finances_overview_managers_finances_path, class: "nav-link nav-link-small nav-academy" %>
+                  </span>
+                </div>
+                <div class="dropdown-sub">
+                  <span class="full-width-link">
+                    <%= link_to "STAGES", camp_finances_overview_managers_finances_path, class: "nav-link nav-link-small nav-academy" %>
+                  </span>
+                </div>
+            </div>
+          </div>
         <% end %>
         <li class="nav-item">
           <%= link_to "MON PROFIL",  edit_user_registration_path, class: "nav-link" %>

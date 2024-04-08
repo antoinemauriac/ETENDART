@@ -1,6 +1,10 @@
 class Managers::FinancePolicy < ApplicationPolicy
 
-  def index?
+  def membership_finances_overview?
+    user.manager?
+  end
+
+  def camp_finances_overview?
     user.manager?
   end
 end

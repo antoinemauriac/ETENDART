@@ -173,40 +173,6 @@
   }
 }
 
-// .dropdown-content {
-//   display: none;
-//   position: absolute;
-//   background-color: black;
-//   color: white;
-//   // min-width: 160px;
-//   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-//   z-index: 1;
-// }
-
-// .dropdown-content a {
-//   float: none;
-//   color: white;
-//   padding: 12px 16px;
-//   text-decoration: none;
-//   display: block;
-//   text-align: left;
-// }
-
-// .dropdown-content a:hover {
-//   color: $yellow;
-// }
-
-// .dropdown:hover .dropdown-content {
-//   display: block;
-// }
-
-// .dropdown-content {
-//   top: 100%;
-// }
-
-// .dropdown {
-//   padding-right: 1px;
-// }
 
 .dropdown-content, .sub-content {
   display: none;
@@ -241,7 +207,7 @@
 }
 
 .dropdown-sub:hover .sub-content {
-  display: block; /* Affiche le sous-menu uniquement au survol de son parent direct */
+  display: block;
 }
 
 .dropdown span:hover {
@@ -249,29 +215,12 @@
   cursor: pointer;
 }
 
-// .dropdown span:hover .caret-academy {
-//   display: block;
-// }
-
-
-// .caret-academy {
-//   color: white;
-//   margin-left: 5px;
-//   display: none;
-// }
 
 .sub-content a:hover {
   color: $yellow;
   cursor: pointer;
 }
 
-.sub-content {
-  min-width: 150px;
-}
-
-.dropdown-content {
-  min-width: 100%;
-}
 
 .fa-caret-down {
   color: $yellow;
@@ -283,37 +232,32 @@
   cursor: pointer;
 }
 .dropdown-sub:hover > span > a {
-  color: $yellow; /* Ou tout autre effet de survol que vous souhaitez conserver */
+  color: $yellow;
 }
 
 .dropdown-sub {
-  position: relative; /* Cela crée un contexte de positionnement pour les sous-menus */
+  position: relative;
 }
 
 .sub-content {
   display: none;
   position: absolute;
-  background-color: black; /* Ou toute autre couleur de votre choix */
+  background-color: black;
   color: white;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
-  top: 40%; /* Aligner le haut du sous-menu avec le haut de .dropdown-sub */
-  left: 100%; /* Positionner le sous-menu à droite du lien parent */
-  min-width: 150px; /* Ou ajustez selon la largeur désirée */
+  top: 40%;
+  left: 100%;
 }
 
 .dropdown-sub:hover .sub-content {
-  display: block; /* Affiche le sous-menu au survol de son lien parent */
+  display: block;
 }
 
 .dropdown-content {
-  margin-left: -1px;
+  width: 100%;
 }
 
 .sub-content a {
   font-size: 14px;
 }
-
-// .nav-academy {
-//   padding-left: 1.5rem;
-// }
