@@ -1,5 +1,5 @@
 class Managers::FinancesController < ApplicationController
-  def index
+  def membership_finances_overview
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     @academies = current_user.academies_as_manager
@@ -42,5 +42,17 @@ class Managers::FinancesController < ApplicationController
 
     # Répartition par moyen de paiement
     @payment_details_by_user = @current_year_memberships.paid.group(:receiver_id, :payment_method).order(:receiver_id).sum(:amount)
+  end
+
+  def camp_finances_overview
+    skip_policy_scope
+    authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
+    @academies = current_user.academies_as_manager
+    academy_ids = @academies.pluck(:id)
+
+    # selectionner les camp appartenant à une school_period qui a un attribut paid à true et qui appartient à l'une des académie
+
+    @school_periods = SchoolPeriod.where(paid: true, academy_id: academy_ids)
+    @camps = Camp.where(school_period_id: @school_periods.pluck(:id))
   end
 end

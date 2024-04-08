@@ -40,7 +40,12 @@ Rails.application.routes.draw do
     post 'import_students', to: 'import_students#import'
     post 'import_annual_students', to: 'import_annual_students#import'
 
-    resources :finances, only: %i[index]
+    resources :finances, only: %i[index] do
+      collection do
+        get :membership_finances_overview
+        get :camp_finances_overview
+      end
+    end
 
     resources :courses, only: %i[index show edit update destroy] do
       member do

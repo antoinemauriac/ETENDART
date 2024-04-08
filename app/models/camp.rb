@@ -161,6 +161,18 @@ class Camp < ApplicationRecord
     end
   end
 
+  def expected_revenue
+    show_count * school_period.price
+  end
+
+  def received_revenue
+    camp_enrollments.where(has_paid: true).count * school_period.price
+  end
+
+  def missing_revenue
+    expected_revenue - received_revenue
+  end
+
   private
 
   def starts_at_must_be_before_ends_at
