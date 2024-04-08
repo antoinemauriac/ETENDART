@@ -47,12 +47,15 @@ class Managers::FinancesController < ApplicationController
   def camp_finances_overview
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
+
+    @school_periods = SchoolPeriod.includes(:academy).where(paid: true)
+
     @academies = current_user.academies_as_manager
-    academy_ids = @academies.pluck(:id)
+                  .joins(:school_periods)
+                  .where(school_periods: { id: @school_periods.select(:id) })
+                  .distinct
 
-    # selectionner les camp appartenant à une school_period qui a un attribut paid à true et qui appartient à l'une des académie
-
-    @school_periods = SchoolPeriod.where(paid: true, academy_id: academy_ids)
     @camps = Camp.where(school_period_id: @school_periods.pluck(:id))
   end
+
 end
