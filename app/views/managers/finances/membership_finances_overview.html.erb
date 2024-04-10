@@ -15,14 +15,14 @@
         </thead>
         <tbody>
           <tr>
-            <td>Nombre de cotisations</td>
+            <td style="text-align:right">Nombre de cotisations</td>
             <td><%= @current_year_memberships_count %></td>
             <td><%= @current_year_paid_memberships_count %></td>
             <td><%= @current_year_unpaid_memberships_count %></td>
             <td><%= @current_year_offered_memberships_count %></td>
           </tr>
           <tr>
-            <td>Revenu</td>
+            <td style="text-align:right">Revenu</td>
             <td><%= @current_year_expected_revenue %>€</td>
             <td><%= @current_year_received_revenue %>€</td>
             <td><%= @current_year_missing_revenue %>€</td>
@@ -78,7 +78,7 @@
           <% @revenue_by_user.each do |receiver_id, total_received| %>
             <% receiver = User.find_by(id: receiver_id) %>
             <tr>
-              <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
+              <td style="text-align:right"><%= receiver&.full_name || "Utilisateur inconnu" %></td>
               <td><%= total_received %>€</td>
               <% ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
                 <td><%= @payment_details_by_user[[receiver_id, method]] || 0 %>€</td>
