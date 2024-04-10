@@ -6,15 +6,15 @@
         <table class="table table-responsive">
           <thead>
             <tr>
-              <th>Période</th>
-              <th>Stage</th>
-              <th>Revenu attendu</th>
-              <th>Revenu perçu</th>
-              <th>Revenu manquant</th>
-              <th>Prix du stage</th>
-              <th>Nb élèves présents</th>
-              <th>Ayant payé</th>
-              <th>N'ayant pas payé</th>
+              <th class="align-middle" style="max-width:100px">Période</th>
+              <th class="align-middle" style="text-align:right">Stage</th>
+              <th class="align-middle text-center">Revenu<br>attendu</th>
+              <th class="align-middle text-center">Revenu<br>perçu</th>
+              <th class="align-middle text-center">Revenu<br>manquant</th>
+              <th class="align-middle text-center">Prix du<br>stage</th>
+              <th class="align-middle text-center">Nb élèves<br>présents</th>
+              <th class="align-middle text-center">Ayant<br>payé</th>
+              <th class="align-middle text-center">N'ayant<br>pas payé</th>
             </tr>
           </thead>
           <tbody>
@@ -33,31 +33,30 @@
                 <% total_paid += camp.camp_enrollments.where(has_paid: true).count %>
                 <% total_unpaid += (camp.show_count - camp.camp_enrollments.where(has_paid: true).count) %>
                 <tr>
-                  <% if school_period.camps.first == camp %>
-                    <td><%= school_period.full_name %></td>
-                  <% else %>
-                    <td></td>
-                  <% end %>
-                  <td><%= camp.name %></td>
-                  <td><%= camp.expected_revenue %>€</td>
-                  <td><%= camp.received_revenue %>€</td>
-                  <td><%= camp.missing_revenue %>€</td>
-                  <td><%= camp.school_period.price %>€</td>
-                  <td><%= camp.show_count %></td>
-                  <td><%= camp.camp_enrollments.where(has_paid: true).count %></td>
-                  <td><%= camp.show_count - camp.camp_enrollments.where(has_paid: true).count %></td>
+                  <%# if school_period.camps.first == camp %>
+                    <td style="max-width:100px"><%= school_period.full_name %></td>
+                  <%# else %>
+<!--                    <td></td>-->
+                  <%# end %>
+                  <td style="text-align:right"><%= camp.name %></td>
+                  <td class="text-center"><%= camp.expected_revenue %>€</td>
+                  <td class="text-center"><%= camp.received_revenue %>€</td>
+                  <td class="text-center"><%= camp.missing_revenue %>€</td>
+                  <td class="text-center"><%= camp.school_period.price %>€</td>
+                  <td class="text-center"><%= camp.show_count %></td>
+                  <td class="text-center"><%= camp.camp_enrollments.where(has_paid: true).count %></td>
+                  <td class="text-center"><%= camp.show_count - camp.camp_enrollments.where(has_paid: true).count %></td>
                 </tr>
               <% end %>
-              <!-- Correction de la ligne de total pour la période scolaire -->
               <tr style="font-weight: bold;background-color:#e3e3e3">
-                <td colspan=2>Total <%= school_period.full_name %> </td>
-                <td><%= total_expected %>€</td>
-                <td><%= total_received %>€</td>
-                <td><%= total_missing %>€</td>
-                <td><%= school_period.price %>€</td>
-                <td><%= total_present %></td>
-                <td><%= total_paid %></td>
-                <td><%= total_unpaid %></td>
+                <td colspan=2 style="text-align:right;max-width:150px">Total <%= school_period.full_name %> </td>
+                <td class="text-center"><%= total_expected %>€</td>
+                <td class="text-center"><%= total_received %>€</td>
+                <td class="text-center"><%= total_missing %>€</td>
+                <td class="text-center"><%= school_period.price %>€</td>
+                <td class="text-center"><%= total_present %></td>
+                <td class="text-center"><%= total_paid %></td>
+                <td class="text-center"><%= total_unpaid %></td>
               </tr>
             <% end %>
           </tbody>
