@@ -43,6 +43,7 @@
             <th>Cash</th>
             <th>Chèque</th>
             <th>Hello Asso</th>
+            <th>Pass</th>
             <th>Virement</th>
             <th>Offert</th>
           </tr>
@@ -50,7 +51,7 @@
         <tbody>
           <tr>
             <td><%= @current_year_received_revenue %>€</td>
-            <% ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
+            <% ["cash", "cheque", "hello_asso", "pass", "virement", "offert"].each do |method| %>
               <td><%= @current_year_memberships.where(payment_method: method).sum(:amount) %>€</td>
             <% end %>
           </tr>
@@ -70,6 +71,7 @@
             <th>Cash</th>
             <th>Chèque</th>
             <th>Hello Asso</th>
+            <th>Pass</th>
             <th>Virement</th>
             <th>Offert</th>
           </tr>
@@ -80,7 +82,7 @@
             <tr>
               <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
               <td><%= total_received %>€</td>
-              <% ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
+              <% ["cash", "cheque", "hello_asso", "pass", "virement", "offert"].each do |method| %>
                 <td><%= @payment_details_by_user[[receiver_id, method]] || 0 %>€</td>
               <% end %>
             </tr>
