@@ -78,7 +78,7 @@
           <% @revenue_by_user.each do |receiver_id, total_received| %>
             <% receiver = User.find_by(id: receiver_id) %>
             <tr>
-              <td style="text-align:right"><%= receiver&.full_name || "Utilisateur inconnu" %></td>
+              <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
               <td><%= total_received %>€</td>
               <% ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
                 <td><%= @payment_details_by_user[[receiver_id, method]] || 0 %>€</td>
