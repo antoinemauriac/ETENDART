@@ -57,7 +57,7 @@
                     <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
                     <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.first_name %></span><br>
                     <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
-                      <span style="color: red; font-weight: bold;"><%= student.allergy %></span>
+                      <span style="color: red; font-weight: bold;"><%= student.allergy if student.allergy != "non" %></span>
                     <% end %>
                   <% end %>
                 </td>
