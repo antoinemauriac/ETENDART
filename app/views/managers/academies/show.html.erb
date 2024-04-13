@@ -160,7 +160,7 @@
               <% @today_absent_students.each do |student| %>
                 <% student.unattended_today_courses.each do |course_enrollment| %>
                   <% if course_enrollment.course.academy.name == @academy.name %>
-                    <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @academy) %>'">
+                    <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
                       <td class="align-middle"><%= student.full_name_separator %></td>
                       <td class="align-middle"><%= student.phone_number %></td>
                       <td class="align-middle"><%= student.email %></td>
@@ -202,7 +202,7 @@
           </thead>
           <tbody>
             <% @week_absent_enrollments.each do |enrollment| %>
-              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(enrollment.student, academy_id: @academy) %>'">
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(enrollment.student) %>'">
                 <td class="align-middle"><%= l(enrollment.course.starts_at, format: :day_name) %></td>
                 <td class="align-middle"><%= enrollment.activity.name %></td>
                 <td class="align-middle"><%= enrollment.student.full_name_separator %></td>
@@ -243,17 +243,17 @@
             <% @banished_students.each do |student| %>
               <tr class="banish-student-row">
                 <td class="align-middle">
-                  <%= link_to student.full_name_separator, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                  <%= link_to student.full_name_separator, managers_student_path(student), style:"color:inherit" %>
                 </td>
                 <td class="align-middle">
-                  <%= link_to student.phone_number.present? ? student.phone_number : "", managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                  <%= link_to student.phone_number.present? ? student.phone_number : "", managers_student_path(student), style:"color:inherit" %>
                 </td>
                 <td class="align-middle">
-                  <%= link_to student.email, managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                  <%= link_to student.email, managers_student_path(student), style:"color:inherit" %>
                 </td>
                 <% banishment_day = student.camp_enrollments.where(camp: @camp).first&.banishment_day %>
                 <td class="align-middle">
-                  <%= link_to banishment_day.present? ? l(banishment_day, format: :abbr_bis) : '-', managers_student_path(student, academy_id: @academy), style:"color:inherit" %>
+                  <%= link_to banishment_day.present? ? l(banishment_day, format: :abbr_bis) : '-', managers_student_path(student), style:"color:inherit" %>
                 </td>
                 <td class="align-middle">
                   <%= link_to "Réintégrer", unban_student_managers_course_path(@course, camp_id: @camp.id, student_id: student.id), method: :post, data: { turbo_method: :post, turbo_confirm: "Êtes-vous sûr de vouloir réintégrer l'élève?" }, class: "btn btn-etendart btn-reintegrer" %>
@@ -282,7 +282,7 @@
           </thead>
           <tbody>
             <% @feedbacks.each do |feedback| %>
-              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(feedback.student, academy_id: @academy) %>'">
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(feedback.student) %>'">
                 <td class="align-middle"><%= feedback.student.full_name %></td>
                 <td class="align-middle"><%= feedback.content %></td>
                 <td class="align-middle"><%= feedback.coach.full_name %></td>

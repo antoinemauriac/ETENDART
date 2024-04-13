@@ -105,7 +105,7 @@
         <% @students.each do |student| %>
           <% membership = student.memberships.find_by(start_year: @start_year) %>
           <% name_style = membership&.status == false ? "color: red;font-weight: bold" : "" %>
-          <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student, academy_id: @camp.academy.id) %>'">
+          <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
             <td class="align-middle" style="<%= name_style %>"><%= student.last_name %></td>
             <td class="align-middle" style="<%= name_style %>"><%= student.first_name %></td>
             <% if @academy.banished %>

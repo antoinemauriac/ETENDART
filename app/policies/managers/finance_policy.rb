@@ -7,4 +7,8 @@ class Managers::FinancePolicy < ApplicationPolicy
   def camp_finances_overview?
     user.manager?
   end
+
+  def export_members_csv?
+    user.manager?
+  end
 end

@@ -8,12 +8,12 @@ class Managers::FeedbacksController < ApplicationController
   def create
     @student = Student.find(params[:student_id])
     authorize([:managers, @student], policy_class: Managers::FeedbackPolicy)
-    academy_id = Academy.find(params[:academy_id])
+    # academy_id = Academy.find(params[:academy_id])
     @feedback = Feedback.new(feedback_params)
     @feedback.student = @student
     @feedback.coach = current_user
     if @feedback.save
-      redirect_to managers_student_path(@student, academy_id)
+      redirect_to managers_student_path(@student)
       flash[:notice] = "Feedback ajouté avec succès"
     else
       flash[:alert] = "Une erreur est survenue"
