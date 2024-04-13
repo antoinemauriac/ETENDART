@@ -30,7 +30,7 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @academies = current_user.academies_as_manager
-    @academy = Academy.find(params[:academy_id])
+    @academy = @student.first_academy
     @feedback = Feedback.new
     @feedbacks = @student.feedbacks.order(created_at: :desc)
     @next_camp_activities = @student.next_camp_activities.reject { |activity| @student.next_courses_by_activity(activity).empty? }
@@ -63,7 +63,7 @@ class Managers::StudentsController < ApplicationController
     username = "#{student.first_name.downcase}#{student.last_name.downcase}#{excel_serial_date }"
     student.update(username: username)
     if student.save
-      redirect_to managers_student_path(student, academy_id: academy.id)
+      redirect_to managers_student_path(student)
       flash[:notice] = "Élève ajouté"
     else
       flash[:error] = "Une erreur est survenue"
@@ -85,11 +85,11 @@ class Managers::StudentsController < ApplicationController
     authorize([:managers, student], policy_class: Managers::StudentPolicy)
     if student.update(student_params)
       update_academies(student)
-      redirect_to managers_student_path(student, academy_id: student.first_academy.id)
+      redirect_to managers_student_path(student)
       flash[:notice] = "Informations modifiées avec succès"
     else
       flash[:error] = "Une erreur est survenue"
-      redirect_to managers_student_path(student, academy_id: student.first_academy.id)
+      redirect_to managers_student_path(student)
     end
   end
 
@@ -154,7 +154,7 @@ class Managers::StudentsController < ApplicationController
 
   def determine_redirect_path
     if @origin == 'manager'
-      managers_student_path(@student, academy_id: @academy.id)
+      managers_student_path(@student)
     else
       coaches_student_profile_path(@student, precedent: @origin)
     end

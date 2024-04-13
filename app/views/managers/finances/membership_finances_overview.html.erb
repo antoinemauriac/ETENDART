@@ -92,6 +92,44 @@
     </div>
   </div>
 
+  <div class="col-lg-10 col-sm-12 mt-4">
+    <div class="header-info">
+      MEMBRES <%= "#{@start_year} - #{@start_year + 1}" %>
+      <%= link_to export_members_csv_managers_finances_path(membership_ids: @current_year_memberships.paid.pluck(:id), format: :csv) do %>
+        <i class="fa-solid fa-download fa-download-white ml-3"></i>
+      <% end %>
+    </div>
+    <div class="content-info">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Âge</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Méthode de paiement</th>
+            <th>Académie principale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @current_year_memberships.paid.joins(:student).order("students.last_name ASC").each do |membership| %>
+            <% student = membership.student %>
+            <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
+              <td><%= student.last_name %></td>
+              <td><%= student.first_name %></td>
+              <td><%= student.age %> ans</td>
+              <td><%= student.email %></td>
+              <td><%= student.phone_number %></td>
+              <td><%= membership.payment_method %></td>
+              <td><%= student.main_academy.name %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 <!--  <div class="col-lg-6 col-sm-12 mt-4">
     <div class="header-info">DÉTAILS PAR ACADÉMIE</div>
     <div class="content-info">

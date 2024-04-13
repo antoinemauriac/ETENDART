@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       collection do
         get :membership_finances_overview
         get :camp_finances_overview
+        get :export_members_csv
       end
     end
 

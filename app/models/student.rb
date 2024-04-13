@@ -213,7 +213,10 @@ class Student < ApplicationRecord
     end
 
     # Trouver l'académie avec le nombre maximum de cours
-    academy_counts.max_by { |_academy, count| count }&.first
+    primary_academy = academy_counts.max_by { |_academy, count| count }&.first
+
+    # Renvoyer la première académie si la principale est nil
+    primary_academy || academies.first
   end
 
   # def main_academy

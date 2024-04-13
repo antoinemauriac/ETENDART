@@ -11,12 +11,13 @@ class Managers::FinancesController < ApplicationController
 
     # Calculs globaux
     @all_memberships_count = @all_memberships.count
-    paid_memberships_excluding_offered = @all_memberships.paid.where.not(payment_method: 'offert')
 
+    paid_memberships_excluding_offered = @all_memberships.paid.where.not(payment_method: 'offert')
     @total_expected_revenue = paid_memberships_excluding_offered.sum(:amount)
 
     @all_paid_memberships_count = paid_memberships_excluding_offered.count
     @total_received_revenue = paid_memberships_excluding_offered.sum(:amount)
+
 
     @all_unpaid_memberships_count = @all_memberships.unpaid.count
     @total_missing_revenue = @all_memberships.unpaid.sum(:amount)
@@ -56,6 +57,28 @@ class Managers::FinancesController < ApplicationController
                   .distinct
 
     @camps = Camp.where(school_period_id: @school_periods.pluck(:id))
+  end
+
+  def export_members_csv
+    skip_policy_scope
+    authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
+    membership_ids = params[:membership_ids] || []
+    memberships = Membership.where(id: membership_ids)
+    start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+
+    respond_to do |format|
+      format.csv do
+        csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Email", "Téléphone", "Adresse", "Code postal", "Ville", "Academie Principale"]
+          memberships.joins(:student).order("students.last_name ASC").each do |membership|
+            student = membership.student
+            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.email, student.phone_number, student.address, student.zipcode, student.city, student.main_academy&.name]
+          end
+        end
+        send_data(csv_data, filename: "membres_#{start_year}_#{start_year + 1}.csv")
+      end
+    end
+
   end
 
 end
