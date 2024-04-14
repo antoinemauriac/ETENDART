@@ -1,5 +1,6 @@
 class Managers::ImportStudentsController < ApplicationController
 
+  # Imports students from a CSV file into a camp.
   def import
     camp = Camp.find(params[:camp][:camp_id])
     authorize([:managers, camp], policy_class: Managers::StudentPolicy)
@@ -12,7 +13,7 @@ class Managers::ImportStudentsController < ApplicationController
     students = camp.students.to_a
 
     ActiveRecord::Base.transaction do
-
+      # Step 1: Remove existing enrollments and related records for the camp
       school_period.school_period_enrollments.each do |school_period_enrollment|
         camps = school_period_enrollment.student.camps.where(school_period: school_period)
         if camps == [camp] || camps.empty?
@@ -24,7 +25,7 @@ class Managers::ImportStudentsController < ApplicationController
       ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id).destroy_all
       CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id).destroy_all
 
-
+      # Step 2: Process each student record from the CSV file
       students.each do |student|
         student.destroy if student.courses.empty?
         courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 1), Date.new(start_year + 1, 8, 31))
@@ -54,7 +55,7 @@ class Managers::ImportStudentsController < ApplicationController
           student.academies << academy unless student.academies.include?(academy)
           student.school_periods << school_period unless student.school_periods.include?(school_period)
 
-          # vérifier si le student à un school_period_enrollment avec un tshirt_delivered à true
+          # Step 3: Update t-shirt delivery status for the student's school period enrollment
           if school_period.tshirt == true
             school_period_enrollments = student.school_period_enrollments
                                                .joins(:school_period)
@@ -66,8 +67,10 @@ class Managers::ImportStudentsController < ApplicationController
             end
           end
 
+          # Step 4: Create camp enrollment for the student
           CampEnrollment.create(student: student, camp: camp, image_consent: row['droitimage'] == 'oui' ? true : false)
 
+          # Step 5: Assign student to activities
           (1..3).each do |i|
             activity_name = row["activite_#{i}"]
             next unless activity_name.present?
@@ -82,6 +85,7 @@ class Managers::ImportStudentsController < ApplicationController
             end
           end
 
+          # Step 6: Manage membership
           membership = student.memberships.find_by(start_year: start_year)
           if membership.nil?
             membership = student.memberships.create(amount: 15, start_year: start_year, academy: student.main_academy)
@@ -96,6 +100,7 @@ class Managers::ImportStudentsController < ApplicationController
           end
         end
       end
+
       redirect_to managers_camp_path(camp), notice: "Le fichier CSV a été importé avec succès."
     end
   end

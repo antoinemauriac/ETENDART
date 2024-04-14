@@ -109,7 +109,7 @@
             <th>Email</th>
             <th>Téléphone</th>
             <th>Méthode de paiement</th>
-            <th>Académie principale</th>
+            <th>Académie</th>
           </tr>
         </thead>
         <tbody>
@@ -122,7 +122,7 @@
               <td><%= student.email %></td>
               <td><%= student.phone_number %></td>
               <td><%= membership.payment_method %></td>
-              <td><%= student.main_academy.name %></td>
+              <td><%= student.first_academy&.name %></td>
             </tr>
           <% end %>
         </tbody>
