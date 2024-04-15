@@ -69,10 +69,10 @@ class Managers::FinancesController < ApplicationController
     respond_to do |format|
       format.csv do
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Email", "Téléphone", "Adresse", "Code postal", "Ville", "Academie Principale"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Email", "Téléphone", "Adresse", "Code postal", "Ville", "Moyen de paiement", "Academie Principale"]
           memberships.joins(:student).order("students.last_name ASC").each do |membership|
             student = membership.student
-            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.email, student.phone_number, student.address, student.zipcode, student.city, membership.academy&.name]
+            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.email, student.phone_number, student.address, student.zipcode, student.city, membership.payment_method, membership.academy&.name]
           end
         end
         send_data(csv_data, filename: "membres_#{start_year}_#{start_year + 1}.csv")
