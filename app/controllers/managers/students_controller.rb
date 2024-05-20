@@ -4,6 +4,7 @@ class Managers::StudentsController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy])
+    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
 
     if params[:query].present?
       @students = Student.search_by_query(params[:query])
