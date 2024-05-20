@@ -174,7 +174,7 @@ class Camp < ApplicationRecord
   end
 
   def student_without_tennis
-    tennis_activity_ids = self.activities.where(name: 'Tennis').pluck(:id)
+    tennis_activity_ids = self.activities.joins(:category).where(categories: { name: 'Tennis' }).pluck(:id)
     show_students.select { |student| student.courses.where(activity_id: tennis_activity_ids).empty? }
   end
 
