@@ -178,6 +178,10 @@ class Camp < ApplicationRecord
     show_students.select { |student| student.courses.where(activity_id: tennis_activity_ids).empty? }
   end
 
+  def missing_clarisse_revenue
+    student_without_tennis.count * school_period.price
+  end
+
   private
 
   def starts_at_must_be_before_ends_at
