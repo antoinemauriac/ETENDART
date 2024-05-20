@@ -11,15 +11,17 @@
             <th>Reçu</th>
             <th>En attente</th>
             <th>Offert</th>
+            <th>Reçu mais<br>non exigible</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td style="text-align:right">Nombre de cotisations</td>
-            <td><%= @current_year_memberships_count %></td>
+            <td><%= @current_year_expected_memberships_count %></td>
             <td><%= @current_year_paid_memberships_count %></td>
             <td><%= @current_year_unpaid_memberships_count %></td>
             <td><%= @current_year_offered_memberships_count %></td>
+            <td><%= @current_year_not_expected_memberships_count %></td>
           </tr>
           <tr>
             <td style="text-align:right">Revenu</td>
@@ -27,6 +29,7 @@
             <td><%= @current_year_received_revenue %>€</td>
             <td><%= @current_year_missing_revenue %>€</td>
             <td><%= @current_year_offered_revenue %>€</td>
+            <td><%= @current_year_not_expected_revenue %>€</td>
           </tr>
         </tbody>
       </table>

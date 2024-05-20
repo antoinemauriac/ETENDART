@@ -228,6 +228,18 @@ class Student < ApplicationRecord
   #          .first
   # end
 
+  def self.with_at_least_one_course(start_year)
+    start_date = Date.new(start_year, 4, 7) # 1er septembre de l'année spécifiée
+
+    joins(courses: { activity: :camp }) # Ajout de la jointure avec activity et camp
+      .where('courses.starts_at > ?', start_date)
+      .where(course_enrollments: { present: true })
+      .where.not(camps: { id: nil }) # Filtrer les cours avec un camp non nul
+      .group('students.id') # Ajout de la group_by pour éviter les doublons
+      .pluck(:id)
+  end
+
+
   def photo_or_default
     if photo.attached?
       photo.key

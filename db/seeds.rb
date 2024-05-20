@@ -88,22 +88,22 @@
 # manager2 = User.create!(email: 'manager2@gmail.com', password: 123456)
 # manager2.roles << Role.find_by(name: 'manager')
 
-coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Remi", last_name: "Martin")
-coach1.roles << Role.find_by(name: 'coach')
-coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Lucie", last_name: "Durand")
-coach2.roles << Role.find_by(name: 'coach')
-coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
-coach3.roles << Role.find_by(name: 'coach')
-coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
-coach4.roles << Role.find_by(name: 'coach')
-coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
-coach5.roles << Role.find_by(name: 'coach')
+# coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Remi", last_name: "Martin")
+# coach1.roles << Role.find_by(name: 'coach')
+# coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Lucie", last_name: "Durand")
+# coach2.roles << Role.find_by(name: 'coach')
+# coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "Thierry", last_name: "Leroy")
+# coach3.roles << Role.find_by(name: 'coach')
+# coach4 = User.create!(email: 'coach4@gmail.com', password: 123456, first_name: "Myriam", last_name: "Diallo")
+# coach4.roles << Role.find_by(name: 'coach')
+# coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
+# coach5.roles << Role.find_by(name: 'coach')
 
-coach1.academies_as_coach << djoko
-coach2.academies_as_coach << djoko
-coach3.academies_as_coach << djoko
-coach4.academies_as_coach << djoko
-coach5.academies_as_coach << djoko
+# coach1.academies_as_coach << djoko
+# coach2.academies_as_coach << djoko
+# coach3.academies_as_coach << djoko
+# coach4.academies_as_coach << djoko
+# coach5.academies_as_coach << djoko
 
 
 # coaches = [coach1, coach2, coach3]
