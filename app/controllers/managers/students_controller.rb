@@ -6,17 +6,19 @@ class Managers::StudentsController < ApplicationController
     @academy = Academy.find(params[:academy])
     @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
 
-    if params[:query].present?
-      @students = Student.search_by_query(params[:query])
-                         .joins(academy_enrollments: :academy)
-                         .where(academies: { id: @academy.id })
-                         .order(:last_name)
-    else
-      @students = Student.joins(academy_enrollments: :academy)
-                         .where(academies: { id: @academy.id })
-                         .order(:last_name)
-                         .distinct
-    end
+    @students = if params[:query].present?
+                  Student.search_by_query(params[:query])
+                        .joins(academy_enrollments: :academy)
+                        .where(academies: { id: @academy.id })
+                else
+                  Student.joins(academy_enrollments: :academy)
+                        .where(academies: { id: @academy.id })
+                        .distinct
+                end
+
+    # Ensure the ordering is applied to both search and non-search cases
+    @students = @students.reorder(last_name: :asc)
+
 
     @pagy, @students = pagy(@students, items: 100)
     skip_policy_scope
@@ -129,16 +131,29 @@ class Managers::StudentsController < ApplicationController
 
   def export_students_csv
     academy = Academy.find(params[:id])
-    students = academy.students
+    students = academy.students.order(:last_name)
+    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville", "Membre ?", "Dernier cours"]
 
           students.each do |student|
-            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.age, student.phone_number, student.email, student.address, student.zipcode, student.city]
+            csv << [
+            student.last_name,
+            student.first_name,
+            student.gender,
+            student.date_of_birth,
+            student.age, student.phone_number,
+            student.email,
+            student.address,
+            student.zipcode,
+            student.city,
+            student.memberships.where(start_year: @start_year)&.first&.status ? "Oui" : "Non",
+            student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : ''
+          ]
           end
         end
 
