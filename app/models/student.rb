@@ -248,6 +248,7 @@ class Student < ApplicationRecord
     end
   end
 
+
   private
 
   def normalize_fields

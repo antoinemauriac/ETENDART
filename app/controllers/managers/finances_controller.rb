@@ -36,7 +36,7 @@ class Managers::FinancesController < ApplicationController
                                     .where("payment_method IS NULL OR payment_method != ?", 'offert')
                                     .sum(:amount)
 
-    @current_year_not_expected_memberships = @all_not_expected_memberships.where(start_year: @start_year)
+    @current_year_not_expected_memberships = @all_not_expected_memberships.paid.where(start_year: @start_year)
     @current_year_not_expected_memberships_count = @current_year_not_expected_memberships.count
     @current_year_not_expected_revenue = @current_year_not_expected_memberships.sum(:amount)
 
