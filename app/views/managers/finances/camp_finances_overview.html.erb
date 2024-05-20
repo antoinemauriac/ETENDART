@@ -11,6 +11,7 @@
               <th class="align-middle text-center">Revenu<br>attendu</th>
               <th class="align-middle text-center">Revenu<br>perçu</th>
               <th class="align-middle text-center">Revenu<br>manquant</th>
+              <th class="align-middle text-center">Dont Clarisse</th>
               <th class="align-middle text-center">Prix du<br>stage</th>
               <th class="align-middle text-center">Nb élèves<br>présents</th>
               <th class="align-middle text-center">Ayant<br>payé</th>
@@ -42,6 +43,7 @@
                   <td class="text-center"><%= camp.expected_revenue %>€</td>
                   <td class="text-center"><%= camp.received_revenue %>€</td>
                   <td class="text-center"><%= camp.missing_revenue %>€</td>
+                  <td class="text-center"><%= camp.student_without_tennis.count %>€</td>
                   <td class="text-center"><%= camp.school_period.price %>€</td>
                   <td class="text-center"><%= camp.show_count %></td>
                   <td class="text-center"><%= camp.camp_enrollments.where(has_paid: true).count %></td>

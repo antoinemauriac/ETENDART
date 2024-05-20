@@ -173,6 +173,11 @@ class Camp < ApplicationRecord
     expected_revenue - received_revenue
   end
 
+  def student_without_tennis
+    tennis_activity_ids = self.activities.where(name: 'Tennis').pluck(:id)
+    show_students.select { |student| student.courses.where(activity_id: tennis_activity_ids).empty? }
+  end
+
   private
 
   def starts_at_must_be_before_ends_at
