@@ -173,13 +173,13 @@ class Camp < ApplicationRecord
     expected_revenue - received_revenue
   end
 
-  def student_without_tennis
-    tennis_activity_ids = self.activities.joins(:category).where(categories: { name: 'Tennis' }).pluck(:id)
-    show_students.select { |student| student.courses.where(activity_id: tennis_activity_ids).empty? }
+  def student_with_judo
+    judo_activity_ids = self.activities.joins(:category).where(categories: { name: 'Judo' }).pluck(:id)
+    show_students.select { |student| student.courses.where(activity_id: judo_activity_ids).exists? }
   end
 
   def missing_clarisse_revenue
-    student_without_tennis.count * school_period.price
+    student_with_judo.count * school_period.price
   end
 
   private
