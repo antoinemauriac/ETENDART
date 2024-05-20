@@ -9,18 +9,26 @@
           <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="phone">Téléphone</th>
           <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="datenaissance">Date de naissance</th>
           <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="city">Ville</th>
+          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="city">Membre ?</th>
+          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="city">Date dernier cours</th>
         </tr>
       </thead>
       <tbody>
         <% @students.each do |student| %>
           <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
-            <td><%= student.last_name %></td>
-            <td><%= student.first_name %></td>
-            <td><%= student.gender %></td>
-            <td><%= student.email %></td>
-            <td><%= student.phone_number %></td>
-            <td><%= student.date_of_birth %></td>
-            <td><%= student.city %></td>
+            <td class="align-middle"><%= student.last_name %></td>
+            <td class="align-middle"><%= student.first_name %></td>
+            <td class="align-middle"><%= student.gender %></td>
+            <td class="align-middle"><%= student.email %></td>
+            <td class="align-middle"><%= student.phone_number %></td>
+            <td class="align-middle"><%= student.date_of_birth %></td>
+            <td class="align-middle"><%= student.city %></td>
+            <td class="align-middle">
+            <% if student.memberships.where(start_year: @start_year)&.first&.status %>
+              <i class="fa-solid fa-check text-success fa-test"></i>
+            <% end %>
+            </td>
+            <td class="align-middle"><%= student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : '' %></td>
           </tr>
         <% end %>
       </tbody>

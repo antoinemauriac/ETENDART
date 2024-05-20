@@ -248,6 +248,16 @@ class Student < ApplicationRecord
     end
   end
 
+  def last_attended_course_date
+    course_enrollments
+      .where(present: true)
+      .joins(:course)
+      .where('courses.ends_at < ?', Time.current)
+      .order('courses.ends_at DESC')
+      .limit(1)
+      .pluck('courses.ends_at')
+      .first
+  end
 
   private
 
