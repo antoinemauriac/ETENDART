@@ -173,13 +173,29 @@ class Camp < ApplicationRecord
     expected_revenue - received_revenue
   end
 
+  # def student_with_judo
+  #   judo_activity_ids = self.activities.joins(:category).where(categories: { name: 'Judo' }).pluck(:id)
+  #   show_students.select { |student| student.courses.where(activity_id: judo_activity_ids).exists? }
+  # end
+
+  # def missing_clarisse_revenue
+  #   student_with_judo.count * school_period.price
+  # end
+
   def student_with_judo
     judo_activity_ids = self.activities.joins(:category).where(categories: { name: 'Judo' }).pluck(:id)
     show_students.select { |student| student.courses.where(activity_id: judo_activity_ids).exists? }
   end
 
+  def students_with_unpaid_camp_enrollments
+    camp_id = self.id
+    student_with_judo.select do |student|
+      student.camp_enrollments.where(camp_id: camp_id, has_paid: false).exists?
+    end
+  end
+
   def missing_clarisse_revenue
-    student_with_judo.count * school_period.price
+    students_with_unpaid_camp_enrollments.count * school_period.price
   end
 
   private
