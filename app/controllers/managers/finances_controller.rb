@@ -9,6 +9,14 @@ class Managers::FinancesController < ApplicationController
     # Sélectionner tous les memberships pour les académies gérées
     @all_memberships = Membership.where(academy_id: academy_ids)
 
+    # cotisations des élèves ayant particpé à au mons un cours
+    @all_expected_memberships = Membership.where(academy_id: academy_ids)
+                                          .where(student_id: Student.with_at_least_one_course(@start_year))
+
+
+    # cotisation des élèves qui n'ont particpé à aucun cours et donc cotisation non exigible
+    @all_not_expected_memberships = Membership.where(academy_id: academy_ids)
+                                              .where.not(student_id: Student.with_at_least_one_course(@start_year))
     # Calculs globaux
     @all_memberships_count = @all_memberships.count
 
@@ -18,24 +26,31 @@ class Managers::FinancesController < ApplicationController
     @all_paid_memberships_count = paid_memberships_excluding_offered.count
     @total_received_revenue = paid_memberships_excluding_offered.sum(:amount)
 
-
     @all_unpaid_memberships_count = @all_memberships.unpaid.count
     @total_missing_revenue = @all_memberships.unpaid.sum(:amount)
 
     # Calculs pour l'année courante
+    @current_year_expected_memberships = @all_expected_memberships.where(start_year: @start_year)
+    @current_year_expected_memberships_count = @current_year_expected_memberships.count
+    @current_year_expected_revenue = @current_year_expected_memberships
+                                    .where("payment_method IS NULL OR payment_method != ?", 'offert')
+                                    .sum(:amount)
+
+    @current_year_not_expected_memberships = @all_not_expected_memberships.where(start_year: @start_year)
+    @current_year_not_expected_memberships_count = @current_year_not_expected_memberships.count
+    @current_year_not_expected_revenue = @current_year_not_expected_memberships.sum(:amount)
+
     @current_year_memberships = @all_memberships.where(start_year: @start_year)
-    @current_year_memberships_count = @current_year_memberships.count
-    @current_year_expected_revenue = @current_year_memberships.sum(:amount)
 
-    @current_year_offered_memberships_count = @current_year_memberships.where(payment_method: 'offert').count
-    @current_year_offered_revenue = @current_year_memberships.where(payment_method: 'offert').sum(:amount)
+    @current_year_offered_memberships_count = @current_year_expected_memberships.where(payment_method: 'offert').count
+    @current_year_offered_revenue = @current_year_expected_memberships.where(payment_method: 'offert').sum(:amount)
 
-    current_year_paid_memberships_excluding_offered = @current_year_memberships.paid.where.not(payment_method: 'offert')
+    current_year_paid_memberships_excluding_offered = @current_year_expected_memberships.paid.where.not(payment_method: 'offert')
     @current_year_paid_memberships_count = current_year_paid_memberships_excluding_offered.count
     @current_year_received_revenue = current_year_paid_memberships_excluding_offered.sum(:amount)
 
-    @current_year_unpaid_memberships_count = @current_year_memberships.unpaid.count
-    @current_year_missing_revenue = @current_year_memberships.unpaid.sum(:amount)
+    @current_year_unpaid_memberships_count = @current_year_expected_memberships.unpaid.count
+    @current_year_missing_revenue = @current_year_expected_memberships.unpaid.sum(:amount)
 
     # Revenu total par utilisateur (hors offerts)
     revenue_by_user = paid_memberships_excluding_offered.group(:receiver_id).sum(:amount)
