@@ -219,14 +219,19 @@ class Student < ApplicationRecord
     primary_academy || academies.first
   end
 
-  # def main_academy
-  #   Academy.joins(courses: { course_enrollments: :student, activity: [:camp, :annual_program] })
-  #          .where(course_enrollments: { student_id: id })
-  #          .select('academies.*, COUNT(courses.id) AS courses_count')
-  #          .group('academies.id')
-  #          .order('courses_count DESC')
-  #          .first
-  # end
+  def predominant_category
+    category_counts = courses.joins(activity: :category).group('categories.name').count
+    tennis_count = category_counts['Tennis'] || 0
+    judo_count = category_counts['Judo'] || 0
+
+    if tennis_count > judo_count
+      'Tennis'
+    elsif judo_count > tennis_count
+      'Judo'
+    else
+      'N/A'
+    end
+  end
 
   def self.with_at_least_one_course(start_year)
     start_date = Date.new(start_year, 4, 7) # 1er septembre de l'année spécifiée
