@@ -166,7 +166,7 @@ class Managers::StudentsController < ApplicationController
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville", "Membre ?", "Dernier cours"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville", "Tennis ou Judo ?", "Membre ?", "Dernier cours"]
 
           students.each do |student|
             csv << [
@@ -179,6 +179,7 @@ class Managers::StudentsController < ApplicationController
             student.address,
             student.zipcode,
             student.city,
+            student.predominant_category,
             student.memberships.where(start_year: @start_year)&.first&.status ? "Oui" : "Non",
             student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : ''
           ]

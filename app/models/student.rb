@@ -218,20 +218,15 @@ class Student < ApplicationRecord
   end
 
   def predominant_category
-    # Join courses, activities, and categories
     category_counts = courses.joins(activity: :category).group('categories.name').count
-    p category_counts
-    # Check if the student has courses related to "Tennis" or "Judo"
     tennis_count = category_counts['Tennis'] || 0
     judo_count = category_counts['Judo'] || 0
-
-    # Determine the predominant category
     if tennis_count > judo_count
       'Tennis'
     elsif judo_count > tennis_count
       'Judo'
     else
-      'N/A' # Or handle ties as you see fit
+      'N/A'
     end
   end
 
