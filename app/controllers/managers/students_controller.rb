@@ -29,10 +29,30 @@ class Managers::StudentsController < ApplicationController
     end
   end
 
+  def index_for_admin
+    if params[:academy].present? && params[:academy] != "all"
+      @academy = Academy.find(params[:academy])
+      @students = Student.joins(academy_enrollments: :academy)
+                         .where(academies: { id: @academy.id })
+                         .distinct
+      @students = @students.search_by_query(params[:query]) if params[:query].present?
+    else
+      @students = params[:query].present? ? Student.search_by_query(params[:query]) : Student.all
+    end
+    @students = @students.reorder(last_name: :asc)
+    @pagy, @students = pagy(@students, items: 100)
+    skip_policy_scope
+    authorize([:managers, @students], policy_class: Managers::StudentPolicy)
+    respond_to do |format|
+      format.html
+      format.text { render partial: "managers/students/list", locals: {students: @students}, formats: [:html] }
+    end
+  end
+
   def show
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
     @academy = @student.first_academy
     @feedback = Feedback.new
     @feedbacks = @student.feedbacks.order(created_at: :desc)
@@ -53,6 +73,7 @@ class Managers::StudentsController < ApplicationController
     @student = Student.new
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @academy = Academy.find(params[:academy_id])
+    @academies = current_user.academies
   end
 
   def create
@@ -76,6 +97,7 @@ class Managers::StudentsController < ApplicationController
 
   def edit
     @student = Student.find(params[:id])
+    @academies = current_user.academies
     @academy1 = @student.academies.first if @student.academies.any?
     @academy2 = @student.academies.second if @student.academies.second
     @academy3 = @student.academies.third if @student.academies.third
@@ -130,8 +152,14 @@ class Managers::StudentsController < ApplicationController
   end
 
   def export_students_csv
-    academy = Academy.find(params[:id])
-    students = academy.students.order(:last_name)
+    if params[:academy].present? && params[:academy] != "all"
+      academy = Academy.find(params[:academy])
+      students = academy.students.order(:last_name)
+      filename = "eleves_#{academy.name}.csv"
+    else
+      students = Student.all.order(:last_name)
+      filename = "eleves_toute_academie.csv"
+    end
     @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
@@ -157,7 +185,7 @@ class Managers::StudentsController < ApplicationController
           end
         end
 
-        send_data(csv_data, filename: "eleves_#{academy.name}.csv")
+        send_data(csv_data, filename: filename)
       end
     end
   end

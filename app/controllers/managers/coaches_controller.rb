@@ -19,7 +19,7 @@ class Managers::CoachesController < ApplicationController
   def show
     @coach = User.find(params[:id])
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
     @coach_feedback = CoachFeedback.new
     @coach_feedbacks = @coach.coach_feedbacks.order(created_at: :desc)
     @categories = Category.order(:name)
@@ -38,7 +38,7 @@ class Managers::CoachesController < ApplicationController
   def new
     @coach = User.new
     authorize([:managers, @coach], policy_class: Managers::CoachPolicy)
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
     @categories = Category.all
     @academy = Academy.find(params[:academy_id])
   end

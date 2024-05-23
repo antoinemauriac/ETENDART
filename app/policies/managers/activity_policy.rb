@@ -1,60 +1,65 @@
 class Managers::ActivityPolicy < ApplicationPolicy
 
   def new?
-    user.manager?
+    authorized_for_camp?
   end
 
   def create?
-    user.manager? && record.camp.school_period.academy.manager == user
+    authorized_for_camp?
   end
 
   def show?
-    user.manager? && record.camp.school_period.academy.manager == user
+    authorized_for_camp?
   end
 
-  def destroy?
-    if record.camp
-      user.manager? && record.camp.school_period.academy.manager == user
-    else
-      user.manager? && record.annual_program.academy.manager == user
-    end
-  end
-
-  def update?
-    if record.camp
-      user.manager? && record.camp.school_period.academy.manager == user
-    else
-      user.manager? && record.annual_program.academy.manager == user
-    end
-  end
 
   def new_for_annual?
-    user.manager?
+    authorized_for_annual?
   end
 
   def create_for_annual?
-    user.manager? && record.annual_program.academy.manager == user
+    authorized_for_annual?
   end
 
   def show_for_annual?
-    user.manager? && record.annual_program.academy.manager == user
+    authorized_for_annual?
   end
 
   def all_annual_courses?
-    user.manager? && record.annual_program.academy.manager == user
+    authorized_for_annual?
+  end
+
+  def destroy?
+    authorized?
+  end
+
+  def update?
+    authorized?
   end
 
   def export_activity_students?
+    authorized?
+  end
+
+  private
+
+  def authorized?
     if record.camp
-      user.manager? && record.camp.school_period.academy.manager == user
+      academy = record.camp.school_period.academy
+      (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
     else
-      user.manager? && record.annual_program.academy.manager == user
+      academy = record.annual_program.academy
+      (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
     end
   end
 
-  class Scope < Scope
-    def resolve
+  def authorized_for_annual?
+    academy = record.annual_program.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
+  end
 
-    end
+  def authorized_for_camp?
+    academy = record.camp.school_period.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 end

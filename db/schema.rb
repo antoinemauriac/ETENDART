@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_05_101326) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_21_092848) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_05_101326) do
     t.datetime "updated_at", null: false
     t.boolean "annual", default: false
     t.boolean "banished", default: false
+    t.bigint "coordinator_id"
+    t.index ["coordinator_id"], name: "index_academies_on_coordinator_id"
     t.index ["manager_id"], name: "index_academies_on_manager_id"
   end
 
@@ -449,6 +451,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_05_101326) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "academies", "users", column: "coordinator_id"
   add_foreign_key "academies", "users", column: "manager_id"
   add_foreign_key "academy_enrollments", "academies"
   add_foreign_key "academy_enrollments", "students"

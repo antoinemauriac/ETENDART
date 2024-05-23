@@ -1,27 +1,29 @@
 class Managers::CampPolicy < ApplicationPolicy
+
   def create?
-    user.manager? && record.school_period.academy.manager == user
+    authorized?
   end
 
   def show?
-    user.manager? && record.school_period.academy.manager == user
+    authorized?
   end
 
   def destroy?
-    user.manager? && record.school_period.academy.manager == user
+    authorized?
   end
 
   def export_students_csv?
-    user.manager? && record.school_period.academy.manager == user
+    authorized?
   end
 
   def export_banished_students_csv?
-    user.manager? && record.school_period.academy.manager == user
+    authorized?
   end
 
-  class Scope < Scope
-    def resolve
+  private
 
-    end
+  def authorized?
+    academy = record.school_period.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 end

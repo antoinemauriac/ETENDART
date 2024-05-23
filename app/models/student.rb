@@ -186,19 +186,17 @@ class Student < ApplicationRecord
               .where('annual_programs.ends_at >= ?', Date.current)
   end
 
-  def self.today_absent_students(manager)
-    joins(course_enrollments: { course: :academy })
-      .where(course_enrollments: { present: false })
-      .where(courses: { starts_at: Time.current.all_day, manager_id: manager.id })
-      .where(academies: { id: manager.academies_as_manager.pluck(:id) })
-      .distinct
-  end
+  # def self.today_absent_students(manager)
+  #   joins(course_enrollments: { course: :academy })
+  #     .where(course_enrollments: { present: false })
+  #     .where(courses: { starts_at: Time.current.all_day, manager_id: manager.id })
+  #     .where(academies: { id: manager.academies_as_manager.pluck(:id) })
+  #     .distinct
+  # end
 
   def first_academy
     academies.first
   end
-
-  # methode qui retrouve l'academy du student dans laquelle il a suivi le plus de courses
 
   def main_academy
     # Collecter tous les cours et leurs académies associées
@@ -219,14 +217,23 @@ class Student < ApplicationRecord
     primary_academy || academies.first
   end
 
-  # def main_academy
-  #   Academy.joins(courses: { course_enrollments: :student, activity: [:camp, :annual_program] })
-  #          .where(course_enrollments: { student_id: id })
-  #          .select('academies.*, COUNT(courses.id) AS courses_count')
-  #          .group('academies.id')
-  #          .order('courses_count DESC')
-  #          .first
-  # end
+  def predominant_category
+    # Join courses, activities, and categories
+    category_counts = courses.joins(activity: :category).group('categories.name').count
+    p category_counts
+    # Check if the student has courses related to "Tennis" or "Judo"
+    tennis_count = category_counts['Tennis'] || 0
+    judo_count = category_counts['Judo'] || 0
+
+    # Determine the predominant category
+    if tennis_count > judo_count
+      'Tennis'
+    elsif judo_count > tennis_count
+      'Judo'
+    else
+      'N/A' # Or handle ties as you see fit
+    end
+  end
 
   def self.with_at_least_one_course(start_year)
     start_date = Date.new(start_year, 4, 7) # 1er septembre de l'année spécifiée

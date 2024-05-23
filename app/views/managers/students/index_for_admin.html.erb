@@ -1,0 +1,35 @@
+<div class="yellow-title">LES ÉLÈVES</div>
+<div class="container" data-controller="search-student">
+  <%= form_with url: managers_students_path, method: :get, html: {data: {search_student_target: "form"}} do |f| %>
+    <div class="student-list-header mt-2 mb-3">
+      <div style="width:300px;position:relative">
+        <%= f.select :academy_id, options_for_select([['TOUTE ACADÉMIE', 'all']] + Academy.all.order(:name).map { |a| [a.name.upcase, a.id] }, selected: params[:academy_id]),
+            {},
+            {class: "student-input-search academy-select ml-2",
+            data: {
+              search_student_target: "select",
+              action: "change->search-student#update_for_admin"
+            }} %>
+        <i class="fa-solid fa-caret-down select-caret"></i>
+      </div>
+      <div style="width:300px">
+          <%= f.text_field :query,
+                class: "student-input-search",
+                placeholder: "Rechercher",
+                value: params[:query],
+                data: {
+                  search_student_target: "input",
+                  action: "keyup->search-student#update_for_admin"
+                },
+                autofocus: false %>
+      </div>
+      <%= link_to export_students_csv_managers_students_path(format: :csv), class: 'btn-add-student', style: "width:300px", data: {search_student_target: "link"} do %>
+        <i class="fa-solid fa-download fa-no-margin"></i>TÉLÉCHARGER<i class="fa-solid fa-download fa-no-margin"></i>
+      <% end %>
+    </div>
+  <% end %>
+  <%= render "list", students: @students %>
+  <div class="flexy mb-3">
+    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+  </div>
+</div>

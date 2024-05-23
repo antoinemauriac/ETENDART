@@ -2,7 +2,7 @@ class Managers::FinancesController < ApplicationController
   def membership_finances_overview
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
     academy_ids = @academies.pluck(:id)
     @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
 
@@ -66,7 +66,7 @@ class Managers::FinancesController < ApplicationController
 
     @school_periods = SchoolPeriod.includes(:academy).where(paid: true)
 
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
                   .joins(:school_periods)
                   .where(school_periods: { id: @school_periods.select(:id) })
                   .distinct

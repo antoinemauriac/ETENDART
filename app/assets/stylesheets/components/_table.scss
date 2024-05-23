@@ -82,3 +82,20 @@
   background-color: $yellow;
   cursor: pointer;
 }
+
+.container-special {
+  width: 60%; /* 50% de la largeur disponible */
+  margin: 0 auto; /* Pour centrer le conteneur horizontalement */
+  /* Autres styles CSS au besoin */
+}
+
+.table-no-top-margin {
+  margin-top: 0!important;
+  border-top-left-radius: 0!important;
+  border-top-right-radius: 0!important;
+  margin-bottom: 20px;
+
+  tr {
+    border-style: hidden;
+  }
+}

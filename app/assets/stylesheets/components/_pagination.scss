@@ -90,3 +90,29 @@
   border-top: 1px solid #bfbdbd !important;
   border-bottom: 1px solid #bfbdbd !important;
 }
+
+.academy-select {
+  background-color: black;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.academy-select:hover {
+  background-color: black;
+  color: $yellow;
+}
+
+.academy-select:focus {
+  outline: none;
+  border: none  ;
+}
+
+.select-caret {
+  position: absolute;
+  top: 18%;
+  right: 6%;
+  font-size: 24px;
+  pointer-events: none;
+  margin: 0!important;
+}

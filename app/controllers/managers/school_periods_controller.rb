@@ -8,6 +8,13 @@ class Managers::SchoolPeriodsController < ApplicationController
     authorize([:managers, @school_periods], policy_class: Managers::SchoolPeriodPolicy)
   end
 
+  def index_for_admin
+    @school_periods = SchoolPeriod.all.where(new: true).group_by { |school_period| [school_period.year, season_to_int(school_period.name)] }
+    @school_periods = @school_periods.sort_by { |period, _| [-period[0], -period[1]] } # Tri par année décroissante, puis par saison décroissante
+    skip_policy_scope
+    authorize([:managers, :school_period])
+  end
+
   def create
     academy = Academy.find(params[:academy])
     school_period = academy.school_periods.build(school_period_params)
@@ -161,4 +168,18 @@ class Managers::SchoolPeriodsController < ApplicationController
     params.require(:school_period).permit(:name, :year, :paid, :price, :tshirt)
   end
 
+  def season_to_int(season)
+    case season.downcase
+    when "février"
+      1
+    when "printemps"
+      2
+    when "été"
+      3
+    when "toussaint"
+      4
+    else
+      0
+    end
+  end
 end

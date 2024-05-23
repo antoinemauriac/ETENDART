@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  authenticated :user, ->(user) { user.manager? } do
+  authenticated :user, ->(user) { user.manager? || user.coordinator? } do
     root to: "managers/dashboards#index", as: :manager_root
   end
 
@@ -23,8 +23,6 @@ Rails.application.routes.draw do
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # coach stiumulus controller
   get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'
@@ -48,7 +46,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :courses, only: %i[index show edit update destroy] do
+    resources :courses, only: %i[show edit update destroy] do
       member do
         put :update_enrollments
         post :unban_student
@@ -58,6 +56,9 @@ Rails.application.routes.draw do
     resources :students, only: %i[show new create edit update index] do
       member do
         put :update_photo
+      end
+      collection do
+        get :index_for_admin
         get :export_students_csv
       end
     end
@@ -77,9 +78,12 @@ Rails.application.routes.draw do
         get :statistics
         get :export_bilan_csv
       end
+      collection do
+        get :index_for_admin
+      end
     end
 
-    resources :academies, only: %i[show index] do
+    resources :academies, only: %i[show] do
       member do
         get :export_absent_students_csv
         get :export_week_absent_students_csv
@@ -88,7 +92,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :camps, only: %i[new create show destroy] do
+    resources :camps, only: %i[index new create show destroy] do
       member do
         get :export_students_csv
         get :export_banished_students_csv

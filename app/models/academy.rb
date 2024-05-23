@@ -11,6 +11,7 @@ class Academy < ApplicationRecord
   has_many :annual_programs
 
   belongs_to :manager, class_name: 'User'
+  belongs_to :coordinator, class_name: 'User', optional: true
   has_many :coach_academies
   has_many :coaches, through: :coach_academies
 

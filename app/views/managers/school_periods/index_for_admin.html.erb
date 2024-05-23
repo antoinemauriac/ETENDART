@@ -1,0 +1,31 @@
+<div class="yellow-title">LES STAGES</div>
+
+<% @school_periods.each do |period, school_periods| %>
+  <div class="container-special" data-controller="clickable-table">
+    <div class="black-title black-title-no-margin"><%= period[0] %> - <%= school_periods.first.name %></div>
+    <table class="table table-striped table-responsive table-center form-container table-no-top-margin">
+      <thead>
+        <tr>
+          <th>Académie</th>
+          <th>Stage</th>
+          <th>Année</th>
+          <th>Début</th>
+          <th>Fin</th>
+          <th>Élèves présents</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% school_periods.each do |school_period| %>
+          <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= statistics_managers_school_period_path(school_period) %>">
+            <td class="align-middle"><%= school_period.academy.name %></td>
+            <td class="align-middle"><%= school_period.name %></td>
+            <td class="align-middle"><%= school_period.year %></td>
+            <td class="align-middle"><%= l(school_period.starts_at, format: :date) %></td>
+            <td class="align-middle"><%= l(school_period.ends_at, format: :date) %></td>
+            <td class="align-middle"><%= school_period.show_count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

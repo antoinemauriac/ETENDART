@@ -23,7 +23,7 @@
               autofocus: false %>
       <% end %>
     </div>
-    <%= link_to export_students_csv_managers_student_path(@academy, format: :csv), class: 'btn-add-student' do %>
+    <%= link_to export_students_csv_managers_students_path(academy: @academy, format: :csv), class: 'btn-add-student' do %>
       <i class="fa-solid fa-download fa-no-margin"></i>LES ÉLÈVES<i class="fa-solid fa-download fa-no-margin"></i>
     <% end %>
   </div>
