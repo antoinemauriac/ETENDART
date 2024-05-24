@@ -1,9 +1,11 @@
 class Managers::ActivityEnrollmentPolicy < ApplicationPolicy
   def destroy?
     if record.camp
-      user.manager? && record.activity.camp.school_period.academy.manager == user
+      academy = record.camp.school_period.academy
+      (user.manager? && academy.manager == user) || (academy.coordinator == user && academy.coordinator == user)
     else
-      user.manager? && record.activity.annual_program.academy.manager == user
+      academy = record.activity.annual_program.academy
+      (user.manager? && academy.manager == user) || (academy.coordinator == user && academy.coordinator == user)
     end
   end
 end

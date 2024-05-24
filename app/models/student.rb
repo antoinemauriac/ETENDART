@@ -186,55 +186,52 @@ class Student < ApplicationRecord
               .where('annual_programs.ends_at >= ?', Date.current)
   end
 
-  def self.today_absent_students(manager)
-    joins(course_enrollments: { course: :academy })
-      .where(course_enrollments: { present: false })
-      .where(courses: { starts_at: Time.current.all_day, manager_id: manager.id })
-      .where(academies: { id: manager.academies_as_manager.pluck(:id) })
-      .distinct
-  end
-
   def first_academy
     academies.first
   end
 
-  # methode qui retrouve l'academy du student dans laquelle il a suivi le plus de courses
-
   def main_academy
-    # Collecter tous les cours et leurs académies associées
-    academy_counts = courses.each_with_object(Hash.new(0)) do |course, counts|
-      # Déterminer si le cours appartient à un camp ou à un programme annuel
-      academy = if course.activity.camp
-                  course.activity.camp.school_period.academy
-                else
-                  course.activity.annual_program.academy
-                end
-      counts[academy] += 1
-    end
+    # # Collecter tous les cours et leurs académies associées
+    # academy_counts = courses.each_with_object(Hash.new(0)) do |course, counts|
+    #   # Déterminer si le cours appartient à un camp ou à un programme annuel
+    #   academy = if course.activity.camp
+    #               course.activity.camp.school_period.academy
+    #             else
+    #               course.activity.annual_program.academy
+    #             end
+    #   counts[academy] += 1
+    # end
 
-    # Trouver l'académie avec le nombre maximum de cours
-    primary_academy = academy_counts.max_by { |_academy, count| count }&.first
+    # # Trouver l'académie avec le nombre maximum de cours
+    # primary_academy = academy_counts.max_by { |_academy, count| count }&.first
 
-    # Renvoyer la première académie si la principale est nil
-    primary_academy || academies.first
+    # # Renvoyer la première académie si la principale est nil
+    # primary_academy || academies.first
+    courses.order(:starts_at)&.last&.academy || academies.first
   end
 
-  def predominant_category
+  def predominant_sport
     category_counts = courses.joins(activity: :category).group('categories.name').count
     tennis_count = category_counts['Tennis'] || 0
     judo_count = category_counts['Judo'] || 0
+    basket_count = category_counts['Basket'] || 0
+    football_count = category_counts['Football'] || 0
+    handball_count = category_counts['Handball'] || 0
 
-    if tennis_count > judo_count
-      'Tennis'
-    elsif judo_count > tennis_count
-      'Judo'
-    else
-      'N/A'
-    end
+    counts = {
+      'Tennis' => tennis_count,
+      'Judo' => judo_count,
+      'Basket' => basket_count,
+      'Football' => football_count,
+      'Handball' => handball_count
+    }
+
+    predominant_sport = counts.max_by { |_, count| count }[0]
+    predominant_sport
   end
 
   def self.with_at_least_one_course(start_year)
-    start_date = Date.new(start_year, 4, 7) # 1er septembre de l'année spécifiée
+    start_date = Date.new(start_year, 4, 7)
 
     joins(courses: { activity: :camp }) # Ajout de la jointure avec activity et camp
       .where('courses.starts_at > ?', start_date)

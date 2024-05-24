@@ -8,6 +8,6 @@ class Coaches::CoursePolicy < ApplicationPolicy
   end
 
   def update_enrollments?
-    record.coaches.include?(user) || user.manager?
+    record.coaches.include?(user) || user.manager? || user.coordinator?
   end
 end

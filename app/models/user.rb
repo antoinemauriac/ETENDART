@@ -23,6 +23,7 @@ class User < ApplicationRecord
   has_many :memberships, foreign_key: :receiver_id
 
   has_many :academies_as_manager, class_name: 'Academy', foreign_key: :manager_id
+  has_many :academies_as_coordinator, class_name: 'Academy', foreign_key: :coordinator_id
 
   has_many :coach_academies, foreign_key: :coach_id, dependent: :destroy
   has_many :academies_as_coach, through: :coach_academies, source: :academy
@@ -50,6 +51,18 @@ class User < ApplicationRecord
 
   before_validation :normalize_fields
   before_validation :normalize_phone_number
+
+  def academies
+    if manager?
+      academies_as_manager
+    elsif coordinator?
+      academies_as_coordinator
+    end
+  end
+
+  def coordinator?
+    roles.any? { |role| role.name == 'coordinator' }
+  end
 
   def manager?
     roles.any? { |role| role.name == 'manager' }

@@ -1,12 +1,5 @@
 class Managers::AcademiesController < ApplicationController
 
-  def index
-    @academies = current_user.academies_as_manager
-    skip_policy_scope
-    authorize [:managers, @academies]
-  end
-
-
   def show
     @academy = Academy.find(params[:id])
     authorize [:managers, @academy]

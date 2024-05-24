@@ -1,33 +1,41 @@
 class Managers::AnnualProgramPolicy < ApplicationPolicy
   def index?
-    user.manager?
+    academy = record.first.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 
   def show?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def new?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def create?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def destroy?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def export_past_enrollments?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def export_annual_students?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def statistics?
-    user.manager? && record.academy.manager == user
+    authorized?
+  end
+
+  private
+
+  def authorized?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 end

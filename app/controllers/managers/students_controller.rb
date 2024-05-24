@@ -29,10 +29,30 @@ class Managers::StudentsController < ApplicationController
     end
   end
 
+  def index_for_admin
+    if params[:academy].present? && params[:academy] != "all"
+      @academy = Academy.find(params[:academy])
+      @students = Student.joins(academy_enrollments: :academy)
+                         .where(academies: { id: @academy.id })
+                         .distinct
+      @students = @students.search_by_query(params[:query]) if params[:query].present?
+    else
+      @students = params[:query].present? ? Student.search_by_query(params[:query]) : Student.all
+    end
+    @students = @students.reorder(last_name: :asc)
+    @pagy, @students = pagy(@students, items: 100)
+    skip_policy_scope
+    authorize([:managers, @students], policy_class: Managers::StudentPolicy)
+    respond_to do |format|
+      format.html
+      format.text { render partial: "managers/students/list", locals: {students: @students}, formats: [:html] }
+    end
+  end
+
   def show
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
     @academy = @student.first_academy
     @feedback = Feedback.new
     @feedbacks = @student.feedbacks.order(created_at: :desc)
@@ -53,6 +73,7 @@ class Managers::StudentsController < ApplicationController
     @student = Student.new
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @academy = Academy.find(params[:academy_id])
+    @academies = current_user.academies
   end
 
   def create
@@ -76,6 +97,7 @@ class Managers::StudentsController < ApplicationController
 
   def edit
     @student = Student.find(params[:id])
+    @academies = current_user.academies
     @academy1 = @student.academies.first if @student.academies.any?
     @academy2 = @student.academies.second if @student.academies.second
     @academy3 = @student.academies.third if @student.academies.third
@@ -130,35 +152,42 @@ class Managers::StudentsController < ApplicationController
   end
 
   def export_students_csv
-    academy = Academy.find(params[:id])
-    students = academy.students.order(:last_name)
+    if params[:academy].present? && params[:academy] != "all"
+      academy = Academy.find(params[:academy])
+      students = academy.students.order(:last_name)
+      filename = "eleves_#{academy.name}.csv"
+    else
+      students = Student.all.order(:last_name)
+      filename = "eleves_toute_academie.csv"
+    end
     @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville", "Tennis ou Judo ?", "Membre ?", "Dernier cours"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville", "Membre ?", "Dernier cours", "Sport Principal", "Academie du dernier cours"]
 
           students.each do |student|
             csv << [
-            student.last_name,
-            student.first_name,
-            student.gender,
-            student.date_of_birth,
-            student.age, student.phone_number,
-            student.email,
-            student.address,
-            student.zipcode,
-            student.city,
-            student.predominant_category,
-            student.memberships.where(start_year: @start_year)&.first&.status ? "Oui" : "Non",
-            student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : ''
-          ]
+              student.last_name,
+              student.first_name,
+              student.gender,
+              student.date_of_birth,
+              student.age, student.phone_number,
+              student.email,
+              student.address,
+              student.zipcode,
+              student.city,
+              student.memberships.where(start_year: @start_year)&.first&.status ? "Oui" : "Non",
+              student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : '',
+              student.predominant_sport,
+              student.main_academy&.name
+            ]
           end
         end
 
-        send_data(csv_data, filename: "eleves_#{academy.name}.csv")
+        send_data(csv_data, filename: filename)
       end
     end
   end

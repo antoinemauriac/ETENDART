@@ -1,31 +1,37 @@
 class Managers::SchoolPeriodPolicy < ApplicationPolicy
   def index?
-    user.manager?
+    academy = record.first.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 
   def create?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def show?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def destroy?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def statistics?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
   def export_bilan_csv?
-    user.manager? && record.academy.manager == user
+    authorized?
   end
 
-  class Scope < Scope
-    def resolve
-      # scope.where(manager_id: user.id)
-    end
+  def index_for_admin?
+    user.admin?
+  end
+
+  private
+
+  def authorized?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 end

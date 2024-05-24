@@ -1,28 +1,24 @@
 class Managers::CategoryPolicy < ApplicationPolicy
 
   def index?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 
   def create?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 
   def update?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 
   def destroy?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 
   def category_coaches?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 
-  class Scope < Scope
-    def resolve
 
-    end
-  end
 end

@@ -1,8 +1,0 @@
-<h1>Les Academies</h1>
-<ul>
-<% @academies.each do |academy| %>
-  <li>
-    <%= link_to academy.name.upcase, managers_academy_path(academy) %>
-  </li>
-<% end %>
-</ul>

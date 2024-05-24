@@ -2,7 +2,7 @@ class Managers::FinancesController < ApplicationController
   def membership_finances_overview
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
     academy_ids = @academies.pluck(:id)
     @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
 
@@ -66,7 +66,7 @@ class Managers::FinancesController < ApplicationController
 
     @school_periods = SchoolPeriod.includes(:academy).where(paid: true)
 
-    @academies = current_user.academies_as_manager
+    @academies = current_user.academies
                   .joins(:school_periods)
                   .where(school_periods: { id: @school_periods.select(:id) })
                   .distinct
@@ -84,16 +84,14 @@ class Managers::FinancesController < ApplicationController
     respond_to do |format|
       format.csv do
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Email", "Téléphone", "Adresse", "Code postal", "Ville", "Moyen de paiement", "Academie Principale"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Email", "Téléphone", "Adresse", "Code postal", "Ville", "Moyen de paiement", "Academie du derniers cours", "Sport Principal"]
           memberships.joins(:student).order("students.last_name ASC").each do |membership|
             student = membership.student
-            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.email, student.phone_number, student.address, student.zipcode, student.city, membership.payment_method, membership.academy&.name]
+            csv << [student.last_name, student.first_name, student.gender, student.date_of_birth, student.email, student.phone_number, student.address, student.zipcode, student.city, membership.payment_method, membership.academy&.name, student.predominant_sport]
           end
         end
         send_data(csv_data, filename: "membres_#{start_year}_#{start_year + 1}.csv")
       end
     end
-
   end
-
 end

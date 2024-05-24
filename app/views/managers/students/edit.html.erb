@@ -27,11 +27,11 @@
 
       <%= form.input :city, label: "Ville" %>
 
-      <%= form.input :academy1_id, label: "Académie 1", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, required: true, selected: @academy1&.id %>
+      <%= form.input :academy1_id, label: "Académie 1", collection: @academies, label_method: :name, value_method: :id, required: true, selected: @academy1&.id %>
 
-      <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true, selected: @academy2&.id || 'Sélectionnez une académie' %>
+      <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy2&.id || 'Sélectionnez une académie' %>
 
-      <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: current_user.academies_as_manager, label_method: :name, value_method: :id, include_blank: true, selected: @academy3&.id || 'Sélectionnez une académie' %>
+      <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy3&.id || 'Sélectionnez une académie' %>
 
       <div class="flex-btn">
         <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>

@@ -21,21 +21,15 @@
             </li>
           </ul>
         <% end %>
-        <%# if current_user.manager? %>
-          <%# current_user.academies_as_manager.each do |academy| %>
-<!--            <li class="nav-item">-->
-              <%#= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small" %>
-<!--            </li>-->
-          <%# end %>
-        <%# end %>
-        <% if current_user.manager? %>
+        <% if current_user.manager? || current_user.coordinator? %>
+          <% academies = current_user.academies %>
           <div class="dropdown" style="margin-left: -1px;">
             <li class="nav-item d-flex align-items-center justify-content-center">
               <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
               <i class="fa fa-caret-down"></i>
             </li>
             <div class="dropdown-content">
-              <% current_user.academies_as_manager.order(:created_at).each do |academy| %>
+              <% academies.order(:created_at).each do |academy| %>
                 <div class="dropdown-sub">
                   <span class="full-width-link">
                     <%= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small nav-academy" %>

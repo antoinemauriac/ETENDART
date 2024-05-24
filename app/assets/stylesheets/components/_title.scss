@@ -32,6 +32,12 @@
   font-size: 20px;
 }
 
+.black-title-no-margin {
+  margin-bottom: 0px!important;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
 .student-title {
   background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), image-url('students.jpeg');
   background-size: cover;

@@ -1,33 +1,25 @@
 class Managers::CoursePolicy < ApplicationPolicy
-  def index?
-    user.manager?
-  end
 
   def show?
-    user.manager?
-  end
-
-  def create?
-    user.manager?
-  end
-
-  def edit?
-    user.manager?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 
   def update?
-    user.manager?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 
   def destroy?
-    user.manager?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 
   def update_enrollments?
-    record.academy.manager == user || record.coaches.include?(user)
+    record.academy.manager == user || record.academy.coordinator == user || record.coaches.include?(user)
   end
 
   def unban_student?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 end

@@ -1,5 +1,5 @@
 class Managers::DashboardPolicy < ApplicationPolicy
   def index?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 end

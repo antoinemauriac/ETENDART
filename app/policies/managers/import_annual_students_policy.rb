@@ -1,5 +1,5 @@
 class Managers::ImportAnnualStudentsPolicy < ApplicationPolicy
   def import?
-    user.manager?
+    user.manager? || user.coordinator?
   end
 end
