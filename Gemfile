@@ -15,6 +15,7 @@ gem "sidekiq-failures", "~> 1.0"
 gem 'will_paginate', '~> 4.0'
 gem 'pagy'
 gem 'sidekiq-cron'
+gem 'faker'
 
 gem 'pg_search'
 

@@ -28,8 +28,5 @@
       <% end %>
     </div>
   <% end %>
-  <%= render "list", students: @students %>
-  <div class="flexy mb-3">
-    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
-  </div>
+  <%= render "list", students: @students, pagy: @pagy %>
 </div>
