@@ -226,6 +226,9 @@ class Student < ApplicationRecord
       'Handball' => handball_count
     }
 
+    # Vérifier si tous les compteurs sont à zéro
+    return '' if counts.values.all?(&:zero?)
+
     predominant_sport = counts.max_by { |_, count| count }[0]
     predominant_sport
   end
