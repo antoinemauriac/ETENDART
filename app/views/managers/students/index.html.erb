@@ -27,8 +27,8 @@
       <i class="fa-solid fa-download fa-no-margin"></i>LES ÉLÈVES<i class="fa-solid fa-download fa-no-margin"></i>
     <% end %>
   </div>
-  <%= render "list", students: @students %>
-  <div class="flexy mb-3">
-    <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
-  </div>
+  <%= render "list", students: @students, pagy: @pagy %>
+<!--  <div class="flexy mb-3">-->
+    <%#== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+<!--  </div>-->
 </div>

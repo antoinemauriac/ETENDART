@@ -1,3 +1,4 @@
+# require 'faker'
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
@@ -24,7 +25,6 @@
 # Feedback.destroy_all
 # User.destroy_all
 # Student.destroy_all
-
 # Category.create!(name: 'Tennis', super_category: 'Sport')
 # Category.create!(name: 'Manga', super_category: 'Eveil')
 
@@ -221,4 +221,17 @@
 #   week2_d.activities.second.courses.each do |course|
 #     CourseEnrollment.create!(student: student, course: course)
 #   end
+# end
+
+# 80.times do
+#   student = Student.create!(
+#     first_name: Faker::Name.first_name,
+#     last_name: Faker::Name.last_name,
+#     date_of_birth: Faker::Date.birthday(min_age: 5, max_age: 18),
+#     email: Faker::Internet.email,
+#     phone_number: Faker::PhoneNumber.cell_phone,
+#     gender: ['Garçon', 'Fille'].sample,
+#     username: Faker::Internet.username,
+#     )
+#     student.academies << Academy.find(10)
 # end
