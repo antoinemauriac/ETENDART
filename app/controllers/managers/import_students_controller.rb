@@ -96,7 +96,7 @@ class Managers::ImportStudentsController < ApplicationController
             redirect_to managers_camp_path(camp) and return
           end
           if %w[cash cheque hello_asso offert virement pass].include?(row['cotisation']) && membership.status == false
-            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
+            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id, academy: student.main_academy)
           end
         end
       end
