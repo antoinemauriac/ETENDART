@@ -34,6 +34,6 @@ class Managers::StudentPolicy < ApplicationPolicy
   end
 
   def export_students_csv?
-    user.manager? || user.coordinator?
+    user.manager? || user.coordinator? || user.admin?
   end
 end

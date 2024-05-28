@@ -32,6 +32,6 @@ class Managers::SchoolPeriodPolicy < ApplicationPolicy
 
   def authorized?
     academy = record.academy
-    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user) || user.admin?
   end
 end
