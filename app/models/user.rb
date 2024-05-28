@@ -53,11 +53,17 @@ class User < ApplicationRecord
   before_validation :normalize_phone_number
 
   def academies
-    if manager?
+    if admin?
+      Academy.all
+    elsif manager?
       academies_as_manager
     elsif coordinator?
       academies_as_coordinator
     end
+  end
+
+  def admin?
+    roles.any? { |role| role.name == 'admin' }
   end
 
   def coordinator?

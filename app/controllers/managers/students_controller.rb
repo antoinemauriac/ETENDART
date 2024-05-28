@@ -20,7 +20,7 @@ class Managers::StudentsController < ApplicationController
     @students = @students.reorder(last_name: :asc)
 
 
-    @pagy, @students = pagy(@students, items: 10)
+    @pagy, @students = pagy(@students, items: 30)
     skip_policy_scope
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
@@ -40,12 +40,12 @@ class Managers::StudentsController < ApplicationController
       @students = params[:query].present? ? Student.search_by_query(params[:query]) : Student.all
     end
     @students = @students.reorder(last_name: :asc)
-    @pagy, @students = pagy(@students, items: 10)
+    @pagy, @students = pagy(@students, items: 30)
     skip_policy_scope
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
       format.html
-      format.text { render partial: "managers/students/list", locals: {students: @students, pagy: @pagy}, formats: [:html] }
+      format.text { render partial: "managers/students/list_for_admin", locals: {students: @students, pagy: @pagy}, formats: [:html] }
     end
   end
 
