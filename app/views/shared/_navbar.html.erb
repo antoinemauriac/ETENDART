@@ -51,7 +51,11 @@
           </div>
         <% end %>
         <% if current_user.manager? || current_user.coordinator? %>
-          <% academies = current_user.academies %>
+          <% if current_user.manager? %>
+            <% academies = current_user.academies_as_manager %>
+          <% elsif current_user.coordinator? %>
+            <% academies = current_user.academies_as_coordinator %>
+          <% end %>
           <div class="dropdown" style="margin-left: -1px;">
             <li class="nav-item d-flex align-items-center justify-content-center">
               <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
