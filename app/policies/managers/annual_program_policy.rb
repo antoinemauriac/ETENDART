@@ -28,7 +28,12 @@ class Managers::AnnualProgramPolicy < ApplicationPolicy
   end
 
   def statistics?
-    authorized?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user) || user.admin?
+  end
+
+  def index_for_admin?
+    user.admin?
   end
 
   private

@@ -1,15 +1,11 @@
 <%= render "shared/academy_header" %>
-<% if !current_user.admin? %>
+<% if current_user.manager? || current_user.coordinator? %>
   <div class="header-nav">
     <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
     <div class="header-nav-item"><%= link_to "LES STAGES", managers_school_periods_path(@school_period, academy: @academy) %></div>
     <div class="header-nav-item"><%= link_to "#{@school_period.name.upcase} - #{@school_period.year}", managers_school_period_path(@school_period) %></div>
     <div class="header-nav-item active">BILAN</div>
   </div>
-<%# else %>
-<!--  <div class="header-nav">
-    <div class="header-nav-item"><%#= link_to "LES STAGES", index_for_admin_managers_school_periods_path %></div>
-  </div>-->
 <% end %>
 <div class="yellow-title mb-0">BILAN - <%= @school_period.name.upcase %> - <%= @school_period.year %></div>
 

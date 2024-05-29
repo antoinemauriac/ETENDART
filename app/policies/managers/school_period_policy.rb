@@ -16,7 +16,8 @@ class Managers::SchoolPeriodPolicy < ApplicationPolicy
   end
 
   def statistics?
-    authorized?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user) || user.admin?
   end
 
   def export_bilan_csv?
@@ -31,6 +32,6 @@ class Managers::SchoolPeriodPolicy < ApplicationPolicy
 
   def authorized?
     academy = record.academy
-    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user) || user.admin?
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 end

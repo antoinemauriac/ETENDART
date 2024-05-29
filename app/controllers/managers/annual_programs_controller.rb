@@ -6,6 +6,12 @@ class Managers::AnnualProgramsController < ApplicationController
     authorize [:managers, @annual_programs]
   end
 
+  def index_for_admin
+    @annual_programs = AnnualProgram.all.where(new: true).group_by { |annual_program| annual_program.starts_at.year }
+    skip_policy_scope
+    authorize [:managers, :annual_program]
+  end
+
   def new
     @academy = Academy.find(params[:academy])
     @annual_program = AnnualProgram.new
