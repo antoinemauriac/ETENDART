@@ -109,6 +109,9 @@ Rails.application.routes.draw do
         get :export_past_enrollments
         get :export_annual_students
       end
+      collection do
+        get :index_for_admin
+      end
     end
 
     resources :coaches do

@@ -1,0 +1,25 @@
+<div class="yellow-title">LES STAGES</div>
+
+<% @annual_programs.each do |year, annual_programs| %>
+  <div class="container-special" data-controller="clickable-table">
+    <div class="black-title black-title-no-margin"><%= annual_programs&.first&.name %></div>
+    <table class="table table-striped table-responsive table-center form-container table-no-top-margin">
+      <thead>
+        <tr>
+          <th>Académie</th>
+          <th>Année</th>
+          <th>Élèves inscrits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% annual_programs.each do |annual_program| %>
+          <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= statistics_managers_annual_program_path(annual_program) %>">
+            <td class="align-middle"><%= annual_program.academy.name %></td>
+            <td class="align-middle"><%= annual_program.name %></td>
+            <td class="align-middle"><%= annual_program.students_count%></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

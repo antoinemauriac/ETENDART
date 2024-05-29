@@ -1,10 +1,12 @@
 <%= render "shared/academy_header" %>
+<% if current_user.manager? || current_user.coordinator? %>
 <div class="header-nav">
   <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
   <div class="header-nav-item"><%= link_to "LES PROGRAMMES", managers_annual_programs_path(academy: @academy) %></div>
   <div class="header-nav-item"><%= link_to "#{@annual_program.name.upcase}", managers_annual_program_path(@annual_program) %></div>
   <div class="header-nav-item active">BILAN</div>
 </div>
+<% end %>
 <div class="yellow-title mb-0">BILAN - <%= @annual_program.name.upcase %></div>
 
 <div class="black-title mb-3">GLOBAL</div>

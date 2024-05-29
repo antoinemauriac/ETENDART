@@ -35,16 +35,20 @@
                 </div>
                 <div class="dropdown-sub">
                   <span class="full-width-link">
-                    <%= link_to "STAGES", index_for_admin_managers_school_periods_path, class: "nav-link nav-link-small nav-academy" %>
-                  </span>
-                </div>
-                <div class="dropdown-sub">
-                  <span class="full-width-link">
                     <div class="nav-link nav-link-small nav-academy">FINANCE</div>
                   </span>
                   <div class="sub-content">
                     <%= link_to "COTISATION", membership_finances_overview_managers_finances_path %>
                     <%= link_to "STAGES", camp_finances_overview_managers_finances_path %>
+                  </div>
+                </div>
+                <div class="dropdown-sub">
+                  <span class="full-width-link">
+                    <div class="nav-link nav-link-small nav-academy">BILAN</div>
+                  </span>
+                  <div class="sub-content">
+                    <%= link_to "STAGES", index_for_admin_managers_school_periods_path %>
+                    <%= link_to "PROGRAMMES", index_for_admin_managers_annual_programs_path %>
                   </div>
                 </div>
             </div>
