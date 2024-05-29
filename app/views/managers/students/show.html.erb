@@ -73,41 +73,41 @@
 
   <div class="col-lg-6 col-sm-12 mt-3">
     <div class="header-info"> COTISATIONS </div>
-      <div class="content-info">
-        <table class="table table-striped table-responsive">
-          <thead>
+    <div class="content-info">
+      <table class="table table-striped table-responsive">
+        <thead>
+          <tr>
+            <th>Année</th>
+            <th>Montant</th>
+            <th>Mode de paiement</th>
+            <th>Date du paiement</th>
+            <th>Reçu par</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @memberships.each do |membership| %>
             <tr>
-              <th>Année</th>
-              <th>Montant</th>
-              <th>Mode de paiement</th>
-              <th>Date du paiement</th>
-              <th>Reçu par</th>
-              <th></th>
+              <td class="align-middle"><%= "#{membership.start_year} - #{membership.start_year + 1}" %></td>
+              <td class="align-middle"><%= "#{membership.amount} €" %></td>
+              <td class="align-middle"><%= membership.payment_method %></td>
+              <td class="align-middle"><%= membership.payment_date %></td>
+              <td class="align-middle"><%= membership.receiver&.full_name %></td>
+              <td class="align-middle">
+                <% if membership.receiver.nil? %>
+                  <i class="fa-solid fa-xmark text-danger fa-big">
+                <% else %>
+                  <i class="fa-solid fa-check text-success fa-big">
+                <% end %>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <% @memberships.each do |membership| %>
-              <tr>
-                <td class="align-middle"><%= "#{membership.start_year} - #{membership.start_year + 1}" %></td>
-                <td class="align-middle"><%= "#{membership.amount} €" %></td>
-                <td class="align-middle"><%= membership.payment_method %></td>
-                <td class="align-middle"><%= membership.payment_date %></td>
-                <td class="align-middle"><%= membership.receiver&.full_name %></td>
-                <td class="align-middle">
-                  <% if membership.receiver.nil? %>
-                    <i class="fa-solid fa-xmark text-danger fa-big">
-                  <% else %>
-                    <i class="fa-solid fa-check text-success fa-big">
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-    <% if @membership && !@membership.status %>
-      <div class="header-info-inside"> <%= "#{@start_year} - #{@start_year + 1}" %>  </div>
-        <%= simple_form_for @membership, url: managers_membership_path(@membership, url: "/managers/students/#{@student.id}?academy_id=#{@student.first_academy.id}"), method: :patch do |f| %>
-          <div class="membership-form">
+          <% end %>
+        </tbody>
+      </table>
+      <% if @membership && !@membership.status %>
+        <div class="header-info-inside"> <%= "#{@start_year} - #{@start_year + 1}" %></div>
+          <%= simple_form_for @membership, url: managers_membership_path(@membership, url: "/managers/students/#{@student.id}?academy_id=#{@student.first_academy.id}"), method: :patch do |f| %>
+            <div class="membership-form">
               <%= f.input :payment_method,
                           label: "Moyen de paiment",
                           required: true,
@@ -121,10 +121,59 @@
                           selected: @membership.receiver_id.present? ? @membership.receiver_id : current_user.id,
                           prompt: "Sélectionner" %>
               <%= f.submit "Valider", class: "btn-add-student" %>
-            <% end %>
+            </div>
+          <% end %>
+      <% end %>
+      <% if !@membership %>
+        <div class="flexy">
+          <button type="button" class="btn-add-student" style="width:300px" data-bs-toggle="modal" data-bs-target="#membershipModal">
+            <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER COTISATION<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+          </button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="membershipModal" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"><%= "Nouvelle cotisation pour #{@student.first_name} #{@student.last_name}" %></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <%= form_with(model: Membership.new, url: managers_memberships_path, local: true) do |form| %>
+                  <%= form.hidden_field :student_id, value: @student.id %>
+
+                  <%= form.label :start_year, "Année" %>
+                  <%= form.text_field :start_year_display, value: "#{@start_year}-#{@start_year + 1}", class: "form-control mb-3", readonly: true %>
+                  <%= form.hidden_field :start_year, value: @start_year %>
+
+                  <%= form.label :amount, "Montant" %>
+                  <%= form.number_field :amount, value: 15, class: "form-control mb-3", required: true %>
+
+                  <%= form.label :payment_method, "Méthode de Paiement" %>
+                  <%= form.collection_select :payment_method,
+                                              [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                                              :last, :first,
+                                              { prompt: 'Sélectionnez une méthode de paiement' },
+                                              { class: "form-select mb-3", required: true } %>
+
+                  <%= form.label :receiver_id, "Personne ayant reçu le paiement" %>
+                  <%= form.collection_select :receiver_id,
+                                              User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                                              :second,
+                                              :first,
+                                              { selected: current_user.id, prompt: 'Sélectionnez une personne' },
+                                              { class: "form-select mb-3", required: true } %>
+              </div>
+              <div class="modal-footer">
+                  <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                  <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+              </div>
+              <% end %>
+            </div>
           </div>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class="col-lg-6 col-sm-12 mt-4">
@@ -460,9 +509,9 @@
         </table>
       </div>
       <div class="flexy">
-          <button type="button" class="btn-add-student" style="max-width:250px" data-bs-toggle="modal" data-bs-target="#feedbackModal">
-            <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-          </button>
+        <button type="button" class="btn-add-student" style="max-width:250px" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+          <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+        </button>
       </div>
       <!-- Modal -->
       <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
