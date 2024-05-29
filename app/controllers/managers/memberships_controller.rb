@@ -19,6 +19,20 @@ class Managers::MembershipsController < ApplicationController
     end
   end
 
+  def create
+    @student = Student.find(params[:membership][:student_id])
+    @membership = Membership.new(membership_params)
+    @membership.student = @student
+    authorize([:managers, @membership])
+    if @membership.save
+      @membership.update(status: true, payment_date: Date.current, academy: @student.main_academy)
+      flash[:notice] = "Cotisation validée"
+      redirect_to managers_student_path(@student)
+    else
+      flash[:alert] = "Une erreur est survenue"
+      redirect_to managers_student_path(@student)
+    end
+  end
   private
 
   def membership_params

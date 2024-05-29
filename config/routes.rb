@@ -129,7 +129,7 @@ Rails.application.routes.draw do
     resources :locations, only: %i[show]
     resources :enrollments, only: %i[new create]
     resources :locations, only: %i[create index edit update]
-    resources :memberships, only: %i[update]
+    resources :memberships, only: %i[update create]
   end
 
   namespace :coaches do
