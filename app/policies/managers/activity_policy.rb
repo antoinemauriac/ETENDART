@@ -1,7 +1,7 @@
 class Managers::ActivityPolicy < ApplicationPolicy
 
   def new?
-    authorized_for_camp?
+    user.manager? || user.coordinator?
   end
 
   def create?
@@ -11,7 +11,6 @@ class Managers::ActivityPolicy < ApplicationPolicy
   def show?
     authorized_for_camp?
   end
-
 
   def new_for_annual?
     authorized_for_annual?

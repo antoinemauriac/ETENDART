@@ -10,6 +10,10 @@
         <p class="green-text mb-1">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
         <p class="red-text mb-1">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
       <% end %>
+      <% if @school_period && @school_period.paid %>
+        <p class="mb-1">PRIX DU STAGE : <strong><%= @school_period.price %>€</strong></p>
+      <% end %>
+      <p class="mb-1">COTISATION ANNUELLE : <strong>15€</strong></p>
       <% if @academy.banished %>
         <p class="mb-1">EXCLUS : <strong><%= @banished_students.count %></strong></p>
       <% end %>

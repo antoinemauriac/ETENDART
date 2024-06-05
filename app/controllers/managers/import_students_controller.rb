@@ -27,7 +27,7 @@ class Managers::ImportStudentsController < ApplicationController
 
       # Step 2: Process each student record from the CSV file
       students.each do |student|
-        student.destroy if student.courses.empty?
+        # student.destroy if student.courses.empty?
         courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 1), Date.new(start_year + 1, 8, 31))
         membership = student.memberships.find_by(start_year: start_year)
         if courses_during_civil_year.empty? && membership && membership.status == false
