@@ -11,7 +11,6 @@ export default class extends Controller {
   update() {
     const academy_id = this.inputTarget.dataset.academyId
     const query = this.inputTarget.value
-    console.log("hello toto");
     const url = `coaches?academy=${academy_id}&query=${query}`;
     fetch(url, {headers: {"Accept": "text/plain"}})
       .then(response => response.text())

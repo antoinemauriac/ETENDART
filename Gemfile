@@ -16,7 +16,6 @@ gem 'will_paginate', '~> 4.0'
 gem 'pagy'
 gem 'sidekiq-cron'
 gem 'faker'
-
 gem 'pg_search'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
@@ -80,6 +79,7 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem "bullet"
+  gem "pry-byebug"
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
