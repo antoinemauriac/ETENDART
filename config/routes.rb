@@ -39,7 +39,8 @@ Rails.application.routes.draw do
   get '/managers/annual_enrollments/:annual_program_id/update_activities', to: 'managers/annual_enrollments#update_activities'
 
   namespace :managers do
-    post 'import_students', to: 'import_students#import'
+    post 'import_students/import', to: 'import_students#import'
+    post 'import_students/import_without_camp', to: 'import_students#import_without_camp'
     post 'import_annual_students', to: 'import_annual_students#import'
 
     resources :finances, only: %i[index] do

@@ -6,9 +6,37 @@
 <div class="yellow-title">LES ÉLÈVES</div>
 <div class="container" data-controller="search-student">
   <div class="student-list-header mt-2 mb-3">
-    <%= link_to new_managers_student_path(academy_id: @academy.id), class: "btn-add-student" do %>
-      <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    <%= link_to export_students_csv_managers_students_path(academy: @academy, format: :csv), class: 'btn-add-student' do %>
+      <i class="fa-solid fa-download fa-no-margin"></i>EXPORTER<i class="fa-solid fa-download fa-no-margin"></i>
     <% end %>
+    <button type="button" class="btn-add-student" style="max-width:250px" data-bs-toggle="modal" data-bs-target="#importModal">
+      <i class="fas fa-upload fa-no-margin"></i>IMPORTER<i class="fas fa-upload fa-no-margin"></i>
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><%= "Importer un fichier d'élèves (hors stage)" %></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="flexy" data-controller="import-csv">
+              <div class="loader d-none" data-import-csv-target="spinner"></div>
+              <div class="container flexy mt-3">
+                  <%= simple_form_for :import, url: managers_import_students_import_without_camp_path, method: :post, data: { action: "change->import-csv#handleFileSelect" } do |form| %>
+                    <%= hidden_field_tag :academy_id, @academy.id %>
+                    <div class="form-group">
+                      <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
+                    </div>
+                    <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
+                  <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div style="width:350px">
       <%= form_with url: managers_students_path, method: :get, html: {class: "d-flex", data: {search_student_target: "form"}} do |f| %>
         <%= f.text_field :query,
@@ -23,8 +51,8 @@
               autofocus: false %>
       <% end %>
     </div>
-    <%= link_to export_students_csv_managers_students_path(academy: @academy, format: :csv), class: 'btn-add-student' do %>
-      <i class="fa-solid fa-download fa-no-margin"></i>LES ÉLÈVES<i class="fa-solid fa-download fa-no-margin"></i>
+    <%= link_to new_managers_student_path(academy_id: @academy.id), class: "btn-add-student" do %>
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
     <% end %>
   </div>
   <%= render "list", students: @students, pagy: @pagy %>

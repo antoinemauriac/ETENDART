@@ -3,7 +3,7 @@ class Managers::ImportStudentsController < ApplicationController
   # Imports students from a CSV file into a camp.
   def import
     camp = Camp.find(params[:camp][:camp_id])
-    authorize([:managers, camp], policy_class: Managers::StudentPolicy)
+    authorize([:managers, camp], policy_class: Managers::ImportStudentPolicy)
     school_period = camp.school_period
     academy = camp.academy
     file = params[:camp][:csv_file]
@@ -102,6 +102,38 @@ class Managers::ImportStudentsController < ApplicationController
       end
 
       redirect_to managers_camp_path(camp), notice: "Le fichier CSV a été importé avec succès."
+    end
+  end
+
+  def import_without_camp
+    academy = Academy.find(params[:academy_id])
+    authorize([:managers, academy], policy_class: Managers::ImportStudentPolicy)
+    file = params[:import][:csv_file]
+    file = File.open(file)
+
+    ActiveRecord::Base.transaction do
+      CSV.foreach(file, headers: true, col_sep: ';') do |row|
+        row = row.to_hash
+        if row['prénom'].nil? || row['nom'].nil? || row['date-naissance'].nil? || row['username'].nil? || row['genre'].nil?
+          flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
+          redirect_to managers_students_path(academy) and return
+        else
+          username = row['username'].to_s.strip.downcase.gsub(/\s+/, '')
+
+          student = Student.where("lower(unaccent(username)) = unaccent(?)", username).first_or_initialize
+          student.assign_attributes(student_params_upload(row))
+
+          if student.new_record?
+            student.save
+          else
+            student.update(student_params_upload(row))
+          end
+
+          student.academies << academy unless student.academies.include?(academy)
+
+        end
+      end
+      redirect_to managers_students_path(academy), notice: "Le fichier CSV a été importé avec succès."
     end
   end
 

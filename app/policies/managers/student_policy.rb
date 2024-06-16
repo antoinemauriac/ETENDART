@@ -19,16 +19,6 @@ class Managers::StudentPolicy < ApplicationPolicy
     (user.manager? && record.academies.any? { |academy| academy.manager == user }) || (user.coordinator? && record.academies.any? { |academy| academy.coordinator == user })
   end
 
-  def import?
-    academy = record.academy
-    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
-  end
-
-  def import_annual_students?
-    academy = record.academy
-    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
-  end
-
   def update_photo?
     user.manager? || user.coach? || user.coordinator?
   end
