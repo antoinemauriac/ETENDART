@@ -1,5 +1,6 @@
 class Managers::ImportAnnualStudentsPolicy < ApplicationPolicy
   def import?
-    user.manager? || user.coordinator?
+    academy = record.academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 end
