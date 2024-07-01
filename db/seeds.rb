@@ -6,25 +6,7 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-# UserRole.destroy_all
-# Role.destroy_all
-# CourseEnrollment.destroy_all
-# Course.destroy_all
-# ActivityEnrollment.destroy_all
-# Activity.destroy_all
-# CoachCategory.destroy_all
-# Category.destroy_all
-# CoachCamp.destroy_all
-# CampEnrollment.destroy_all
-# Camp.destroy_all
-# SchoolPeriod.destroy_all
-# CoachAcademy.destroy_all
-# Location.destroy_all
-# AcademyEnrollment.destroy_all
-# Academy.destroy_all
-# Feedback.destroy_all
-# User.destroy_all
-# Student.destroy_all
+
 # Category.create!(name: 'Tennis', super_category: 'Sport')
 # Category.create!(name: 'Manga', super_category: 'Eveil')
 
