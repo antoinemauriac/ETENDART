@@ -51,7 +51,7 @@
   </div>
 </div>
 
-<%# if @camp.can_import? %>
+<% if @camp.can_import? %>
   <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
   <div class="flexy" data-controller="import-csv">
     <div class="loader d-none" data-import-csv-target="spinner"></div>
@@ -67,7 +67,7 @@
       </div>
     </div>
   </div>
-<%# end %>
+<% end %>
 
 
 <div class="yellow-title yellow-title-flex mt-3 mb-3">

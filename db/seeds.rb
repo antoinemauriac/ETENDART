@@ -18,6 +18,15 @@
 # ornella = User.create!(email: 'ornella@etendart.org', password: 123456)
 # ornella.roles << Role.find_by(name: 'manager')
 
+# troyes = Academy.create!(name: 'Troyes', manager: raf)
+# troyes_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1719924175/etendart/dc9cj1djqigxocxtad33.jpg')
+# troyes.image.attach(io: troyes_image, filename: 'troyes-court.jpg', content_type: 'image/jpg')
+
+# grasse = Academy.create!(name: 'Grasse', manager: raf)
+# grass_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1719924175/etendart/a7mpkq8zxmsmk9fcmnwc.jpg')
+# grasse.image.attach(io: grass_image, filename: 'grasse-court.jpg', content_type: 'image/jpg')
+
+
 # angers = Academy.create!(name: 'Angers', manager: ornella)
 # angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022761/etendart/szhjycwofx768fuvmurf.jpg')
 # angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
