@@ -129,27 +129,39 @@ class Managers::StudentsController < ApplicationController
     @student = Student.find(params[:id])
     @origin = params[:origin]
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    # Upload de l'image sur Cloudinary en utilisant l'upload_preset student_avatar
+
+    # Supprimer l'ancienne photo de Cloudinary si elle existe
+    if @student.photo.attached?
+      @student.photo.purge
+    end
+
+    # Upload de la nouvelle image sur Cloudinary en utilisant l'upload_preset student_avatar
     result = Cloudinary::Uploader.upload(params[:student][:photo], upload_preset: 'student_avatar')
 
-    # Récupération de l'URL de l'image uploadée
+    # Récupération de l'URL et de l'ID public de la nouvelle image uploadée
     photo_url = result['secure_url']
+    public_id = result['public_id']
 
-    # Enregistrement de l'URL de l'image sur l'objet Student
-    @student.photo.attach(io: URI.open(photo_url), filename: "avatar")
+    # Enregistrement de l'URL de la nouvelle image sur l'objet Student
+    @student.photo.attach(io: URI.open(photo_url), filename: "avatar_student_id_#{@student.id}")
+
+    # Suppression de l'image originale sur Cloudinary
+    Cloudinary::Uploader.destroy(public_id)
 
     @academy = Academy.find(params[:academy_id]) if params[:academy_id].present?
 
     respond_to do |format|
-      format.html { format.html { redirect_to determine_redirect_path, notice: "Photo ajoutée" } }
+      format.html { redirect_to determine_redirect_path, notice: "Photo ajoutée" }
       format.json { render json: { imageUrl: url_for(@student.photo) } }
       format.text do
         partial = choose_partial_based_on_origin
         render partial: partial, locals: { student: @student }, formats: [:html]
       end
-      # format.text { render partial: 'coaches/courses/student_photo', locals: { student: @student }, formats: [:html] }
     end
   end
+
+
+
 
   def export_students_csv
     if params[:academy].present? && params[:academy] != "all"
