@@ -35,7 +35,7 @@ class Managers::ImportStudentsController < ApplicationController
         end
       end
 
-      CSV.foreach(file, headers: true, col_sep: ';') do |row|
+      CSV.foreach(file, headers: true, col_sep: ',') do |row|
         row = row.to_hash
         if row['prénom'].nil? || row['nom'].nil? || row['date-naissance'].nil? || row['username'].nil? || row['genre'].nil?
           flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
@@ -112,7 +112,7 @@ class Managers::ImportStudentsController < ApplicationController
     file = File.open(file)
 
     ActiveRecord::Base.transaction do
-      CSV.foreach(file, headers: true, col_sep: ';') do |row|
+      CSV.foreach(file, headers: true, col_sep: ',') do |row|
         row = row.to_hash
         if row['prénom'].nil? || row['nom'].nil? || row['date-naissance'].nil? || row['username'].nil? || row['genre'].nil?
           flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
