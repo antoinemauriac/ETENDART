@@ -63,37 +63,63 @@
     </div>
   </div>
 
-  <div class="col-lg-10 col-sm-12 mt-4">
-    <div class="header-info">DÉTAILS PAR UTILISATEUR</div>
-    <div class="content-info">
-      <table class="table">
-        <thead>
+<div class="col-lg-10 col-sm-12 mt-4">
+  <div class="header-info">DÉTAILS PAR UTILISATEUR</div>
+  <div class="content-info">
+    <table class="table table-center table-bordered ">
+      <thead>
+        <tr>
+          <th rowspan="2"></th>
+          <th colspan="3">Total</th>
+          <th colspan="3">Cash</th>
+          <th colspan="3">Chèque</th>
+          <th class="align-middle" rowspan="2">Hello Asso</th>
+          <th class="align-middle" rowspan="2">Pass</th>
+          <th class="align-middle" rowspan="2">Virement</th>
+          <th class="align-middle" rowspan="2">Offert</th>
+          <th class="align-middle" rowspan="2"></th>
+        </tr>
+        <tr>
+          <th>Reçu</th>
+          <th>Déposé</th>
+          <th>En attente</th>
+          <th>Reçu</th>
+          <th>Déposé</th>
+          <th>En attente</th>
+          <th>Reçu</th>
+          <th>Déposé</th>
+          <th>En attente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @revenue_by_user.each do |receiver_id, total_received| %>
+          <% receiver = User.find_by(id: receiver_id) %>
           <tr>
-            <th></th>
-            <th>Total Reçu</th>
-            <th>Cash</th>
-            <th>Chèque</th>
-            <th>Hello Asso</th>
-            <th>Pass</th>
-            <th>Virement</th>
-            <th>Offert</th>
+            <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
+            <!-- Total columns (Reçu, Déposé, En attente de dépôt) -->
+            <td><%= total_received %>€</td>
+            <td><%= total_received %>€</td>
+            <td style="<%= total_received != 0 ? 'color:red;' : '' %>"><%= total_received %>€</td>
+            <!-- Cash -->
+            <td><%= @payment_details_by_user[[receiver_id, "cash"]] || 0 %>€</td>
+            <td><%= @payment_details_by_user[[receiver_id, "cash"]] || 0 %>€</td>
+            <td style="<%= @payment_details_by_user[[receiver_id, "cash"]] != nil ? 'color:red;' : '' %>"><%= @payment_details_by_user[[receiver_id, "cash"]] || 0 %>€</td>
+            <!-- Cheque -->
+            <td><%= @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>€</td>
+            <td><%= @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>€</td>
+            <td style="<%= @payment_details_by_user[[receiver_id, "cheque"]] != nil ? 'color:red;' : '' %>"><%= @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>€</td>
+            <!-- Others -->
+            <% ["hello_asso", "pass", "virement", "offert"].each do |method| %>
+              <td><%= @payment_details_by_user[[receiver_id, method]] || 0 %>€</td>
+            <% end %>
+            <td>Dépôt</td>
           </tr>
-        </thead>
-        <tbody>
-          <% @revenue_by_user.each do |receiver_id, total_received| %>
-            <% receiver = User.find_by(id: receiver_id) %>
-            <tr>
-              <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
-              <td><%= total_received %>€</td>
-              <% ["cash", "cheque", "hello_asso", "pass", "virement", "offert"].each do |method| %>
-                <td><%= @payment_details_by_user[[receiver_id, method]] || 0 %>€</td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+        <% end %>
+      </tbody>
+    </table>
   </div>
+</div>
+
 
   <div class="col-lg-10 col-sm-12 mt-4">
     <div class="header-info">
@@ -103,7 +129,7 @@
       <% end %>
     </div>
     <div class="content-info">
-      <table class="table">
+      <table class="table table-align-middle">
         <thead>
           <tr>
             <th>Nom</th>
@@ -111,8 +137,8 @@
             <th>Âge</th>
             <th>Email</th>
             <th>Téléphone</th>
-            <th>Moyen de paiement</th>
-            <th>Académie du dernier cours</th>
+            <th>Moyen de <br> paiement</th>
+            <th>Académie du <br> dernier cours</th>
           </tr>
         </thead>
         <tbody>
