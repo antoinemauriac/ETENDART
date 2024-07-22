@@ -19,7 +19,7 @@
             </tr>
           </thead>
           <tbody>
-            <% academy.school_periods.where(paid: true).order(created_at: :desc).each do |school_period| %>
+            <% academy.school_periods.where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
               <% total_expected = 0 %>
               <% total_received = 0 %>
               <% total_missing = 0 %>
