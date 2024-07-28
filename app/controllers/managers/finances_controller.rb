@@ -93,7 +93,8 @@ class Managers::FinancesController < ApplicationController
   def index
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
-    @academies = current_user.academies
+    # récupérer les académies gérées par l'utilisateur qui ont des school_periods avec une colonne paid à true
+    @academies = current_user.academies.joins(:school_periods).where(school_periods: { paid: true }).distinct
   end
 
   def show

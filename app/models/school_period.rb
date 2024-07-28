@@ -201,6 +201,10 @@ class SchoolPeriod < ApplicationRecord
     expected_revenue - received_revenue
   end
 
+  def total_camp_deposits
+    camps.joins(:camp_deposits).sum('camp_deposits.amount')
+  end
+
   def paid_students_count
     camp_enrollments.attended.paid.count
   end
@@ -216,6 +220,8 @@ class SchoolPeriod < ApplicationRecord
   def student_with_judo_count
     camps.sum(&:student_with_judo_count)
   end
+
+
 
 
 

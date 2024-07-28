@@ -23,9 +23,11 @@
               <tr class="clickable-tr" onclick="window.location.href='<%= managers_finance_path(school_period) %>'">
                 <td style="min-width:200px"><%= school_period.full_name %> </td>
                 <td><%= school_period.expected_revenue %>€</td>
-                <td><%= school_period.received_revenue %>€</td>
-                <td><%=  %>€</td>
-                <td><%=  %>€</td>
+                <% received_revenue = school_period.received_revenue %>
+                <td><%= received_revenue %>€</td>
+                <% total_camp_deposits = school_period.total_camp_deposits %>
+                <td><%= total_camp_deposits %>€</td>
+                <td style="<%= (received_revenue - total_camp_deposits) != 0 ? 'color:red;' : '' %>"><%= received_revenue - total_camp_deposits %>€</td>
                 <td><%= school_period.missing_revenue %>€</td>
                 <td><%= school_period.price %>€</td>
                 <td><%= school_period.show_count %></td>
