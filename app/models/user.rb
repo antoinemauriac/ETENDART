@@ -25,6 +25,11 @@ class User < ApplicationRecord
   has_many :academies_as_manager, class_name: 'Academy', foreign_key: :manager_id
   has_many :academies_as_coordinator, class_name: 'Academy', foreign_key: :coordinator_id
 
+  has_many :membership_deposits_as_manager, class_name: 'MembershipDeposit', foreign_key: :manager_id
+  has_many :membership_deposits_as_depositor, class_name: 'MembershipDeposit', foreign_key: :depositor_id
+
+  has_many :camp_deposits
+
   has_many :coach_academies, foreign_key: :coach_id, dependent: :destroy
   has_many :academies_as_coach, through: :coach_academies, source: :academy
   # has_many :school_periods, through: :academies_as_coach

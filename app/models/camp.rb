@@ -18,6 +18,8 @@ class Camp < ApplicationRecord
 
   has_one :camp_stat, dependent: :destroy
 
+  has_many :camp_deposits, dependent: :destroy
+
   validates :name, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
@@ -162,15 +164,23 @@ class Camp < ApplicationRecord
   end
 
   def expected_revenue
-    show_count * school_period.price
+    (show_count - student_with_judo_count) * school_period.price
   end
 
   def received_revenue
-    camp_enrollments.where(has_paid: true).count * school_period.price
+    camp_enrollments.paid.count * school_period.price
   end
 
   def missing_revenue
     expected_revenue - received_revenue
+  end
+
+  def paid_students_count
+    camp_enrollments.attended.paid.count
+  end
+
+  def unpaid_students_count
+    camp_enrollments.attended.unpaid.count
   end
 
   # def student_with_judo
@@ -181,10 +191,20 @@ class Camp < ApplicationRecord
   # def missing_clarisse_revenue
   #   student_with_judo.count * school_period.price
   # end
+  #
+
+  # def camp_enrollments_with_judo
+  #   judo_activity_ids = self.activities.joins(:category).where(categories: { name: 'Judo' }).pluck(:id)
+  #   camp_enrollments.joins(course_enrollment: { course: :activity }).where("activities.id" => judo_activity_ids)
+  # end
 
   def student_with_judo
     judo_activity_ids = self.activities.joins(:category).where(categories: { name: 'Judo' }).pluck(:id)
     show_students.select { |student| student.courses.where(activity_id: judo_activity_ids).exists? }
+  end
+
+  def student_with_judo_count
+    student_with_judo.count
   end
 
   def students_with_unpaid_camp_enrollments

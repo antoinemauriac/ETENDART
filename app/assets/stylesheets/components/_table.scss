@@ -99,3 +99,21 @@
     border-style: hidden;
   }
 }
+
+.table-align-middle th, .table-align-middle td {
+  vertical-align: middle;
+}
+
+.grey-background {
+  background-color: #f4f1f1!important;
+}
+
+.table-border-vertical td:not(:first-child):not(:last-child),
+.table-border-vertical th:not(:first-child):not(:last-child) {
+  border-left: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+}
+
+.table-border-vertical tbody tr:last-child td {
+  border-bottom: none!important;
+}

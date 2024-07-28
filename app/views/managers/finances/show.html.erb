@@ -1,0 +1,105 @@
+<div class="row justify-content-center align-items-stretch">
+    <div class="col-lg-10 col-sm-12 mb-4 mt-4">
+      <div class="yellow-title mb-0"><%= @school_period.academy.name.upcase %> - <%= @school_period.full_name %></div>
+      <div class="content-info">
+        <table class="table table-responsive table-center table-align-middle table-striped">
+          <thead>
+            <tr>
+              <th style="text-align:right">Stage</th>
+              <th>Revenu attendu</th>
+              <th>Perçu par les coachs</th>
+              <th>Déposé par les coachs</th>
+              <th>En attente de dépôt</th>
+              <th>En attente de paiement élève</th>
+              <th>Prix du stage</th>
+              <th>Nb élèves présents</th>
+              <th>Ayant payé</th>
+              <th>N'ayant pas payé (dont Clarisse)</th>
+              <% if current_user.manager? || current_user.coordinator? %>
+                <th></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @school_period.camps.each do |camp| %>
+                <tr>
+                  <td style="text-align:right"><%= camp.name %></td>
+                  <% expected_revenue = camp.expected_revenue %>
+                  <% received_revenue = camp.received_revenue %>
+                  <td><%= expected_revenue %>€</td>
+                  <td><%= received_revenue %>€</td>
+                  <% deposit_amount = camp.camp_deposits.sum(:amount) %>
+                  <td><%= deposit_amount %> €</td>
+                  <td style="<%= (received_revenue - deposit_amount) != 0 ? 'color:red;' : '' %>"><%= received_revenue - deposit_amount %>€</td>
+                  <td><%= expected_revenue - received_revenue %>€</td>
+                  <td><%= camp.school_period.price %>€</td>
+                  <td><%= camp.show_count %></td>
+                  <td><%= camp.paid_students_count %></td>
+                  <td><%= camp.unpaid_students_count %> (<%= camp.student_with_judo_count %>)</td>
+                  <% if current_user.manager? || current_user.coordinator? %>
+                    <td>
+                      <button type="button" style="margin:0" class="btn-etendart-yellow" data-bs-toggle="modal" data-bs-target="#modal-<%= camp.id %>">
+                        Déposer
+                      </button>
+                      <div class="modal fade" id="modal-<%= camp.id %>" tabindex="-1" aria-labelledby="modalLabel-<%= camp.id %>" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content" style="width:80%;padding:0px">
+                            <div class="modal-header modal-header-deposit">
+                              <h1 class="modal-title fs-5" id="modalLabel-<%= camp.id %>"><%= camp.name %> le <%= l(Date.current, format: :default) %></h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <%= form_for CampDeposit.new, url: managers_camp_deposits_path(camp: camp), data: { turbo: false } do |f| %>
+                                <%= f.hidden_field :camp_id, value: camp.id %>
+                                <div class="mb-3 row align-items-center">
+                                  <%= f.label :amount, "Montant déposé (€) :", class: "col-5" %>
+                                  <%= f.number_field :amount, class: "form-deposit col-4" %>
+                                </div>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-around">
+                              <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                              <div>
+                                <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                              </div>
+                            </div>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  <% end %>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-lg-10 col-sm-12 mb-4 mt-4">
+      <div class="yellow-title mb-0">DERNIERS DÉPÔTS</div>
+      <div class="content-info">
+        <table class="table table-responsive table-center table-align-middle table-striped">
+          <thead>
+            <tr>
+              <th style="text-align:right">Stage</th>
+              <th>Montant</th>
+              <th>Déposé le</th>
+              <th>Par</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @school_period.camp_deposits.order(date: :desc).each do |deposit| %>
+                <tr>
+                  <td style="text-align:right"><%= deposit.camp.name %></td>
+                  <td><%= deposit.amount %>€</td>
+                  <td><%= l(deposit.date, format: :default) %></td>
+                  <td><%= deposit.manager.full_name %></td>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+
+<!---->

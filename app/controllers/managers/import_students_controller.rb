@@ -88,7 +88,7 @@ class Managers::ImportStudentsController < ApplicationController
           # Step 6: Manage membership
           membership = student.memberships.find_by(start_year: start_year)
           if membership.nil?
-            membership = student.memberships.create(amount: 15, start_year: start_year, academy: student.main_academy)
+            membership = student.memberships.create(amount: 15, start_year: start_year, academy: academy)
           end
 
           if !["cash", "cheque", "hello_asso", "offert", "virement", "pass", nil].include?(row['cotisation'])
@@ -96,7 +96,7 @@ class Managers::ImportStudentsController < ApplicationController
             redirect_to managers_camp_path(camp) and return
           end
           if %w[cash cheque hello_asso offert virement pass].include?(row['cotisation']) && membership.status == false
-            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id, academy: student.main_academy)
+            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
         end
       end

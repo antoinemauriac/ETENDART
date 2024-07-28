@@ -8,6 +8,7 @@ class SchoolPeriod < ApplicationRecord
   has_many :camp_enrollments, through: :camps
   has_many :students, through: :camp_enrollments
 
+  has_many :camp_deposits, through: :camps
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps
@@ -42,7 +43,8 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def show_count
-    camps.sum(&:show_count)
+    # camps.sum(&:show_count)
+    camp_enrollments.attended.count
   end
 
   def show_rate
@@ -185,6 +187,37 @@ class SchoolPeriod < ApplicationRecord
   def new_students_count
     camps.sum(&:new_students_count)
   end
+
+  def expected_revenue
+    camp_enrollments.attended.count * price -
+    camps.sum(&:missing_clarisse_revenue)
+  end
+
+  def received_revenue
+    camp_enrollments.paid.count * price
+  end
+
+  def missing_revenue
+    expected_revenue - received_revenue
+  end
+
+  def paid_students_count
+    camp_enrollments.attended.paid.count
+  end
+
+  def unpaid_students_count
+    camp_enrollments.attended.unpaid.count
+  end
+
+  def missing_clarisse_revenue
+    camps.sum(&:missing_clarisse_revenue)
+  end
+
+  def student_with_judo_count
+    camps.sum(&:student_with_judo_count)
+  end
+
+
 
   private
 

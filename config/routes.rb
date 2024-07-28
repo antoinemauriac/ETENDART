@@ -43,10 +43,9 @@ Rails.application.routes.draw do
     post 'import_students/import_without_camp', to: 'import_students#import_without_camp'
     post 'import_annual_students', to: 'import_annual_students#import'
 
-    resources :finances, only: %i[index] do
+    resources :finances, only: %i[index show] do
       collection do
         get :membership_finances_overview
-        get :camp_finances_overview
         get :export_members_csv
       end
     end
@@ -120,6 +119,9 @@ Rails.application.routes.draw do
         patch :update_infos
       end
     end
+
+    resources :membership_deposits, only: %i[create index]
+    resources :camp_deposits, only: %i[create]
 
     resources :coach_feedbacks, only: %i[create destroy]
 

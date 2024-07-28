@@ -85,3 +85,31 @@
 #     end
 #   end
 # end
+
+
+# itérer sur les les camp_enrollments du student
+# pour chaque camp_enrollment
+# compter le nombre d'activity_enrollments associés
+# si le nombre d'activity_enrollments est égal à 0
+# compter le nombre de attended course_enrollments associés au camp_enrollment
+# si le nombre de course_enrollments attended est égal à 0
+# supprimer le camp_enrollment
+# fin
+
+
+# SUPPRESSION DES CAMP ENROLLMENTS SANS ACTIVITY ENROLLMENTS NI COURSE ENROLLMENTS ATTENDED
+
+# student = Student.find(1186)
+# student.camp_enrollments.each do |camp_enrollment|
+#   camp = camp_enrollment.camp
+#   activity_enrollments = student.activity_enrollments.joins(:activity).where(activities: { camp_id: camp.id })
+#   activity_enrollments_count = activity_enrollments.count
+
+#   if activity_enrollments_count == 0
+#     attended_course_enrollments_count = student.course_enrollments.joins(course: :activity).where(activities: { camp_id: camp.id }).attended.count
+
+#     if attended_course_enrollments_count == 0
+#       puts "SchoolPeriod: #{camp.school_period.full_name} Camp enrollment : #{camp_enrollment.camp.name} - Académie : #{camp.academy.name} will be destroyed"
+#     end
+#   end
+# end

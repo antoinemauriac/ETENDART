@@ -190,6 +190,36 @@ class Student < ApplicationRecord
     academies.first
   end
 
+  def today_course
+    courses.where('DATE(starts_at) = ?', Date.current)
+           .order(starts_at: :asc)
+           .first
+  end
+
+  def next_course
+    courses.where('starts_at >= ?', Date.current - 1.day)
+           .order(starts_at: :asc)
+           .first
+  end
+
+  def last_course_before_today
+    courses.where('ends_at <= ?', Date.current + 1.day)
+           .order(starts_at: :desc)
+           .first
+  end
+
+  def membership_academy
+    if today_course.present?
+      today_course.academy
+    elsif next_course.present?
+      next_course.academy
+    elsif last_course_before_today.present?
+      last_course_before_today.academy
+    else
+      academies.first
+    end
+  end
+
   def main_academy
     # # Collecter tous les cours et leurs académies associées
     # academy_counts = courses.each_with_object(Hash.new(0)) do |course, counts|
