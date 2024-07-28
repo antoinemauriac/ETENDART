@@ -1,0 +1,17 @@
+<div class="yellow-title mb-2">DÉPÔTS COTISATIONS <%= "#{@start_year} - #{@start_year + 1}" %></div>
+<div class="row justify-content-center align-items-stretch" data-controller="filter-membership-deposit">
+  <div class="flexy mb-3">
+    <div style="width:300px;position:relative">
+      <select id="coach_id" class="student-input-search coach-select academy-select ml-2" data-action="change->filter-membership-deposit#updateList">
+        <option value="all">SELECTIONNER UN COACH</option>
+        <% @users.each do |user| %>
+          <option value="<%= user.id %>"><%= user.full_name %></option>
+        <% end %>
+      </select>
+      <i class="fa-solid fa-caret-down select-caret"></i>
+    </div>
+  </div>
+  <div class="col-10">
+    <%= render "membership_deposit_list", membership_deposits: @membership_deposits %>
+  </div>
+</div>

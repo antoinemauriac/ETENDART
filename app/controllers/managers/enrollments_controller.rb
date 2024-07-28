@@ -39,7 +39,7 @@ class Managers::EnrollmentsController < ApplicationController
       start_year = camp.starts_at.month >= 4 ? camp.starts_at.year : camp.starts_at.year - 1
       membership = student.memberships.find_by(start_year: start_year)
       if membership.nil?
-        student.memberships.create(amount: 15, start_year: start_year, academy: student.main_academy)
+        student.memberships.create(amount: 15, start_year: start_year, academy: academy)
       end
       redirect_to managers_student_path(student)
       flash[:notice] = "Inscription validée"

@@ -1,0 +1,30 @@
+<div class="content-select" data-filter-membership-deposit-target="list">
+  <% if @membership_deposits.present? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Déposant</th>
+          <th>Fait à</th>
+          <th>Total</th>
+          <th>Espèces</th>
+          <th>Chèque</th>
+          <th>Date du dépôt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @membership_deposits.each do |deposit| %>
+          <tr>
+            <td><%= deposit.depositor.full_name %></td>
+            <td><%= deposit.manager.full_name %></td>
+            <td><%= (deposit.cash_amount || 0) + (deposit.cheque_amount || 0) %>€</td>
+            <td><%= deposit.cash_amount || 0 %>€</td>
+            <td><%= deposit.cheque_amount || 0 %>€</td>
+            <td><%= l(deposit.date, format: :default) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p style="text-align:center">Aucun dépôt à ce jour.</p>
+  <% end %>
+</div>

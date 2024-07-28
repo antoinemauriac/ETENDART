@@ -1,0 +1,41 @@
+<div class="row justify-content-center align-items-stretch">
+  <% @academies.each do |academy| %>
+    <div class="col-lg-11 col-sm-12 mb-4 mt-4">
+      <div class="yellow-title mb-0"><%= academy.name.upcase %></div>
+      <div class="content-info">
+        <table class="table table-responsive table-center table-striped table-align-middle">
+          <thead>
+            <tr>
+              <th style="min-width:200px">Période</th>
+              <th>Revenu attendu</th>
+              <th>Perçu par les coachs</th>
+              <th>Déposé par les coachs</th>
+              <th>En attente de dépôt</th>
+              <th>En attente de paiement élève</th>
+              <th>Prix du stage</th>
+              <th>Nb élèves présents</th>
+              <th>Ayant payé</th>
+              <th>N'ayant pas payé <br> (dont Clarisse) </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% academy.school_periods.where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_finance_path(school_period) %>'">
+                <td style="min-width:200px"><%= school_period.full_name %> </td>
+                <td><%= school_period.expected_revenue %>€</td>
+                <td><%= school_period.received_revenue %>€</td>
+                <td><%=  %>€</td>
+                <td><%=  %>€</td>
+                <td><%= school_period.missing_revenue %>€</td>
+                <td><%= school_period.price %>€</td>
+                <td><%= school_period.show_count %></td>
+                <td><%= school_period.paid_students_count %></td>
+                <td><%= school_period.unpaid_students_count %> (<%= school_period.student_with_judo_count %>) </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>

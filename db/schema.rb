@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_21_092848) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_25_115421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -165,6 +165,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_21_092848) do
     t.date "ends_at"
     t.boolean "new", default: true
     t.index ["academy_id"], name: "index_annual_programs_on_academy_id"
+  end
+
+  create_table "camp_deposits", force: :cascade do |t|
+    t.bigint "manager_id", null: false
+    t.bigint "camp_id", null: false
+    t.integer "amount"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_id"], name: "index_camp_deposits_on_camp_id"
+    t.index ["manager_id"], name: "index_camp_deposits_on_manager_id"
   end
 
   create_table "camp_enrollments", force: :cascade do |t|
@@ -324,6 +335,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_21_092848) do
     t.index ["academy_id"], name: "index_locations_on_academy_id"
   end
 
+  create_table "membership_deposits", force: :cascade do |t|
+    t.bigint "manager_id", null: false
+    t.bigint "depositor_id", null: false
+    t.integer "cash_amount"
+    t.integer "cheque_amount"
+    t.date "date"
+    t.integer "start_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["depositor_id"], name: "index_membership_deposits_on_depositor_id"
+    t.index ["manager_id"], name: "index_membership_deposits_on_manager_id"
+  end
+
   create_table "memberships", force: :cascade do |t|
     t.bigint "student_id", null: false
     t.boolean "status", default: false
@@ -471,6 +495,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_21_092848) do
   add_foreign_key "annual_program_enrollments", "students"
   add_foreign_key "annual_program_stats", "annual_programs"
   add_foreign_key "annual_programs", "academies"
+  add_foreign_key "camp_deposits", "camps"
+  add_foreign_key "camp_deposits", "users", column: "manager_id"
   add_foreign_key "camp_enrollments", "camps"
   add_foreign_key "camp_enrollments", "students"
   add_foreign_key "camp_stats", "camps"
@@ -492,6 +518,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_21_092848) do
   add_foreign_key "feedbacks", "students"
   add_foreign_key "feedbacks", "users", column: "coach_id"
   add_foreign_key "locations", "academies"
+  add_foreign_key "membership_deposits", "users", column: "depositor_id"
+  add_foreign_key "membership_deposits", "users", column: "manager_id"
   add_foreign_key "memberships", "students"
   add_foreign_key "memberships", "users", column: "receiver_id"
   add_foreign_key "program_periods", "annual_programs"

@@ -34,6 +34,12 @@ application.register("enrollment-form", EnrollmentFormController)
 import FeedbackFormController from "./feedback_form_controller"
 application.register("feedback-form", FeedbackFormController)
 
+import FilterCoachController from "./filter_coach_controller"
+application.register("filter-coach", FilterCoachController)
+
+import FilterMembershipDepositController from "./filter_membership_deposit_controller"
+application.register("filter-membership-deposit", FilterMembershipDepositController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

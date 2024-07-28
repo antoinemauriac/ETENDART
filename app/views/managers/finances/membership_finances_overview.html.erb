@@ -1,45 +1,48 @@
 <div class="yellow-title mb-3">COTISATIONS <%= "#{@start_year} - #{@start_year + 1}" %></div>
 <div class="row justify-content-center align-items-stretch">
-  <div class="col-lg-5 col-sm-12">
+  <div class="col-lg-6 col-sm-12">
     <div class="header-info">GLOBAL</div>
     <div class="content-info">
-      <table class="table table-center">
+      <table class="table table-center table-border-vertical table-align-middle">
         <thead>
           <tr>
-            <th></th>
-            <th class="align-middle text-center">Total<br>attendu</th>
-            <th class="align-middle" >Reçu</th>
-            <th class="align-middle">En attente</th>
-            <th class="align-middle">Offert</th>
-            <th class="align-middle text-center">Reçu mais<br>non exigible</th>
+            <th class="top-left-th"></th>
+            <th class="text-center">Total (hors offert)</th>
+            <th>Payé par les élèves (dont non exigibles)</th>
+            <th>En attente de paiment élève</th>
+            <th>Offert</th>
+            <th>Montant déposé par les coachs</th>
+            <th>Montant en attente de dépôt</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style="text-align:right">Nombre de cotisations</td>
-            <td><%= @current_year_expected_memberships_count %></td>
-            <td><%= @current_year_paid_memberships_count %></td>
+            <td style="text-align:right;font-weight:700">Nombre de cotisations</td>
+            <td><%= @current_year_memberships_count %></td>
+            <td><%= @current_year_paid_memberships_count %> (<%= @current_year_not_expected_memberships_count %>) </td>
             <td><%= @current_year_unpaid_memberships_count %></td>
             <td><%= @current_year_offered_memberships_count %></td>
-            <td><%= @current_year_not_expected_memberships_count %></td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
-            <td style="text-align:right">Revenu</td>
-            <td><%= @current_year_expected_revenue %>€</td>
-            <td><%= @current_year_received_revenue %>€</td>
+            <td style="text-align:right;font-weight:700"">Revenu</td>
+            <td><%= @current_year_revenue %>€</td>
+            <td><%= @current_year_received_revenue %>€ (<%= @current_year_not_expected_revenue %>€)</td>
             <td><%= @current_year_missing_revenue %>€</td>
             <td><%= @current_year_offered_revenue %>€</td>
-            <td><%= @current_year_not_expected_revenue %>€</td>
+            <td><%= @current_year_deposited_revenue %>€</td>
+            <td style="color:red"><%= @current_year_received_revenue - @current_year_deposited_revenue %>€</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="col-lg-5 col-sm-12">
+  <div class="col-lg-4 col-sm-12">
     <div class="header-info">DÉTAILS PAR MOYEN DE PAIEMENT</div>
     <div class="content-info">
-      <table class="table">
+      <table class="table table-center table-border-vertical table-align-middle">
         <thead>
           <tr>
             <th>Total Reçu</th>
@@ -63,101 +66,165 @@
     </div>
   </div>
 
-<div class="col-lg-10 col-sm-12 mt-4">
-  <div class="header-info">DÉTAILS PAR UTILISATEUR</div>
-  <div class="content-info">
-    <table class="table table-center table-bordered ">
-      <thead>
-        <tr>
-          <th rowspan="2"></th>
-          <th colspan="3">Total</th>
-          <th colspan="3">Cash</th>
-          <th colspan="3">Chèque</th>
-          <th class="align-middle" rowspan="2">Hello Asso</th>
-          <th class="align-middle" rowspan="2">Pass</th>
-          <th class="align-middle" rowspan="2">Virement</th>
-          <th class="align-middle" rowspan="2">Offert</th>
-          <th class="align-middle" rowspan="2"></th>
-        </tr>
-        <tr>
-          <th>Reçu</th>
-          <th>Déposé</th>
-          <th>En attente</th>
-          <th>Reçu</th>
-          <th>Déposé</th>
-          <th>En attente</th>
-          <th>Reçu</th>
-          <th>Déposé</th>
-          <th>En attente</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @revenue_by_user.each do |receiver_id, total_received| %>
-          <% receiver = User.find_by(id: receiver_id) %>
-          <tr>
-            <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
-            <!-- Total columns (Reçu, Déposé, En attente de dépôt) -->
-            <td><%= total_received %>€</td>
-            <td><%= total_received %>€</td>
-            <td style="<%= total_received != 0 ? 'color:red;' : '' %>"><%= total_received %>€</td>
-            <!-- Cash -->
-            <td><%= @payment_details_by_user[[receiver_id, "cash"]] || 0 %>€</td>
-            <td><%= @payment_details_by_user[[receiver_id, "cash"]] || 0 %>€</td>
-            <td style="<%= @payment_details_by_user[[receiver_id, "cash"]] != nil ? 'color:red;' : '' %>"><%= @payment_details_by_user[[receiver_id, "cash"]] || 0 %>€</td>
-            <!-- Cheque -->
-            <td><%= @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>€</td>
-            <td><%= @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>€</td>
-            <td style="<%= @payment_details_by_user[[receiver_id, "cheque"]] != nil ? 'color:red;' : '' %>"><%= @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>€</td>
-            <!-- Others -->
-            <% ["hello_asso", "pass", "virement", "offert"].each do |method| %>
-              <td><%= @payment_details_by_user[[receiver_id, method]] || 0 %>€</td>
-            <% end %>
-            <td>Dépôt</td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
   <div class="col-lg-10 col-sm-12 mt-4">
-    <div class="header-info">
-      MEMBRES <%= "#{@start_year} - #{@start_year + 1}" %>
-      <%= link_to export_members_csv_managers_finances_path(membership_ids: @current_year_memberships.paid.pluck(:id), format: :csv) do %>
-        <i class="fa-solid fa-download fa-download-white ml-3"></i>
-      <% end %>
-    </div>
+    <div class="header-info">DÉTAILS PAR UTILISATEUR</div>
     <div class="content-info">
-      <table class="table table-align-middle">
+      <table class="table table-center table-striped table-border-vertical table-align-middle">
         <thead>
           <tr>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Âge</th>
-            <th>Email</th>
-            <th>Téléphone</th>
-            <th>Moyen de <br> paiement</th>
-            <th>Académie du <br> dernier cours</th>
+            <th rowspan="2"></th>
+            <th colspan="3">Total</th>
+            <th colspan="3">Cash</th>
+            <th colspan="3">Chèque</th>
+            <th rowspan="2">Hello Asso</th>
+            <th rowspan="2">Pass</th>
+            <th rowspan="2">Virement</th>
+            <th rowspan="2">Offert</th>
+            <th rowspan="2">Dernier Dépôt</th>
+            <% if current_user.manager? || current_user.coordinator? %>
+              <th rowspan="2"></th>
+            <% end %>
+          </tr>
+          <tr>
+            <th style="border-left:1px solid #dee2e6">Reçu</th>
+            <th>Déposé</th>
+            <th>En attente</th>
+            <th>Reçu</th>
+            <th>Déposé</th>
+            <th>En attente</th>
+            <th>Reçu</th>
+            <th>Déposé</th>
+            <th>En attente</th>
           </tr>
         </thead>
         <tbody>
-          <% @current_year_memberships.paid.joins(:student).order("students.last_name ASC").each do |membership| %>
-            <% student = membership.student %>
-            <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
-              <td><%= student.last_name %></td>
-              <td><%= student.first_name %></td>
-              <td><%= student.age %> ans</td>
-              <td><%= student.email %></td>
-              <td><%= student.phone_number %></td>
-              <td><%= membership.payment_method %></td>
-              <td><%= membership.academy&.name %></td>
+          <% @revenue_by_user.each do |receiver_id, total_received| %>
+            <% receiver = User.find_by(id: receiver_id) %>
+            <tr>
+              <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
+              <!-- Total columns (Reçu, Déposé, En attente de dépôt) -->
+              <% cash_deposit = receiver.membership_deposits_as_depositor.where(start_year: @start_year).sum(:cash_amount) || 0 %>
+              <% cheque_deposit = receiver.membership_deposits_as_depositor.where(start_year: @start_year).sum(:cheque_amount) || 0 %>
+              <% other_deposit = receiver.memberships.where(payment_method: ["hello_asso", "pass", "virement"], start_year: @start_year).sum(:amount) || 0 %>
+              <% total_deposit = cash_deposit + cheque_deposit + other_deposit %>
+              <td><%= total_received %>€</td>
+              <td><%= total_deposit %>€</td>
+              <td style="<%= (total_received - total_deposit) != 0 ? 'color:red;' : '' %>"><%= total_received - total_deposit %>€</td>
+              <!-- Cash -->
+              <% cash_received = @payment_details_by_user[[receiver_id, "cash"]] || 0 %>
+              <td><%= cash_received %>€</td>
+              <td><%= cash_deposit %>€</td>
+              <td style="<%= (cash_received - cash_deposit) != 0 ? 'color:red;' : '' %>"><%= cash_received - cash_deposit %>€</td>
+              <!-- Cheque -->
+              <% cheque_received = @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>
+              <td><%= cheque_received %>€</td>
+              <td><%= cheque_deposit %>€</td>
+              <td style="<%= (cheque_received - cheque_deposit) != 0 ? 'color:red;' : '' %>"><%= cheque_received - cheque_deposit %>€</td>
+              <!-- Others -->
+              <td><%= @payment_details_by_user[[receiver_id, "hello_asso"]] || 0 %>€</td>
+              <td><%= @payment_details_by_user[[receiver_id, "pass"]] || 0 %>€</td>
+              <td><%= @payment_details_by_user[[receiver_id, "virement"]] || 0 %>€</td>
+              <td><%= @payment_details_by_user[[receiver_id, "offert"]] || 0 %>€</td>
+              <!-- Last deposit -->
+              <td><%= receiver.membership_deposits_as_depositor.where(start_year: @start_year).order(created_at: :desc).first&.created_at&.strftime("%d/%m/%Y") %></td>
+              <% if current_user.manager? || current_user.coordinator? %>
+                <td>
+                  <button type="button" style="margin:0" class="btn-etendart-yellow" data-bs-toggle="modal" data-bs-target="#modal-<%= receiver.id %>">
+                    Déposer
+                  </button>
+                  <div class="modal fade" id="modal-<%= receiver.id %>" tabindex="-1" aria-labelledby="modalLabel-<%= receiver.id %>" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content" style="width:80%;padding:0px">
+                        <div class="modal-header modal-header-deposit">
+                          <h1 class="modal-title fs-5" id="modalLabel-<%= receiver.id %>"><%= receiver.full_name %> le <%= l(Date.current, format: :default) %></h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <%= form_for MembershipDeposit.new, url: managers_membership_deposits_path, data: { turbo: false } do |f| %>
+                            <%= f.hidden_field :depositor_id, value: receiver.id %>
+                            <div class="mb-3 row align-items-center">
+                              <%= f.label :cash_amount, "Espèces (€) :", class: "col-5" %>
+                              <%= f.number_field :cash_amount, class: "form-deposit col-4" %>
+                            </div>
+                            <div class="mb-3 row align-items-center">
+                              <%= f.label :cheque_amount, "Chèque (€) :", class: "col-5"%>
+                              <%= f.number_field :cheque_amount, class: "form-deposit col-4"%>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-around">
+                          <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                          <div>
+                            <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                          </div>
+                        </div>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   </div>
+
+  <div class="col-lg-10 col-sm-12 mt-4">
+    <div class="header-info">DERNIERS DÉPÔTS</div>
+    <div class="content-info">
+      <table class="table table-striped table-align-middle">
+        <thead>
+          <tr>
+            <th>Déposant</th>
+            <th>Fait à</th>
+            <th>Total</th>
+            <th>Espèces</th>
+            <th>Chèque</th>
+            <th>Date du dépôt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @last_membership_deposits.each do |deposit| %>
+            <tr>
+              <td><%= deposit.depositor.full_name %></td>
+              <td><%= deposit.manager.full_name %></td>
+              <td><%= (deposit.cash_amount || 0) + (deposit.cheque_amount || 0) %>€</td>
+              <td><%= deposit.cash_amount || 0 %>€</td>
+              <td><%= deposit.cheque_amount || 0 %>€</td>
+              <td><%= l(deposit.date, format: :default) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="flexy">
+        <%= link_to "Voir tous", managers_membership_deposits_path, data: { turbo: false }, class: "btn-add-student btn-add-student-small mb-3" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-10 col-sm-12 mt-4" data-controller="filter-coach">
+    <div class="header-info">
+      MEMBRES <%= "#{@start_year} - #{@start_year + 1}" %>
+      <%= link_to export_members_csv_managers_finances_path(membership_ids: @current_year_paid_memberships.pluck(:id), format: :csv) do %>
+        <i class="fa-solid fa-download fa-download-white ml-3"></i>
+      <% end %>
+    </div>
+    <div class="content-select">
+      <div style="width:300px;position:relative">
+        <select id="coach_id" class="student-input-search coach-select academy-select ml-2" data-action="change->filter-coach#updateList">
+          <option value="all">SELECTIONNER UN COACH</option>
+          <% @users.each do |user| %>
+            <option value="<%= user.id %>"><%= user.full_name %></option>
+          <% end %>
+        </select>
+        <i class="fa-solid fa-caret-down select-caret"></i>
+      </div>
+    </div>
+    <%= render "members_list", current_year_memberships: @current_year_paid_memberships %>
+  </div>
+</div>
+
 
 <!--  <div class="col-lg-6 col-sm-12 mt-4">
     <div class="header-info">DÉTAILS PAR ACADÉMIE</div>
@@ -182,4 +249,3 @@
       </table>
     </div>
   </div>-->
-</div>
