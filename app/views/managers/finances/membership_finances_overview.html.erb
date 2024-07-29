@@ -107,24 +107,24 @@
               <% cheque_deposit = receiver.membership_deposits_as_depositor.where(start_year: @start_year).sum(:cheque_amount) || 0 %>
               <% other_deposit = receiver.memberships.where(payment_method: ["hello_asso", "pass", "virement"], start_year: @start_year).sum(:amount) || 0 %>
               <% total_deposit = cash_deposit + cheque_deposit + other_deposit %>
-              <td><%= total_received %>€</td>
-              <td><%= total_deposit %>€</td>
-              <td style="<%= (total_received - total_deposit) != 0 ? 'color:red;' : '' %>"><%= total_received - total_deposit %>€</td>
+              <td><%= replace_zero_with_dash(total_received) %></td>
+              <td><%= replace_zero_with_dash(total_deposit) %></td>
+              <td style="<%= (total_received - total_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(total_received - total_deposit) %></td>
               <!-- Cash -->
               <% cash_received = @payment_details_by_user[[receiver_id, "cash"]] || 0 %>
-              <td><%= cash_received %>€</td>
-              <td><%= cash_deposit %>€</td>
-              <td style="<%= (cash_received - cash_deposit) != 0 ? 'color:red;' : '' %>"><%= cash_received - cash_deposit %>€</td>
+              <td><%= replace_zero_with_dash(cash_received) %></td>
+              <td><%= replace_zero_with_dash(cash_deposit) %></td>
+              <td style="<%= (cash_received - cash_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(cash_received - cash_deposit) %></td>
               <!-- Cheque -->
               <% cheque_received = @payment_details_by_user[[receiver_id, "cheque"]] || 0 %>
-              <td><%= cheque_received %>€</td>
-              <td><%= cheque_deposit %>€</td>
-              <td style="<%= (cheque_received - cheque_deposit) != 0 ? 'color:red;' : '' %>"><%= cheque_received - cheque_deposit %>€</td>
+              <td><%= replace_zero_with_dash(cheque_received) %></td>
+              <td><%= replace_zero_with_dash(cheque_deposit) %></td>
+              <td style="<%= (cheque_received - cheque_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(cheque_received - cheque_deposit) %></td>
               <!-- Others -->
-              <td><%= @payment_details_by_user[[receiver_id, "hello_asso"]] || 0 %>€</td>
-              <td><%= @payment_details_by_user[[receiver_id, "pass"]] || 0 %>€</td>
-              <td><%= @payment_details_by_user[[receiver_id, "virement"]] || 0 %>€</td>
-              <td><%= @payment_details_by_user[[receiver_id, "offert"]] || 0 %>€</td>
+              <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "hello_asso"]] || 0) %></td>
+              <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "pass"]] || 0) %></td>
+              <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "virement"]] || 0) %></td>
+              <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "offert"]] || 0) %></td>
               <!-- Last deposit -->
               <td><%= receiver.membership_deposits_as_depositor.where(start_year: @start_year).order(created_at: :desc).first&.created_at&.strftime("%d/%m/%Y") %></td>
               <% if current_user.manager? || current_user.coordinator? %>
