@@ -9,7 +9,7 @@ class Managers::CampDepositsController < ApplicationController
     if camp_deposit.save
       flash[:notice] = 'Dépôt enregistré'
     else
-      flash[:alert] = 'Erreur lors de l\'enregistrement du dépôt'
+      flash[:alert] = 'Le montant du dépôt doit être renseigné'
     end
     redirect_to managers_finance_path(camp.school_period)
   end

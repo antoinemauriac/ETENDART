@@ -78,7 +78,6 @@ class Managers::FinancesController < ApplicationController
       MembershipDeposit.where(depositor_id: @users.ids, start_year: @start_year).sum(:cheque_amount) +
       current_year_paid_memberships_excluding_offered.where.not(payment_method: ["cash", "cheque"]).sum(:amount)
 
-
     if params[:coach].present? && params[:coach] != "all"
       @current_year_paid_memberships = User.find(params[:coach]).memberships.where(start_year: @start_year).paid
     else
@@ -94,7 +93,7 @@ class Managers::FinancesController < ApplicationController
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     # récupérer les académies gérées par l'utilisateur qui ont des school_periods avec une colonne paid à true
-    @academies = current_user.academies.joins(:school_periods).where(school_periods: { paid: true }).distinct
+    @academies = current_user.academies.joins(:school_periods).where(school_periods: { paid: true, new: true }).distinct
   end
 
   def show

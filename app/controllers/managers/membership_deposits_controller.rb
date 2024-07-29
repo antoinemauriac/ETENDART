@@ -30,7 +30,7 @@ class Managers::MembershipDepositsController < ApplicationController
       flash[:notice] = 'Dépôt enregistré'
       redirect_to membership_finances_overview_managers_finances_path
     else
-      flash[:alert] = 'Erreur lors de l\'enregistrement du dépôt'
+      flash[:alert] = 'Erreur : au moins un montant doit être renseigné'
       redirect_to membership_finances_overview_managers_finances_path
     end
   end
