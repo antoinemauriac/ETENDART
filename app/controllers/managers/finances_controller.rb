@@ -73,10 +73,12 @@ class Managers::FinancesController < ApplicationController
     @users = User.where(id: revenue_by_user.keys).order(:last_name)
 
     @last_membership_deposits = MembershipDeposit.where(depositor_id: @users.ids).order(created_at: :desc).limit(3)
+
     @current_year_deposited_revenue =
       MembershipDeposit.where(depositor_id: @users.ids, start_year: @start_year).sum(:cash_amount) +
       MembershipDeposit.where(depositor_id: @users.ids, start_year: @start_year).sum(:cheque_amount) +
-      current_year_paid_memberships_excluding_offered.where.not(payment_method: ["cash", "cheque"]).sum(:amount)
+      current_year_paid_memberships_excluding_offered.where.not(payment_method: ["cash", "cheque"]).sum(:amount) +
+      @current_year_not_expected_memberships.where.not(payment_method: ["cash", "cheque"]).sum(:amount)
 
     if params[:coach].present? && params[:coach] != "all"
       @current_year_paid_memberships = User.find(params[:coach]).memberships.where(start_year: @start_year).paid
