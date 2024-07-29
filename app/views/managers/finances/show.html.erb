@@ -49,20 +49,20 @@
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                              <%= form_for CampDeposit.new, url: managers_camp_deposits_path(camp: camp), data: { turbo: false } do |f| %>
+                              <%= form_for CampDeposit.new, url: managers_camp_deposits_path(camp: camp) do |f| %>
                                 <%= f.hidden_field :camp_id, value: camp.id %>
                                 <div class="mb-3 row align-items-center">
                                   <%= f.label :amount, "Montant déposé (€) :", class: "col-5" %>
                                   <%= f.number_field :amount, class: "form-deposit col-4" %>
                                 </div>
+                                <div class="modal-footer d-flex justify-content-around">
+                                  <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                                  <div>
+                                    <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                                  </div>
+                                </div>
+                              <% end %>
                             </div>
-                            <div class="modal-footer d-flex justify-content-around">
-                              <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
-                              <div>
-                                <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-                              </div>
-                            </div>
-                            <% end %>
                           </div>
                         </div>
                       </div>
