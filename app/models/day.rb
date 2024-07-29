@@ -33,39 +33,39 @@ class Day < ApplicationRecord
   #   end
   # end
 
-  # def self.import_students_csv(file_path)
-  #   ActiveRecord::Base.transaction do
-  #     CSV.foreach(file_path, headers: true, col_sep: ';') do |row|
-  #       data = row.to_h
-  #       data = data.transform_keys { |key| key.gsub(/^\uFEFF/, '') }
+  def self.import_students_csv(file_path)
+    ActiveRecord::Base.transaction do
+      CSV.foreach(file_path, headers: true, col_sep: ',') do |row|
+        data = row.to_h
+        data = data.transform_keys { |key| key.gsub(/^\uFEFF/, '') }
 
-  #       username = data['username'].to_s.strip.downcase.gsub(/\s+/, '')
-  #       student = Student.where("lower(unaccent(username)) = unaccent(?)", username).first_or_initialize
+        username = data['username'].to_s.strip.downcase.gsub(/\s+/, '')
+        student = Student.where("lower(unaccent(username)) = unaccent(?)", username).first_or_initialize
 
-  #       if student.new_record?
-  #         student.assign_attributes(
-  #           first_name: data['prénom'],
-  #           last_name: data['nom'],
-  #           date_of_birth: data['date-naissance'],
-  #           username: username,
-  #           email: data['email'],
-  #           gender: data['genre'],
-  #           phone_number: data['telephone'],
-  #           address: data['adresse'],
-  #           zipcode: data['codepostal'],
-  #           city: data['ville']
-  #         )
-  #         student.save!
-  #       end
+        if student.new_record?
+          student.assign_attributes(
+            first_name: data['prénom'],
+            last_name: data['nom'],
+            date_of_birth: data['date-naissance'],
+            username: username,
+            email: data['email'],
+            gender: data['genre'],
+            phone_number: data['telephone'],
+            address: data['adresse'],
+            zipcode: data['codepostal'],
+            city: data['ville']
+          )
+          student.save!
+        end
 
-  #       academy = Academy.find_by(name: data['academie'])
-  #       school_period = SchoolPeriod.find_by(name: data['stage'], year: data['annee'], academy_id: academy.id)
-  #       camp = Camp.find_by(name: data['semaine'], school_period: school_period)
+        academy = Academy.find_by(name: data['academie'])
+        school_period = SchoolPeriod.find_by(name: data['stage'], year: data['annee'], academy_id: academy.id)
+        camp = Camp.find_by(name: data['semaine'], school_period: school_period)
 
-  #       student.academies << academy unless student.academies.include?(academy)
-  #       student.school_periods << school_period unless student.school_periods.include?(school_period)
-  #       student.camps << camp unless student.camps.include?(camp)
-  #     end
-  #   end
-  # end
+        student.academies << academy unless student.academies.include?(academy)
+        student.school_periods << school_period unless student.school_periods.include?(school_period)
+        student.camps << camp unless student.camps.include?(camp)
+      end
+    end
+  end
 end
