@@ -1,7 +1,7 @@
 class Managers::MembershipDepositsController < ApplicationController
 
   def index
-    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     academy_ids = current_user.academies.pluck(:id)
     user_ids = Membership.where(academy_id: academy_ids, start_year: @start_year, status: true).distinct.pluck(:receiver_id)
     @users = User.where(id: user_ids).order(:last_name)
@@ -25,7 +25,8 @@ class Managers::MembershipDepositsController < ApplicationController
     membership_deposit.manager = current_user
     membership_deposit.depositor = User.find(params[:membership_deposit][:depositor_id])
     membership_deposit.date = Date.current
-    Date.current >= Date.new(Date.current.year, 4, 1) ? membership_deposit.start_year = Date.current.year : membership_deposit.start_year = Date.current.year - 1
+    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
+    membership_deposit.start_year = start_year
     if membership_deposit.save
       flash[:notice] = 'Dépôt enregistré'
       redirect_to membership_finances_overview_managers_finances_path

@@ -8,10 +8,4 @@ class Membership < ApplicationRecord
   scope :paid, -> { where(status: true) }
   scope :unpaid, -> { where(status: false) }
 
-  # # methode pour retrouver les memebrships en fonction de la start_year
-
-  # def self.memberships_by_year(year)
-  #   where(start_year: year)
-  # end
-
 end

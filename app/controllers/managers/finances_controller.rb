@@ -4,7 +4,7 @@ class Managers::FinancesController < ApplicationController
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     @academies = current_user.academies
     academy_ids = @academies.pluck(:id)
-    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
 
     # Sélectionner tous les memberships pour les académies gérées
     @all_memberships = Membership.where(academy_id: academy_ids)
@@ -109,7 +109,7 @@ class Managers::FinancesController < ApplicationController
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     membership_ids = params[:membership_ids] || []
     memberships = Membership.where(id: membership_ids)
-    start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
 
     respond_to do |format|
       format.csv do

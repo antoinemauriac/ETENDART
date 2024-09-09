@@ -100,9 +100,11 @@
     </thead>
     <tbody>
       <% @students.each do |student| %>
+        <% membership = student.memberships.find_by(start_year: @start_year) %>
+        <% name_style = membership&.status == false ? "color: red;font-weight: bold" : "" %>
         <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student) %>">
-          <td class="align-middle"><%= student.last_name %></td>
-          <td class="align-middle"><%= student.first_name %></td>
+          <td class="align-middle" style="<%= name_style %>"><%= student.last_name %></td>
+          <td class="align-middle" style="<%= name_style %>"><%= student.first_name %></td>
           <td class="align-middle <%= student.annual_program_enrollments.find_by(annual_program: @annual_program).image_consent ? '' : 'non-bg' %>">
             <%= student.annual_program_enrollments.find_by(annual_program: @annual_program).image_consent ? "" : "Non" %>
           </td>
