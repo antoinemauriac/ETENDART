@@ -11,7 +11,7 @@ class Managers::CampsController < ApplicationController
     @activities = @camp.activities
     @activity = Activity.new
     @students = @camp.students.order(:last_name)
-    @start_year = @camp.starts_at.month >= 4 ? @camp.starts_at.year : @camp.starts_at.year - 1
+    @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
   end
 
   def create

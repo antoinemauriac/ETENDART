@@ -97,7 +97,7 @@ class Managers::ActivitiesController < ApplicationController
     category = @activity.category
     @coach = @activity.coach
     @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
-    @start_year = @camp.starts_at.month >= 4 ? @camp.starts_at.year : @camp.starts_at.year - 1
+    @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
   end
 
   def show_for_annual

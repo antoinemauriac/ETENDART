@@ -6,22 +6,21 @@ class Managers::ImportAnnualStudentsController < ApplicationController
     file = params[:academy][:csv_file]
     file = File.open(file)
 
-    annual_program.annual_program_enrollments.destroy_all
-
-    annual_program.activities.each do |activity|
-      activity.activity_enrollments.destroy_all
-    end
-
-    annual_program.courses.each do |course|
-      course.course_enrollments.destroy_all
-    end
-
-    # annual_program.students.each do |student|
-    #   student.destroy if student.courses.empty?
-    # end
+    start_year = annual_program.starts_at.year
 
     ActiveRecord::Base.transaction do
-      CSV.foreach(file, headers: true, col_sep: ',') do |row|
+
+      annual_program.annual_program_enrollments.destroy_all
+
+      annual_program.activities.each do |activity|
+        activity.activity_enrollments.destroy_all
+      end
+
+      annual_program.courses.each do |course|
+        course.course_enrollments.destroy_all
+      end
+
+      CSV.foreach(file, headers: true, col_sep: ';') do |row|
         row = row.to_hash
         if row['prénom'].nil? || row['nom'].nil? || row['date-naissance'].nil? || row['username'].nil? || row['genre'].nil?
           flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
@@ -53,6 +52,19 @@ class Managers::ImportAnnualStudentsController < ApplicationController
                 redirect_to managers_annual_program_path(annual_program) and return
               end
             end
+          end
+
+          membership = student.memberships.find_by(start_year: start_year)
+          if membership.nil?
+            membership = Membership.create(student: student, amount: 15, start_year: start_year, academy: academy)
+          end
+
+          if !["cash", "cheque", "hello_asso", "offert", "virement", "pass", nil].include?(row['cotisation'])
+            flash[:alert] = "Le mode de paiement de la cotisation doit être cash, cheque, hello_asso, offert, pass ou virement"
+            redirect_to managers_annual_program_path(annual_program) and return
+          end
+          if %w[cash cheque hello_asso offert virement pass].include?(row['cotisation']) && membership.status == false
+            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
         end
       end

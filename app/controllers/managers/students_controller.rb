@@ -4,7 +4,7 @@ class Managers::StudentsController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy])
-    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    # @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
 
     @students = if params[:query].present?
                   Student.search_by_query(params[:query])
@@ -64,7 +64,7 @@ class Managers::StudentsController < ApplicationController
     past_courses = @student.past_courses
     @past_annual_courses = past_courses.select(&:annual_program)
     @past_camp_courses = past_courses.select(&:camp)
-    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     @membership = @student.memberships.find_by(start_year: @start_year)
     @memberships = @student.memberships.order(start_year: :desc)
   end
@@ -172,7 +172,7 @@ class Managers::StudentsController < ApplicationController
       students = Student.all.order(:last_name)
       filename = "eleves_toute_academie.csv"
     end
-    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
       format.csv do
@@ -191,7 +191,7 @@ class Managers::StudentsController < ApplicationController
               student.address,
               student.zipcode,
               student.city,
-              student.memberships.where(start_year: @start_year)&.first&.status ? "Oui" : "Non",
+              student.memberships.where(start_year: start_year)&.first&.status ? "Oui" : "Non",
               student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : '',
               student.predominant_sport,
               student.main_academy&.name

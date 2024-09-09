@@ -9,7 +9,7 @@ class Managers::ImportStudentsController < ApplicationController
     file = params[:camp][:csv_file]
     file = File.open(file)
 
-    start_year = camp.starts_at.month >= 4 ? camp.starts_at.year : camp.starts_at.year - 1
+    start_year = camp.starts_at.month >= 9 ? camp.starts_at.year : camp.starts_at.year - 1
     students = camp.students.to_a
 
     ActiveRecord::Base.transaction do
@@ -88,7 +88,7 @@ class Managers::ImportStudentsController < ApplicationController
           # Step 6: Manage membership
           membership = student.memberships.find_by(start_year: start_year)
           if membership.nil?
-            membership = student.memberships.create(amount: 15, start_year: start_year, academy: academy)
+            membership = Membership.create(student: student, amount: 15, start_year: start_year, academy: academy)
           end
 
           if !["cash", "cheque", "hello_asso", "offert", "virement", "pass", nil].include?(row['cotisation'])

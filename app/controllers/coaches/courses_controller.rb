@@ -11,7 +11,7 @@ class Coaches::CoursesController < ApplicationController
   end
 
   def show
-    @start_year = Date.current.month >= 4 ? Date.current.year : Date.current.year - 1
+    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
     @academy = course.academy
     # @school_periods = @academy.school_periods
