@@ -5,27 +5,27 @@ class Managers::ActivityPolicy < ApplicationPolicy
   end
 
   def create?
-    authorized_for_camp?
+    authorized?
   end
 
   def show?
-    authorized_for_camp?
+    authorized?
   end
 
   def new_for_annual?
-    authorized_for_annual?
+    user.manager? || user.coordinator?
   end
 
   def create_for_annual?
-    authorized_for_annual?
+    authorized?
   end
 
   def show_for_annual?
-    authorized_for_annual?
+    authorized?
   end
 
   def all_annual_courses?
-    authorized_for_annual?
+    authorized?
   end
 
   def destroy?
@@ -43,22 +43,15 @@ class Managers::ActivityPolicy < ApplicationPolicy
   private
 
   def authorized?
+    academy = find_academy
+    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
+  end
+
+  def find_academy
     if record.camp
-      academy = record.camp.school_period.academy
-      (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
+      record.camp.school_period.academy
     else
-      academy = record.annual_program.academy
-      (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
+      record.annual_program.academy
     end
-  end
-
-  def authorized_for_annual?
-    academy = record.annual_program.academy
-    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
-  end
-
-  def authorized_for_camp?
-    academy = record.camp.school_period.academy
-    (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user)
   end
 end

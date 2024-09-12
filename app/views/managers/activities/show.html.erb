@@ -26,7 +26,7 @@
           <tr>
             <td class="align-middle">
               <div class="d-flex">
-                <%= link_to l(course.starts_at, format: :abbr), managers_course_path(course), class: "btn-etendart-yellow mb-2", style: "width: 80%" %>
+                <%= link_to l(course.starts_at, format: :abbr), managers_course_path(course), data: { turbo: false }, class: "btn-etendart-yellow mb-2", style: "width: 80%" %>
               </div>
             </td>
             <%= simple_form_for course, url: managers_course_path(course, redirect_to: "camp" ), method: :put, data: { turbo: false } do |f| %>

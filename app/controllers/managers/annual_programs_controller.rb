@@ -1,7 +1,7 @@
 class Managers::AnnualProgramsController < ApplicationController
   def index
     @academy = Academy.find(params[:academy])
-    @annual_programs = @academy.annual_programs
+    @annual_programs = @academy.annual_programs.order(starts_at: :desc)
     skip_policy_scope
     authorize [:managers, @annual_programs]
   end
