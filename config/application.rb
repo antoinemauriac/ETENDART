@@ -16,12 +16,10 @@ module ETENDART
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    config.active_job.queue_adapter = :sidekiq
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
+    # Use the solid_queue adapter for Active Job
+    config.active_job.queue_adapter = :solid_queue
+    config.solid_queue.connects_to = { database: { writing: :queue } }
+
 
     config.time_zone = 'Paris'
     config.i18n.default_locale = :fr

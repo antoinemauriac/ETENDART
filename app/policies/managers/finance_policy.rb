@@ -15,4 +15,5 @@ class Managers::FinancePolicy < ApplicationPolicy
   def show?
     user.manager? || user.coordinator? || user.admin?
   end
+
 end

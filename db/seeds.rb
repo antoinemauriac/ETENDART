@@ -9,12 +9,19 @@
 
 # Category.create!(name: 'Tennis', super_category: 'Sport')
 # Category.create!(name: 'Manga', super_category: 'Eveil')
+# SchoolPeriod.destroy_all
+# Academy.destroy_all
+# User.destroy_all
 
 # Role.create!(name: 'manager')
 # Role.create!(name: 'coach')
+# Role.create!(name: 'admin')
 
-# antoine = User.create(email: "mauriac.antoine@gmail.com", password: 123456, admin: true)
-# antoine.roles << Role.find_by(name: 'manager')
+# antoine = User.create!(email: "mauriac.antoine@gmail.com", password: 123456, first_name: "Antoine", last_name: "Mauriac")
+# antoine.roles << Role.find_by(name: 'admin')
+
+# celine = User.create!(email: "celine@etendart.com", password: 123456, first_name: "Céline", last_name: "Gouiret")
+# celine.roles << Role.find_by(name: 'manager')
 # ornella = User.create!(email: 'ornella@etendart.org', password: 123456)
 # ornella.roles << Role.find_by(name: 'manager')
 
@@ -59,7 +66,7 @@
 # strasbourg.image.attach(io: strasbourg_image, filename: 'strasbourg-court.jpg', content_type: 'image/jpg')
 # strasbourg.save
 
-# Academy.create!(name: 'Djokovic', manager: antoine)
+# Academy.create!(name: 'Djokovic', manager: celine)
 # djoko = Academy.find_by(name: 'Djokovic')
 # djoko_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/sr6nqll54ykkr03jqvgn.jpg')
 # djoko.image.attach(io: djoko_image, filename: 'djoko-court.jpg', content_type: 'image/jpg')

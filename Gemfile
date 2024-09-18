@@ -10,16 +10,16 @@ gem 'pundit'
 gem "cloudinary"
 gem "rails_admin", "3.0"
 gem 'text'
-gem "sidekiq", "< 7"
-gem "sidekiq-failures", "~> 1.0"
+# gem "sidekiq", "< 7"
+# gem "sidekiq-failures", "~> 1.0"
 gem 'will_paginate', '~> 4.0'
 gem 'pagy'
-gem 'sidekiq-cron'
+# gem 'sidekiq-cron'
 gem 'faker'
 gem 'pg_search'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.0.4", ">= 7.0.4.2"
+gem "rails", "~> 7.1.4"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
@@ -28,7 +28,7 @@ gem "sprockets-rails"
 gem "pg", "~> 1.1"
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+gem "puma", "~> 6.0"
 
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
@@ -94,3 +94,6 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem "solid_queue", "~> 0.9.0"
+gem "mission_control-jobs"

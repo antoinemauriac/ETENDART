@@ -2,6 +2,7 @@ class UpdateEnrollmentsJob < ApplicationJob
   queue_as :default
 
   def perform(course_id, enrollments_params)
+    puts "UpdateEnrollmentsJob COMMENCE"
     course = Course.find(course_id)
     activity = course.activity
     category = activity.category

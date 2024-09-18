@@ -1,8 +1,10 @@
-require 'sidekiq/web'
-require 'sidekiq/cron/web'
+# require 'sidekiq/web'
+# require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount MissionControl::Jobs::Engine, at: "/jobs"
+  MissionControl::Jobs.base_controller_class = "MissionControlController"
 
   devise_for :users, controllers: {
     sessions: 'users/sessions',
@@ -24,9 +26,9 @@ Rails.application.routes.draw do
 
   root to: "pages#home"
 
-  authenticate :user, ->(user) { user.admin? } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
+  # authenticate :user, ->(user) { user.admin? } do
+  #   mount Sidekiq::Web => '/sidekiq'
+  # end
 
   # coach stiumulus controller
   get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'

@@ -1,0 +1,29 @@
+# periodic_cleanup:
+#   class: CleanSoftDeletedRecordsJob
+#   queue: background
+#   args: [ 1000, { batch_size: 500 } ]
+#   schedule: every hour
+# periodic_command:
+#   command: "SoftDeletedRecord.due.delete_all"
+#   priority: 2
+#   schedule: at 5am every day
+
+log_message:
+  class: LogMessageJob
+  schedule: "* * * * *" # Every day at 12:00 AM
+
+update_school_period_stats:
+  class: UpdateSchoolPeriodStatsJob
+  schedule: "0 22 * * *" # Every day at 2:00 AM
+
+update_camp_stats:
+  class: UpdateCampStatsJob
+  schedule: "5 22 * * *" # Every day at 2:02 AM
+
+update_annual_program_stats:
+  class: UpdateAnnualProgramStatsJob
+  schedule: "10 22 * * *" # Every day at 2:04 AM
+
+update_activity_stats:
+  class: UpdateActivityStatsJob
+  schedule: "15 22 * * *" # Every day at 2:06 AM

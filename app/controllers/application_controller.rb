@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
+  before_action :set_locale
+
   include Pundit::Authorization
   include Pagy::Backend
 
@@ -15,6 +17,10 @@ class ApplicationController < ActionController::Base
   # end
 
   private
+
+  def set_locale
+    I18n.locale = :fr
+  end
 
   def skip_pundit?
     devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)/
