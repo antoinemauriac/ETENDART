@@ -62,7 +62,7 @@
       <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select" } } %>
       <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches.reject { |coach| coach == @coach }, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" }, selected: @coaches.reject { |coach| coach == @coach } } %>
       <%= f.simple_fields_for :day_attributes do |activity_period| %>
-        <%= activity_period.input :day, as: :select, collection: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'], label: 'Jour', selected: @last_course_day, input_html: { class: 'activity-input' } %>
+        <%= activity_period.input :day, as: :select, collection: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'], label: 'Jour', selected: @last_course_day, input_html: { class: 'activity-input' } %>
         <%= activity_period.input :start_time, as: :time, label: 'Heure de début', selected: @last_course_start_time, input_html: { class: 'activity-input' }, minute_step: 15 %>
         <%= activity_period.input :end_time, as: :time, label: 'Heure de fin', selected: @last_course_end_time, input_html: { class: 'activity-input' }, minute_step: 15 %>
       <% end %>

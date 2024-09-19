@@ -46,7 +46,8 @@ class AnnualProgram < ApplicationRecord
     'Tuesday' => 'Mardi',
     'Wednesday' => 'Mercredi',
     'Thursday' => 'Jeudi',
-    'Friday' => 'Vendredi'
+    'Friday' => 'Vendredi',
+    'Saturday' => 'Samedi',
   }
 
   def can_import?
