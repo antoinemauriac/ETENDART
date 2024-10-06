@@ -1,0 +1,36 @@
+<%= link_to managers_students_path(academy: academy), class: "col-sm-12 col-md-2 mb-3" do %>
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('student.jpeg') %>')">
+      LES ÉLÈVES
+    </div>
+<% end %>
+
+<%= link_to managers_coaches_path(academy: academy), class: "col-sm-12 col-md-2 mb-3" do %>
+  <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('coachs.jpeg') %>')">
+    LES COACHS
+  </div>
+<% end %>
+
+<% if academy.annual %>
+  <%= link_to managers_annual_programs_path(academy: academy), class: "col-sm-12 col-md-3 mb-3" do %>
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('annual.jpeg') %>')">
+      PROGRAMME ANNUEL
+    </div>
+  <% end %>
+<% else %>
+  <%= link_to managers_school_periods_path(academy: academy), class: "col-sm-12 col-md-3 mb-3"  do %>
+    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('camps.jpeg') %>')">
+      LES STAGES
+    </div>
+  <% end %>
+<% end %>
+<%= link_to managers_locations_path(academy: academy), class: "col-sm-12 col-md-2 mb-3" do %>
+  <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('locations.jpeg') %>')">
+    LES ADRESSES
+  </div>
+<% end %>
+
+<%= link_to managers_categories_path(academy: academy), class: "col-sm-12 col-md-2 mb-3" do %>
+  <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('categories.jpeg') %>')">
+    LES CATÉGORIES
+  </div>
+<% end %>

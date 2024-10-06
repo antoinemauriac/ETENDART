@@ -9,7 +9,7 @@ export default class extends Controller {
   }
 
   displayMenu() {
-    this.navbarTarget.classList.toggle('show');
+    // this.navbarTarget.classList.toggle('show');
     this.navbarCollapseTarget.classList.toggle('show');
     this.navbarToggleTarget.classList.toggle('active')
   }

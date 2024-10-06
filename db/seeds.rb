@@ -90,8 +90,8 @@
 # coach5 = User.create!(email: 'coach5@gmail.com', password: 123456, first_name: "Imane", last_name: "Ali")
 # coach5.roles << Role.find_by(name: 'coach')
 
-# coach1.academies_as_coach << djoko
-# coach2.academies_as_coach << djoko
+# coach1.academies_as_coach << Academy.first
+# coach2.academies_as_coach << Academy.first
 # coach3.academies_as_coach << djoko
 # coach4.academies_as_coach << djoko
 # coach5.academies_as_coach << djoko
@@ -213,6 +213,8 @@
 #     CourseEnrollment.create!(student: student, course: course)
 #   end
 # end
+#
+# SchoolPeriod.destroy_all
 
 # 80.times do
 #   student = Student.create!(
@@ -224,5 +226,5 @@
 #     gender: ['Garçon', 'Fille'].sample,
 #     username: Faker::Internet.username,
 #     )
-#     student.academies << Academy.find(10)
+#     student.academies << Academy.first
 # end

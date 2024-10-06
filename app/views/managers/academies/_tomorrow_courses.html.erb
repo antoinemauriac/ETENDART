@@ -1,0 +1,23 @@
+<div class="col-12 col-xxl-11 mt-2 mb-4" style="overflow-x:auto">
+  <div class="header-info header-info-academy">DEMAIN</div>
+    <div class="card-row-container">
+      <div class="row pb-2 pt-2 header-row">
+        <div class="col-3 flexy-row">Activité</div>
+        <div class="col-3 flexy-row">Coach Référent</div>
+        <div class="col flexy-row">Téléphone</div>
+        <div class="col flexy-row">Début</div>
+        <div class="col flexy-row">Fin</div>
+        <div class="col flexy-row">Nb élèves</div>
+      </div>
+      <% @tomorrow_courses.each do |course| %>
+        <%= link_to managers_course_path(course), class: "row card-row" do %>
+          <div class="col-3 flexy-row"><%= course.activity.name %></div>
+          <div class="col-3 flexy-row"><%= course.activity.coach.try(:full_name) || "" %></div>
+          <div class="col flexy-row"><%= course.activity.coach.try(:phone_number) || "" %></div>
+          <div class="col flexy-row"><%= l(course.starts_at, format: :hour_min) %></div>
+          <div class="col flexy-row"><%= l(course.ends_at, format: :hour_min) %></div>
+          <div class="col flexy-row"><%= course.students_count %></div>
+        <% end %>
+      <% end %>
+    </div>
+</div>

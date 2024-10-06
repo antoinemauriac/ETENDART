@@ -1,0 +1,19 @@
+<div class="col-12 col-xxl-11 mb-4">
+  <div class="header-info header-info-academy">FEEDBACKS RÉCENTS</div>
+    <div class="card-row-container">
+    <div class="row pb-2 pt-2 header-row align-items-center">
+      <div class="col flexy-row">Élève</div>
+      <div class="col-5 flexy-row">Contenu</div>
+      <div class="col flexy-row">Auteur</div>
+      <div class="col flexy-row">Date</div>
+    </div>
+      <% feedbacks.each do |feedback| %>
+        <%= link_to managers_student_path(feedback.student), class: "row card-row" do %>
+          <div class="col flexy-row"><%= feedback.student.full_name %></div>
+          <div class="col-5 flexy-row"><%= feedback.short_content %></div>
+          <div class="col flexy-row"><%= feedback.coach.full_name %></div>
+          <div class="col flexy-row"><%= l(feedback.created_at, format: :date) %></div>
+        <% end %>
+      <% end %>
+    </div>
+</div>

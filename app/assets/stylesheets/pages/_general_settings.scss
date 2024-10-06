@@ -4,6 +4,7 @@
 
 a {
   text-decoration: none;
+  color: black;
 }
 
 a:hover {
@@ -39,12 +40,6 @@ ul {
 .flexy {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.flexy-row {
-  display: flex;
   justify-content: center;
   align-items: center;
 }

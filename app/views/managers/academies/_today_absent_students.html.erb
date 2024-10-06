@@ -1,0 +1,33 @@
+<div class="col-12 col-xxl-11 mb-4">
+  <div class="header-info header-info-academy">
+    ÉLÈVES ABSENTS AUJOURD'HUI
+    <%= link_to export_absent_students_csv_managers_academy_path(format: :csv) do %>
+      <i class="fa-solid fa-download fa-download-white"></i>
+    <% end %>
+  </div>
+  <div class="card-row-container">
+    <div class="row pb-2 pt-2 header-row align-items-center">
+      <div class="col-3 flexy-row">Élève</div>
+      <div class="col flexy-row">Téléphone</div>
+      <div class="col-3 flexy-row">Email</div>
+      <div class="col-3 flexy-row">Activité</div>
+      <div class="col flexy-row">Academie</div>
+    </div>
+    <% today_absent_students.each do |student| %>
+      <% student.unattended_today_courses.each do |course_enrollment| %>
+        <% if course_enrollment.course.academy.name == @academy.name %>
+          <%= link_to managers_student_path(student), class: "row card-row" do %>
+            <div class="col-3 flexy-row align-middle"><%= student.full_name_separator %></div>
+            <div class="col flexy-row align-middle"><%= student.phone_number %></div>
+            <div class="col-3 flexy-row align-middle"><%= student.email %></div>
+            <div class="col-3 flexy-row align-middle"><%= course_enrollment.course.activity.name %></div>
+            <div class="col flexy-row align-middle"><%= course_enrollment.course.academy.name %></div>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <div class="flexy mt-2">
+      <%= link_to "Voir tous", today_absent_students_managers_academy_path, class: "btn-add-student" %>
+    </div>
+  </div>
+</div>

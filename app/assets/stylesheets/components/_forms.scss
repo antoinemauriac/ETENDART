@@ -25,6 +25,9 @@
   border-top-left-radius: 0px!important;
   border-top-right-radius: 0px!important;
   margin: 0px 0px 12px 0px!important;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .edit-container {

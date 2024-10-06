@@ -11,46 +11,55 @@
 <div class="yellow-title"><%= @activity.name.upcase %></div>
 <div class="row justify-content-center align-items-stretch">
 
-  <div class="col-8" >
+    <div class="col-8">
     <div class="header-info">PROCHAINS COURS</div>
-    <table class="table table-striped table-responsive table-center form-container form-container-activity">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Heure de début</th>
-          <th>Heure de fin</th>
-          <th>Modifier</th>
-          <th>Supprimer</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @courses.each do |course| %>
-          <%= simple_form_for course, url: managers_course_path(course), method: :put, data: { turbo: false } do |f| %>
-          <tr>
-          <td class="align-middle">
-            <div class="d-flex">
-              <%= link_to l(course.starts_at, format: :abbr), managers_course_path(course), class: "btn-etendart-yellow mb-2", style: "width: 80%" %>
+    <div class="form-container form-container-activity">
+      <div class="row row-with-border align-items-center">
+        <div class="col-3 flexy-row">
+          <strong>Date</strong>
+        </div>
+        <div class="col-3 flexy-row">
+          <strong>Heure de début</strong>
+        </div>
+        <div class="col-3 flexy-row">
+          <strong>Heure de fin</strong>
+        </div>
+        <div class="col-2 flexy-row">
+          <strong>Modifier</strong>
+        </div>
+        <div class="col-1 flexy-row">
+          <strong>Supprimer</strong>
+        </div>
+      </div>
+
+      <% @courses.each do |course| %>
+        <%= simple_form_for course, url: managers_course_path(course), method: :put do |f| %>
+          <div class="row row-with-border align-items-center">
+            <div class="col-3 flexy-row">
+                <%= link_to l(course.starts_at, format: :abbr), managers_course_path(course), class: "btn-new-generation" %>
             </div>
-          </td>
-            <td class="align-middle">
+
+            <div class="col-3 flexy-row">
               <%= f.input :starts_at, as: :time, label: false, minute_step: 15 %>
-            </td>
-            <td class="align-middle">
+            </div>
+
+            <div class="col-3 flexy-row">
               <%= f.input :ends_at, as: :time, label: false, minute_step: 15 %>
-            </td>
-            <td class="align-middle">
-              <%= f.submit "Valider", class: 'btn-etendart-yellow mb-2' %>
-            </td>
-          <% end %>
-            <td class="align-middle">
+            </div>
+
+            <div class="col-2 flexy-row">
+              <%= f.submit "Valider", class: 'btn-new-generation'%>
+            </div>
+
+            <div class="col-1 flexy-row">
               <% if course.starts_at > Time.current - 1.week  %>
                 <%= link_to managers_course_path(course), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce cours ?"} do %>
                   <i class="fas fa-trash trash"></i>
                 <% end %>
               <% end %>
-            </td>
-          </tr>
+            </div>
+          </div>
         <% end %>
-      </tbody>
-    </table>
-  </div>
+      <% end %>
+    </div>
+</div>

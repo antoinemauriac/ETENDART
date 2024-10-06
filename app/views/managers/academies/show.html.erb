@@ -1,222 +1,33 @@
+<%#= turbo_stream_from "today_courses" %>
 <%= render "shared/academy_header" %>
 <div class="row justify-content-center align-items-center mt-3">
-  <%= link_to managers_students_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('student.jpeg') %>')">
-      LES ÉLÈVES
-    </div>
-  <% end %>
-
-  <%= link_to managers_coaches_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('coachs.jpeg') %>')">
-      LES COACHS
-    </div>
-  <% end %>
-
-  <% if @academy.annual %>
-    <%= link_to managers_annual_programs_path(academy: @academy), class: "col-sm-12 col-md-3 mb-3" do %>
-      <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('annual.jpeg') %>')">
-        PROGRAMME ANNUEL
-      </div>
-    <% end %>
-  <% else %>
-    <%= link_to managers_school_periods_path(academy: @academy), class: "col-sm-12 col-md-3 mb-3"  do %>
-      <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('camps.jpeg') %>')">
-        LES STAGES
-      </div>
-    <% end %>
-  <% end %>
-  <%= link_to managers_locations_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('locations.jpeg') %>')">
-      LES ADRESSES
-    </div>
-  <% end %>
-
-  <%= link_to managers_categories_path(academy: @academy), class: "col-sm-12 col-md-2 mb-3" do %>
-    <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('categories.jpeg') %>')">
-      LES CATÉGORIES
-    </div>
-  <% end %>
+  <%= render "managers/academies/menu", academy: @academy %>
 </div>
 
 <div class="row justify-content-center align-items-stretch">
   <%# LES COURS DU JOUR %>
   <div class="col-12 col-xxl-11 mt-2 mb-4">
     <div class="header-info header-info-academy">LES COURS DU JOUR</div>
-    <div class="content-info">
-      <% if @today_courses.present? %>
-        <table class="table table-striped table-responsive table-center">
-          <thead>
-            <tr>
-              <th>Activité</th>
-              <th>Coach Référent</th>
-              <th>Telephone</th>
-              <th>Début</th>
-              <th>Fin</th>
-              <th>Total élèves</th>
-              <% if @academy.banished %>
-                <th>Nb exclus</th>
-              <% end %>
-              <th>Nb présents</th>
-              <th>Nb absents</th>
-              <th>Appel fait ?</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @today_courses.each do |course| %>
-            <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
-              <td class="align-middle"><%= course.activity.name %></td>
-              <td class="align-middle"><%= course.activity.coach.try(:full_name) || "" %></td>
-              <td class="align-middle"><%= course.activity.coach.try(:phone_number) || "" %></td>
-              <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
-              <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
-              <td class="align-middle"><%= course.students.count %></td>
-              <% if @academy.banished %>
-                <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.activity.banished_students.where.not(id: course.course_enrollments.joins(:student).pluck(:student_id)).count, style: 'font-weight:bold;') : "-" %></td>
-              <% end %>
-              <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.present_students_count, style: 'color:green; font-weight:bold;') : "-" %></td>
-              <td class="align-middle"><%= course.starts_at < Time.current ? content_tag(:span, course.missing_students_count, style: 'color:red; font-weight:bold;') : "-" %></td>
-              <td class="align-middle">
-                <% if course.starts_at < Time.current %>
-                  <% if course.status %>
-                    <i class="fa-solid fa-check text-success fa-big"></i>
-                  <% else %>
-                    <i class="fa-solid fa-xmark text-danger fa-big"></i>
-                  <% end %>
-                <% end %>
-              </td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p style="text-align:center">Aucun cours aujourd'hui.</p>
-      <% end %>
-    </div>
+    <% if @today_courses.present? %>
+      <%= render "managers/academies/today_courses", academy: @academy %>
+    <% else %>
+      <p class="mt-3" style="text-align:center">Aucun cours aujourd'hui.</p>
+    <% end %>
   </div>
 
   <%# LES APPELS EN RETARD %>
   <% if @old_presence_sheet.present? %>
-    <div class="col-12 col-xxl-11 mt-2 mb-4">
-      <div class="header-info header-info-academy">
-        <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;FEUILLE DE PRÉSENCE EN RETARD&nbsp;<i class="fa-solid fa-triangle-exclamation"></i>
-      </div>
-      <div class="content-info">
-          <table class="table table-striped table-responsive table-center">
-            <thead>
-              <tr>
-                <th>Activité</th>
-                <th>Coach Référent</th>
-                <th>Telephone</th>
-                <th>Date</th>
-                <th>Appel fait ?</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @old_presence_sheet.each do |course| %>
-              <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
-                <td class="align-middle"><%= course.activity.name %></td>
-                <td class="align-middle"><%= course.activity.coach.try(:full_name) || "" %></td>
-                <td class="align-middle"><%= course.activity.coach.try(:phone_number) || "" %></td>
-                <td class="align-middle"><%= l(course.starts_at, format: :short) %></td>
-                <td class="align-middle">
-                  <% if course.starts_at < Time.current %>
-                    <% if course.status %>
-                      <i class="fa-solid fa-check text-success fa-big"></i>
-                    <% else %>
-                      <i class="fa-solid fa-xmark text-danger fa-big"></i>
-                    <% end %>
-                  <% end %>
-                </td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
-      </div>
-    </div>
+    <%= render "managers/academies/old_courses", old_presence_sheet: @old_presence_sheet %>
   <% end %>
 
   <%# LES ABSENTS DE LA JOURNÉE %>
   <% if @today_absent_students.present? %>
-    <div class="col-12 col-xxl-11 mb-4" data-controller="missing-students-table">
-      <div class="header-info header-info-academy">
-        ÉLÈVES ABSENTS AUJOURD'HUI
-        <%= link_to export_absent_students_csv_managers_academy_path(format: :csv) do %>
-          <i class="fa-solid fa-download fa-download-white"></i>
-        <% end %>
-      </div>
-      <div class="content-info">
-          <table class="table table-striped table-responsive table-center">
-            <thead>
-              <tr>
-                <th>Élève</th>
-                <th>Téléphone</th>
-                <th>Email</th>
-                <th>Heure</th>
-                <th>Activité</th>
-                <th>Academie</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @today_absent_students.each do |student| %>
-                <% student.unattended_today_courses.each do |course_enrollment| %>
-                  <% if course_enrollment.course.academy.name == @academy.name %>
-                    <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
-                      <td class="align-middle"><%= student.full_name_separator %></td>
-                      <td class="align-middle"><%= student.phone_number %></td>
-                      <td class="align-middle"><%= student.email %></td>
-                      <td class="align-middle"><%= l(course_enrollment.course.starts_at, format: :hour_min) %></td>
-                      <td class="align-middle"><%= course_enrollment.course.activity.name %></td>
-                      <td class="align-middle"><%= course_enrollment.course.academy.name %></td>
-                    </tr>
-                  <% end %>
-                <% end %>
-              <% end %>
-            </tbody>
-          </table>
-        <div class="flexy">
-          <%= link_to "Voir tous", today_absent_students_managers_academy_path, class: "btn-add-student" %>
-        </div>
-      </div>
-    </div>
+    <%= render "managers/academies/today_absent_students", today_absent_students: @today_absent_students %>
   <% end %>
 
   <%# LES ABSENTS DE LA SEMAINE %>
   <% if @week_absent_enrollments.present? %>
-  <div class="col-12 col-xxl-11 mb-4" data-controller="missing-students-table">
-    <div class="header-info header-info-academy">
-      ÉLÈVES ABSENTS DE LA SEMAINE
-      <%= link_to export_week_absent_students_csv_managers_academy_path(format: :csv) do %>
-        <i class="fa-solid fa-download fa-download-white"></i>
-      <% end %>
-    </div>
-    <div class="content-info">
-        <table class="table table-striped table-responsive table-center">
-          <thead>
-            <tr>
-              <th>Jour</th>
-              <th>Activité</th>
-              <th>Élève</th>
-              <th>Téléphone</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @week_absent_enrollments.each do |enrollment| %>
-              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(enrollment.student) %>'">
-                <td class="align-middle"><%= l(enrollment.course.starts_at, format: :day_name) %></td>
-                <td class="align-middle"><%= enrollment.activity.name %></td>
-                <td class="align-middle"><%= enrollment.student.full_name_separator %></td>
-                <td class="align-middle"><%= enrollment.student.phone_number %></td>
-                <td class="align-middle"><%= enrollment.student.email %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <div class="flexy">
-        <%= link_to "Voir tous", week_absent_students_managers_academy_path, class: "btn-add-student" %>
-      </div>
-    </div>
-  </div>
+    <%= render "managers/academies/week_absent_students", week_absent_enrollments: @week_absent_enrollments %>
   <% end %>
 
   <%# LES EXCLUS %>
@@ -267,70 +78,12 @@
   <% end %>
 
   <%# LES FEEDBACKS %>
-  <div class="col-12 col-xxl-11 mb-4">
-    <div class="header-info header-info-academy">FEEDBACKS RÉCENTS</div>
-    <div class="content-info">
-      <% if @feedbacks.present? %>
-        <table class="table table-striped table-responsive table-center">
-          <thead>
-            <tr>
-              <th>Élève</th>
-              <th>Contenu</th>
-              <th>Auteur</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @feedbacks.each do |feedback| %>
-              <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(feedback.student) %>'">
-                <td class="align-middle"><%= feedback.student.full_name %></td>
-                <td class="align-middle"><%= feedback.content %></td>
-                <td class="align-middle"><%= feedback.coach.full_name %></td>
-                <td class="align-middle"><%= l(feedback.created_at, format: :date) %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p style="text-align:center">Aucun feedback récent.</p>
-      <% end %>
-    </div>
-  </div>
+  <% if @feedbacks.present? %>
+    <%= render "managers/academies/feedbacks", feedbacks: @feedbacks %>
+  <% end %>
 
   <%# DEMAIN %>
-  <div class="col-12 col-xxl-11 mt-2 mb-4">
-    <div class="header-info header-info-academy">DEMAIN</div>
-    <div class="content-info">
-      <% if @tomorrow_courses.present? %>
-        <table class="table table-striped table-responsive table-center">
-          <thead>
-            <tr>
-              <th>Académie</th>
-              <th>Activité</th>
-              <th>Coach Référent</th>
-              <th>Téléphone</th>
-              <th>Début</th>
-              <th>Fin</th>
-              <th>Nb élèves</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @tomorrow_courses.each do |course| %>
-            <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
-              <td class="align-middle"><%= course.academy.name %></td>
-              <td class="align-middle"><%= course.activity.name %></td>
-              <td class="align-middle"><%= course.activity.coach.try(:full_name) || "" %></td>
-              <td class="align-middle"><%= course.activity.coach.try(:phone_number) || "" %></td>
-              <td class="align-middle"><%= l(course.starts_at, format: :hour_min) %></td>
-              <td class="align-middle"><%= l(course.ends_at, format: :hour_min) %></td>
-              <td class="align-middle"><%= course.students_count %></td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p style="text-align:center">Aucun cours demain.</p>
-      <% end %>
-    </div>
-  </div>
+  <% if @tomorrow_courses.present? %>
+    <%= render "managers/academies/tomorrow_courses", tomorrow_courses: @tomorrow_courses %>
+  <% end %>
 </div>

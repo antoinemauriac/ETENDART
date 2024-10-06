@@ -25,7 +25,7 @@ class Activity < ApplicationRecord
 
   has_many :courses, dependent: :destroy
   has_many :course_enrollments, through: :courses
-  accepts_nested_attributes_for :courses
+  accepts_nested_attributes_for :courses, allow_destroy: true
 
   has_one :activity_stat, dependent: :destroy
 
@@ -138,20 +138,6 @@ class Activity < ApplicationRecord
     end
   end
 
-  # def starts_at_before_ends_at
-  #   courses = self.courses
-  #   raise
-  #   if courses.any?
-  #     courses.each do |course|
-  #       if course.starts_at >= course.ends_at
-  #         errors.add(:base, "L'heure de début doit être avant l'heure de fin")
-  #         return false
-  #       end
-  #     end
-  #   else
-  #     return true
-  #   end
-  # end
   private
 
   def normalize_name
