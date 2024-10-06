@@ -34,9 +34,11 @@
 
 .course_starts_at {
   margin-bottom: 0 !important;
+  width: 90%;
 }
 .course_ends_at {
   margin-bottom: 0 !important;
+  width: 90%;
 }
 
 .student-mr {
@@ -116,4 +118,56 @@
 
 .table-border-vertical tbody tr:last-child td {
   border-bottom: none!important;
+}
+
+.card-row-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  background-color: white;
+}
+
+.card-row {
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  background-color: #f3f3f3;
+  height: 2.5rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  &:hover {
+    background-color: #d9d8d8;
+    transform: scale(1.01);
+  }
+}
+
+.header-row {
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #dee2e6;
+  font-weight: bold;
+}
+
+.row-with-border {
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 0.5rem;
+}
+
+.flexy-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nowrap-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
 }

@@ -1,0 +1,17 @@
+<div class="col-12 col-xxl-11 mt-2 mb-4">
+  <div class="header-info header-info-academy">
+    <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;FEUILLE DE PRÉSENCE EN RETARD&nbsp;<i class="fa-solid fa-triangle-exclamation"></i>
+  </div>
+  <div class="card-row-container">
+    <div class="row pb-2 pt-2 header-row align-items-center">
+      <div class="col-3 flexy-row"><strong>Activité</strong></div>
+      <div class="col-3 flexy-row"><strong>Coach Référent</strong></div>
+      <div class="col flexy-row"><strong>Telephone</strong></div>
+      <div class="col flexy-row"><strong>Date</strong></div>
+      <div class="col flexy-row"><strong>Appel fait ?</strong></div>
+    </div>
+    <% old_presence_sheet.each do |course| %>
+      <%= render "managers/academies/old_course", course: course %>
+    <% end %>
+  </div>
+</div>

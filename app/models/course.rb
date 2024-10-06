@@ -13,12 +13,13 @@ class Course < ApplicationRecord
   has_many :course_enrollments, dependent: :destroy
   has_many :students, through: :course_enrollments
 
-  # validate :starts_at_before_ends_at
-  scope :upcoming, ->(time_window) { where('ends_at >= ?', Time.current.in_time_zone('Paris') - time_window) }
+  # after_update_commit -> { broadcast_replace_to "today_courses", partial: "managers/academies/today_course", locals: { course: self, academy: academy }, target: self }
+  # after_update_commit -> { broadcast_remove_to "today_courses", target: "old_course_#{id}" }
 
   def academy
     return camp.academy if camp
     return annual_program.academy if annual_program
+
     nil
   end
 
@@ -28,8 +29,8 @@ class Course < ApplicationRecord
 
   def banished_students
     students.joins(camp_enrollments: { camp: { activities: :courses } })
-           .where(camp_enrollments: { banished: true }, courses: { id: id })
-           .distinct
+            .where(camp_enrollments: { banished: true }, courses: { id: id })
+            .distinct
   end
 
   def banished_students_count
@@ -38,14 +39,6 @@ class Course < ApplicationRecord
 
   def student_presence(student)
     course_enrollments.find_by(student: student).present
-  end
-
-  def self.today(manager)
-    where(starts_at: Time.current.all_day, manager_id: manager.id).order(:starts_at)
-  end
-
-  def self.tomorrow(manager)
-    where(starts_at: Time.zone.tomorrow.all_day, manager_id: manager.id).order(:starts_at)
   end
 
   def missing_students

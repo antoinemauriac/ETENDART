@@ -7,6 +7,7 @@ class Managers::ActivitiesController < ApplicationController
     @academy = @school_period.academy
     @locations = @academy.locations
     authorize([:managers, @activity])
+
   end
 
   def new_for_annual
@@ -40,15 +41,10 @@ class Managers::ActivitiesController < ApplicationController
       camp.coaches << coach if coach && !camp.coaches.include?(coach)
 
 
-      if validate_courses
-        if activity.save
-          activity.activity_stat = ActivityStat.create(activity: activity)
-          create_courses_for_activity(activity, coach, days)
-          redirect_to managers_camp_path(camp), notice: "Activité créée"
-        else
-          flash[:alert] = "Erreur : #{activity.errors.full_messages.join(', ')}"
-          redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
-        end
+      if validate_courses && activity.save
+        activity.activity_stat = ActivityStat.create(activity: activity)
+        create_courses_for_activity(activity, coach, days)
+        redirect_to managers_camp_path(camp), notice: "Activité créée"
       else
         flash[:alert] = "L'heure de début doit être avant l'heure de fin"
         redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
@@ -119,6 +115,7 @@ class Managers::ActivitiesController < ApplicationController
     category = @activity.category
     @coach = @activity.coach
     @coaches = category.coaches.joins(:coach_academies).where(coach_academies: { academy_id: @academy.id })
+    @start_year = @annual_program.starts_at.year
   end
 
   def all_annual_courses

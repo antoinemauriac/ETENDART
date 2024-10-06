@@ -29,30 +29,19 @@ class Managers::CoursesController < ApplicationController
 
   def update
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
+
     if course.update(course_params)
-      if params[:redirect_to] == "camp"
-        redirect_to managers_activity_path(course.activity), notice: "Cours mis à jour"
-      else
-        redirect_to show_for_annual_managers_activity_path(course.activity), notice: "Cours mis à jour"
-      end
+      redirect_to correct_activity_path(course.activity), notice: "Cours mis à jour"
     else
       flash[:alert] = "L'heure de début doit être avant l'heure de fin"
-      if params[:redirect_to] == "camp"
-        redirect_to managers_activity_path(course.activity)
-      else
-        redirect_to show_for_annual_managers_activity_path(course.activity), notice: "Cours mis à jour"
-      end
+      redirect_to correct_activity_path(course.activity)
     end
   end
 
   def destroy
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
     course.destroy
-    if params[:redirect_to] == "camp"
-      redirect_to managers_activity_path(course.activity), notice: "Cours supprimé"
-    else
-      redirect_to show_for_annual_managers_activity_path(course.activity), notice: "Cours supprimé"
-    end
+    redirect_to correct_activity_path(course.activity), notice: "Cours supprimé"
   end
 
   def update_enrollments
@@ -142,6 +131,14 @@ class Managers::CoursesController < ApplicationController
       flash[:notice] = message if style == "notice"
       flash[:alert] = message if style == "alert"
       redirect_to coaches_course_path(course)
+    end
+  end
+
+  def correct_activity_path(activity)
+    if activity.camp
+      managers_activity_path(activity)
+    else
+      show_for_annual_managers_activity_path(activity)
     end
   end
 end

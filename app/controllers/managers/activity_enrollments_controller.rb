@@ -15,7 +15,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       past_course_enrollments.destroy_all
     end
 
-    if params[:origin] == 'camp'
+    if activity.camp
       camp = activity.camp
       school_period = camp.school_period
 
@@ -41,9 +41,8 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       else
         redirect_to managers_activity_path(activity), notice: "Élève retiré de l'activité."
       end
-    end
 
-    if params[:origin] == 'annual_program'
+    elsif activity.annual_program
       annual_program = activity.annual_program
       # activities = student.activities.where(annual_program: annual_program)
       student_annual_courses = student.courses.joins(:activity).where("activities.annual_program_id = ?", annual_program.id)

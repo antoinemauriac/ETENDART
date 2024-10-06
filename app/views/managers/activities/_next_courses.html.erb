@@ -1,0 +1,53 @@
+<div class="header-info">PROCHAINS COURS</div>
+  <div class="form-container form-container-activity">
+    <div class="row row-with-border align-items-center">
+      <div class="col-3 flexy-row">
+        <strong>Date</strong>
+      </div>
+      <div class="col-3 flexy-row">
+        <strong>Heure de début</strong>
+      </div>
+      <div class="col-3 flexy-row">
+        <strong>Heure de fin</strong>
+      </div>
+      <div class="col-2 flexy-row">
+        <strong>Modifier</strong>
+      </div>
+      <div class="col-1 flexy-row">
+        <strong>Supprimer</strong>
+      </div>
+    </div>
+
+    <% courses.each do |course| %>
+      <%= simple_form_for course, url: managers_course_path(course), method: :put do |f| %>
+        <div class="row row-with-border">
+          <div class="col-3 flexy-row">
+              <%= link_to l(course.starts_at, format: :abbr), managers_course_path(course), class: "btn-new-generation" %>
+          </div>
+
+          <div class="col-3 flexy-row">
+            <%= f.input :starts_at, as: :time, label: false, minute_step: 15 %>
+          </div>
+
+          <div class="col-3 flexy-row">
+            <%= f.input :ends_at, as: :time, label: false, minute_step: 15 %>
+          </div>
+
+          <div class="col-2 flexy-row">
+            <%= f.submit "Valider", class: 'btn-new-generation'%>
+          </div>
+
+          <div class="col-1 flexy-row">
+            <% if course.starts_at > Time.current - 1.week  %>
+              <%= link_to managers_course_path(course), data: {turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce cours ?"} do %>
+                <i class="fas fa-trash trash"></i>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    <div class="flexy">
+      <%= link_to "Voir tous", all_annual_courses_managers_activity_path(@activity), class: "btn-add-student mb-2 mt-0" %>
+    </div>
+  </div>

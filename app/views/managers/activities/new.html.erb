@@ -36,7 +36,7 @@
                 <%= day_form.time_field :end_time_Lundi, value: Activity::DAYS[:Lundi][:end_time], data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "form-control" %>
               </div>
             </div>
-            <% end %>
+          <% end %>
         </li>
 
         <% Activity::DAYS.except(:Lundi).each do |day, times| %>
