@@ -6,14 +6,9 @@
 
 <div class="row justify-content-center align-items-stretch">
   <%# LES COURS DU JOUR %>
-  <div class="col-12 col-xxl-11 mt-2 mb-4">
-    <div class="header-info header-info-academy">LES COURS DU JOUR</div>
-    <% if @today_courses.present? %>
-      <%= render "managers/academies/today_courses", academy: @academy %>
-    <% else %>
-      <p class="mt-3" style="text-align:center">Aucun cours aujourd'hui.</p>
-    <% end %>
-  </div>
+  <% if @today_courses.present? %>
+    <%= render "managers/academies/today_courses", academy: @academy %>
+  <% end %>
 
   <%# LES APPELS EN RETARD %>
   <% if @old_presence_sheet.present? %>

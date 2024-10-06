@@ -1,19 +1,22 @@
-<div class="card-row-container">
-  <div class="row pb-2 pt-2 header-row align-items-center">
-    <div class="col-2 flexy-row">Activité</div>
-    <div class="col-2 flexy-row">Coach Référent</div>
-    <div class="col flexy-row">Telephone</div>
-    <div class="col flexy-row">Début</div>
-    <div class="col flexy-row">Fin</div>
-    <div class="col flexy-row">Total élèves</div>
-    <% if academy.banished %>
-      <div class="col flexy-row">Nb exclus</div>
+<div class="col-12 col-xxl-11 mt-2 mb-4">
+  <div class="header-info header-info-academy">LES COURS DU JOUR</div>
+  <div class="card-row-container">
+    <div class="row pb-2 pt-2 header-row align-items-center">
+      <div class="col-2 flexy-row">Activité</div>
+      <div class="col-2 flexy-row">Coach Référent</div>
+      <div class="col flexy-row">Telephone</div>
+      <div class="col flexy-row">Début</div>
+      <div class="col flexy-row">Fin</div>
+      <div class="col flexy-row">Total élèves</div>
+      <% if academy.banished %>
+        <div class="col flexy-row">Nb exclus</div>
+      <% end %>
+      <div class="col flexy-row">Nb présents</div>
+      <div class="col flexy-row">Nb absents</div>
+      <div class="col flexy-row">Appel fait ?</div>
+    </div>
+    <% @today_courses.each do |course| %>
+      <%= render "managers/academies/today_course", course: course, academy: academy %>
     <% end %>
-    <div class="col flexy-row">Nb présents</div>
-    <div class="col flexy-row">Nb absents</div>
-    <div class="col flexy-row">Appel fait ?</div>
   </div>
-  <% @today_courses.each do |course| %>
-    <%= render "managers/academies/today_course", course: course, academy: academy %>
-  <% end %>
 </div>
