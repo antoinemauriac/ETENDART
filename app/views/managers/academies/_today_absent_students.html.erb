@@ -17,11 +17,11 @@
       <% student.unattended_today_courses.each do |course_enrollment| %>
         <% if course_enrollment.course.academy.name == @academy.name %>
           <%= link_to managers_student_path(student), class: "row card-row" do %>
-            <div class="col-3 flexy-row align-middle"><%= student.full_name_separator %></div>
-            <div class="col flexy-row align-middle"><%= student.phone_number %></div>
-            <div class="col-3 flexy-row align-middle"><%= student.email %></div>
-            <div class="col-3 flexy-row align-middle"><%= course_enrollment.course.activity.name %></div>
-            <div class="col flexy-row align-middle"><%= course_enrollment.course.academy.name %></div>
+            <div class="col-3 flexy-row"><%= student.full_name_separator %></div>
+            <div class="col flexy-row"><%= student.phone_number %></div>
+            <div class="col-3 flexy-row"><%= student.email %></div>
+            <div class="col-3 flexy-row"><%= course_enrollment.course.activity.name %></div>
+            <div class="col flexy-row"><%= course_enrollment.course.academy.name %></div>
           <% end %>
         <% end %>
       <% end %>

@@ -24,7 +24,7 @@
             <div class="flexy" data-controller="import-csv">
               <div class="loader d-none" data-import-csv-target="spinner"></div>
               <div class="container flexy mt-3">
-                  <%= simple_form_for :import, url: managers_import_students_import_without_camp_path, method: :post, data: { action: "change->import-csv#handleFileSelect" } do |form| %>
+                  <%= simple_form_for :import, url: import_without_camp_managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" } do |form| %>
                     <%= hidden_field_tag :academy_id, @academy.id %>
                     <div class="form-group">
                       <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>

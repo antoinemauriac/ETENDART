@@ -15,11 +15,11 @@
     </div>
     <% week_absent_enrollments.each do |enrollment| %>
       <%= link_to managers_student_path(enrollment.student), class: "row card-row" do %>
-        <div class="col flexy-row align-middle"><%= l(enrollment.course.starts_at, format: :day_name) %></div>
-        <div class="col-3 flexy-row align-middle"><%= enrollment.activity.name %></div>
-        <div class="col-3 flexy-row align-middle"><%= enrollment.student.full_name_separator %></div>
-        <div class="col flexy-row align-middle"><%= enrollment.student.phone_number %></div>
-        <div class="col-3 flexy-row align-middle"><%= enrollment.student.email %></div>
+        <div class="col flexy-row"><%= l(enrollment.course.starts_at, format: :day_name) %></div>
+        <div class="col-3 flexy-row"><%= enrollment.activity.name %></div>
+        <div class="col-3 flexy-row"><%= enrollment.student.full_name_separator %></div>
+        <div class="col flexy-row"><%= enrollment.student.phone_number %></div>
+        <div class="col-3 flexy-row"><%= enrollment.student.email %></div>
       <% end %>
     <% end %>
     <div class="flexy mt-2">

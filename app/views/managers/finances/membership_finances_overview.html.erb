@@ -56,7 +56,7 @@
         </thead>
         <tbody>
           <tr>
-            <td><%= @current_year_received_revenue %>€</td>
+            <td><strong><%= @current_year_received_revenue %>€</strong></td>
             <% ["cash", "cheque", "hello_asso", "pass", "virement", "offert"].each do |method| %>
               <td><%= @current_year_memberships.where(payment_method: method).sum(:amount) %>€</td>
             <% end %>
