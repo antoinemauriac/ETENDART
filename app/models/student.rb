@@ -267,11 +267,11 @@ class Student < ApplicationRecord
     start_date = Date.new(start_year, 4, 7)
     end_date = Date.current
 
-    joins(courses: { activity: :camp }) # Ajout de la jointure avec activity et camp
+    joins(courses: { activity: :camp })
       .where('courses.starts_at > ? AND courses.starts_at <= ?', start_date, end_date)
       .where(course_enrollments: { present: true })
-      .where.not(camps: { id: nil }) # Filtrer les cours avec un camp non nul
-      .group('students.id') # Ajout de la group_by pour éviter les doublons
+      .where.not(camps: { id: nil })
+      .group('students.id')
       .pluck(:id)
   end
 

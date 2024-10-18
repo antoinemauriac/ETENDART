@@ -1,12 +1,12 @@
-UpdateSchoolPeriodStatsJob:
-  cron: '0 22 * * *' # Exécution tous les jours à 2h du matin
-  class: UpdateSchoolPeriodStatsJob
-UpdateCampStatsJob:
-  cron: '02 22 * * *' # Exécution tous les jours à 2h du matin
-  class: UpdateCampStatsJob
-UpdateAnnualProgramStatsJob:
-  cron: '04 22 * * *' # Exécution tous les jours à 2h du matin
-  class: UpdateAnnualProgramStatsJob
 UpdateActivityStatsJob:
-  cron: '06 22 * * *' # Exécution tous les jours à 2h du matin
+  cron: "00 23 * * *"
   class: UpdateActivityStatsJob
+UpdateCampStatsJob:
+  cron: "10 23 * * *"
+  class: UpdateCampStatsJob
+UpdateSchoolPeriodStatsJob:
+  cron: "20 23 * * *"
+  class: UpdateSchoolPeriodStatsJob
+UpdateAnnualProgramStatsJob:
+  cron: "30 23 * * *"
+  class: UpdateAnnualProgramStatsJob

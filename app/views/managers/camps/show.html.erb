@@ -57,7 +57,7 @@
     <div class="loader d-none" data-import-csv-target="spinner"></div>
     <div class="container flexy">
       <div class="form-container">
-        <%= simple_form_for(@camp, url: managers_import_students_import_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+        <%= simple_form_for(@camp, url: import_managers_import_students_path, method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
           <%= form.input :camp_id, as: :hidden, input_html: { value: @camp.id } %>
           <div class="form-group">
             <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>

@@ -16,7 +16,6 @@ class Managers::StudentsController < ApplicationController
                         .distinct
                 end
 
-    # Ensure the ordering is applied to both search and non-search cases
     @students = @students.reorder(last_name: :asc)
 
 

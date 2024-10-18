@@ -9,6 +9,10 @@ class Managers::ImportStudentsController < ApplicationController
     file = params[:camp][:csv_file]
     file = File.open(file)
 
+    first_line = file.readline
+    detected_col_sep = first_line.include?(';') ? ';' : ','
+    file.rewind
+
     start_year = camp.starts_at.month >= 9 ? camp.starts_at.year : camp.starts_at.year - 1
     students = camp.students.to_a
 
@@ -35,7 +39,7 @@ class Managers::ImportStudentsController < ApplicationController
         end
       end
 
-      CSV.foreach(file, headers: true, col_sep: ',') do |row|
+      CSV.foreach(file, headers: true, col_sep: detected_col_sep) do |row|
         row = row.to_hash
         if row['prénom'].nil? || row['nom'].nil? || row['date-naissance'].nil? || row['username'].nil? || row['genre'].nil?
           flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"
@@ -75,7 +79,7 @@ class Managers::ImportStudentsController < ApplicationController
             activity_name = row["activite_#{i}"]
             next unless activity_name.present?
 
-            activity = camp.activities.find_by(name: activity_name)
+            activity = camp.activities.where("unaccent(lower(name)) = unaccent(lower(?))", activity_name).first
             if activity.present?
               student.activities << activity
               student.courses << activity.courses
@@ -112,7 +116,11 @@ class Managers::ImportStudentsController < ApplicationController
     file = File.open(file)
 
     ActiveRecord::Base.transaction do
-      CSV.foreach(file, headers: true, col_sep: ',') do |row|
+      first_line = file.readline
+      detected_col_sep = first_line.include?(';') ? ';' : ','
+      file.rewind
+
+      CSV.foreach(file, headers: true, col_sep: detected_col_sep) do |row|
         row = row.to_hash
         if row['prénom'].nil? || row['nom'].nil? || row['date-naissance'].nil? || row['username'].nil? || row['genre'].nil?
           flash[:alert] = "Le 'prénom', le 'nom', la 'date de naissance' et le 'username' doivent être présents pour chaque élève"

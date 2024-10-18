@@ -221,10 +221,6 @@ class SchoolPeriod < ApplicationRecord
     camps.sum(&:student_with_judo_count)
   end
 
-
-
-
-
   private
 
   def normalize_name

@@ -7,7 +7,7 @@ class Managers::AnnualProgramsController < ApplicationController
   end
 
   def index_for_admin
-    @annual_programs = AnnualProgram.all.where(new: true).group_by { |annual_program| annual_program.starts_at.year }
+    @annual_programs = AnnualProgram.all.where(new: true).group_by { |annual_program| annual_program.starts_at.year }.sort.reverse
     skip_policy_scope
     authorize [:managers, :annual_program]
   end

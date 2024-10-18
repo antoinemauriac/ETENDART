@@ -2,6 +2,7 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   devise_for :users, controllers: {
@@ -28,20 +29,11 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  # coach stiumulus controller
-  get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'
-  # enrollment stiumulus controller
-  get '/managers/enrollments/:academy_id/update_school_periods', to: 'managers/enrollments#update_school_periods'
-  get '/managers/enrollments/:school_period_id/update_camps', to: 'managers/enrollments#update_camps'
-  get '/managers/enrollments/:camp_id/update_activities', to: 'managers/enrollments#update_activities'
-  # annual_enrollment stimulus controller
-  get '/managers/annual_enrollments/:academy_id/update_annual_programs', to: 'managers/annual_enrollments#update_annual_programs'
-  get '/managers/annual_enrollments/:annual_program_id/update_activities', to: 'managers/annual_enrollments#update_activities'
 
   namespace :managers do
-    post 'import_students/import', to: 'import_students#import'
-    post 'import_students/import_without_camp', to: 'import_students#import_without_camp'
-    post 'import_annual_students', to: 'import_annual_students#import'
+    # post 'import_students/import', to: 'import_students#import'
+    # post 'import_students/import_without_camp', to: 'import_students#import_without_camp'
+    # post 'import_annual_students', to: 'import_annual_students#import'
 
     resources :finances, only: %i[index show] do
       collection do
@@ -120,11 +112,22 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :import_students, only: [] do
+      collection do
+        post :import
+        post :import_without_camp
+      end
+    end
+
+    resources :import_annual_students, only: [] do
+      collection do
+        post :import
+      end
+    end
+
     resources :membership_deposits, only: %i[create index]
     resources :camp_deposits, only: %i[create]
-
     resources :coach_feedbacks, only: %i[create destroy]
-
     resources :annual_enrollments, only: %i[create]
     resources :feedbacks, only: %i[new create destroy]
     resources :activity_enrollments, only: %i[destroy]
@@ -140,4 +143,14 @@ Rails.application.routes.draw do
     resources :student_profiles, only: %i[show index]
     resources :feedbacks, only: %i[new create]
   end
+
+  # coach stiumulus controller
+  get '/managers/coaches/:category_id/category_coaches', to: 'managers/coaches#category_coaches'
+  # enrollment stiumulus controller
+  get '/managers/enrollments/:academy_id/update_school_periods', to: 'managers/enrollments#update_school_periods'
+  get '/managers/enrollments/:school_period_id/update_camps', to: 'managers/enrollments#update_camps'
+  get '/managers/enrollments/:camp_id/update_activities', to: 'managers/enrollments#update_activities'
+  # annual_enrollment stimulus controller
+  get '/managers/annual_enrollments/:academy_id/update_annual_programs', to: 'managers/annual_enrollments#update_annual_programs'
+  get '/managers/annual_enrollments/:annual_program_id/update_activities', to: 'managers/annual_enrollments#update_activities'
 end

@@ -43,9 +43,12 @@
 
 # identifier le main student et le duplicate
 
-# main = Student.find(1)
-# duplicate = Student.find(2)
+# main = Student.find(3136)
+# duplicate = Student.find(3031)
 
+# if duplicate.photo.attached?
+#   main.photo.attach(duplicate.photo.blob)
+# end
 
 # duplicate.academy_enrollments.where.not(academy_id: main.academies.ids).update_all(student_id: main.id)
 # duplicate.annual_program_enrollments.where.not(annual_program_id: main.annual_programs.ids).update_all(student_id: main.id)
@@ -54,8 +57,8 @@
 # duplicate.activity_enrollments.where.not(activity_id: main.activities.ids).update_all(student_id: main.id)
 # duplicate.course_enrollments.where.not(course_id: main.courses.ids).update_all(student_id: main.id)
 # duplicate.feedbacks.where.not(id: main.feedbacks.ids).update_all(student_id: main.id)
-# duplicate.memberships.where.not(id: main.memberships.ids).update_all(student_id: main.id)
-
+# duplicate.memberships.where(status: true).where.not(id: main.memberships.ids).update_all(student_id: main.id)
+# duplicate.destroy
 
 # students = Student.where(username: nil).order(:created_at)
 

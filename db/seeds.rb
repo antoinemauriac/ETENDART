@@ -1,12 +1,3 @@
-# require 'faker'
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
-
 # Category.create!(name: 'Tennis', super_category: 'Sport')
 # Category.create!(name: 'Manga', super_category: 'Eveil')
 
@@ -31,6 +22,11 @@
 # angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022761/etendart/szhjycwofx768fuvmurf.jpg')
 # angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
 # angers.save
+#
+# paris = Academy.create!(name: 'Paris 9', manager: User.find(94))
+# paris_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1728994736/etendart/pp5qu9nfz6nrwxeajj1k.jpg')
+# paris.image.attach(io: paris_image, filename: 'paris-court.jpg', content_type: 'image/jpg')
+# paris.save
 
 
 # strasbourg = Academy.create!(name: 'Strasbourg', manager: ornella)
