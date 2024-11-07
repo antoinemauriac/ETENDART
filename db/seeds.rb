@@ -18,6 +18,10 @@
 # grasse.image.attach(io: grass_image, filename: 'grasse-court.jpg', content_type: 'image/jpg')
 
 
+# marseille = Academy.create!(name: 'Marseille', manager: raf)
+# marseille_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1730987600/etendart/lci2fsktm8yaygm45ja1.png')
+# marseille.image.attach(io: marseille_image, filename: 'marseille-court.jpg', content_type: 'image/jpg')
+
 # angers = Academy.create!(name: 'Angers', manager: ornella)
 # angers_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1685022761/etendart/szhjycwofx768fuvmurf.jpg')
 # angers.image.attach(io: angers_image, filename: 'angers-court.jpg', content_type: 'image/jpg')
