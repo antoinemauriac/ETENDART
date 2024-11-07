@@ -16,7 +16,7 @@
   color: white;
   font-size: 24px;
   font-weight: 900;
-  height: 120px;
+  height: 180px;
   // width: 90%; /* Utilisez une valeur relative en pourcentage */
   // max-width: 600px; /* Définissez une largeur maximale pour les cartes */
   display: flex;
@@ -30,8 +30,7 @@
 }
 
 .card-admin {
-  height: 240px;
-  margin: 0px;
+  height: 140px!important;
 }
 .grid-container {
   display: grid;
