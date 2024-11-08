@@ -1,7 +1,3 @@
-// body {
-//   background-color: white;
-// }
-
 a {
   text-decoration: none;
   color: black;
@@ -49,10 +45,10 @@ ul {
 }
 
 .full-width-link {
-  display: block; /* Ou display: inline-block; selon le besoin */
+  display: block;
   width: 100%;
   height: 100%;
-  text-decoration: none; /* Optionnel: pour enlever le soulignement des liens */
+  text-decoration: none;
 }
 
 .dashboard-container {
