@@ -1,6 +1,5 @@
 class Managers::CoursesController < ApplicationController
   before_action :course, only: %i[edit show update destroy]
-  # before_action :set_cache_headers, only: [:show]
 
   def index
     @courses = current_user.courses_as_manager.sort_by(&:starts_at)
@@ -51,6 +50,7 @@ class Managers::CoursesController < ApplicationController
     camp = activity.camp if activity.camp
     school_period = camp.school_period if camp
 
+    # Convert permitted parameters to a hash for easier manipulation
     enrollments_params = permitted_enrollments_params.to_h
     authorize([:managers, course], policy_class: Managers::CoursePolicy)
 

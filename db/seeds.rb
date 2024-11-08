@@ -17,6 +17,9 @@
 # grass_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1719924175/etendart/a7mpkq8zxmsmk9fcmnwc.jpg')
 # grasse.image.attach(io: grass_image, filename: 'grasse-court.jpg', content_type: 'image/jpg')
 
+djokovic = Academy.create!(name: 'Djokovic', manager: User.find(94))
+
+
 
 # marseille = Academy.create!(name: 'Marseille', manager: raf)
 # marseille_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1730987600/etendart/lci2fsktm8yaygm45ja1.png')

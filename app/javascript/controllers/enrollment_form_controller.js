@@ -2,42 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="enrollment-form"
 export default class extends Controller {
-  static targets = ["academy", "schoolPeriod", "camp", "activity", "activityModal"];
-
-  connect() {
-    console.log("toto");
-  }
-
-
-  openActivityModal() {
-    this.activityModalTarget.classList.add('show');
-    this.activityModalTarget.style.display = 'block';
-    this.activityModalTarget.removeAttribute('aria-hidden');
-    document.body.classList.add('modal-open');
-    this.activityModalTarget.addEventListener('click', this.handleModalClick.bind(this));
-    window.addEventListener('click', this.handleWindowClick.bind(this));
-  }
-
-  closeActivityModal() {
-    this.activityModalTarget.classList.remove('show');
-    this.activityModalTarget.style.display = 'none';
-    this.activityModalTarget.setAttribute('aria-hidden', true);
-    document.body.classList.remove('modal-open');
-    this.activityModalTarget.removeEventListener('click', this.handleModalClick.bind(this));
-    window.removeEventListener('click', this.handleWindowClick.bind(this));
-  }
-
-  handleModalClick(event) {
-    if (event.target.getAttribute('data-dismiss') === 'modal') {
-      this.closeActivityModal();
-    }
-  }
-
-  handleWindowClick(event) {
-    if (event.target === this.activityModalTarget) {
-      this.closeActivityModal();
-    }
-  }
+  static targets = ["academy", "schoolPeriod", "camp", "activity"];
 
   updateSchoolPeriods() {
     const academy_id = this.academyTarget.value

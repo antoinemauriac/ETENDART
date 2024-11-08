@@ -55,7 +55,6 @@
           <tr>
             <th class="presence-head align-middle"></th>
             <th class="presence-head align-middle" style="text-align:left">Élève</th>
-<!--            <th class="presence-head align-middle"></th>-->
             <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Présent ?</th>
             <% if false %>
               <th class="presence-head align-middle" style="text-align:center"></th>
@@ -74,9 +73,6 @@
             <% membership = student.memberships.find_by(start_year: @start_year) %>
             <% name_style = membership&.status == false ? "color: red;font-weight:bold;" : "" %>
             <tr style="position:relative">
-<!--            <td>
-              <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.3em;color: red;position: absolute;top: 5%;left: 15%;"></i>
-            </td>-->
               <td class="align-middle">
                 <%= link_to managers_student_path(student) do %>
                   <% if student.photo.key? %>

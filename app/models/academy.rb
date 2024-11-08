@@ -53,4 +53,12 @@ class Academy < ApplicationRecord
   def old_presence_sheet
     courses.includes(:activity).where('courses.ends_at < ?', Time.current).where(status: false).order(:starts_at)
   end
+
+  def image_url
+    if image.attached?
+      cl_image_path(self.image.key, quality: :auto)
+    else
+      ActionController::Base.helpers.asset_path('home.jpg')
+    end
+  end
 end

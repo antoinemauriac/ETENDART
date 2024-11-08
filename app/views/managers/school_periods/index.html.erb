@@ -5,47 +5,63 @@
 </div>
 <div class="yellow-title">LES STAGES</div>
 <% if current_user.manager? %>
-  <div data-controller="hidden-forms">
-    <div class="flexy">
-      <button class="btn-add-student btn-flex mt-0" data-action="click->hidden-forms#displaySchoolPeriodForm">
-        <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-      </button>
-      <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, class: "hidden-form form-container-hidden", id: "school-period-form", data: { hidden_forms_target: "schoolPeriodForm" }) do |form| %>
-        <%= form.label :name, "Nom :" %>
-        <%= form.select :name, options_for_select(['Février', 'Printemps', 'Été', 'Toussaint']), {}, { class: "form-control", required: true } %>
-        <%= form.label :year, "Année :" %>
-        <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "" }, { class: "form-control", required: true } %>
-        <div class="mt-3">
-          <%= form.label :paid, "Payant ?" %>
-          <div>
-            <%= form.radio_button :paid, true %>
-            <%= form.label "Oui" %>
-          </div>
-          <div>
-            <%= form.radio_button :paid, false %>
-            <%= form.label "Non" %>
-          </div>
+  <div class="flexy">
+    <button class="btn-add-student btn-flex mt-0" data-bs-toggle="modal" data-bs-target="#schoolPeriodModal">
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i>NOUVEAU<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="schoolPeriodModal" tabindex="-1" aria-labelledby="schoolPeriodModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="width:80%;padding:0px">
+        <div class="modal-header modal-header-deposit">
+          <h5 class="modal-title" id="schoolPeriodModalLabel">Nouvelle Période Scolaire</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="mt-3">
-          <%= form.label :price, "Si oui, prix (€) :" %>
-          <%= form.text_field :price, { class: "form-control" } %>
+        <div class="modal-body">
+          <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, id: "school-period-form") do |form| %>
+            <%= form.label :name, "Nom :" %>
+            <%= form.select :name, options_for_select(['Février', 'Printemps', 'Été', 'Toussaint']), {}, { class: "form-control", required: true } %>
+            <%= form.label :year, "Année :" %>
+            <%= form.select :year, (Time.current.year..Time.current.year + 2).to_a, { include_blank: "" }, { class: "form-control", required: true } %>
+            <div class="mt-3 d-flex gap-3">
+              <%= form.label :paid, "Payant ?" %>
+              <div>
+                <div>
+                  <%= form.radio_button :paid, true %>
+                  <%= form.label "Oui" %>
+                </div>
+                <div>
+                  <%= form.radio_button :paid, false %>
+                  <%= form.label "Non" %>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <%= form.label :price, "Si oui, prix (€) :" %>
+              <%= form.text_field :price, { class: "form-control" } %>
+            </div>
+            <div class="mt-3 d-flex gap-3">
+              <%= form.label :tshirt, "Distribution de T-shirt ?" %>
+              <div>
+                <div>
+                  <%= form.radio_button :tshirt, true %>
+                  <%= form.label "Oui" %>
+                </div>
+                <div>
+                  <%= form.radio_button :tshirt, false %>
+                  <%= form.label "Non" %>
+                </div>
+              </div>
+            </div>
         </div>
-        <div class="mt-3">
-          <%= form.label :tshirt, "Distribution de T-shirt ?" %>
-          <div>
-            <%= form.radio_button :tshirt, true %>
-            <%= form.label "Oui" %>
-          </div>
-          <div>
-            <%= form.radio_button :tshirt, false %>
-            <%= form.label "Non" %>
-          </div>
-        </div>
-        <div class="flex-btn mt-3">
+        <div class="modal-footer flex-btn">
           <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-          <button class="btn-add-student btn-add-student-small btn-add-student-grey" data-action="click->hidden-forms#displaySchoolPeriodForm" type="button">Annuler</button>
+          <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
         </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

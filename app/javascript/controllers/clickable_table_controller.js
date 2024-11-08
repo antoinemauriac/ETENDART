@@ -11,7 +11,7 @@ export default class extends Controller {
       row.addEventListener('click', (event) => {
         const target = event.target;
         if (target.classList.contains('trash')) {
-          return; // Ajout du return ici pour empêcher l'exécution du reste de la fonction
+          return;
         }
         window.location.href = row.getAttribute('data-url');
       });
