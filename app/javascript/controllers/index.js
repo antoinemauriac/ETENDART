@@ -31,26 +31,17 @@ application.register("date-picker", DatePickerController)
 import EnrollmentFormController from "./enrollment_form_controller"
 application.register("enrollment-form", EnrollmentFormController)
 
-import FeedbackFormController from "./feedback_form_controller"
-application.register("feedback-form", FeedbackFormController)
-
 import FilterCoachController from "./filter_coach_controller"
 application.register("filter-coach", FilterCoachController)
 
 import FilterMembershipDepositController from "./filter_membership_deposit_controller"
 application.register("filter-membership-deposit", FilterMembershipDepositController)
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
-
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 
 import ImportCsvController from "./import_csv_controller"
 application.register("import-csv", ImportCsvController)
-
-import MissingStudentsTableController from "./missing_students_table_controller"
-application.register("missing-students-table", MissingStudentsTableController)
 
 import NavbarController from "./navbar_controller"
 application.register("navbar", NavbarController)
@@ -69,9 +60,6 @@ application.register("search-coach", SearchCoachController)
 
 import SearchStudentController from "./search_student_controller"
 application.register("search-student", SearchStudentController)
-
-import StudentTableController from "./student_table_controller"
-application.register("student-table", StudentTableController)
 
 import TomSelectController from "./tom_select_controller"
 application.register("tom-select", TomSelectController)
