@@ -47,9 +47,9 @@
         </div>
       <% end %>
     <% end %>
-    <% if courses.first.activity.annual_program %>
+    <% if courses.any? && courses.first.activity.annual_program %>
       <div class="flexy">
-        <%= link_to "Voir tous", all_annual_courses_managers_activity_path(@activity), class: "btn-add-student mb-2 mt-0" %>
+      <%= link_to "Voir tous", all_annual_courses_managers_activity_path(@activity), class: "btn-add-student mb-2 mt-0" %>
       </div>
     <% end %>
   </div>

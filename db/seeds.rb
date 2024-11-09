@@ -78,8 +78,16 @@ coach3.roles << Role.find_by(name: 'coach')
 coachs = [coach1, coach2, coach3]
 # Create 3 academies
 kuerten = Academy.create!(name: 'Kuerten', manager: manager, coordinator: coordinator, annual: false)
+kuerten_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1731177238/etendart_dev/ip1nfwajzofkglkbjmrh.jpg')
+kuerten.image.attach(io: kuerten_image, filename: 'kuerten-court.jpg', content_type: 'image/jpg')
+
 zidane = Academy.create!(name: 'Zidane', manager: manager, annual: true)
+zidane_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1731177278/etendart_dev/orejbsdzmbzw4k9jkdqd.png')
+zidane.image.attach(io: zidane_image, filename: 'zidane-court.jpg', content_type: 'image/jpg')
+
 batum = Academy.create!(name: 'Batum', manager: manager, annual: false)
+batum_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1731177238/etendart_dev/eateyetw2sgwy3bgnh17.avif')
+batum.image.attach(io: batum_image, filename: 'batum-court.jpg', content_type: 'image/jpg')
 
 # Create 2 locations for each academy
 Academy.all.each do |academy|

@@ -9,9 +9,10 @@ local:
 cloudinary:
   service: Cloudinary
   folder: etendart
-  development:
-    service: Cloudinary
-    folder: etendart_dev
+
+cloudinary_dev:
+  service: Cloudinary
+  folder: etendart_dev
 
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
