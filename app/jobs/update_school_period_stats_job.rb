@@ -4,7 +4,7 @@ class UpdateSchoolPeriodStatsJob < ApplicationJob
   def perform
     ActiveRecord::Base.transaction do
       SchoolPeriod.find_each do |school_period|
-        # next unless school_period.current?
+        next unless school_period.current?
         if school_period.school_period_stat.nil?
           school_period_stat = SchoolPeriodStat.new(school_period: school_period)
         else
