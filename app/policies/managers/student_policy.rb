@@ -8,7 +8,7 @@ class Managers::StudentPolicy < ApplicationPolicy
   end
 
   def show?
-    (user.manager? && record.academies.any? { |academy| academy.manager == user }) || (user.coordinator? && record.academies.any? { |academy| academy.coordinator == user })
+    user.manager? || user.coordinator?
   end
 
   def create?
@@ -16,7 +16,7 @@ class Managers::StudentPolicy < ApplicationPolicy
   end
 
   def update?
-    (user.manager? && record.academies.any? { |academy| academy.manager == user }) || (user.coordinator? && record.academies.any? { |academy| academy.coordinator == user })
+    user.manager? || user.coordinator?
   end
 
   def update_photo?

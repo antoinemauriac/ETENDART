@@ -20,10 +20,6 @@ class Managers::SchoolPeriodPolicy < ApplicationPolicy
     (user.manager? && academy.manager == user) || (user.coordinator? && academy.coordinator == user) || user.admin?
   end
 
-  def export_bilan_csv?
-    authorized?
-  end
-
   def index_for_admin?
     user.admin?
   end

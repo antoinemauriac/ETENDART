@@ -7,7 +7,6 @@ class Managers::ActivitiesController < ApplicationController
     @academy = @school_period.academy
     @locations = @academy.locations
     authorize([:managers, @activity])
-
   end
 
   def new_for_annual
