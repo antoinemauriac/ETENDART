@@ -72,7 +72,6 @@ Rails.application.routes.draw do
     resources :school_periods, only: %i[new create index show destroy] do
       member do
         get :statistics
-        get :export_bilan_csv
       end
       collection do
         get :index_for_admin

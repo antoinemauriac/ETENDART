@@ -22,11 +22,11 @@ class Managers::AnnualProgramsController < ApplicationController
     next_year = current_year + 1
 
     program_periods_defaults = [
-      { start_date: Date.parse("25/09/#{current_year}"), end_date: Date.parse("20/10/#{current_year}") },
-      { start_date: Date.parse("30/10/#{current_year}"), end_date: Date.parse("15/12/#{current_year}") },
-      { start_date: Date.parse("08/01/#{next_year}"), end_date: Date.parse("16/02/#{next_year}") },
-      { start_date: Date.parse("04/03/#{next_year}"), end_date: Date.parse("12/04/#{next_year}") },
-      { start_date: Date.parse("22/04/#{next_year}"), end_date: Date.parse("14/06/#{next_year}") }
+      { start_date: Date.parse("16/09/#{current_year}"), end_date: Date.parse("18/10/#{current_year}") },
+      { start_date: Date.parse("28/10/#{current_year}"), end_date: Date.parse("13/12/#{current_year}") },
+      { start_date: Date.parse("06/01/#{next_year}"), end_date: Date.parse("14/02/#{next_year}") },
+      { start_date: Date.parse("03/03/#{next_year}"), end_date: Date.parse("11/04/#{next_year}") },
+      { start_date: Date.parse("21/04/#{next_year}"), end_date: Date.parse("13/06/#{next_year}") }
     ]
 
     @default_program_periods = program_periods_defaults.map do |period_params|

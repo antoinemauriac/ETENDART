@@ -4,7 +4,7 @@ class UpdateActivityStatsJob < ApplicationJob
   def perform
     ActiveRecord::Base.transaction do
       Activity.find_each do |activity|
-        next unless activity.current?
+        # next unless activity.current?
         if activity.activity_stat.nil?
           activity_stat = ActivityStat.new(activity: activity)
         else
