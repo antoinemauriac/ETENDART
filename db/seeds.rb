@@ -30,7 +30,7 @@ Role.destroy_all
 User.destroy_all
 Category.destroy_all
 
-# CATEGORIES AND ACTIVITY NAMES
+# CATEGORIES AND ACTIVITY NAME
 categories = {
   "Sport" => ["Tennis", "Basket"],
   "Eveil" => ["Danse", "Théâtre", "Manga", "Anglais"],
