@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import TomSelect from "tom-select";
 
 export default class extends Controller {
-  static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach", "toto"]
+  static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach", "subform"]
 
   connect() {
     this.mondayStartTimeTarget.value = "10:00";
@@ -45,7 +45,7 @@ export default class extends Controller {
   }
 
   onCategoryChange() {
-    this.totoTarget.classList.remove("d-none");
+    this.subformTarget.classList.remove("d-none");
     this.loadCoaches();
   }
 }

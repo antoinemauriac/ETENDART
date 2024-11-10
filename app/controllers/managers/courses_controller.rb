@@ -1,5 +1,6 @@
 class Managers::CoursesController < ApplicationController
-  before_action :course, only: %i[edit show update destroy]
+  before_action :course, only: %i[edit show update destroy update_enrollments unban_student]
+  before_action :authorize_course, only: %i[edit show update destroy update_enrollments unban_student]
 
   def index
     @courses = current_user.courses_as_manager.sort_by(&:starts_at)
@@ -19,16 +20,12 @@ class Managers::CoursesController < ApplicationController
     @category = course.category
     @activity = course.activity
     @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id)).order(last_name: :asc)
-    authorize([:managers, @course], policy_class: Managers::CoursePolicy)
   end
 
   def edit
-    authorize([:managers, @course], policy_class: Managers::CoursePolicy)
   end
 
   def update
-    authorize([:managers, @course], policy_class: Managers::CoursePolicy)
-
     if course.update(course_params)
       redirect_to correct_activity_path(course.activity), notice: "Cours mis à jour"
     else
@@ -38,21 +35,16 @@ class Managers::CoursesController < ApplicationController
   end
 
   def destroy
-    authorize([:managers, @course], policy_class: Managers::CoursePolicy)
     course.destroy
     redirect_to correct_activity_path(course.activity), notice: "Cours supprimé"
   end
 
   def update_enrollments
-    course = Course.find(params[:id])
-    academy = course.academy
     activity = course.activity
     camp = activity.camp if activity.camp
     school_period = camp.school_period if camp
 
-    # Convert permitted parameters to a hash for easier manipulation
     enrollments_params = permitted_enrollments_params.to_h
-    authorize([:managers, course], policy_class: Managers::CoursePolicy)
 
     if enrollments_params.present?
       enrollments_params.each do |enrollment_id, enrollment_params|
@@ -61,27 +53,15 @@ class Managers::CoursesController < ApplicationController
         if enrollment.changes.present?
           enrollments_params[enrollment_id][:changes] = enrollment.changes[:present]
         end
-        enrollment.save
-        # mise à jour du paiement
-        student = enrollment.student
-        camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
-        if school_period && school_period.paid == true && camp_enrollment
-          camp_enrollment.update(has_paid: enrollment_params[:has_paid])
-        end
-        # mise à jour du tshirt
-        school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
-        if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false && enrollment_params[:tshirt_delivered] == "1"
-          school_period_enrollment.update(tshirt_delivered: true)
-          student.update(number_of_tshirts: student.number_of_tshirts + 1)
-        elsif school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true && enrollment_params[:tshirt_delivered] == "0"
-          school_period_enrollment.update(tshirt_delivered: false)
-          student.update(number_of_tshirts: student.number_of_tshirts - 1)
+        if enrollment.save
+          update_student_enrollment(enrollment, enrollment_params, camp, school_period)
+        else
+          flash[:alert] = "Erreur lors de la mise à jour de l'inscription"
+          redirect_to managers_course_path(course) and return
         end
       end
       course.update(status: true)
-
       UpdateEnrollmentsJob.perform_later(course.id, enrollments_params)
-
       redirection(course, params, "Appel validé", "notice")
     else
       course.update(status: true)
@@ -90,12 +70,9 @@ class Managers::CoursesController < ApplicationController
   end
 
   def unban_student
-    course = Course.find(params[:id])
     camp = Camp.find(params[:camp_id])
     student = Student.find(params[:student_id])
     activities = student.activities.where(camp: camp)
-    authorize([:managers, course], policy_class: Managers::CoursePolicy)
-    camp_enrollment = student.camp_enrollments.find_by(camp: camp)
 
     camp_enrollment.update(banished: false, banishment_day: nil, number_of_absences: 0)
 
@@ -122,14 +99,32 @@ class Managers::CoursesController < ApplicationController
     params.require(:enrollments).permit!
   end
 
+  def authorize_course
+    authorize([:managers, @course], policy_class: Managers::CoursePolicy)
+  end
+
+  def update_student_enrollment(enrollment, enrollment_params, camp, school_period)
+    student = enrollment.student
+    camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
+    if school_period && school_period.paid == true && camp_enrollment
+      camp_enrollment.update(has_paid: enrollment_params[:has_paid])
+    end
+    school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
+    if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false && enrollment_params[:tshirt_delivered] == "1"
+      school_period_enrollment.update(tshirt_delivered: true)
+      student.update(number_of_tshirts: student.number_of_tshirts + 1)
+    elsif school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true && enrollment_params[:tshirt_delivered] == "0"
+      school_period_enrollment.update(tshirt_delivered: false)
+      student.update(number_of_tshirts: student.number_of_tshirts - 1)
+    end
+  end
+
   def redirection(course, params, message, style)
     if params[:redirect_to] == 'manager'
-      flash[:notice] = message if style == "notice"
-      flash[:alert] = message if style == "alert"
+      flash[style.to_sym] = message
       redirect_to managers_course_path(course)
     else
-      flash[:notice] = message if style == "notice"
-      flash[:alert] = message if style == "alert"
+      flash[style.to_sym] = message
       redirect_to coaches_course_path(course)
     end
   end

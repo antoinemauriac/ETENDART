@@ -19,37 +19,11 @@ class UpdateEnrollmentsJob < ApplicationJob
       school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) if school_period
       annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program) if annual_program
 
-      if camp_enrollment && category.name != "Accompagnement" && data[:changes].present? && academy.banished
-        # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
-        previous_value = data[:changes].first
-        present = data[:present].to_i == 1 ? true : false
-        if !present && previous_value == true
-          camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
-        elsif present && previous_value ==  false
-          camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences - 1)
-        end
-
-        if camp_enrollment.number_of_absences >= 2 && camp_enrollment.banished == false
-          banishment(camp_enrollment, student, course)
-        elsif camp_enrollment.number_of_absences < 2 && camp_enrollment.banished == true
-          unban_because_of_late(student, camp_enrollment)
-        end
-      end
-
-      # if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true
-      #   school_period_enrollments = student.school_period_enrollments
-      #                                      .joins(:school_period)
-      #                                      .where(school_periods: { academy_id: academy.id })
-      #   school_period_enrollments.update_all(tshirt_delivered: true)
-      # end
-
-      # if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false
-      #   school_period_enrollments = student.school_period_enrollments
-      #                                      .joins(:school_period)
-      #                                      .where(school_periods: { academy_id: academy.id })
-      #   school_period_enrollments.update_all(tshirt_delivered: false)
-      # end
-
+      #########################################################################
+      # NB : UN SEUL TSHIRT PEUT ÊTRE DISTRIBUÉ PAR ACADEMY ET PAR STUDENT
+      # UNE NOUVELLE OPERATION DE DISTRIBUTION DE TSHIRT EST POSSIBLE
+      # DANS CE CAS, ON REMET TOUS LES SCHOOL_PERIOD_ENROLLMENT.TSHIRT_DELIVERED À FALSE
+      #########################################################################
       if school_period && school_period.tshirt
         school_period_enrollments = student.school_period_enrollments
                                            .joins(:school_period)
@@ -67,29 +41,56 @@ class UpdateEnrollmentsJob < ApplicationJob
       if annual_program
         update_presence_if_needed(annual_program_enrollment, enrollment.present)
       end
+
+      ##################################################################
+      # CODE DANS LE CAS DES ELEVES EXCLUS ( academy.banished == true )
+      ##################################################################
+
+      # if camp_enrollment && category.name != "Accompagnement" && data[:changes].present? && academy.banished
+      #   # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
+      #   previous_value = data[:changes].first
+      #   present = data[:present].to_i == 1 ? true : false
+      #   if !present && previous_value == true
+      #     camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
+      #   elsif present && previous_value ==  false
+      #     camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences - 1)
+      #   end
+
+      #   if camp_enrollment.number_of_absences >= 2 && camp_enrollment.banished == false
+      #     banishment(camp_enrollment, student, course)
+      #   elsif camp_enrollment.number_of_absences < 2 && camp_enrollment.banished == true
+      #     unban_because_of_late(student, camp_enrollment)
+      #   end
+      # end
+
+
     end
   end
 
-  def unban_because_of_late(student, camp_enrollment)
-    camp = camp_enrollment.camp
-    camp_enrollment.update(banished: false, banishment_day: nil)
-    future_courses = camp.courses.joins(activity: :students).where("ends_at > ? AND students.id = ?", Time.current, student.id)
-    # ré-inscrire le student aux cours futurs
-    future_courses.each do |course|
-      student.courses << course unless student.courses.include?(course)
-    end
-  end
-
-  def banishment(camp_enrollment, student, course)
-    camp = course.activity.camp
-    camp_enrollment.update(banished: true, banishment_day: Time.current)
-    future_courses = camp.courses.where("starts_at > ?", course.starts_at + 0.5.hour)
-    student.course_enrollments.where(course: future_courses).destroy_all
-  end
 
   def update_presence_if_needed(enrollment, course_presence)
     if course_presence && enrollment && !enrollment.present
       enrollment.update(present: true)
     end
   end
+
+  ##################################################################
+  # CODE DANS LE CAS DES ELEVES EXCLUS ( academy.banished == true )
+  ##################################################################
+
+  # def unban_because_of_late(student, camp_enrollment)
+  #   camp = camp_enrollment.camp
+  #   camp_enrollment.update(banished: false, banishment_day: nil)
+  #   future_courses = camp.courses.joins(activity: :students).where("ends_at > ? AND students.id = ?", Time.current, student.id)
+  #   future_courses.each do |course|
+  #     student.courses << course unless student.courses.include?(course)
+  #   end
+  # end
+
+  # def banishment(camp_enrollment, student, course)
+  #   camp = course.activity.camp
+  #   camp_enrollment.update(banished: true, banishment_day: Time.current)
+  #   future_courses = camp.courses.where("starts_at > ?", course.starts_at + 0.5.hour)
+  #   student.course_enrollments.where(course: future_courses).destroy_all
+  # end
 end

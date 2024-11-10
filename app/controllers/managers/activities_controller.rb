@@ -24,7 +24,7 @@ class Managers::ActivitiesController < ApplicationController
     school_period = camp.school_period
 
     authorize([:managers, activity])
-
+    raise
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
     coach = User.find(params[:activity][:coach_id]) if params[:activity][:coach_id].present?
     coaches_ids = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }
@@ -229,7 +229,7 @@ class Managers::ActivitiesController < ApplicationController
 
   def validate_courses
     no_error = true
-    Activity::DAYS.each do |day, times|
+    Activity::DAYS.each do |day|
       start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
       end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
 
@@ -247,10 +247,8 @@ class Managers::ActivitiesController < ApplicationController
     start_time = Time.zone.parse("#{params[:activity][:day_attributes]["start_time(4i)"]}:#{params[:activity][:day_attributes]["start_time(5i)"]}")
     end_time = Time.zone.parse("#{params[:activity][:day_attributes]["end_time(4i)"]}:#{params[:activity][:day_attributes]["end_time(5i)"]}")
 
-    if start_time >= end_time
-      no_error = false
-    end
-    no_error
+    no_error = false if start_time >= end_time
+    return no_error
   end
 
   def create_courses_for_activity(activity, coach, days)

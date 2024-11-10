@@ -1,6 +1,6 @@
 class Managers::ImportStudentsController < ApplicationController
 
-  # Imports students from a CSV file into a camp.
+# IMPORTER UNE LISTE DE STUDENT ET INSCRIPTION A UN CAMP, ACTIVITES, ET COURSES
   def import
     camp = Camp.find(params[:camp][:camp_id])
     authorize([:managers, camp], policy_class: Managers::ImportStudentPolicy)
@@ -109,6 +109,7 @@ class Managers::ImportStudentsController < ApplicationController
     end
   end
 
+  # IMPORTER UNE LISTE DE STUDENT SANS LIEN AVEC UN CAMP
   def import_without_camp
     academy = Academy.find(params[:academy_id])
     authorize([:managers, academy], policy_class: Managers::ImportStudentPolicy)
