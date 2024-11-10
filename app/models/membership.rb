@@ -9,7 +9,9 @@ class Membership < ApplicationRecord
   scope :unpaid, -> { where(status: false) }
 
   def self.with_all_course_enrollments_present_false
-    joins(student: :course_enrollments).group('memberships.id').having('bool_and(course_enrollments.present = false)')
+    joins(student: { course_enrollments: :course })
+      .where('courses.ends_at < ?', Date.current)
+      .group('memberships.id')
+      .having('bool_and(course_enrollments.present = false)')
   end
-
 end
