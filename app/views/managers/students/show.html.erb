@@ -7,7 +7,6 @@
 
 
 <div class="row justify-content-center align-items-stretch">
-
   <div class="col-lg-4 col-md-7 col-sm-12 mt-3" data-controller="upload-photo" data-upload-photo-student-id-value="<%=@student.id%>">
     <div class="header-info">INFORMATIONS</div>
     <div class="content-info">
@@ -227,31 +226,31 @@
                 <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
                 <%= form_with url: managers_enrollments_path, local: true do |form| %>
-                  <%= form.hidden_field :student_id, value: @student.id %>
+                  <div class="modal-body">
+                    <%= form.hidden_field :student_id, value: @student.id %>
 
-                  <%= form.label :academy, "Académie" %>
-                  <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'academy', action: "change->enrollment-form#updateSchoolPeriods" } } %>
+                    <%= form.label :academy, "Académie" %>
+                    <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'academy', action: "change->enrollment-form#updateSchoolPeriods" } } %>
 
-                  <%= form.label :school_period, "Période" %>
-                  <%= form.collection_select :school_period, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'schoolPeriod', action: "change->enrollment-form#updateCamps" } } %>
+                    <%= form.label :school_period, "Période" %>
+                    <%= form.collection_select :school_period, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'schoolPeriod', action: "change->enrollment-form#updateCamps" } } %>
 
-                  <%= form.label :camp, "Stage" %>
-                  <%= form.collection_select :camp, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'camp', action: "change->enrollment-form#updateActivities" } } %>
+                    <%= form.label :camp, "Stage" %>
+                    <%= form.collection_select :camp, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'camp', action: "change->enrollment-form#updateActivities" } } %>
 
-                  <%= form.label :activity, "Activité" %>
-                  <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
+                    <%= form.label :activity, "Activité" %>
+                    <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
 
-                  <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
-                  <%= form.radio_button :image_consent, true %> Oui
-                  <%= form.radio_button :image_consent, false, checked: true %> Non
-              </div>
-              <div class="modal-footer">
-                <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-                <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
-              </div>
-              <% end %>
+                    <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
+                    <%= form.radio_button :image_consent, true %> Oui
+                    <%= form.radio_button :image_consent, false, checked: true %> Non
+                  </div>
+                  <div class="modal-footer">
+                    <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                    <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                  </div>
+                <% end %>
             </div>
           </div>
         </div>
@@ -308,27 +307,27 @@
                 <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
-                <%= form_with url: managers_annual_enrollments_path, local: true do |form| %>
-                    <%= form.hidden_field :student_id, value: @student.id %>
+              <%= form_with url: managers_annual_enrollments_path, local: true do |form| %>
+                <div class="modal-body">
+                  <%= form.hidden_field :student_id, value: @student.id %>
 
-                    <%= form.label :academy, "Académie" %>
-                    <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'academy', action: "change->annual-enrollments-form#updateAnnualPrograms" } } %>
+                  <%= form.label :academy, "Académie" %>
+                  <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'academy', action: "change->annual-enrollments-form#updateAnnualPrograms" } } %>
 
-                    <%= form.label :annual_program, "Programme" %>
-                    <%= form.collection_select :annual_program, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'annualProgram', action: "change->annual-enrollments-form#updateActivities" } } %>
+                  <%= form.label :annual_program, "Programme" %>
+                  <%= form.collection_select :annual_program, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'annualProgram', action: "change->annual-enrollments-form#updateActivities" } } %>
 
-                    <%= form.label :activity, "Activité" %>
-                    <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'activity' } } %>
+                  <%= form.label :activity, "Activité" %>
+                  <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'activity' } } %>
 
-                    <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
-                    <%= form.radio_button :image_consent, true %> Oui
-                    <%= form.radio_button :image_consent, false, checked: true %> Non
-              </div>
-              <div class="modal-footer">
-                <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-                <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
-              </div>
+                  <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
+                  <%= form.radio_button :image_consent, true %> Oui
+                  <%= form.radio_button :image_consent, false, checked: true %> Non
+                </div>
+                <div class="modal-footer">
+                  <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                  <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                </div>
               <% end %>
             </div>
           </div>

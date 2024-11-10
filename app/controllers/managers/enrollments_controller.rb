@@ -41,8 +41,8 @@ class Managers::EnrollmentsController < ApplicationController
       if membership.nil?
         student.memberships.create(amount: 15, start_year: start_year, academy: academy)
       end
-      redirect_to managers_student_path(student)
       flash[:notice] = "Inscription validée"
+      redirect_to managers_student_path(student)
     end
   end
 
