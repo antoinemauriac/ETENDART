@@ -78,8 +78,8 @@
 </div>
 
 <% if @students.any? %>
-  <div class="container" data-controller="clickable-table">
-    <table class="table table-striped table-responsive table-center form-container">
+  <div class="container container-big" data-controller="clickable-table">
+    <table class="table table-striped table-responsive table-center table-align-middle form-container">
       <thead>
         <tr>
           <th>Nom</th>
@@ -107,24 +107,24 @@
           <% membership = student.memberships.find_by(start_year: @start_year) %>
           <% name_style = membership&.status == false ? "color: red;font-weight: bold" : "" %>
           <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student) %>">
-            <td class="align-middle" style="<%= name_style %>"><%= student.last_name %></td>
-            <td class="align-middle" style="<%= name_style %>"><%= student.first_name %></td>
+            <td style="<%= name_style %>"><%= student.last_name %></td>
+            <td style="<%= name_style %>"><%= student.first_name %></td>
             <% if @academy.banished %>
-              <td class="align-middle <%= student.camp_enrollments.find_by(camp: @camp)&.banished ? 'non-bg' : '' %>">
+              <td class="<%= student.camp_enrollments.find_by(camp: @camp)&.banished ? 'non-bg' : '' %>">
                 <%= student.camp_enrollments.find_by(camp: @camp)&.banished ? "Oui" : "" %>
               </td>
             <% end %>
-            <td class="align-middle <%= student.camp_enrollments.find_by(camp: @camp).image_consent ? '' : 'non-bg' %>">
+            <td class="<%= student.camp_enrollments.find_by(camp: @camp).image_consent ? '' : 'non-bg' %>">
               <%= student.camp_enrollments.find_by(camp: @camp).image_consent ? "" : "Non" %>
             </td>
             <% if @school_period.paid %>
-              <td class="align-middle <%= student.camp_enrollments.find_by(camp: @camp).has_paid ? '' : 'non-bg' %>">
+              <td class="<%= student.camp_enrollments.find_by(camp: @camp).has_paid ? '' : 'non-bg' %>">
                 <%= student.camp_enrollments.find_by(camp: @camp).has_paid ? "Oui" : "Non" %>
               </td>
             <% end %>
             <% if @school_period.tshirt %>
               <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: @school_period)%>
-              <td class="align-middle <%= school_period_enrollment.tshirt_delivered ? '' : 'non-bg' %>">
+              <td class="<%= school_period_enrollment.tshirt_delivered ? '' : 'non-bg' %>">
                 <%= school_period_enrollment.tshirt_delivered ? "Oui" : "Non" %>
               </td>
             <% end %>
