@@ -13,13 +13,12 @@
     <%= simple_form_for @activity, url: managers_activities_path(camp: @camp), method: :post, data: { controller: 'activity-form' } do |f| %>
       <%= f.input :name, label: "Nom", input_html: { class: "activity-input" } %>
       <%= f.input :category_id, as: :select, collection: Category.all.order(:name), label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", academy_id: @camp.school_period.academy.id, action: 'change->activity-form#onCategoryChange' }, class: "activity-input" } %>
-      <div class="d-none" data-activity-form-target="toto">
+      <div class="d-none" data-activity-form-target="subform">
         <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: User.all, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select", activity_form_target: "coach" } } %>
         <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: User.all, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select", activity_form_target: "coach" } } %>
       </div>
 
       <%= f.input :location_id, as: :select, collection: @locations, label: "Adresse", input_html: { class: "activity-input" }  %>
-
 
       <ul>
         <li>
@@ -30,16 +29,16 @@
                 <%= day_form.label :day_of_week, "Lundi".to_s %>
               </div>
               <div class="col-4">
-              <%= day_form.time_field :start_time_Lundi, value: Activity::DAYS[:Lundi][:start_time], data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' }, class: "form-control" %>
+              <%= day_form.time_field :start_time_Lundi, data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' }, class: "form-control" %>
               </div>
               <div class="col-4">
-                <%= day_form.time_field :end_time_Lundi, value: Activity::DAYS[:Lundi][:end_time], data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "form-control" %>
+                <%= day_form.time_field :end_time_Lundi, data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "form-control" %>
               </div>
             </div>
           <% end %>
         </li>
 
-        <% Activity::DAYS.except(:Lundi).each do |day, times| %>
+        <% (Activity::DAYS - ["Lundi"]).each do |day| %>
           <li>
             <%= f.simple_fields_for :days do |day_form| %>
               <div class="row align-items-center">
@@ -48,10 +47,10 @@
                   <%= day_form.label :day_of_week, day.to_s %>
                 </div>
                 <div class="col-4">
-                  <%= day_form.time_field :"start_time_#{day}", value: times[:start_time], data: { activity_form_target: 'startTime' }, class: "form-control" %>
+                  <%= day_form.time_field :"start_time_#{day}", data: { activity_form_target: 'startTime' }, class: "form-control" %>
                 </div>
                 <div class="col-4">
-                  <%= day_form.time_field :"end_time_#{day}", value: times[:end_time], data: { activity_form_target: 'endTime' }, class: "form-control" %>
+                  <%= day_form.time_field :"end_time_#{day}", data: { activity_form_target: 'endTime' }, class: "form-control" %>
                 </div>
               </div>
             <% end %>

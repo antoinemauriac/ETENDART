@@ -1,12 +1,6 @@
 class Activity < ApplicationRecord
 
-  DAYS = {
-    Lundi: { start_time: nil, end_time: nil },
-    Mardi: { start_time: nil, end_time: nil },
-    Mercredi: { start_time: nil, end_time: nil },
-    Jeudi: { start_time: nil, end_time: nil },
-    Vendredi: { start_time: nil, end_time: nil }
-  }
+  DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi']
 
   has_many :activity_enrollments, dependent: :destroy
   has_many :students, through: :activity_enrollments

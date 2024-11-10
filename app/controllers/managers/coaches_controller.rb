@@ -127,5 +127,3 @@ class Managers::CoachesController < ApplicationController
     params.require(:user).permit(:email, :first_name, :last_name, :password, :phone_number, :gender)
   end
 end
-
-# toto

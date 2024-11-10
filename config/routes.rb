@@ -130,6 +130,7 @@ Rails.application.routes.draw do
     resources :annual_enrollments, only: %i[create]
     resources :feedbacks, only: %i[new create destroy]
     resources :activity_enrollments, only: %i[destroy]
+    resources :camp_enrollments, only: %i[destroy]
     resources :categories, only: %i[index create edit update destroy]
     resources :locations, only: %i[show]
     resources :enrollments, only: %i[new create]

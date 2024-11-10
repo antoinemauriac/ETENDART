@@ -87,7 +87,7 @@ class AnnualProgram < ApplicationRecord
       end_date = period.end_date
 
       (start_date..end_date).each do |date|
-        specific_days << date if date.wday == wday
+        specific_days << date if date.wday == wday && date >= Date.current
       end
     end
 

@@ -144,7 +144,7 @@ class Managers::StudentsController < ApplicationController
     # Enregistrement de l'URL de la nouvelle image sur l'objet Student
     @student.photo.attach(io: URI.open(photo_url), filename: "avatar_student_id_#{@student.id}")
 
-    # Suppression de l'image originale sur Cloudinary
+    # Suppression de l'image originale sur Cloudinary pour éviter le doublon dans le stockage
     Cloudinary::Uploader.destroy(public_id)
 
     @academy = Academy.find(params[:academy_id]) if params[:academy_id].present?

@@ -1,9 +1,13 @@
-# Stop execution if the environment is production
+require 'faker'
+# NB : POUR L'EXECUTION DES BACKGROUND JOB (ACTIVITY_STAT, CAMP_STAT...),
+# PENSER À MODIFIER LES FICHIERS EN RETIRANT 'NEXT UNLESS MODEL.CURRENT?'
+
+
+# STOP EXECUTION IF THE ENVIRONMENT IS PRODUCTION
 if Rails.env.production?
   raise "Seeds should not be run in production!"
 end
 
-require 'faker'
 
 # DESTROY ALL
 ActivityStat.destroy_all
@@ -44,7 +48,7 @@ categories.each do |super_category, sub_categories|
   end
 end
 
-# create activity names using things like (8-12ans), 14h-16h, or juste the category name
+# CREATE ACTIVITY NAMES USING THINGS LIKE (8-12ANS), 14H-16H, OR JUSTE THE CATEGORY NAME
 def generate_activity_name(category_name)
   first_age_range = " 8-12ans"
   time_range = " #{rand(14..16)}h-#{rand(17..19)}h"
@@ -67,7 +71,7 @@ coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "
 coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Leila", last_name: "El Amrani", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Fille')
 coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "John", last_name: "Doe", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Garçon')
 
-# Assign roles to users
+# ASSIGN ROLES TO USERS
 manager.roles << Role.find_by(name: 'manager')
 coordinator.roles << Role.find_by(name: 'coordinator')
 admin.roles << Role.find_by(name: 'admin')
@@ -76,7 +80,7 @@ coach2.roles << Role.find_by(name: 'coach')
 coach3.roles << Role.find_by(name: 'coach')
 
 coachs = [coach1, coach2, coach3]
-# Create 3 academies
+# CREATE 3 ACADEMIES
 kuerten = Academy.create!(name: 'Kuerten', manager: manager, coordinator: coordinator, annual: false)
 kuerten_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1731177238/etendart_dev/ip1nfwajzofkglkbjmrh.jpg')
 kuerten.image.attach(io: kuerten_image, filename: 'kuerten-court.jpg', content_type: 'image/jpg')
@@ -89,7 +93,7 @@ batum = Academy.create!(name: 'Batum', manager: manager, annual: false)
 batum_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1731177238/etendart_dev/eateyetw2sgwy3bgnh17.avif')
 batum.image.attach(io: batum_image, filename: 'batum-court.jpg', content_type: 'image/jpg')
 
-# Create 2 locations for each academy
+# CREATE 2 LOCATIONS FOR EACH ACADEMY
 Academy.all.each do |academy|
 2.times do |i|
   Location.create!(
@@ -100,7 +104,7 @@ Academy.all.each do |academy|
   end
 end
 
-# create 20 students
+# CREATE 20 STUDENTS
 20.times do |i|
   student = Student.new(
     first_name: Faker::Name.first_name,
@@ -122,7 +126,7 @@ end
   student.memberships << Membership.create!(academy: kuerten, student: student, start_year: 2024, amount: 20, status: rand < 0.8)
 end
 
-# Mise à jour des paid memberships
+# MISE À JOUR DES PAID MEMBERSHIPS
 payment_methods = ["cash", "cheque", "hello_asso"]
 Membership.all.each do |membership|
   if membership.status
@@ -188,7 +192,7 @@ camp_names = ["semaine1", "semaine2"]
           coach: activity.coach,
           status: true
           )
-        # Inscription des students aux courses, et mise à jour de la présence aléatoire
+        # INSCRIPTION DES STUDENTS AUX COURSES, ET MISE À JOUR DE LA PRÉSENCE ALÉATOIRE
         Student.all.each { |student| CourseEnrollment.create!(student: student, course: course, present: rand < 0.9) }
       end
     end
@@ -228,7 +232,7 @@ Student.all.each do |student|
   end
 end
 
-# Create a NEW school period with two camps
+# CREATE A NEW SCHOOL PERIOD WITH TWO CAMPS
 new_school_period = SchoolPeriod.create!(
   name: "Février",
   year: 2024,
@@ -265,7 +269,7 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
     coach.categories << category unless coach.categories.include?(category)
     coach.camps << camp unless activity.coach.camps.include?(camp)
     activity.coaches << coach
-    # create 5 courses for each activity, the first one starting on Monday of the camp
+    # CREATE 5 COURSES FOR EACH ACTIVITY, THE FIRST ONE STARTING ON MONDAY OF THE CAMP
     start_hour = j.even? ? 10 : 12
     5.times do |k|
       start_day = camp.starts_at + k.days
@@ -283,7 +287,7 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
 end
 
 
-# create 1 annual program with 5 program periods
+# CREATE 1 ANNUAL PROGRAM WITH 5 PROGRAM PERIODS
 annual_program = AnnualProgram.create!(academy: zidane)
 
 program_periods_defaults = [
@@ -306,8 +310,8 @@ Student.all.each do |student|
   AnnualProgramEnrollment.create!(student: student, annual_program: annual_program, image_consent: rand < 0.8)
 end
 
-# create 5 activities for the annual program
-# each activity has 1 course per week, every week within the program periods
+# CREATE 5 ACTIVITIES FOR THE ANNUAL PROGRAM
+# EACH ACTIVITY HAS 1 COURSE PER WEEK, EVERY WEEK WITHIN THE PROGRAM PERIODS
 
 5.times do |i|
   category = Category.all.sample
@@ -331,7 +335,7 @@ end
   annual_program.program_periods.each do |program_period|
     program_period_start = program_period.start_date
     program_period_end = program_period.end_date
-    weeks = (program_period_end - program_period_start).to_i / 7
+    weeks = ((program_period_end - program_period_start).to_i / 7) + 1
     weeks.times do |j|
       start_day = program_period_start + i.days + j.weeks
       start = start_day + start_hour.hour
