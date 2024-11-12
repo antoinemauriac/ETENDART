@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_25_115421) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_12_110346) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -428,6 +428,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_25_115421) do
     t.integer "price", default: 0, null: false
     t.boolean "new", default: true
     t.boolean "tshirt", default: false
+    t.boolean "free_judo", default: false
     t.index ["academy_id"], name: "index_school_periods_on_academy_id"
   end
 
