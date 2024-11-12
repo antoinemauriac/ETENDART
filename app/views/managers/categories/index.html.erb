@@ -18,7 +18,7 @@
       <% end %>
     </div>
   </div>
-  <table class="table table-striped form-container table-center table-responsive">
+  <table class="table table-border form-container table-center table-responsive">
     <thead>
       <tr>
         <th>Super Catégorie</th>
@@ -28,7 +28,13 @@
     </thead>
     <tbody>
       <% @categories.each do |category| %>
-        <tr>
+      <tr style="background-color: <%= case category.super_category
+        when 'Accompagnement' then 'lightgrey'
+        when 'Cuisine' then 'white'
+        when 'Eveil' then 'lightgrey'
+        when 'Sport' then 'white'
+        else '#F0E68C'
+      end %>">
           <td><%= category.super_category %></td>
           <td><%= category.name %></td>
           <td>

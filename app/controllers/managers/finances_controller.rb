@@ -6,40 +6,28 @@ class Managers::FinancesController < ApplicationController
     academy_ids = @academies.pluck(:id)
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
 
-    # Sélectionner tous les memberships pour les académies gérées
+    # SÉLECTIONNER TOUS LES MEMBERSHIPS POUR LES ACADÉMIES GÉRÉES QUELQUE SOIT L'ANNÉE
     @all_memberships = Membership.where(academy_id: academy_ids)
-
-    # cotisations des élèves ayant particpé à au mons un cours
-    @all_expected_memberships = Membership.where(academy_id: academy_ids)
-                                          .where(student_id: Student.with_at_least_one_course(@start_year))
-
-
-    # cotisation des élèves qui n'ont particpé à aucun cours et donc cotisation non exigible
-    @all_not_expected_memberships = Membership.where(academy_id: academy_ids)
-                                              .where.not(student_id: Student.with_at_least_one_course(@start_year))
-
-    # paid_memberships_excluding_offered =
-    # @total_expected_revenue = paid_memberships_excluding_offered.sum(:amount)
-
-    # @all_paid_memberships_count = paid_memberships_excluding_offered.count
-    # @total_received_revenue = paid_memberships_excluding_offered.sum(:amount)
-
-    # @all_unpaid_memberships_count = @all_memberships.unpaid.count
-    # @total_missing_revenue = @all_memberships.unpaid.sum(:amount)
-
 
     # CALCULS POUR L'ANNÉE COURANTE
 
-    # payés mais non exigibles (élèves ayant payé mais n'ayant particpé à aucun cours)
+    # COTISATIONS DES ÉLÈVES AYANT PARTICPÉ À AU MONS UN COURS PENDANT L'ANNÉE SCOLAIRE
+    @all_expected_memberships = Membership.where(academy_id: academy_ids, student_id: Student.with_at_least_one_course(@start_year))
 
+    # COTISATION DES ÉLÈVES QUI N'ONT PARTICPÉ À AUCUN COURS ET DONC COTISATION NON EXIGIBLE
+    @all_not_expected_memberships = Membership.where(academy_id: academy_ids).where.not(student_id: Student.with_at_least_one_course(@start_year))
+
+
+
+    # COTISATIONS PAYÉES MAIS NON EXIGIBLES (ÉLÈVES AYANT PAYÉ MAIS N'AYANT PARTICPÉ À AUCUN COURS PENDANT L'ANNÉE SCOLAIRE)
     @current_year_not_expected_memberships = @all_not_expected_memberships.paid.where(start_year: @start_year)
     @current_year_not_expected_memberships_count = @current_year_not_expected_memberships.paid.where.not(payment_method: 'offert').count
     @current_year_not_expected_revenue = @current_year_not_expected_memberships.paid.where.not(payment_method: 'offert').sum(:amount)
 
-    # exigibles
+    # EXIGIBLES
     @current_year_expected_memberships = @all_expected_memberships.where(start_year: @start_year)
 
-    # exigibles + payés mais non exigibles
+    # PAYÉES EXIGIBLES + PAYÉS MAIS NON EXIGIBLES
     @current_year_memberships_count = @current_year_expected_memberships.where("payment_method IS NULL OR payment_method != ?", 'offert').count +
                                       @current_year_not_expected_memberships_count
 
@@ -48,30 +36,34 @@ class Managers::FinancesController < ApplicationController
                                     .sum(:amount) + @current_year_not_expected_revenue
 
 
+    # TOUTES LES COTISATIONS DE L'ANNÉE SCOLAIRE PAYEES OU NON
     @current_year_memberships = @all_memberships.where(start_year: @start_year)
 
 
+    # COTISATIONS OFFERTES
     @current_year_offered_memberships_count = @current_year_expected_memberships.where(payment_method: 'offert').count +
                                               @current_year_not_expected_memberships.where(payment_method: 'offert').count
     @current_year_offered_revenue = @current_year_expected_memberships.where(payment_method: 'offert').sum(:amount) +
                                     @current_year_not_expected_memberships.where(payment_method: 'offert').sum(:amount)
 
+    # COTISATIONS PAYÉES (HORS OFFERTS)
     current_year_paid_memberships_excluding_offered = @current_year_expected_memberships.paid.where.not(payment_method: 'offert')
     @current_year_paid_memberships_count = current_year_paid_memberships_excluding_offered.count + @current_year_not_expected_memberships_count
     @current_year_received_revenue = current_year_paid_memberships_excluding_offered.sum(:amount) + @current_year_not_expected_revenue
 
+    # COTISATIONS NON PAYÉES
     @current_year_unpaid_memberships_count = @current_year_expected_memberships.unpaid.count
     @current_year_missing_revenue = @current_year_expected_memberships.unpaid.sum(:amount)
 
-    # Revenu total par utilisateur (hors offerts)
+    # REVENU TOTAL PAR UTILISATEUR SUR L'ANNÉE SCOLAIRE (HORS OFFERTS)
     revenue_by_user = @all_memberships.paid.where.not(payment_method: 'offert').where(start_year: @start_year).group(:receiver_id).sum(:amount)
     @revenue_by_user = revenue_by_user.sort_by { |_, total_received| -total_received }.to_h
 
-    # Répartition par moyen de paiement
+    # RÉPARTITION PAR MOYEN DE PAIEMENT PAR UTILISATEUR
     @payment_details_by_user = @current_year_memberships.paid.group(:receiver_id, :payment_method).order(:receiver_id).sum(:amount)
-
     @users = User.where(id: revenue_by_user.keys).order(:last_name)
 
+    # DEPOSITS
     @last_membership_deposits = MembershipDeposit.where(depositor_id: @users.ids).order(created_at: :desc).limit(3)
 
     @current_year_deposited_revenue =
@@ -94,7 +86,7 @@ class Managers::FinancesController < ApplicationController
   def index
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
-    # récupérer les académies gérées par l'utilisateur qui ont des school_periods avec une colonne paid à true
+    # RÉCUPÉRER LES ACADÉMIES GÉRÉES PAR L'UTILISATEUR QUI ONT AU MOINS UNE SCHOOL_PERIOD AVEC UNE COLONNE PAID À TRUE
     @academies = current_user.academies.joins(:school_periods).where(school_periods: { paid: true, new: true }).distinct
   end
 

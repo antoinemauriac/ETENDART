@@ -11,7 +11,7 @@ class Membership < ApplicationRecord
   # MÉTHODE QUI RENVOIE LES MEMBERSHIPS A PRIORI NON EXIGIBLES
   def self.with_all_course_enrollments_present_false
     joins(student: { course_enrollments: :course })
-      .where('courses.ends_at BETWEEN ? AND ?', Date.new(2024, 4, 15), Date.current)
+      .where('courses.ends_at BETWEEN ? AND ?', Date.new(2024, 4, 7), Date.current)
       .group('students.id', 'memberships.id')
       .having('bool_and(course_enrollments.present = false)')
       .pluck('students.id', 'memberships.id')
@@ -27,3 +27,4 @@ class Membership < ApplicationRecord
   #   end
   # end
 end
+
