@@ -117,6 +117,7 @@ end
     zipcode: [92000, 75000, 69000, 13000, 31000].sample,
     allergy: rand < 0.8 ? nil : ["Arachides", "Lactose", "Gluten", "Oeufs"].sample,
     )
+  # CREATE USERNAME FOR STUDENT FROM THEIR FIRST NAME, LAST NAME AND DATE OF BIRTH
   excel_serial_date = (student.date_of_birth - Date.new(1899, 12, 30)).to_i
   username = "#{student.first_name.downcase}#{student.last_name.downcase}#{excel_serial_date }"
   student.username = username
@@ -144,6 +145,8 @@ school_period_names = ["Printemps", "Été", "Toussaint", "Février"]
 camp_names = ["semaine1", "semaine2"]
 
 # CREATE 2 PAST SCHOOL PERIODS WITH 2 CAMPS FOR EACH SCHOOL_PERIOD, AND 2 ACTIVITIES FOR EACH CAMP WITH 5 COURSES FOR EACH ACTIVITY (1 PER DAY)
+#
+# CREATE 2 SCHOOL PERIODS
 2.times do |i|
   school_period = SchoolPeriod.create!(
     name: school_period_names[i],
@@ -152,7 +155,9 @@ camp_names = ["semaine1", "semaine2"]
     academy_id: Academy.find_by(name: "Kuerten").id
     )
   school_period.update(price: 15) if school_period.paid
+  # INSCRIPTION DES STUDENTS À LA SCHOOL PERIOD
   Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, school_period: school_period) }
+  # CREATE 2 CAMPS THE SCHOOL PERIOD
   2.times do |i|
     camp = Camp.create!(
       name: camp_names[i],
@@ -160,9 +165,12 @@ camp_names = ["semaine1", "semaine2"]
       starts_at: Date.new(2024, 10, 7) + 7*i.days,
       ends_at: Date.new(2024, 10, 11) + 7*i.days
       )
+    # INSCRIPTION DES STUDENTS AUX CAMPS
     Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
+    # MISE À JOUR DE LA PAIEMENT DES CAMPS
     CampEnrollment.all.each { |camp_enrollment| camp_enrollment.update(has_paid: rand < 0.7) if camp_enrollment.camp.school_period.paid }
 
+    # CREATE 2 ACTIVITIES FOR EACH CAMP
     2.times do |j|
       category = Category.all.sample
       activity_name = generate_activity_name(category.name)
@@ -174,6 +182,7 @@ camp_names = ["semaine1", "semaine2"]
         category: category,
         location: camp.academy.locations.sample
         )
+      # INSCRIPTION DES STUDENTS AUX ACTIVITÉS
       Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
       coach.academies_as_coach << camp.academy unless coach.academies_as_coach.include?(camp.academy)
       coach.categories << category unless coach.categories.include?(category)
@@ -241,8 +250,10 @@ new_school_period = SchoolPeriod.create!(
 )
 new_school_period.update(price: 15) if new_school_period.paid
 
+# INSCRIPTION DES STUDENTS À LA NOUVELLE SCHOOL PERIOD
 Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, school_period: new_school_period) }
 
+# CREATE 2 CAMPS FOR THE NEW SCHOOL PERIOD
 2.times do |i|
   camp = Camp.create!(
     name: "semaine#{i + 1}",
@@ -250,9 +261,10 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
     starts_at: Date.new(2024, 11, 11) + 7 * i.days,
     ends_at: Date.new(2024, 11, 15) + 7 * i.days
   )
+  # INSCRIPTION DES STUDENTS AUX CAMPS
   Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
-  # CampEnrollment.all.each { |camp_enrollment| camp_enrollment.update(has_paid: rand < 0.7) if camp_enrollment.camp.school_period.paid }
 
+  # CREATE 2 ACTIVITIES FOR EACH CAMP
   2.times do |j|
     category = Category.all.sample
     activity_name = generate_activity_name(category.name)
@@ -264,6 +276,7 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
       category: category,
       location: camp.academy.locations.sample
     )
+    # INSCRIPTION DES STUDENTS AUX ACTIVITÉS
     Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
     coach.academies_as_coach << camp.academy unless coach.academies_as_coach.include?(camp.academy)
     coach.categories << category unless coach.categories.include?(category)
@@ -281,6 +294,7 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
         manager: manager,
         coach: activity.coach,
         )
+      # INSCRIPTION DES STUDENTS AUX COURSES
       Student.all.each { |student| CourseEnrollment.create!(student: student, course: course) }
     end
   end
@@ -298,6 +312,7 @@ program_periods_defaults = [
   { start_date: Date.parse("21/04/2025"), end_date: Date.parse("13/06/2025") }
 ]
 
+# CREATE 5 PROGRAM PERIODS FOR THE ANNUAL PROGRAM
 program_periods_defaults.each do |period_params|
   annual_program.program_periods << ProgramPeriod.create!(start_date: period_params[:start_date], end_date: period_params[:end_date], annual_program: annual_program)
 end
@@ -305,6 +320,7 @@ end
 annual_program.update(starts_at: annual_program.program_periods.first.start_date)
 annual_program.update(ends_at: annual_program.program_periods.last.end_date)
 
+# INSCRIPTION DES STUDENTS À L'ANNUAL PROGRAM
 Student.all.each do |student|
   student.academies << zidane unless student.academies.include?(zidane)
   AnnualProgramEnrollment.create!(student: student, annual_program: annual_program, image_consent: rand < 0.8)
@@ -329,8 +345,10 @@ end
   coach.activities << activity
   activity.coaches << coach
 
+  # INSCRIPTION DES STUDENTS AUX ACTIVITÉS
   Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
 
+  # CREATE 1 COURSE PER WEEK FOR EACH ACTIVITY
   start_hour = rand(16..19)
   annual_program.program_periods.each do |program_period|
     program_period_start = program_period.start_date
@@ -346,6 +364,7 @@ end
         manager: manager,
         coach: activity.coach,
       )
+      # INSCRIPTION DES STUDENTS AUX COURSES
       if course.starts_at <= Date.today
         course.update(status: true)
         Student.all.each { |student| CourseEnrollment.create!(student: student, course: course, present: rand < 0.7) }
