@@ -22,6 +22,21 @@
   transform: scale(1.05);
 }
 
+.card-category-small-height {
+  height: 60px;
+}
+
+@media (min-width: 768px) {
+  .col-md-1-5 {
+    flex: 0 0 12.5%;
+    max-width: 12.5%;
+  }
+  .col-md-2-5 {
+    flex: 0 0 20.8%;
+    max-width: 20.8%;
+  }
+}
+
 
 // @media screen and (max-width: 1024px) {
 //   .card-category {

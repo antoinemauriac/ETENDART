@@ -19,8 +19,8 @@
           <h5 class="modal-title" id="schoolPeriodModalLabel">Nouvelle Période Scolaire</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, id: "school-period-form") do |form| %>
+        <%= form_with(model: @school_period, url: managers_school_periods_path(academy: @academy), method: :post, id: "school-period-form") do |form| %>
+          <div class="modal-body">
             <%= form.label :name, "Nom :" %>
             <%= form.select :name, options_for_select(['Février', 'Printemps', 'Été', 'Toussaint']), {}, { class: "form-control", required: true } %>
             <%= form.label :year, "Année :" %>
@@ -55,11 +55,11 @@
                 </div>
               </div>
             </div>
-        </div>
-        <div class="modal-footer flex-btn">
-          <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-          <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
-        </div>
+          </div>
+          <div class="modal-footer flex-btn">
+            <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+            <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+          </div>
         <% end %>
       </div>
     </div>
@@ -73,7 +73,7 @@
         <th>Stage</th>
         <th>Année</th>
         <th>Élèves inscrits</th>
-        <th>Action</th>
+        <th>Supprimer</th>
       </tr>
     </thead>
     <tbody>

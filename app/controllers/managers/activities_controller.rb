@@ -24,7 +24,6 @@ class Managers::ActivitiesController < ApplicationController
     school_period = camp.school_period
 
     authorize([:managers, activity])
-    raise
     days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
     coach = User.find(params[:activity][:coach_id]) if params[:activity][:coach_id].present?
     coaches_ids = params[:activity][:coach_ids].reject { |id| id == params[:activity][:coach_id] || id == "" }

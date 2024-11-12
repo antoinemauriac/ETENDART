@@ -21,5 +21,4 @@ class UpdateActivityStatsJob < ApplicationJob
       end
     end
   end
-
 end

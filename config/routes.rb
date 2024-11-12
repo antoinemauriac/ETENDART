@@ -31,10 +31,6 @@ Rails.application.routes.draw do
 
 
   namespace :managers do
-    # post 'import_students/import', to: 'import_students#import'
-    # post 'import_students/import_without_camp', to: 'import_students#import_without_camp'
-    # post 'import_annual_students', to: 'import_annual_students#import'
-
     resources :finances, only: %i[index show] do
       collection do
         get :membership_finances_overview
@@ -132,9 +128,8 @@ Rails.application.routes.draw do
     resources :activity_enrollments, only: %i[destroy]
     resources :camp_enrollments, only: %i[destroy]
     resources :categories, only: %i[index create edit update destroy]
-    resources :locations, only: %i[show]
     resources :enrollments, only: %i[new create]
-    resources :locations, only: %i[create index edit update]
+    resources :locations, only: %i[create show index edit update]
     resources :memberships, only: %i[update create]
   end
 

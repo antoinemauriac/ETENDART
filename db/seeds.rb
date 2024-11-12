@@ -1,6 +1,6 @@
 require 'faker'
 # NB : POUR L'EXECUTION DES BACKGROUND JOB (ACTIVITY_STAT, CAMP_STAT...),
-# PENSER À MODIFIER LES FICHIERS EN RETIRANT 'NEXT UNLESS MODEL.CURRENT?'
+# PENSER À MODIFIER LES FICHIERS EN COMMENTANT 'NEXT UNLESS MODEL.CURRENT?'
 
 
 # STOP EXECUTION IF THE ENVIRONMENT IS PRODUCTION
@@ -270,7 +270,7 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
     coach.camps << camp unless activity.coach.camps.include?(camp)
     activity.coaches << coach
     # CREATE 5 COURSES FOR EACH ACTIVITY, THE FIRST ONE STARTING ON MONDAY OF THE CAMP
-    start_hour = j.even? ? 10 : 12
+    start_hour = j.even? ? 14 : 16
     5.times do |k|
       start_day = camp.starts_at + k.days
       start = start_day + start_hour.hour
@@ -288,98 +288,98 @@ end
 
 
 # CREATE 1 ANNUAL PROGRAM WITH 5 PROGRAM PERIODS
-# annual_program = AnnualProgram.create!(academy: zidane)
+annual_program = AnnualProgram.create!(academy: zidane)
 
-# program_periods_defaults = [
-#   { start_date: Date.parse("16/09/2024"), end_date: Date.parse("18/10/2024") },
-#   { start_date: Date.parse("28/10/2024"), end_date: Date.parse("13/12/2024") },
-#   { start_date: Date.parse("06/01/2025"), end_date: Date.parse("14/02/2025") },
-#   { start_date: Date.parse("03/03/2025"), end_date: Date.parse("11/04/2025") },
-#   { start_date: Date.parse("21/04/2025"), end_date: Date.parse("13/06/2025") }
-# ]
+program_periods_defaults = [
+  { start_date: Date.parse("16/09/2024"), end_date: Date.parse("18/10/2024") },
+  { start_date: Date.parse("28/10/2024"), end_date: Date.parse("13/12/2024") },
+  { start_date: Date.parse("06/01/2025"), end_date: Date.parse("14/02/2025") },
+  { start_date: Date.parse("03/03/2025"), end_date: Date.parse("11/04/2025") },
+  { start_date: Date.parse("21/04/2025"), end_date: Date.parse("13/06/2025") }
+]
 
-# program_periods_defaults.each do |period_params|
-#   annual_program.program_periods << ProgramPeriod.create!(start_date: period_params[:start_date], end_date: period_params[:end_date], annual_program: annual_program)
-# end
+program_periods_defaults.each do |period_params|
+  annual_program.program_periods << ProgramPeriod.create!(start_date: period_params[:start_date], end_date: period_params[:end_date], annual_program: annual_program)
+end
 
-# annual_program.update(starts_at: annual_program.program_periods.first.start_date)
-# annual_program.update(ends_at: annual_program.program_periods.last.end_date)
+annual_program.update(starts_at: annual_program.program_periods.first.start_date)
+annual_program.update(ends_at: annual_program.program_periods.last.end_date)
 
-# Student.all.each do |student|
-#   student.academies << zidane unless student.academies.include?(zidane)
-#   AnnualProgramEnrollment.create!(student: student, annual_program: annual_program, image_consent: rand < 0.8)
-# end
+Student.all.each do |student|
+  student.academies << zidane unless student.academies.include?(zidane)
+  AnnualProgramEnrollment.create!(student: student, annual_program: annual_program, image_consent: rand < 0.8)
+end
 
-# # CREATE 5 ACTIVITIES FOR THE ANNUAL PROGRAM
-# # EACH ACTIVITY HAS 1 COURSE PER WEEK, EVERY WEEK WITHIN THE PROGRAM PERIODS
+# CREATE 5 ACTIVITIES FOR THE ANNUAL PROGRAM
+# EACH ACTIVITY HAS 1 COURSE PER WEEK, EVERY WEEK WITHIN THE PROGRAM PERIODS
 
-# 5.times do |i|
-#   category = Category.all.sample
-#   activity_name = generate_activity_name(category.name)
-#   coach = coachs.sample
-#   activity = Activity.create!(
-#     name: activity_name,
-#     coach: coach,
-#     annual_program: annual_program,
-#     category: category,
-#     location: zidane.locations.sample
-#   )
-#   coach.academies_as_coach << zidane unless coach.academies_as_coach.include?(zidane)
-#   coach.categories << category unless coach.categories.include?(category)
-#   coach.activities << activity
-#   activity.coaches << coach
+5.times do |i|
+  category = Category.all.sample
+  activity_name = generate_activity_name(category.name)
+  coach = coachs.sample
+  activity = Activity.create!(
+    name: activity_name,
+    coach: coach,
+    annual_program: annual_program,
+    category: category,
+    location: zidane.locations.sample
+  )
+  coach.academies_as_coach << zidane unless coach.academies_as_coach.include?(zidane)
+  coach.categories << category unless coach.categories.include?(category)
+  coach.activities << activity
+  activity.coaches << coach
 
-#   Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
+  Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
 
-#   start_hour = rand(16..19)
-#   annual_program.program_periods.each do |program_period|
-#     program_period_start = program_period.start_date
-#     program_period_end = program_period.end_date
-#     weeks = ((program_period_end - program_period_start).to_i / 7) + 1
-#     weeks.times do |j|
-#       start_day = program_period_start + i.days + j.weeks
-#       start = start_day + start_hour.hour
-#       course = Course.create!(
-#         starts_at: start,
-#         ends_at: start + 2.hour,
-#         activity: activity,
-#         manager: manager,
-#         coach: activity.coach,
-#       )
-#       if course.starts_at <= Date.today
-#         course.update(status: true)
-#         Student.all.each { |student| CourseEnrollment.create!(student: student, course: course, present: rand < 0.7) }
-#       else
-#         Student.all.each { |student| CourseEnrollment.create!(student: student, course: course) }
-#       end
-#     end
-#   end
-# end
+  start_hour = rand(16..19)
+  annual_program.program_periods.each do |program_period|
+    program_period_start = program_period.start_date
+    program_period_end = program_period.end_date
+    weeks = ((program_period_end - program_period_start).to_i / 7) + 1
+    weeks.times do |j|
+      start_day = program_period_start + i.days + j.weeks
+      start = start_day + start_hour.hour
+      course = Course.create!(
+        starts_at: start,
+        ends_at: start + 2.hour,
+        activity: activity,
+        manager: manager,
+        coach: activity.coach,
+      )
+      if course.starts_at <= Date.today
+        course.update(status: true)
+        Student.all.each { |student| CourseEnrollment.create!(student: student, course: course, present: rand < 0.7) }
+      else
+        Student.all.each { |student| CourseEnrollment.create!(student: student, course: course) }
+      end
+    end
+  end
+end
 
-# # MISE A JOUR DE LA PRESENCE DES STUDENTS POUR ACTIVITY_ENROLLMENTS ET ANNUAL_PROGRAM_ENROLLMENTS
+# MISE A JOUR DE LA PRESENCE DES STUDENTS POUR ACTIVITY_ENROLLMENTS ET ANNUAL_PROGRAM_ENROLLMENTS
 
-# Student.all.each do |student|
-#   annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program)
-#   course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.annual_program_id = ?', annual_program.id)
-#   if course_enrollments.any? { |course_enrollment| course_enrollment.present }
-#     annual_program_enrollment.update(present: true)
-#   end
-#   activity_enrollments = student.activity_enrollments.joins(:activity).where('activities.annual_program_id = ?', annual_program.id)
-#   activity_enrollments.each do |activity_enrollment|
-#     activity = activity_enrollment.activity
-#     course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.id = ?', activity.id)
-#     if course_enrollments.any? { |course_enrollment| course_enrollment.present }
-#       activity_enrollment.update(present: true)
-#     end
-#   end
-# end
+Student.all.each do |student|
+  annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program)
+  course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.annual_program_id = ?', annual_program.id)
+  if course_enrollments.any? { |course_enrollment| course_enrollment.present }
+    annual_program_enrollment.update(present: true)
+  end
+  activity_enrollments = student.activity_enrollments.joins(:activity).where('activities.annual_program_id = ?', annual_program.id)
+  activity_enrollments.each do |activity_enrollment|
+    activity = activity_enrollment.activity
+    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.id = ?', activity.id)
+    if course_enrollments.any? { |course_enrollment| course_enrollment.present }
+      activity_enrollment.update(present: true)
+    end
+  end
+end
 
-# # CREATE STATS FOR ACTIVITIES, CAMPS, SCHOOL PERIODS AND ANNUAL PROGRAMS
+# CREATE STATS FOR ACTIVITIES, CAMPS, SCHOOL PERIODS AND ANNUAL PROGRAMS
 
-# UpdateActivityStatsJob.perform_now
-# UpdateCampStatsJob.perform_now
-# UpdateSchoolPeriodStatsJob.perform_now
-# UpdateAnnualProgramStatsJob.perform_now
+UpdateActivityStatsJob.perform_now
+UpdateCampStatsJob.perform_now
+UpdateSchoolPeriodStatsJob.perform_now
+UpdateAnnualProgramStatsJob.perform_now
 
 # troyes = Academy.create!(name: 'Troyes', manager: raf)
 # troyes_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1719924175/etendart/dc9cj1djqigxocxtad33.jpg')

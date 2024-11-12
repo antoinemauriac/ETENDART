@@ -33,6 +33,7 @@ class Managers::MembershipsController < ApplicationController
       redirect_to managers_student_path(@student)
     end
   end
+
   private
 
   def membership_params
