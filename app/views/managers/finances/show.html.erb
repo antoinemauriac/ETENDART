@@ -35,7 +35,7 @@
                   <% deposit_amount = camp.camp_deposits.sum(:amount) %>
                   <td><%= replace_zero_with_dash(deposit_amount) %></td>
                   <td style="<%= (received_revenue - deposit_amount) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(received_revenue - deposit_amount) %></td>
-                  <td><%= replace_zero_with_dash(expected_revenue - received_revenue) %></td>
+                  <td style="<%= (expected_revenue - received_revenue) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(expected_revenue - received_revenue) %></td>
                   <td><%= camp.school_period.price %>€</td>
                   <td><%= camp.show_count %></td>
                   <td><%= camp.paid_students_count %></td>
