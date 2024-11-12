@@ -164,7 +164,11 @@ class Camp < ApplicationRecord
   end
 
   def expected_revenue
-    (show_count - student_with_judo_count) * school_period.price
+    if self.school_period.free_judo == true
+      (show_count - student_with_judo_count) * school_period.price
+    else
+      show_count * school_period.price
+    end
   end
 
   def received_revenue

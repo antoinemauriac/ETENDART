@@ -15,7 +15,11 @@
               <th>Prix du stage</th>
               <th>Nb élèves présents</th>
               <th>Ayant payé</th>
-              <th>N'ayant pas payé <br> (dont Clarisse) </th>
+              <% if academy == Academy.find_by(name: "Djokovic") %>
+                <th>N'ayant pas payé <br> (dont Clarisse) </th>
+              <% else %>
+                <th>N'ayant pas payé</th>
+              <% end %>
             </tr>
           </thead>
           <tbody>
@@ -32,7 +36,11 @@
                 <td><%= school_period.price %>€</td>
                 <td><%= school_period.show_count %></td>
                 <td><%= school_period.paid_students_count %></td>
-                <td><%= school_period.unpaid_students_count %> (<%= school_period.student_with_judo_count %>) </td>
+                <% if school_period.free_judo == true %>
+                  <td><%= school_period.unpaid_students_count %> (<%= school_period.student_with_judo_count %>) </td>
+                <% else %>
+                  <td><%= school_period.unpaid_students_count %></td>
+                <% end %>
               </tr>
             <% end %>
           </tbody>

@@ -189,8 +189,11 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def expected_revenue
-    camp_enrollments.attended.count * price -
-    camps.sum(&:missing_clarisse_revenue)
+    if self.free_judo == true
+      camp_enrollments.attended.count * price - camps.sum(&:missing_clarisse_revenue)
+    else
+      camp_enrollments.paid.count * price
+    end
   end
 
   def received_revenue

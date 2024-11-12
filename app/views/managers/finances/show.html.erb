@@ -14,7 +14,11 @@
               <th>Prix du stage</th>
               <th>Nb élèves présents</th>
               <th>Ayant payé</th>
-              <th>N'ayant pas payé (dont Clarisse)</th>
+              <% if @school_period.academy == Academy.find_by(name: "Djokovic") %>
+                <th>N'ayant pas payé <br> (dont Clarisse) </th>
+              <% else %>
+                <th>N'ayant pas payé</th>
+              <% end %>
               <% if current_user.manager? || current_user.coordinator? %>
                 <th></th>
               <% end %>
@@ -35,7 +39,11 @@
                   <td><%= camp.school_period.price %>€</td>
                   <td><%= camp.show_count %></td>
                   <td><%= camp.paid_students_count %></td>
-                  <td><%= camp.unpaid_students_count %> (<%= camp.student_with_judo_count %>)</td>
+                  <% if camp.school_period.free_judo == true %>
+                    <td><%= camp.unpaid_students_count %> (<%= camp.student_with_judo_count %>)</td>
+                  <% else %>
+                    <td><%= camp.unpaid_students_count %></td>
+                  <% end %>
                   <% if current_user.manager? || current_user.coordinator? %>
                     <td>
                       <button type="button" style="margin:0" class="btn-etendart-yellow" data-bs-toggle="modal" data-bs-target="#modal-<%= camp.id %>">
