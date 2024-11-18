@@ -4,26 +4,26 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
 
   static targets = [ "form", "list", "input", "select", "link", "paginationLink" ]
-  // static values = { url: String }
+  static values = { academyId: Number }
 
   connect() {
-    this.setInitialAcademySelection();
+    if (this.hasSelectTarget) {
+      this.setInitialAcademySelection();
+    }
   }
 
   setInitialAcademySelection() {
     const params = new URLSearchParams(window.location.search);
     const academy_id = params.get('academy');
+
     if (academy_id) {
       this.selectTarget.value = academy_id;
     }
   }
 
-
   update() {
-    const academy_id = this.inputTarget.dataset.academyId
+    const academy_id = this.academyIdValue
     const query = this.inputTarget.value
-    console.log(academy_id);
-    console.log(query);
     const url = `students?academy=${academy_id}&query=${query}`;
     fetch(url, {headers: {"Accept": "text/plain"}})
       .then(response => response.text())

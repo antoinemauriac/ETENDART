@@ -4,6 +4,8 @@ import TomSelect from "tom-select";
 export default class extends Controller {
   static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach", "subform"]
 
+  static values = { academyId: Number }
+
   connect() {
     this.mondayStartTimeTarget.value = "10:00";
     this.mondayEndTimeTarget.value = "12:00";
@@ -30,7 +32,7 @@ export default class extends Controller {
 
   loadCoaches() {
     const category_id = this.categoryTarget.value
-    const academy_id = this.categoryTarget.dataset.academyId
+    const academy_id = this.academyIdValue
     const url = `/managers/coaches/${category_id}/category_coaches?academy_id=${academy_id}`
 
     fetch(url)

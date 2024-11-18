@@ -5,7 +5,6 @@ export default class extends Controller {
   static targets = ["table", "button", "header"];
 
   connect() {
-    console.log("past annual courses connected");
     this.showMore = true;
   }
 

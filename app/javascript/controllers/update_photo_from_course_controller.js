@@ -4,14 +4,15 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["input", "spinner", "studentPhoto", "label"];
 
+  static values = { studentId: Number };
+
   connect() {
   }
 
   submit(event) {
-    console.log("submit");
     this.spinnerTarget.classList.remove("d-none");
     this.labelTarget.classList.add("d-none");
-    let studentId = event.target.dataset.studentId;
+    const studentId = this.studentIdValue;
     const url = `/managers/students/${studentId}/update_photo`
     const formData = new FormData();
     const origin = event.target.dataset.origin;
