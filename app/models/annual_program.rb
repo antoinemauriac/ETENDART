@@ -102,7 +102,7 @@ class AnnualProgram < ApplicationRecord
   end
 
   def active_sorted_activities
-    activities.where(disable: false).sort_by do |activity|
+    activities.sort_by do |activity|
       [DAY_NAME_TO_NUMBER[activity.day_of_activity], activity.name]
     end
   end

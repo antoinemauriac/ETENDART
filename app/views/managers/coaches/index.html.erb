@@ -4,17 +4,16 @@
   <div class="header-nav-item active">LES COACHS</div>
 </div>
 <div class="yellow-title">LES COACHS</div>
-<div class="container" data-controller="search-coach">
+<div class="container" data-controller="search-coach" data-search-coach-academy-id-value="<%= @academy.id  %>">
   <div class="student-list-header mt-2 mb-3">
     <div  style="width:350px">
-      <%= form_with url: managers_coaches_path, method: :get, html: {class: "d-flex", data: {search_coach_target: "form"}} do |f| %>
+      <%= form_with url: managers_coaches_path, method: :get, html: { class: "d-flex" } do |f| %>
         <%= f.text_field :query,
               class: "student-input-search",
               placeholder: "Rechercher par catégorie, académie...",
               value: params[:query],
               data: {
                 search_coach_target: "input",
-                academy_id: @academy.id,
                 action: "keyup->search-coach#update"
               },
               autofocus: false %>

@@ -4,7 +4,7 @@
   <div class="header-nav-item active">LES ÉLÈVES</div>
 </div>
 <div class="yellow-title">LES ÉLÈVES</div>
-<div class="container" data-controller="search-student">
+<div class="container" data-controller="search-student" data-search-student-academy-id-value="<%= @academy.id  %>">
   <div class="student-list-header mt-2 mb-3">
     <%= link_to export_students_csv_managers_students_path(academy: @academy, format: :csv), class: 'btn-add-student' do %>
       <i class="fa-solid fa-download fa-no-margin"></i>EXPORTER<i class="fa-solid fa-download fa-no-margin"></i>
@@ -45,7 +45,6 @@
               value: params[:query],
               data: {
                 search_student_target: "input",
-                academy_id: @academy.id,
                 action: "keyup->search-student#update"
               },
               autofocus: false %>

@@ -64,12 +64,12 @@ end
 
 
 # CREATE 6 USERS, DONT 1 ADMIN, 1 MANAGER, 1 COORDINATOR AND 3 COACHES (ROLES)
-manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Garçon')
-coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Garçon')
-admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Garçon')
-coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Fille')
-coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Leila", last_name: "El Amrani", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Fille')
-coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "John", last_name: "Doe", phone_number: "06 12 34 56 78", status: "", admin: false, gender: 'Garçon')
+manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
+coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Leila", last_name: "El Amrani", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
+coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "John", last_name: "Doe", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 
 # ASSIGN ROLES TO USERS
 manager.roles << Role.find_by(name: 'manager')
@@ -363,6 +363,7 @@ end
         activity: activity,
         manager: manager,
         coach: activity.coach,
+        annual: true
       )
       # INSCRIPTION DES STUDENTS AUX COURSES
       if course.starts_at <= Date.today
