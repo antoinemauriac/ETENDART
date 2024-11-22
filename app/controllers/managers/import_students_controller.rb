@@ -95,11 +95,11 @@ class Managers::ImportStudentsController < ApplicationController
             membership = Membership.create(student: student, amount: 15, start_year: start_year, academy: academy)
           end
 
-          if !["cash", "cheque", "hello_asso", "offert", "virement", "pass", nil].include?(row['cotisation'])
+          if !Membership::PAYMENT_METHODS.include?(row['cotisation'])
             flash[:alert] = "Le mode de paiement de la cotisation doit être cash, cheque, hello_asso, offert, pass ou virement"
             redirect_to managers_camp_path(camp) and return
           end
-          if %w[cash cheque hello_asso offert virement pass].include?(row['cotisation']) && membership.status == false
+          if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.status == false
             membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
         end

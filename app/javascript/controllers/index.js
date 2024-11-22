@@ -37,6 +37,9 @@ application.register("filter-coach", FilterCoachController)
 import FilterMembershipDepositController from "./filter_membership_deposit_controller"
 application.register("filter-membership-deposit", FilterMembershipDepositController)
 
+import FlashesController from "./flashes_controller"
+application.register("flashes", FlashesController)
+
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 

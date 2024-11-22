@@ -57,7 +57,7 @@
         <tbody>
           <tr>
             <td><strong><%= @current_year_received_revenue %>€</strong></td>
-            <% ["cash", "cheque", "hello_asso", "pass", "virement", "offert"].each do |method| %>
+            <% Membership::PAYMENT_METHODS.compact.each do |method| %>
               <td><%= @current_year_memberships.where(payment_method: method).sum(:amount) %>€</td>
             <% end %>
           </tr>
@@ -76,9 +76,9 @@
             <th colspan="3">Total</th>
             <th colspan="3">Cash</th>
             <th colspan="3">Chèque</th>
-            <th rowspan="2">Hello Asso</th>
+<!--            <th rowspan="2">Hello Asso</th>
             <th rowspan="2">Pass</th>
-            <th rowspan="2">Virement</th>
+            <th rowspan="2">Virement</th>-->
             <th rowspan="2">Offert</th>
             <th rowspan="2">Dernier Dépôt</th>
             <% if current_user.manager? || current_user.coordinator? %>
@@ -121,9 +121,9 @@
               <td><%= replace_zero_with_dash(cheque_deposit) %></td>
               <td style="<%= (cheque_received - cheque_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(cheque_received - cheque_deposit) %></td>
               <!-- Others -->
-              <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "hello_asso"]] || 0) %></td>
-              <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "pass"]] || 0) %></td>
-              <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "virement"]] || 0) %></td>
+<!--              <td><%#= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "hello_asso"]] || 0) %></td>
+              <td><%#= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "pass"]] || 0) %></td>
+              <td><%#= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "virement"]] || 0) %></td>-->
               <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "offert"]] || 0) %></td>
               <!-- Last deposit -->
               <td><%= receiver.membership_deposits_as_depositor.where(start_year: @start_year).order(created_at: :desc).first&.created_at&.strftime("%d/%m/%Y") %></td>

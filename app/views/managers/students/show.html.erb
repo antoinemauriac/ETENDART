@@ -106,10 +106,10 @@
               <td class="align-middle"><%= membership.payment_date %></td>
               <td class="align-middle"><%= membership.receiver&.full_name %></td>
               <td class="align-middle">
-                <% if membership.receiver.nil? %>
-                  <i class="fa-solid fa-xmark text-danger fa-big">
-                <% else %>
+                <% if membership.status %>
                   <i class="fa-solid fa-check text-success fa-big">
+                <% else %>
+                  <i class="fa-solid fa-xmark text-danger fa-big">
                 <% end %>
               </td>
             </tr>
@@ -210,10 +210,10 @@
               <td class="align-middle"><%= membership.payment_date %></td>
               <td class="align-middle"><%= membership.receiver&.full_name %></td>
               <td class="align-middle">
-                <% if membership.receiver.nil? %>
-                  <i class="fa-solid fa-xmark text-danger fa-big">
-                <% else %>
+                <% if membership.status %>
                   <i class="fa-solid fa-check text-success fa-big">
+                <% else %>
+                  <i class="fa-solid fa-xmark text-danger fa-big">
                 <% end %>
               </td>
             </tr>

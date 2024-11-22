@@ -56,7 +56,7 @@ class Managers::FinancesController < ApplicationController
     @current_year_missing_revenue = @current_year_expected_memberships.unpaid.sum(:amount)
 
     # REVENU TOTAL PAR UTILISATEUR SUR L'ANNÉE SCOLAIRE (HORS OFFERTS)
-    revenue_by_user = @all_memberships.paid.where.not(payment_method: 'offert').where(start_year: @start_year).group(:receiver_id).sum(:amount)
+    revenue_by_user = @all_memberships.paid.where.not(payment_method: ['offert', 'hello_asso', 'pass', 'virement']).where(start_year: @start_year).group(:receiver_id).sum(:amount)
     @revenue_by_user = revenue_by_user.sort_by { |_, total_received| -total_received }.to_h
 
     # RÉPARTITION PAR MOYEN DE PAIEMENT PAR UTILISATEUR
