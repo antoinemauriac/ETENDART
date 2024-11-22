@@ -7,6 +7,8 @@ class Managers::CampEnrollmentsController < ApplicationController
     camp = camp_enrollment.camp
     school_period = camp.school_period
 
+    start_year = camp.starts_at.month >= 9 ? camp.starts_at.year : camp.starts_at.year - 1
+
 
     student.activity_enrollments.where(activity: camp.activities).destroy_all
     student.course_enrollments.where(course: camp.courses).destroy_all
@@ -18,11 +20,20 @@ class Managers::CampEnrollmentsController < ApplicationController
       if camp_enrollments.empty?
         student.school_period_enrollments.find_by(school_period: school_period).destroy
       end
-      flash[:notice] = "Élève retiré du camp"
+      flash[:notice] = "Élève retiré de la semaine"
     else
       flash[:alert] = "Erreur lors de la suppression"
     end
-    redirect_to managers_camp_path(camp)
+    # redirect_to managers_camp_path(camp)
+    render partial: "managers/camps/students", locals: { students: camp.students, camp: camp, academy: camp.academy, school_period: school_period, start_year: start_year }
+  end
+
+  def index
+
+  end
+
+  def update
+
   end
 
   private

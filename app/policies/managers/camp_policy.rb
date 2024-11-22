@@ -8,6 +8,18 @@ class Managers::CampPolicy < ApplicationPolicy
     authorized?
   end
 
+  def activities?
+    authorized?
+  end
+
+  def students?
+    authorized?
+  end
+
+  def payment_details?
+    authorized?
+  end
+
   def destroy?
     authorized?
   end

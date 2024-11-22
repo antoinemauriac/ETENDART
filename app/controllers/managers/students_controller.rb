@@ -55,11 +55,11 @@ class Managers::StudentsController < ApplicationController
     @academy = @student.first_academy
     @feedback = Feedback.new
     @feedbacks = @student.feedbacks.order(created_at: :desc)
-    @next_camp_activities = @student.next_camp_activities.reject { |activity| @student.next_courses_by_activity(activity).empty? }
-    @next_annual_activities = @student.next_annual_activities.reject { |activity| @student.next_courses_by_activity(activity).empty? }
+    @next_camp_activities = @student.next_camp_activities
+    @next_annual_activities = @student.next_annual_activities
     next_courses = @student.next_courses
-    @next_annual_courses = next_courses.select(&:annual_program)
-    @next_camp_courses = next_courses.select(&:camp)
+    @next_annual_courses = next_courses.where(annual: true)
+    @next_camp_courses = next_courses.where(annual: false)
     past_courses = @student.past_courses
     @past_annual_courses = past_courses.select(&:annual_program)
     @past_camp_courses = past_courses.select(&:camp)
@@ -81,7 +81,6 @@ class Managers::StudentsController < ApplicationController
     student.academies << Academy.find(params[:student][:academy1_id])
     student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
     student.academies << Academy.find(params[:student][:academy3_id]) if params[:student][:academy3_id].present?
-    academy = Academy.find(params[:student][:academy1_id])
     excel_serial_date = (student.date_of_birth - Date.new(1899, 12, 30)).to_i
     username = "#{student.first_name.downcase}#{student.last_name.downcase}#{excel_serial_date }"
     student.update(username: username)

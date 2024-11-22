@@ -1,0 +1,44 @@
+<%= turbo_frame_tag "selected_content" do %>
+  <!--<div class="yellow-title">LES ACTIVITÉS</div>-->
+  <div class="container">
+    <% if activities.any? %>
+      <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
+        <thead>
+          <tr>
+            <th>Activité</th>
+            <th>Catégorie</th>
+            <th>Lieu</th>
+            <th>Coach Référent</th>
+            <th>Nombre d'élèves inscrits</th>
+            <th>Supprimer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% activities.sort.each do |activity| %>
+            <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_activity_path(activity) %>">
+              <td><%= activity.name %></td>
+              <td><%= activity.category.name %></td>
+              <td><%= activity.location.name %></td>
+              <td><%= activity.coach.try(:full_name) || "" %></td>
+              <td><%= activity.students.count %></td>
+              <% if activity.can_delete? %>
+                <td>
+                  <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
+                </td>
+              <% else %>
+                <td></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+    <div class="flexy">
+      <%= link_to new_managers_activity_path(camp: camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-flex mt-1" do %>
+        <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+      <% end %>
+    </div>
+  </div>
+<% end %>

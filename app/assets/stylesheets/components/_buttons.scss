@@ -25,6 +25,20 @@
   justify-content: space-evenly;
 }
 
+.btn-selection {
+  font-weight: 900;
+}
+
+.btn-add-student.selected {
+  background-color: $yellow;
+  color: black;
+}
+
+.btn-add-student.selected:hover {
+  background-color: $yellow;
+  color: black;
+}
+
 .btn-add-student-small {
   width: 120px;
 }
@@ -279,6 +293,16 @@
 .fa-download {
   font-size: 24px;
   margin-left: 16px;
+}
+
+.fa-download-camp {
+  font-size: 32px;
+  color: black;
+  margin-left: 0!important;
+}
+
+.fa-download-camp:hover {
+  color: $yellow;
 }
 
 .fa-upload {

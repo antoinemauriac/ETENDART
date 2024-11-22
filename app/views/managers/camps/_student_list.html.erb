@@ -1,0 +1,55 @@
+<% students.each_with_index do |student, index| %>
+  <% membership = student.memberships.find_by(start_year: start_year) %>
+  <% name_style = membership&.status == false ? "color: red;font-weight: bold" : "" %>
+  <% camp_enrollment = student.camp_enrollments.find_by(camp: camp) %>
+  <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) %>
+  <% activities = student.student_activities_without_acc(camp) %>
+  <div class="row card-row clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student) %>">
+    <div class="col flexy-row" style="<%= name_style %>">
+      <span class="ellipsis"><%= student.last_name %></span>
+    </div>
+    <div class="col flexy-row" style="<%= name_style %>">
+      <span class="ellipsis"><%= student.first_name %></span>
+    </div>
+    <% if academy.banished %>
+      <div class="col flexy-row small-col <%= camp_enrollment&.banished ? 'non-bg' : '' %>">
+        <span class="ellipsis"><%= camp_enrollment&.banished ? "Oui" : "" %></span>
+      </div>
+    <% end %>
+    <div class="col flexy-row small-col <%= camp_enrollment&.image_consent ? '' : 'non-bg' %>">
+      <span class="ellipsis"><%= camp_enrollment&.image_consent ? "" : "Non" %></span>
+    </div>
+    <% if school_period.paid %>
+      <div class="col flexy-row small-col <%= camp_enrollment&.has_paid ? '' : 'non-bg' %>">
+        <span class="ellipsis"><%= camp_enrollment&.has_paid ? "Oui" : "Non" %></span>
+      </div>
+    <% end %>
+    <% if school_period.tshirt %>
+      <div class="col flexy-row small-col <%= school_period_enrollment&.tshirt_delivered ? '' : 'non-bg' %>">
+        <span class="ellipsis"><%= school_period_enrollment&.tshirt_delivered ? "Oui" : "Non" %></span>
+      </div>
+    <% end %>
+    <div class="col flexy-row small-col">
+      <span class="ellipsis"><%= student.age %> ans</span>
+    </div>
+    <div class="col flexy-row">
+      <span class="ellipsis"><%= activities.first&.name %></span>
+    </div>
+    <div class="col flexy-row small-col">
+      <span class="ellipsis"><%= "#{student.unattended_activity_rate(activities.first)}%" if activities.first.present? %></span>
+    </div>
+    <div class="col flexy-row">
+      <span class="ellipsis"><%= activities.second&.name %></span>
+    </div>
+    <div class="col flexy-row small-col">
+      <span class="ellipsis"><%= "#{student.unattended_activity_rate(activities.second)}%" if activities.second.present? %></span>
+    </div>
+    <div class="col flexy-row small-col">
+      <span class="ellipsis">
+        <%= link_to managers_camp_enrollment_path(camp.camp_enrollments.find_by(student: student)), data: { turbo_frame: "top", turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cet élève de la semaine ?" } do %>
+          <i class="fas fa-trash trash"></i>
+        <% end %>
+      </span>
+    </div>
+  </div>
+<% end %>

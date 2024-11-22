@@ -85,6 +85,9 @@ Rails.application.routes.draw do
 
     resources :camps, only: %i[index new create show destroy] do
       member do
+        get :activities
+        get :students
+        get :payment_details
         get :export_students_csv
         get :export_banished_students_csv
       end
