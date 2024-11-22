@@ -19,21 +19,21 @@
           <div class="col flexy-row">Nom</div>
           <div class="col flexy-row">Prénom</div>
           <% if academy.banished %>
-            <div class="col flexy-row">Exclu ?</div>
+            <div class="col flexy-row small-col">Exclu ?</div>
           <% end %>
-          <div class="col flexy-row text-wrap text-center">Droit à l'image ?</div>
+          <div class="col flexy-row text-wrap text-center small-col">Droit à l'image ?</div>
           <% if school_period.paid %>
-            <div class="col flexy-row text-wrap text-center">Paiement effectué ?</div>
+            <div class="col flexy-row text-wrap text-center small-col">A payé ?</div>
           <% end %>
           <% if school_period.tshirt %>
-            <div class="col flexy-row">Tshirt reçu ?</div>
+            <div class="col flexy-row small-col">Tshirt reçu ?</div>
           <% end %>
-          <div class="col flexy-row">Age</div>
+          <div class="col flexy-row small-col">Age</div>
           <div class="col flexy-row">Activité 1</div>
-          <div class="col flexy-row">Taux abs</div>
+          <div class="col flexy-row small-col">Taux abs</div>
           <div class="col flexy-row">Activité 2</div>
-          <div class="col flexy-row">Taux abs</div>
-          <div class="col flexy-row">Suppr</div>
+          <div class="col flexy-row small-col">Taux abs</div>
+          <div class="col flexy-row small-col">Suppr</div>
         </div>
         <%= render "managers/camps/student_list", students: students, camp: camp, school_period: school_period, academy: academy, start_year: start_year %>
       </div>

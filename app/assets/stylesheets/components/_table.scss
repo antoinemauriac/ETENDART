@@ -175,10 +175,12 @@
   text-overflow: ellipsis;
 }
 
-.nowrap-content {
+.ellipsis {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: flex;
-  align-items: center;
+}
+
+.small-col {
+  max-width: 7%;
 }
