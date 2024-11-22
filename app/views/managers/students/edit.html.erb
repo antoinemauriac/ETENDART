@@ -1,7 +1,9 @@
 <div class="student-title"><%= @student.full_name.upcase %></div>
 <div class="header-nav">
-  <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
-  <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_students_path(academy: @academy) %></div>
+  <% if @academy %>
+    <div class="header-nav-item"><%= link_to @academy.name.upcase, managers_academy_path(@academy) %></div>
+    <div class="header-nav-item"><%= link_to "LES ÉLÈVES", managers_students_path(academy: @academy) %></div>
+  <% end %>
   <div class="header-nav-item"><%= link_to @student.full_name.upcase, managers_student_path(@student) %></div>
   <div class="header-nav-item active">MODIFIER</div>
 </div>

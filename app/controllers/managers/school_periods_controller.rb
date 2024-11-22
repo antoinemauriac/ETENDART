@@ -9,7 +9,7 @@ class Managers::SchoolPeriodsController < ApplicationController
   end
 
   def index_for_admin
-    @school_periods = SchoolPeriod.all.where(new: true).group_by { |school_period| [school_period.year, season_to_int(school_period.name)] }
+    @school_periods = SchoolPeriod.where(new: true).group_by { |school_period| [school_period.year, season_to_int(school_period.name)] }
     @school_periods = @school_periods.sort_by { |period, _| [-period[0], -period[1]] }
     skip_policy_scope
     authorize([:managers, :school_period])

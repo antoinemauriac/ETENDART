@@ -137,21 +137,26 @@
   background-color: white;
 }
 
+.card-row-container-camp {
+ border-radius: 0.5rem!important;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
 .card-row {
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
   background-color: #f3f3f3;
   height: 2.5rem;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   &:hover {
     background-color: #d9d8d8;
-    transform: scale(1.01);
+    transform: scale(1.008);
   }
 }
 
 .header-row {
   border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid #dee2e6;
   font-weight: bold;
 }

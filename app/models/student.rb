@@ -164,10 +164,10 @@ class Student < ApplicationRecord
     end
   end
 
-  def active_camps
-    Camp.joins(:camp_enrollments)
-        .where(camp_enrollments: { banished: false, student_id: id })
-  end
+  # def active_camps
+  #   Camp.joins(:camp_enrollments)
+  #       .where(camp_enrollments: { banished: false, student_id: id })
+  # end
 
   def next_courses_by_activity(activity)
     courses.where('starts_at > ?', Time.current)
@@ -176,7 +176,7 @@ class Student < ApplicationRecord
   end
 
   def next_camp_activities
-    activities.joins(:camp).merge(active_camps)
+    activities.joins(:camp)
               .where('camps.ends_at > ?', Time.current)
               .order('camps.starts_at ASC')
   end
@@ -187,7 +187,7 @@ class Student < ApplicationRecord
   end
 
   def first_academy
-    academies.first
+    academies&.first
   end
 
   def today_course

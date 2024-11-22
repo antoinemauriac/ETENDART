@@ -258,8 +258,8 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
   camp = Camp.create!(
     name: "semaine#{i + 1}",
     school_period: new_school_period,
-    starts_at: Date.new(2024, 11, 11) + 7 * i.days,
-    ends_at: Date.new(2024, 11, 15) + 7 * i.days
+    starts_at: Date.new(2024, 11, 19) + 7 * i.days,
+    ends_at: Date.new(2024, 11, 22) + 7 * i.days
   )
   # INSCRIPTION DES STUDENTS AUX CAMPS
   Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }

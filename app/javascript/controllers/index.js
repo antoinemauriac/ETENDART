@@ -61,6 +61,9 @@ application.register("search-coach", SearchCoachController)
 import SearchStudentController from "./search_student_controller"
 application.register("search-student", SearchStudentController)
 
+import SelectedButtonController from "./selected_button_controller"
+application.register("selected-button", SelectedButtonController)
+
 import TomSelectController from "./tom_select_controller"
 application.register("tom-select", TomSelectController)
 
