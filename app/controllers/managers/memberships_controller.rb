@@ -4,6 +4,10 @@ class Managers::MembershipsController < ApplicationController
     @membership = Membership.find(params[:id])
     @student = @membership.student
     authorize([:managers, @membership])
+    payment_method = params[:membership][:payment_method]
+    if ["cash", "cheque", "offert"].include?(payment_method)
+      @membership.update(receiver_id: params[:membership][:receiver_id])
+    end
     if @membership.update(membership_params)
       @membership.update(status: true, payment_date: Date.current, academy: @student.membership_academy)
       if params[:url]
@@ -37,6 +41,6 @@ class Managers::MembershipsController < ApplicationController
   private
 
   def membership_params
-    params.require(:membership).permit(:start_year, :amount, :payment_method, :status, :payment_date, :receiver_id)
+    params.require(:membership).permit(:start_year, :amount, :payment_method, :status, :payment_date)
   end
 end
