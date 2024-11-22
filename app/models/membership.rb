@@ -3,7 +3,7 @@ class Membership < ApplicationRecord
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
   belongs_to :academy, optional: true
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "virement", "pass", "offert", nil].freeze
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
   validates :payment_method, inclusion: { in: Membership::PAYMENT_METHODS }
 
   scope :paid, -> { where(status: true) }
