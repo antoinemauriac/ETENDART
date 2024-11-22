@@ -76,9 +76,6 @@
             <th colspan="3">Total</th>
             <th colspan="3">Cash</th>
             <th colspan="3">Chèque</th>
-<!--            <th rowspan="2">Hello Asso</th>
-            <th rowspan="2">Pass</th>
-            <th rowspan="2">Virement</th>-->
             <th rowspan="2">Offert</th>
             <th rowspan="2">Dernier Dépôt</th>
             <% if current_user.manager? || current_user.coordinator? %>
@@ -105,8 +102,8 @@
               <!-- Total columns (Reçu, Déposé, En attente de dépôt) -->
               <% cash_deposit = receiver.membership_deposits_as_depositor.where(start_year: @start_year).sum(:cash_amount) || 0 %>
               <% cheque_deposit = receiver.membership_deposits_as_depositor.where(start_year: @start_year).sum(:cheque_amount) || 0 %>
-              <% other_deposit = receiver.memberships.where(payment_method: ["hello_asso", "pass", "virement"], start_year: @start_year).sum(:amount) || 0 %>
-              <% total_deposit = cash_deposit + cheque_deposit + other_deposit %>
+              <%# other_deposit = receiver.memberships.where(payment_method: ["hello_asso", "pass", "virement"], start_year: @start_year).sum(:amount) || 0 %>
+              <% total_deposit = cash_deposit + cheque_deposit %>
               <td><%= replace_zero_with_dash(total_received) %></td>
               <td><%= replace_zero_with_dash(total_deposit) %></td>
               <td style="<%= (total_received - total_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(total_received - total_deposit) %></td>
@@ -121,9 +118,6 @@
               <td><%= replace_zero_with_dash(cheque_deposit) %></td>
               <td style="<%= (cheque_received - cheque_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(cheque_received - cheque_deposit) %></td>
               <!-- Others -->
-<!--              <td><%#= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "hello_asso"]] || 0) %></td>
-              <td><%#= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "pass"]] || 0) %></td>
-              <td><%#= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "virement"]] || 0) %></td>-->
               <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "offert"]] || 0) %></td>
               <!-- Last deposit -->
               <td><%= receiver.membership_deposits_as_depositor.where(start_year: @start_year).order(created_at: :desc).first&.created_at&.strftime("%d/%m/%Y") %></td>
