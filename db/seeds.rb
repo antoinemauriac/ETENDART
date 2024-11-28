@@ -24,6 +24,8 @@ SchoolPeriodEnrollment.destroy_all
 SchoolPeriod.destroy_all
 MembershipDeposit.destroy_all
 Membership.destroy_all
+CampDeposit.destroy_all
+OldCampDeposit.destroy_all
 Student.destroy_all
 Location.destroy_all
 AnnualProgram.destroy_all
@@ -65,6 +67,7 @@ end
 
 # CREATE 6 USERS, DONT 1 ADMIN, 1 MANAGER, 1 COORDINATOR AND 3 COACHES (ROLES)
 manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+manager1 = User.create!(email: 'manager1@gmail.com', password: 123456, first_name: "Leon", last_name: "Marchand", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
@@ -73,6 +76,7 @@ coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "
 
 # ASSIGN ROLES TO USERS
 manager.roles << Role.find_by(name: 'manager')
+manager1.roles << Role.find_by(name: 'manager')
 coordinator.roles << Role.find_by(name: 'coordinator')
 admin.roles << Role.find_by(name: 'admin')
 coach1.roles << Role.find_by(name: 'coach')
@@ -85,7 +89,7 @@ kuerten = Academy.create!(name: 'Kuerten', manager: manager, coordinator: coordi
 kuerten_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1731177238/etendart_dev/ip1nfwajzofkglkbjmrh.jpg')
 kuerten.image.attach(io: kuerten_image, filename: 'kuerten-court.jpg', content_type: 'image/jpg')
 
-zidane = Academy.create!(name: 'Zidane', manager: manager, annual: true)
+zidane = Academy.create!(name: 'Zidane', manager: manager1, annual: true)
 zidane_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1731177278/etendart_dev/orejbsdzmbzw4k9jkdqd.png')
 zidane.image.attach(io: zidane_image, filename: 'zidane-court.jpg', content_type: 'image/jpg')
 
@@ -124,18 +128,18 @@ end
   student.save
   student.academies << kuerten
   student.academies << [zidane, batum].sample if i.even?
-  student.memberships << Membership.create!(academy: kuerten, student: student, start_year: 2024, amount: 20, status: rand < 0.8)
+  student.memberships << Membership.create!(academy: [kuerten, zidane].sample, student: student, start_year: 2024, amount: 20, paid: rand < 0.8)
 end
 
 # MISE À JOUR DES PAID MEMBERSHIPS
 payment_methods = ["cash", "cheque", "hello_asso"]
 Membership.all.each do |membership|
-  if membership.status
-    payment_method = rand < 0.9 ? payment_methods.sample : "offert"
+  if membership.paid
+    payment_method = rand < 0.95 ? payment_methods.sample : "offert"
     membership.update!(
       payment_method: payment_method,
       payment_date: Date.today - rand(1..100).days,
-      receiver: [coach1, coach2, coach3, manager, coordinator].sample
+      receiver: ([coach1, coach2, coach3, manager, manager1, coordinator].sample if payment_method != "hello_asso")
       )
   end
 end
@@ -162,19 +166,27 @@ camp_names = ["semaine1", "semaine2"]
     camp = Camp.create!(
       name: camp_names[i],
       school_period: school_period,
+      new: false,
       starts_at: Date.new(2024, 10, 7) + 7*i.days,
       ends_at: Date.new(2024, 10, 11) + 7*i.days
       )
     # INSCRIPTION DES STUDENTS AUX CAMPS
     Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
     # MISE À JOUR DE LA PAIEMENT DES CAMPS
-    CampEnrollment.all.each { |camp_enrollment| camp_enrollment.update(has_paid: rand < 0.7) if camp_enrollment.camp.school_period.paid }
-
+    camp_enrollments = CampEnrollment.where(camp: camp)
+    camp_enrollments.each { |camp_enrollment| camp_enrollment.update(paid: rand < 0.95) if camp_enrollment.camp.school_period.paid }
+    camp_enrollments.each { |camp_enrollment| camp_enrollment.update(payment_method: CampEnrollment::PAYMENT_METHODS.compact.sample, payment_date: (camp.starts_at..camp.ends_at).to_a.sample) if camp_enrollment.paid }
+    camp_enrollments.each { |camp_enrollment| camp_enrollment.update(receiver: [coach1, coach2, coach3, manager, coordinator].sample) if camp_enrollment.paid && !["hello_asso", "virement", "pass"].include?(camp_enrollment.payment_method) }
     # CREATE 2 ACTIVITIES FOR EACH CAMP
     2.times do |j|
       category = Category.all.sample
       activity_name = generate_activity_name(category.name)
       coach = coachs.sample
+      # Ensure unique activity names within the same camp
+      used_activity_names = camp.activities.pluck(:name)
+      while used_activity_names.include?(activity_name)
+        activity_name = generate_activity_name(category.name)
+      end
       activity = Activity.create!(
         name: activity_name,
         coach: coach,
@@ -212,7 +224,7 @@ Student.all.each do |student|
   if student == Student.first
     student.course_enrollments.update_all(present: false)
   end
-  school_period_enrollments = student.school_period_enrollments.where(school_period_id: student.school_periods.pluck(:id))
+  school_period_enrollments = student.school_period_enrollments
   school_period_enrollments.each do |school_period_enrollment|
     school_period = school_period_enrollment.school_period
     course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.camp_id IN (?)', school_period.camps.pluck(:id))
@@ -221,8 +233,8 @@ Student.all.each do |student|
     end
   end
 
-  camp_ids = student.camps.where(school_period_id: student.school_periods.pluck(:id)).pluck(:id)
-  camp_enrollments = student.camp_enrollments.where(camp_id: camp_ids)
+  camp_ids = student.camps.pluck(:id)
+  camp_enrollments = student.camp_enrollments
   camp_enrollments.each do |camp_enrollment|
     camp = camp_enrollment.camp
     course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.camp_id = ?', camp.id)
@@ -258,17 +270,26 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
   camp = Camp.create!(
     name: "semaine#{i + 1}",
     school_period: new_school_period,
-    starts_at: Date.new(2024, 11, 19) + 7 * i.days,
-    ends_at: Date.new(2024, 11, 22) + 7 * i.days
+    starts_at: Date.new(2024, 11, 25) + 7 * i.days,
+    ends_at: Date.new(2024, 11, 29) + 7 * i.days
   )
   # INSCRIPTION DES STUDENTS AUX CAMPS
   Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
+  camp_enrollments = CampEnrollment.where(camp: camp)
+  camp_enrollments.each { |camp_enrollment| camp_enrollment.update(paid: rand < 0.3) if camp_enrollment.camp.school_period.paid }
+  camp_enrollments.each { |camp_enrollment| camp_enrollment.update(payment_method: CampEnrollment::PAYMENT_METHODS.compact.sample, payment_date: (camp.starts_at - 20.day..Date.current).to_a.sample) if camp_enrollment.paid }
+  camp_enrollments.each { |camp_enrollment| camp_enrollment.update(receiver: [coach1, coach2, coach3, manager, coordinator].sample) if camp_enrollment.paid && !["hello_asso", "virement", "pass"].include?(camp_enrollment.payment_method) }
 
   # CREATE 2 ACTIVITIES FOR EACH CAMP
   2.times do |j|
     category = Category.all.sample
     activity_name = generate_activity_name(category.name)
     coach = coachs.sample
+    # Ensure unique activity names within the same camp
+    used_activity_names = camp.activities.pluck(:name)
+    while used_activity_names.include?(activity_name)
+      activity_name = generate_activity_name(category.name)
+    end
     activity = Activity.create!(
       name: activity_name,
       coach: coach,
@@ -333,6 +354,10 @@ end
   category = Category.all.sample
   activity_name = generate_activity_name(category.name)
   coach = coachs.sample
+  used_activity_names = annual_program.activities.pluck(:name)
+  while used_activity_names.include?(activity_name)
+    activity_name = generate_activity_name(category.name)
+  end
   activity = Activity.create!(
     name: activity_name,
     coach: coach,

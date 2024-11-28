@@ -105,10 +105,10 @@ class Managers::CoursesController < ApplicationController
 
   def update_student_enrollment(enrollment, enrollment_params, camp, school_period)
     student = enrollment.student
-    camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
-    if school_period && school_period.paid == true && camp_enrollment
-      camp_enrollment.update(has_paid: enrollment_params[:has_paid])
-    end
+    # camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
+    # if school_period && school_period.paid == true && camp_enrollment
+    #   camp_enrollment.update(paid: enrollment_params[:paid])
+    # end
     school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
     if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false && enrollment_params[:tshirt_delivered] == "1"
       school_period_enrollment.update(tshirt_delivered: true)

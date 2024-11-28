@@ -18,6 +18,7 @@ class Camp < ApplicationRecord
 
   has_one :camp_stat, dependent: :destroy
 
+  has_many :old_camp_deposits, dependent: :destroy
   has_many :camp_deposits, dependent: :destroy
 
   validates :name, presence: true
@@ -165,14 +166,35 @@ class Camp < ApplicationRecord
 
   def expected_revenue
     if self.school_period.free_judo == true
-      (show_count - student_with_judo_count) * school_period.price
+      (camp_enrollments.attended.count - student_with_judo_count) * school_period.price
     else
-      show_count * school_period.price
+      (camp_enrollments.attended.count +
+        camp_enrollments.unattended.paid.count -
+        camp_enrollments.paid.where(payment_method: "offert").count) *
+      school_period.price
     end
   end
 
-  def received_revenue
-    camp_enrollments.paid.count * school_period.price
+  def expected_count_revenue
+    if self.school_period.free_judo == true
+      camp_enrollments.attended.count - student_with_judo_count
+    else
+      camp_enrollments.attended.count +
+        camp_enrollments.unattended.paid.count -
+        camp_enrollments.paid.where(payment_method: "offert").count
+    end
+  end
+
+  def present_received_revenue
+    camp_enrollments.attended.paid.count * school_period.price
+  end
+
+  def absent_received_revenue
+    camp_enrollments.unattended.paid.count * school_period.price
+  end
+
+  def total_received_revenue
+    camp_enrollments.paid.where.not(payment_method: 'offert').count * school_period.price
   end
 
   def missing_revenue
@@ -185,6 +207,10 @@ class Camp < ApplicationRecord
 
   def unpaid_students_count
     camp_enrollments.attended.unpaid.count
+  end
+
+  def absent_paid_students_count
+    camp_enrollments.unattended.paid.count
   end
 
   # def student_with_judo
@@ -214,7 +240,7 @@ class Camp < ApplicationRecord
   def students_with_unpaid_camp_enrollments
     camp_id = self.id
     student_with_judo.select do |student|
-      student.camp_enrollments.where(camp_id: camp_id, has_paid: false).exists?
+      student.camp_enrollments.where(camp_id: camp_id, paid: false).exists?
     end
   end
 

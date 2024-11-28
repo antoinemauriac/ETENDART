@@ -47,11 +47,13 @@
         <% end %>
       </tbody>
     </table>
+  <% else %>
+    <div class="flexy mb-4 mt-4">Aucune semaine pour le moment.</div>
   <% end %>
 </div>
 <div class="flexy" data-controller="hidden-forms">
-  <button class="btn-add-student btn-flex mt-1" data-action="click->hidden-forms#displayCampForm">
-    <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+  <button class="btn-add-student btn-flex btn-large mt-1" data-action="click->hidden-forms#displayCampForm">
+    <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE SEMAINE<i class="fa-solid fa-square-plus fa-square-bigger"></i>
   </button>
   <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
     <%= form.label :name, "Nom :" %>

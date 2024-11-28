@@ -32,12 +32,6 @@ class Managers::CampsController < ApplicationController
     render partial: "managers/camps/students", locals: { students: @students, camp: @camp, academy: @academy, school_period: @school_period, start_year: @start_year }
   end
 
-  def payment_details
-    @camp = Camp.find(params[:id])
-    authorize([:managers, @camp])
-    render partial: "managers/camps/payment_details"
-  end
-
   def create
     camp = Camp.new(camp_params)
     camp.school_period = SchoolPeriod.find(params[:school_period])
@@ -88,7 +82,7 @@ class Managers::CampsController < ApplicationController
             camp_enrollment = student.camp_enrollments.find_by(camp: camp)
             image_consent = camp_enrollment.image_consent ? "Oui" : "Non"
             banished = camp_enrollment.banished ? "Oui" : "Non" if academy.banished
-            paid = camp_enrollment.has_paid ? "Oui" : "Non" if school_period.paid
+            paid = camp_enrollment.paid ? "Oui" : "Non" if school_period.paid
             school_periods = student.school_periods.where(academy: academy)
             school_period_enrollments = student.school_period_enrollments.where(school_period: school_periods)
             thsirt_delivered = school_period_enrollments.any?(&:tshirt_delivered) ? "Oui" : "Non" if school_period.tshirt

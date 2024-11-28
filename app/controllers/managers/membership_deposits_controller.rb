@@ -3,7 +3,7 @@ class Managers::MembershipDepositsController < ApplicationController
   def index
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     academy_ids = current_user.academies.pluck(:id)
-    user_ids = Membership.where(academy_id: academy_ids, start_year: @start_year, status: true).distinct.pluck(:receiver_id)
+    user_ids = Membership.where(academy_id: academy_ids, start_year: @start_year, paid: true).distinct.pluck(:receiver_id)
     @users = User.where(id: user_ids).order(:last_name)
 
     if params[:coach].present? && params[:coach] != "all"

@@ -4,28 +4,29 @@
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
     <div class="header-info header-info-coach">INFOS</div>
     <div class="content-info content-info-coach">
-      <p class="mb-1">ADRESSE : <strong><%= @activity.location.name %></strong></p>
-      <p class="mb-1">TOTAL ÉLÈVES : <strong><%= @course.students.count %></strong></p>
-      <% if @course.status %>
-        <p class="green-text mb-1">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
-        <p class="red-text mb-1">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
-      <% end %>
-      <% if @school_period && @school_period.paid %>
-        <p class="mb-1">PRIX DU STAGE : <strong><%= @school_period.price %>€</strong></p>
-      <% end %>
-      <p class="mb-1">COTISATION ANNUELLE : <strong>15€</strong></p>
-      <% if @academy.banished %>
-        <p class="mb-1">EXCLUS : <strong><%= @banished_students.count %></strong></p>
-      <% end %>
-      <% if @course.status %>
-        <p class="presence-status container">
-          APPEL VALIDÉ <i class="fa-solid fa-check text-success fa-big"></i>
-        </p>
-      <% else %>
-        <p class="presence-status container">
-          APPEL EN ATTENTE <i class="fa-solid fa-xmark text-danger fa-big"></i>
-        </p>
-      <% end %>
+      <div style="width: 13em";>
+        <p class="mb-1" style="word-break: break-all">ADRESSE : <strong><%= @activity.location.name %></strong></p>
+        <p class="mb-1">TOTAL ÉLÈVES : <strong><%= @course.students.count %></strong></p>
+        <% if @course.status %>
+          <p class="green-text mb-1">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
+          <p class="red-text mb-1">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
+        <% end %>
+        <% if @school_period && @school_period.paid %>
+          <p class="mb-1">PRIX DU STAGE : <strong><%= @school_period.price %>€</strong></p>
+        <% end %>
+        <% if @academy.banished %>
+          <p class="mb-1">EXCLUS : <strong><%= @banished_students.count %></strong></p>
+        <% end %>
+      </div>
+      <div class="course-status">
+        <% if @course.status %>
+          <i class="fa-solid fa-circle-check text-success fa-bigger"></i>
+          <p class="mb-0">VALIDÉ</p>
+        <% else %>
+          <i class="fa-solid fa-circle-xmark fa-pink fa-bigger"></i>
+          <p class="mb-0">EN ATTENTE</p>
+        <% end %>
+      </div>
     </div>
   </div>
 
@@ -38,9 +39,9 @@
             <th class="presence-head align-middle"style="min-width: 60px;"></th>
             <th class="presence-head align-middle" style="text-align:left">Élève</th>
             <th class="presence-head align-middle" style="text-align:left; padding-right:5px">Présent ?</th>
-            <% if @school_period && @school_period.paid %>
-              <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Payé ?</th>
-            <% end %>
+            <%# if @school_period && @school_period.paid %>
+<!--              <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Payé ?</th>-->
+            <%# end %>
             <% if @school_period && @school_period.tshirt %>
               <th class="presence-head align-middle" style="text-align:center">Tshirt ?</th>
             <% end %>
@@ -49,13 +50,14 @@
         <tbody>
           <% @enrollments.each do |enrollment| %>
             <% student = enrollment.student %>
+            <% camp_enrollment = student.camp_enrollments.find_by(camp: @course.camp) %>
             <% membership = student.memberships.find_by(start_year: @start_year) %>
-            <% name_style = membership&.status == false ? "color: red;font-weight:bold" : "" %>
+            <% name_style = camp_enrollment&.paid == false ? "color: red;font-weight:bold" : "" %>
 
             <tr>
-              <%= render partial: "coaches/courses/student_photo", locals: { student: student }%>
+              <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: @course }%>
                 <td class="align-middle" style="text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
-                  <%= link_to coaches_student_profile_path(student, url_origin: coaches_course_path(@course)), class: "full-width-link" do %>
+                  <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(@course), course_id: @course.id), class: "full-width-link" do %>
                     <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
                     <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.first_name %></span><br>
                     <% if @category.super_category == 'Cuisine' || @category.super_category == 'Accompagnement' %>
@@ -72,21 +74,6 @@
                   <% end %>
                 </div>
               </td>
-              <% if false %>
-                <td class="align-middle"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
-              <% end %>
-              <% if @school_period && @school_period.paid %>
-                <td class="align-middle">
-                  <div class="has-paid">
-                    <% if student.camp_enrollments.find_by(camp: @camp).has_paid %>
-                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", style: "background-color:green", checked: true, readonly: true, disabled: true } %>
-                      <%= form.hidden_field "enrollments[#{enrollment.id}][has_paid]", value: true %>
-                    <% else %>
-                      <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", checked: false } %>
-                    <% end %>
-                  </div>
-                </td>
-              <% end %>
               <% if @school_period && @school_period.tshirt %>
                 <td class="align-middle">
                   <div class="has-paid">

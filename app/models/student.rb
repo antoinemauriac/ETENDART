@@ -306,6 +306,12 @@ class Student < ApplicationRecord
       .first
   end
 
+  def paid_camp_enrollments
+    camp_enrollments.joins(camp: :school_period)
+                    .where(school_periods: { paid: true })
+                    .sort_by(&:camp_starts_at).reverse
+  end
+
   private
 
   def normalize_fields

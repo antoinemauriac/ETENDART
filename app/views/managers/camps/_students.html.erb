@@ -1,11 +1,4 @@
 <%= turbo_frame_tag "selected_content" do %>
-<!--  <div class="yellow-title yellow-title-flex">
-      ÉLÈVES INSCRITS
-      <%#= link_to export_students_csv_managers_camp_path(camp, format: :csv) do %>-->
-<!--        <i class="fa-solid fa-download fa-download-black ml-3"></i>-->
-      <%# end %>
-<!--  </div>
--->
   <div class="flexy">
     <%= link_to export_students_csv_managers_camp_path(camp, format: :csv) do %>
       <i class="fa-solid fa-download fa-download-camp ml-0 mb-2"></i>

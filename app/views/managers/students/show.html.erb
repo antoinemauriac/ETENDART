@@ -8,7 +8,7 @@
 </div>
 
 <div class="row justify-content-center align-items-stretch">
-  <div class="col-lg-6 col-md-7 col-sm-12 mt-3" data-controller="upload-photo" data-upload-photo-student-id-value="<%=@student.id%>">
+  <div class="col-lg-5 col-md-7 col-sm-12 mt-3" data-upload-photo-student-id-value="<%=@student.id%>">
     <div class="header-info">INFORMATIONS</div>
     <div class="content-info">
       <div class="student-info">
@@ -21,36 +21,42 @@
       </div>
       <div class="student-photo">
         <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
-        <%= cl_image_tag @student.photo_or_default,
-                 data: { upload_photo_target: "photo" },
-                 class: "avatar",
-                 crop: "thumb",
-                 gravity: "face",
-                 width: 300,
-                 height: 300 %>
-        <%# if @student.photo.attached? %>
-          <%#= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-            <%#= form.input :photo, as: :file, input_html: { id: 'student_photo_upload', style: 'display:none;cursor:pointer' }, label_html: { style: 'display:none;' } %>
-<!--            <label for="student_photo_upload" style="cursor:pointer;">
-              <div class="change-photo" id="change-photo-manager">
-                <%#= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>-->
-<!--                <p style="margin:0;font-size:12px">Modifier</p>
-              </div>
-            </label>
-          <%# end %>-->
-        <%# else %>
-<!--          <div>-->
+        <% if @student.photo.key? %>
+          <%= cl_image_tag @student.photo_or_default,
+                  data: { upload_photo_target: "photo" },
+                  class: "avatar",
+                  crop: "thumb",
+                  gravity: "face",
+                  width: 300,
+                  height: 300 %>
+        <% else %>
+          <%= image_tag "avatar.png",
+                  data: { upload_photo_target: "photo" },
+                  class: "avatar" %>
+        <% end %>
+          <%# if @student.photo.attached? %>
             <%#= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
-              <%#= form.input :photo, as: :file, input_html: { id: 'student_photo_upload', style: 'display:none;' }, label_html: { style: 'display:none;' } %>
-<!--              <label for="student_photo_upload" id="label-photo-new" style="cursor:pointer;">
+              <%#= form.input :photo, as: :file, input_html: { id: 'student_photo_upload', style: 'display:none;cursor:pointer' }, label_html: { style: 'display:none;' } %>
+  <!--            <label for="student_photo_upload" style="cursor:pointer;">
                 <div class="change-photo" id="change-photo-manager">
                   <%#= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>-->
-<!--                  <p style="margin:0;font-size:12px">Ajouter</p>
+  <!--                <p style="margin:0;font-size:12px">Modifier</p>
                 </div>
               </label>
             <%# end %>-->
-<!--          </div>-->
-        <%# end %>
+          <%# else %>
+  <!--          <div>-->
+              <%#= simple_form_for(@student, url: update_photo_managers_student_path(@student, academy_id: @academy.id, redirect_to: 'manager'), method: :put, html: { multipart: true, data: { upload_preset: "student_avatar", upload_photo_target: "form" } }) do |form| %>
+                <%#= form.input :photo, as: :file, input_html: { id: 'student_photo_upload', style: 'display:none;' }, label_html: { style: 'display:none;' } %>
+  <!--              <label for="student_photo_upload" id="label-photo-new" style="cursor:pointer;">
+                  <div class="change-photo" id="change-photo-manager">
+                    <%#= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>-->
+  <!--                  <p style="margin:0;font-size:12px">Ajouter</p>
+                  </div>
+                </label>
+              <%# end %>-->
+  <!--          </div>-->
+          <%# end %>
       </div>
       <div class="flexy">
         <%= link_to "Modifier les informations", edit_managers_student_path(@student), class: "btn-etendart-yellow", style: "width:300px" %>
@@ -58,18 +64,23 @@
     </div>
   </div>
 
-  <div class="col-lg-3 col-md-5 col-sm-12 mt-3">
-    <div class="header-info">HISTORIQUE</div>
+  <div class="col-lg-4 col-md-5 col-sm-12 mt-3">
+    <div class="header-info">ACADEMIES</div>
     <div class="content-info">
-      <div>
-        <p><%= "STAGES : #{@student.camps_count}" %></p>
-        <p><%= "PROGRAMMES : #{@student.annual_programs_count}" %></p>
-        <p><%= "COURS : #{@student.past_courses_count}" %></p>
-        <p><%= "DONT ABSENCES: #{@student.unattended_courses_count}" %></p>
-        <p><%= "TAUX ABS : #{@student.unattended_rate}%" %></p>
-      </div>
+      <%= simple_form_for @student, url: managers_student_path(@student), html: {class: 'form-horizontal'}, method: :put do |form| %>
+        <%= form.input :academy1_id, label: "Académie 1", collection: @academies, label_method: :name, value_method: :id, required: true, selected: @academy1&.id %>
+
+        <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy2&.id || 'Sélectionnez une académie' %>
+
+        <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy3&.id || 'Sélectionnez une académie' %>
+
+        <div class="flexy">
+          <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>
+        </div>
+      <% end %>
     </div>
   </div>
+
   <div class="col-lg-3 col-md-5 col-sm-12 mt-3">
     <div class="header-info">HISTORIQUE</div>
     <div class="content-info">
@@ -84,211 +95,122 @@
   </div>
 
   <div class="col-lg-6 col-sm-12 mt-3">
-    <div class="header-info"> COTISATIONS </div>
+    <div class="header-info"> PAIEMENT COTISATIONS </div>
     <div class="content-info">
       <table class="table table-striped table-responsive">
         <thead>
           <tr>
             <th>Année</th>
             <th>Montant</th>
-            <th>Mode de paiement</th>
             <th>Date du paiement</th>
+            <th>Mode de paiement</th>
             <th>Reçu par</th>
-            <th></th>
+            <th class="text-center">Statut</th>
           </tr>
         </thead>
         <tbody>
           <% @memberships.each do |membership| %>
-            <tr>
-              <td class="align-middle"><%= "#{membership.start_year} - #{membership.start_year + 1}" %></td>
-              <td class="align-middle"><%= "#{membership.amount} €" %></td>
-              <td class="align-middle"><%= membership.payment_method %></td>
-              <td class="align-middle"><%= membership.payment_date %></td>
-              <td class="align-middle"><%= membership.receiver&.full_name %></td>
-              <td class="align-middle">
-                <% if membership.status %>
-                  <i class="fa-solid fa-check text-success fa-big">
-                <% else %>
-                  <i class="fa-solid fa-xmark text-danger fa-big">
-                <% end %>
-              </td>
-            </tr>
+            <%= render "managers/students/membership", membership: membership, student: @student, start_year: membership.start_year %>
           <% end %>
         </tbody>
       </table>
-      <% if @membership && !@membership.status %>
-        <div class="header-info-inside"> <%= "#{@start_year} - #{@start_year + 1}" %></div>
-          <%= simple_form_for @membership, url: managers_membership_path(@membership, url: "/managers/students/#{@student.id}?academy_id=#{@student.first_academy.id}"), method: :patch do |f| %>
-            <div class="membership-form">
-              <%= f.input :payment_method,
+      <%# if @membership && !@membership.paid %>
+<!--        <div class="header-info-inside"> <%#= "#{@start_year} - #{@start_year + 1}" %></div>-->
+          <%#= simple_form_for @membership, url: managers_membership_path(@membership, url: "/managers/students/#{@student.id}?academy_id=#{@student.first_academy.id}"), method: :patch do |f| %>
+<!--            <div class="membership-form">-->
+              <%#= f.input :payment_method,
                           label: "Moyen de paiment",
                           required: true,
                           wrapper_html: { class: 'mt-3 mb-0', style: 'width:60%;'},
                           collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
                           prompt: "Sélectionner" %>
-              <%= f.input :receiver_id,
+              <%#= f.input :receiver_id,
                           label: "Personne ayant reçu le paiment",
                           wrapper_html: { class: 'mt-3 mb-0', style: 'width:60%;'},
                           collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
                           selected: @membership.receiver_id.present? ? @membership.receiver_id : current_user.id,
                           prompt: "Sélectionner" %>
-              <%= f.submit "Valider", class: "btn-add-student" %>
-            </div>
-          <% end %>
-      <% end %>
+              <%#= f.submit "Valider", class: "btn-add-student" %>
+<!--            </div>-->
+          <%# end %>
+      <%# end %>
       <% if !@membership %>
         <div class="flexy">
-          <button type="button" class="btn-add-student" style="width:300px" data-bs-toggle="modal" data-bs-target="#membershipModal">
+          <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#membershipModal">
             <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER COTISATION<i class="fa-solid fa-square-plus fa-square-bigger"></i>
           </button>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="membershipModal" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true">
           <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+            <div class="modal-content" style="width:80%;padding:0px">
+              <div class="modal-header modal-header-deposit">
                 <h5 class="modal-title"><%= "Nouvelle cotisation pour #{@student.first_name} #{@student.last_name}" %></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
                 <%= form_with(model: Membership.new, url: managers_memberships_path, local: true) do |form| %>
-                  <%= form.hidden_field :student_id, value: @student.id %>
+                  <div class="modal-body">
+                    <%= form.hidden_field :student_id, value: @student.id %>
 
-                  <%= form.label :start_year, "Année" %>
-                  <%= form.text_field :start_year_display, value: "#{@start_year}-#{@start_year + 1}", class: "form-control mb-3", readonly: true %>
-                  <%= form.hidden_field :start_year, value: @start_year %>
+                    <%= form.label :start_year, "Année" %>
+                    <%= form.text_field :start_year_display, value: "#{@start_year}-#{@start_year + 1}", class: "form-control mb-3", readonly: true %>
+                    <%= form.hidden_field :start_year, value: @start_year %>
 
-                  <%= form.label :amount, "Montant" %>
-                  <%= form.number_field :amount, value: 15, class: "form-control mb-3", required: true %>
+                    <%= form.label :amount, "Montant" %>
+                    <%= form.number_field :amount, value: 15, class: "form-control mb-3", required: true %>
 
-                  <%= form.label :payment_method, "Méthode de Paiement" %>
-                  <%= form.collection_select :payment_method,
-                                              [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
-                                              :last, :first,
-                                              { prompt: 'Sélectionnez une méthode de paiement' },
-                                              { class: "form-select mb-3", required: true } %>
+                    <%= form.label :payment_method, "Méthode de Paiement" %>
+                    <%= form.collection_select :payment_method,
+                                                [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                                                :last, :first,
+                                                { prompt: 'Sélectionnez une méthode de paiement' },
+                                                { class: "form-select mb-3", required: true } %>
 
-                  <%= form.label :receiver_id, "Personne ayant reçu le paiement" %>
-                  <%= form.collection_select :receiver_id,
-                                              User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
-                                              :second,
-                                              :first,
-                                              { selected: current_user.id, prompt: 'Sélectionnez une personne' },
-                                              { class: "form-select mb-3", required: true } %>
-              </div>
-              <div class="modal-footer">
-                  <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-                  <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
-              </div>
-              <% end %>
+                    <%= form.label :receiver_id, "Personne ayant reçu le paiement" %>
+                    <%= form.collection_select :receiver_id,
+                                                User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                                                :second,
+                                                :first,
+                                                { selected: current_user.id, prompt: 'Sélectionnez une personne' },
+                                                { class: "form-select mb-3", required: true } %>
+                  </div>
+                  <div class="modal-footer d-flex justify-content-around">
+                      <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                      <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                  </div>
+                <% end %>
             </div>
           </div>
         </div>
       <% end %>
     </div>
   </div>
+
   <div class="col-lg-6 col-sm-12 mt-3">
-    <div class="header-info"> COTISATIONS </div>
+    <div class="header-info"> PAIEMENT STAGES </div>
     <div class="content-info">
-      <table class="table table-striped table-responsive">
+      <table class="table table-striped">
         <thead>
           <tr>
-            <th>Année</th>
+            <th>Académie</th>
+            <th>Stage</th>
+            <th>Semaine</th>
             <th>Montant</th>
-            <th>Mode de paiement</th>
             <th>Date du paiement</th>
+            <th>Mode de paiement</th>
             <th>Reçu par</th>
-            <th></th>
+            <th class="text-center">Statut</th>
           </tr>
         </thead>
         <tbody>
-          <% @memberships.each do |membership| %>
-            <tr>
-              <td class="align-middle"><%= "#{membership.start_year} - #{membership.start_year + 1}" %></td>
-              <td class="align-middle"><%= "#{membership.amount} €" %></td>
-              <td class="align-middle"><%= membership.payment_method %></td>
-              <td class="align-middle"><%= membership.payment_date %></td>
-              <td class="align-middle"><%= membership.receiver&.full_name %></td>
-              <td class="align-middle">
-                <% if membership.status %>
-                  <i class="fa-solid fa-check text-success fa-big">
-                <% else %>
-                  <i class="fa-solid fa-xmark text-danger fa-big">
-                <% end %>
-              </td>
-            </tr>
+          <% @camp_enrollments.each do |camp_enrollment| %>
+            <%= render "managers/students/camp_enrollment", camp_enrollment: camp_enrollment, student: @student %>
           <% end %>
         </tbody>
       </table>
-      <% if @membership && !@membership.status %>
-        <div class="header-info-inside"> <%= "#{@start_year} - #{@start_year + 1}" %></div>
-          <%= simple_form_for @membership, url: managers_membership_path(@membership, url: "/managers/students/#{@student.id}?academy_id=#{@student.first_academy.id}"), method: :patch do |f| %>
-            <div class="membership-form">
-              <%= f.input :payment_method,
-                          label: "Moyen de paiment",
-                          required: true,
-                          wrapper_html: { class: 'mt-3 mb-0', style: 'width:60%;'},
-                          collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
-                          prompt: "Sélectionner" %>
-              <%= f.input :receiver_id,
-                          label: "Personne ayant reçu le paiment",
-                          wrapper_html: { class: 'mt-3 mb-0', style: 'width:60%;'},
-                          collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
-                          selected: @membership.receiver_id.present? ? @membership.receiver_id : current_user.id,
-                          prompt: "Sélectionner" %>
-              <%= f.submit "Valider", class: "btn-add-student" %>
-            </div>
-          <% end %>
-      <% end %>
-      <% if !@membership %>
-        <div class="flexy">
-          <button type="button" class="btn-add-student" style="width:300px" data-bs-toggle="modal" data-bs-target="#membershipModal">
-            <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER COTISATION<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-          </button>
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="membershipModal" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title"><%= "Nouvelle cotisation pour #{@student.first_name} #{@student.last_name}" %></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <%= form_with(model: Membership.new, url: managers_memberships_path, local: true) do |form| %>
-                  <%= form.hidden_field :student_id, value: @student.id %>
-
-                  <%= form.label :start_year, "Année" %>
-                  <%= form.text_field :start_year_display, value: "#{@start_year}-#{@start_year + 1}", class: "form-control mb-3", readonly: true %>
-                  <%= form.hidden_field :start_year, value: @start_year %>
-
-                  <%= form.label :amount, "Montant" %>
-                  <%= form.number_field :amount, value: 15, class: "form-control mb-3", required: true %>
-
-                  <%= form.label :payment_method, "Méthode de Paiement" %>
-                  <%= form.collection_select :payment_method,
-                                              [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
-                                              :last, :first,
-                                              { prompt: 'Sélectionnez une méthode de paiement' },
-                                              { class: "form-select mb-3", required: true } %>
-
-                  <%= form.label :receiver_id, "Personne ayant reçu le paiement" %>
-                  <%= form.collection_select :receiver_id,
-                                              User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
-                                              :second,
-                                              :first,
-                                              { selected: current_user.id, prompt: 'Sélectionnez une personne' },
-                                              { class: "form-select mb-3", required: true } %>
-              </div>
-              <div class="modal-footer">
-                  <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-                  <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
-              </div>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      <% end %>
+      <div class="flexy">
+        <button class="btn-add-student">Voir Historique</button>
+      </div>
     </div>
   </div>
 
@@ -319,8 +241,11 @@
               <td class="align-middle"><%= activity.camp.name %></td>
               <td class="align-middle"><%= activity.name %></td>
               <td class="align-middle">
-                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student', origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
-                  <i class="fas fa-trash trash"></i>
+                <% activity_enrollment = @student.activity_enrollments.find_by(activity: activity) %>
+                <% if activity_enrollment && policy([:managers, activity_enrollment]).destroy? %>
+                  <%= link_to managers_activity_enrollment_path(activity_enrollment, redirect_to: 'student', origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
                 <% end %>
               </td>
             </tr>
@@ -331,15 +256,15 @@
       <% end %>
       <div data-controller="enrollment-form">
         <div class="flexy">
-          <button type="button" class="btn-add-student" style="width:300px" data-bs-toggle="modal" data-bs-target="#campActivityModal">
+          <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#campActivityModal">
             <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
           </button>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="campActivityModal" tabindex="-1" aria-labelledby="campActivityModalLabel" aria-hidden="true">
           <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+            <div class="modal-content" style="width:80%;padding:0px">
+              <div class="modal-header modal-header-deposit">
                 <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
@@ -363,7 +288,7 @@
                     <%= form.radio_button :image_consent, true %> Oui
                     <%= form.radio_button :image_consent, false, checked: true %> Non
                   </div>
-                  <div class="modal-footer">
+                  <div class="modal-footer d-flex justify-content-around">
                     <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
                     <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
                   </div>
@@ -400,8 +325,11 @@
               <td class="align-middle"><%= activity.annual_program.name %></td>
               <td class="align-middle"><%= activity.name %></td>
               <td class="align-middle">
-                <%= link_to managers_activity_enrollment_path(activity.activity_enrollments.find_by(student_id: @student.id), redirect_to: 'student', origin: 'annual_program'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
-                  <i class="fas fa-trash trash"></i>
+                <% activity_enrollment = @student.activity_enrollments.find_by(activity: activity) %>
+                <% if activity_enrollment && policy([:managers, activity_enrollment]).destroy? %>
+                  <%= link_to managers_activity_enrollment_path(activity_enrollment, redirect_to: 'student', origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
                 <% end %>
               </td>
             </tr>
@@ -412,15 +340,15 @@
       <% end %>
       <div data-controller="annual-enrollments-form enrollment-form">
         <div class="flexy">
-          <button type="button" class="btn-add-student" style="width:300px" data-bs-toggle="modal" data-bs-target="#programActivityModal">
+          <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#programActivityModal">
             <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
           </button>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="programActivityModal" tabindex="-1" aria-labelledby="programActivityModalLabel" aria-hidden="true">
           <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+            <div class="modal-content" style="width:80%;padding:0px">
+              <div class="modal-header modal-header-deposit">
                 <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
@@ -441,7 +369,7 @@
                   <%= form.radio_button :image_consent, true %> Oui
                   <%= form.radio_button :image_consent, false, checked: true %> Non
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer d-flex justify-content-around">
                   <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
                   <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
                 </div>

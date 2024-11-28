@@ -16,9 +16,9 @@
           <tr>
             <td><%= deposit.depositor.full_name %></td>
             <td><%= deposit.manager.full_name %></td>
-            <td><%= (deposit.cash_amount || 0) + (deposit.cheque_amount || 0) %>€</td>
-            <td><%= deposit.cash_amount || 0 %>€</td>
-            <td><%= deposit.cheque_amount || 0 %>€</td>
+            <td><%= replace_zero_with_dash((deposit.cash_amount || 0) + (deposit.cheque_amount || 0)) %></td>
+            <td><%= replace_zero_with_dash(deposit.cash_amount || 0) %></td>
+            <td><%= replace_zero_with_dash(deposit.cheque_amount || 0) %></td>
             <td><%= l(deposit.date, format: :default) %></td>
           </tr>
         <% end %>

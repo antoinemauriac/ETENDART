@@ -51,7 +51,10 @@ class Managers::StudentsController < ApplicationController
   def show
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    @academies = current_user.academies
+    @academies = (current_user.academies + @student.academies).uniq
+    @academy1 = @student.academies.first if @student.academies.any?
+    @academy2 = @student.academies.second if @student.academies.second
+    @academy3 = @student.academies.third if @student.academies.third
     @academy = @student.first_academy
     @feedback = Feedback.new
     @feedbacks = @student.feedbacks.order(created_at: :desc)
@@ -66,6 +69,8 @@ class Managers::StudentsController < ApplicationController
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     @membership = @student.memberships.find_by(start_year: @start_year)
     @memberships = @student.memberships.order(start_year: :desc)
+    @camp_enrollments = @student.paid_camp_enrollments.first(2)
+    @camp_enrollment = @camp_enrollments.last
   end
 
   def new
@@ -107,7 +112,7 @@ class Managers::StudentsController < ApplicationController
     student = Student.find(params[:id])
     authorize([:managers, student], policy_class: Managers::StudentPolicy)
     if student.update(student_params)
-      update_academies(student)
+      update_academies(student) if params[:student][:academy1_id].present?
       redirect_to managers_student_path(student)
       flash[:notice] = "Informations modifiées avec succès"
     else
@@ -189,7 +194,7 @@ class Managers::StudentsController < ApplicationController
               student.address,
               student.zipcode,
               student.city,
-              student.memberships.where(start_year: start_year)&.first&.status ? "Oui" : "Non",
+              student.memberships.where(start_year: start_year)&.first&.paid ? "Oui" : "Non",
               student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : '',
               student.predominant_sport,
               student.main_academy&.name

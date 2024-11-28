@@ -12,7 +12,11 @@ class Managers::FinancePolicy < ApplicationPolicy
     user.manager? || user.coordinator? || user.admin?
   end
 
-  def show?
+  def show_school_period?
+    user.manager? || user.coordinator? || user.admin?
+  end
+
+  def show_camp?
     user.manager? || user.coordinator? || user.admin?
   end
 end

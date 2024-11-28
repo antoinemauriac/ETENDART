@@ -34,10 +34,12 @@
           <% end %>
         </tbody>
       </table>
+    <% else %>
+      <div class="flexy mb-4 mt-4">Aucune activité pour le moment.</div>
     <% end %>
     <div class="flexy">
-      <%= link_to new_managers_activity_path(camp: camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-flex mt-1" do %>
-        <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+      <%= link_to new_managers_activity_path(camp: camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-1" do %>
+        <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE ACTIVITÉ<i class="fa-solid fa-square-plus fa-square-bigger"></i>
       <% end %>
     </div>
   </div>

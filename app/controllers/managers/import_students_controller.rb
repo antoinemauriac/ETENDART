@@ -34,7 +34,7 @@ class Managers::ImportStudentsController < ApplicationController
         # student.destroy if student.courses.empty?
         courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 7), Date.new(start_year + 1, 8, 31))
         membership = student.memberships.find_by(start_year: start_year)
-        if courses_during_civil_year.empty? && membership && membership.status == false
+        if courses_during_civil_year.empty? && membership && membership.paid == false
           membership&.destroy
         end
       end
@@ -99,7 +99,7 @@ class Managers::ImportStudentsController < ApplicationController
             flash[:alert] = "Le mode de paiement de la cotisation doit être cash, cheque, hello_asso, offert, pass ou virement"
             redirect_to managers_camp_path(camp) and return
           end
-          if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.status == false
+          if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.paid == false
             membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
         end

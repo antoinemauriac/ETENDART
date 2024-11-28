@@ -18,21 +18,21 @@
         <tbody>
           <tr>
             <td style="text-align:right;font-weight:700">Nombre de cotisations</td>
-            <td><%= @current_year_memberships_count %></td>
-            <td><%= @current_year_paid_memberships_count %></td>
-            <td style="color:red"><%= @current_year_unpaid_memberships_count %></td>
-            <td><%= @current_year_offered_memberships_count %></td>
+            <td><%= replace_zero_with_dash(@current_year_memberships_count, false) %></td>
+            <td><%= replace_zero_with_dash(@current_year_paid_memberships_count, false) %></td>
+            <td style="color:red"><%= replace_zero_with_dash(@current_year_unpaid_memberships_count, false) %></td>
+            <td><%= replace_zero_with_dash(@current_year_offered_memberships_count, false) %></td>
             <td></td>
             <td></td>
           </tr>
           <tr>
             <td style="text-align:right;font-weight:700">Revenu</td>
-            <td><%= @current_year_revenue %>€</td>
-            <td><%= @current_year_received_revenue %>€</td>
-            <td style="color:red"><%= @current_year_missing_revenue %>€</td>
-            <td><%= @current_year_offered_revenue %>€</td>
-            <td><%= @current_year_deposited_revenue %>€</td>
-            <td style="color:red"><%= @current_year_received_revenue - @current_year_deposited_revenue %>€</td>
+            <td><%= replace_zero_with_dash(@current_year_revenue) %></td>
+            <td><%= replace_zero_with_dash(@current_year_received_revenue) %></td>
+            <td style="color:red"><%= replace_zero_with_dash(@current_year_missing_revenue) %></td>
+            <td><%= replace_zero_with_dash(@current_year_offered_revenue) %></td>
+            <td><%= replace_zero_with_dash(@current_year_deposited_revenue) %></td>
+            <td style="color:red"><%= replace_zero_with_dash(@current_year_received_revenue - @current_year_deposited_revenue) %></td>
           </tr>
         </tbody>
       </table>
@@ -182,9 +182,9 @@
             <tr>
               <td><%= deposit.depositor.full_name %></td>
               <td><%= deposit.manager.full_name %></td>
-              <td><%= (deposit.cash_amount || 0) + (deposit.cheque_amount || 0) %>€</td>
-              <td><%= deposit.cash_amount || 0 %>€</td>
-              <td><%= deposit.cheque_amount || 0 %>€</td>
+              <td><%= replace_zero_with_dash((deposit.cash_amount || 0) + (deposit.cheque_amount || 0)) %></td>
+              <td><%= replace_zero_with_dash(deposit.cash_amount || 0) %></td>
+              <td><%= replace_zero_with_dash(deposit.cheque_amount || 0) %></td>
               <td><%= l(deposit.date, format: :default) %></td>
             </tr>
           <% end %>

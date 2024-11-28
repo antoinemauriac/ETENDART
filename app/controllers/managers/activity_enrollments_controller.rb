@@ -64,7 +64,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
     end
     courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 7), Date.new(start_year + 1, 8, 31))
     membership = student.memberships.find_by(start_year: start_year)
-    if courses_during_civil_year.empty? && membership && membership.status == false
+    if courses_during_civil_year.empty? && membership && membership.paid == false
       membership&.destroy
     end
   end

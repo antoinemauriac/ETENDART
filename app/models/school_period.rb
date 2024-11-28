@@ -8,7 +8,7 @@ class SchoolPeriod < ApplicationRecord
   has_many :camp_enrollments, through: :camps
   has_many :students, through: :camp_enrollments
 
-  has_many :camp_deposits, through: :camps
+  has_many :old_camp_deposits, through: :camps
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps
@@ -196,16 +196,24 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
+  def unexpected_revenue
+    camp_enrollments.unattended.paid.count * price
+  end
+
   def received_revenue
     camp_enrollments.paid.count * price
   end
 
   def missing_revenue
-    expected_revenue - received_revenue
+    expected_revenue + unexpected_revenue - received_revenue
   end
 
-  def total_camp_deposits
-    camps.joins(:camp_deposits).sum('camp_deposits.amount')
+  def absent_paid_students_count
+    camp_enrollments.unattended.paid.count
+  end
+
+  def total_old_camp_deposits
+    camps.joins(:old_camp_deposits).sum('old_camp_deposits.amount')
   end
 
   def paid_students_count

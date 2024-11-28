@@ -6,9 +6,9 @@
   <div class="col flexy-row">
     <% if course.starts_at < Time.current %>
       <% if course.status %>
-        <i class="fa-solid fa-check text-success fa-big"></i>
+        <i class="fa-solid fa-circle-check text-success fa-small"></i>
       <% else %>
-        <i class="fa-solid fa-xmark text-danger fa-big"></i>
+        <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
       <% end %>
     <% end %>
   </div>

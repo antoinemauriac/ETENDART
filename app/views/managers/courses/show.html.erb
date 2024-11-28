@@ -37,11 +37,11 @@
       <% end %>
       <% if @course.status %>
         <p class="presence-status container">
-          APPEL VALIDÉ <i class="fa-solid fa-check text-success fa-big"></i>
+          APPEL VALIDÉ <i class="fa-solid fa-circle-check text-success fa-bigger"></i>
         </p>
       <% else %>
         <p class="presence-status container">
-          APPEL EN ATTENTE <i class="fa-solid fa-xmark text-danger fa-big"></i>
+          APPEL EN ATTENTE <i class="fa-solid fa-circle-xmark fa-pink fa-bigger"></i>
         </p>
       <% end %>
     </div>
@@ -59,9 +59,9 @@
             <% if false %>
               <th class="presence-head align-middle" style="text-align:center"></th>
             <% end %>
-            <% if @school_period && @school_period.paid %>
-              <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Payé ?</th>
-            <% end %>
+            <%# if @school_period && @school_period.paid %>
+<!--              <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Payé ?</th>-->
+            <%# end %>
             <% if @school_period && @school_period.tshirt %>
               <th class="presence-head align-middle" style="text-align:center">Tshirt ?</th>
             <% end %>
@@ -70,8 +70,9 @@
         <tbody>
           <% @enrollments.each do |enrollment| %>
             <% student = enrollment.student %>
+            <% camp_enrollment = student.camp_enrollments.find_by(camp: @course.camp) %>
             <% membership = student.memberships.find_by(start_year: @start_year) %>
-            <% name_style = membership&.status == false ? "color: red;font-weight:bold;" : "" %>
+            <% name_style = camp_enrollment&.paid == false ? "color: red;font-weight:bold" : "" %>
             <tr style="position:relative">
               <td class="align-middle">
                 <%= link_to managers_student_path(student) do %>
@@ -103,16 +104,13 @@
                   <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", checked: enrollment.present? }, 1, 0 %>
                 </div>
               </td>
-              <% if false %>
-                <td class="align-middle"><span class="status-text <%= enrollment.present ? 'd-none' : '' %>">Absent</span></td>
-              <% end %>
-              <% if @school_period && @school_period.paid %>
-                <td class="align-middle">
+              <%# if @school_period && @school_period.paid %>
+<!--                <td class="align-middle">
                   <div class="has-paid">
-                    <%= form.check_box "enrollments[#{enrollment.id}][has_paid]", { class: "form-check-input green-check", checked: student.camp_enrollments.find_by(camp: @course.activity.camp)&.has_paid || false } %>
-                  </div>
+                    <%#= form.check_box "enrollments[#{enrollment.id}][paid]", { class: "form-check-input green-check", checked: student.camp_enrollments.find_by(camp: @course.activity.camp)&.paid || false } %>-->
+<!--                  </div>
                 </td>
-              <% end %>
+              <%# end %>-->
               <% if @school_period && @school_period.tshirt %>
                 <td class="align-middle">
                   <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: @school_period) %>

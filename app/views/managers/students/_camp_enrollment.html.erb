@@ -1,0 +1,98 @@
+<!--<tr id="camp_enrollment_<%#= camp_enrollment.id %>">
+  <td class="align-middle"><%#= camp_enrollment.camp.academy.name %></td>
+  <td class="align-middle"><%#= "#{camp_enrollment.camp.school_period.name} - #{camp_enrollment.camp.school_period.year}" %></td>
+  <td class="align-middle"><%#= camp_enrollment.camp.name %></td>
+  <td class="align-middle"><%#= "#{camp_enrollment.camp.school_period.price} €" %></td>
+  <%# if camp_enrollment.paid %>-->
+    <%# if camp_enrollment.payment_date %>
+<!--      <td class="align-middle"><%#= l(camp_enrollment.payment_date, formats: :default) %></td>-->
+    <%# else %>
+<!--      <td class="align-middle"></td>-->
+    <%# end %>
+<!--    <td class="align-middle"><%#= camp_enrollment.payment_method %></td>
+    <td class="align-middle"><%#= camp_enrollment.receiver&.full_name_reverse %></td>
+    <td class="text-center"><i class="fa-solid fa-circle-check text-success fa-big"></td>
+  <%# else %>-->
+<!--    <td class="align-middle"></td>
+    <td class="align-middle">
+      <%#= simple_form_for camp_enrollment, url: managers_camp_enrollment_path(camp_enrollment), method: :patch do |f| %>-->
+        <%#= f.input :payment_method,
+                    label: false,
+                    wrapper_html: { style: "width: 150px!important;margin-bottom:0!important" },
+                    required: true,
+                    collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                    prompt: "Sélectionner" %>
+<!--    </td>
+    <td class="align-middle">
+        <%#= f.input :receiver_id,-->
+<!--                    label: false,
+                    required: true,
+                    wrapper_html: { style: "width: 150px!important;margin-bottom:0!important" },
+                    collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+
+                    prompt: "Sélectionner" %>
+    </td>
+    <td class="align-middle text-center">
+        <%#= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>-->
+      <%# end %>
+<!--    </td>-->
+  <%# end %>
+<!--</tr>-->
+
+<tr id="camp_enrollment_<%= camp_enrollment.id %>">
+  <td class="align-middle"><%= camp_enrollment.camp.academy.name %></td>
+  <td class="align-middle"><%= "#{camp_enrollment.camp.school_period.name} - #{camp_enrollment.camp.school_period.year}" %></td>
+  <td class="align-middle"><%= camp_enrollment.camp.name %></td>
+  <td class="align-middle"><%= "#{camp_enrollment.camp.school_period.price} €" %></td>
+  <% if camp_enrollment.paid %>
+    <td class="align-middle"><%= l(camp_enrollment.payment_date, formats: :default) %></td>
+    <td class="align-middle"><%= camp_enrollment.payment_method %></td>
+  <% else %>
+    <td colspan="2" class="align-middle text-center">
+      <div style="display: flex; justify-content: center;">
+      <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#campEnrollment<%=camp_enrollment.id%>Modal">
+        <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+      </button>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="campEnrollment<%=camp_enrollment.id%>Modal" tabindex="-1" aria-labelledby="campEnrollment<%=camp_enrollment.id%>ModalLabel" aria-hidden="true" data-controller="close-modal">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:80%;padding:0px">
+          <div class="modal-header modal-header-deposit">
+            <h5 class="modal-title"><%= "Paiement stage pour #{student.first_name} #{student.last_name}" %></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+            <%= simple_form_for camp_enrollment, url: managers_camp_enrollment_path(camp_enrollment), data: { action: "submit->close-modal#closeModal" }, method: :patch do |f| %>
+            <div class="modal-body" style="text-align:left;">
+              <%= f.hidden_field :source, value: "show_student" %>
+              <%= f.input :payment_method,
+                    label: "Moyen de paiment",
+                    required: true,
+                    collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                    prompt: "Sélectionner" %>
+              <%= f.input :receiver_id,
+                  label: "Personne ayant reçu le paiment",
+                  collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                  selected: camp_enrollment.receiver_id.present? ? camp_enrollment.receiver_id : current_user.id,
+                  prompt: "Sélectionner",
+                  include_blank: true %>
+            </div>
+            <div class="modal-footer d-flex justify-content-around">
+              <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+              <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </td>
+  <% end %>
+  <td class="align-middle"><%= camp_enrollment.receiver&.full_name %></td>
+  <td class="align-middle text-center">
+    <% if camp_enrollment.paid %>
+      <i class="fa-solid fa-circle-check text-success fa-small">
+    <% else %>
+    <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
+    <% end %>
+  </td>
+</tr>

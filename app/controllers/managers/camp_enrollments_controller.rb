@@ -1,10 +1,10 @@
 class Managers::CampEnrollmentsController < ApplicationController
   def destroy
-    camp_enrollment = CampEnrollment.find(params[:id])
-    authorize([:managers, camp_enrollment])
+    @camp_enrollment = CampEnrollment.find(params[:id])
+    authorize([:managers, @camp_enrollment])
 
-    student = camp_enrollment.student
-    camp = camp_enrollment.camp
+    student = @camp_enrollment.student
+    camp = @camp_enrollment.camp
     school_period = camp.school_period
 
     start_year = camp.starts_at.month >= 9 ? camp.starts_at.year : camp.starts_at.year - 1
@@ -15,7 +15,7 @@ class Managers::CampEnrollmentsController < ApplicationController
 
     manage_membership(student, camp)
 
-    if camp_enrollment.destroy
+    if @camp_enrollment.destroy
       camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
       if camp_enrollments.empty?
         student.school_period_enrollments.find_by(school_period: school_period).destroy
@@ -24,16 +24,58 @@ class Managers::CampEnrollmentsController < ApplicationController
     else
       flash[:alert] = "Erreur lors de la suppression"
     end
-    # redirect_to managers_camp_path(camp)
-    render partial: "managers/camps/students", locals: { students: camp.students, camp: camp, academy: camp.academy, school_period: school_period, start_year: start_year }
+    # render partial: "managers/camps/students", locals: { students: camp.students, camp: camp, academy: camp.academy, school_period: school_period, start_year: start_year }
+    flash.discard
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to managers_camp_path(camp) }
+    end
   end
 
   def index
-
+    @camp = Camp.find(params[:camp_id])
+    @camp_enrollments = @camp.camp_enrollments.joins(:student).order('students.last_name ASC')
+    skip_policy_scope
+    authorize([:managers, @camp_enrollments])
   end
 
   def update
+    @camp_enrollment = CampEnrollment.find(params[:id])
+    authorize([:managers, @camp_enrollment])
+    if @camp_enrollment.paid
+      flash[:alert] = "Paiement déjà enregistré"
+      handle_response
+      return
+    end
+    @student = @camp_enrollment.student
+    payment_method = params[:camp_enrollment][:payment_method]
+    if @camp_enrollment.update(camp_enrollment_params)
+      @camp_enrollment.update(paid: true, payment_date: Date.current)
+      if ["cash", "cheque", "offert"].include?(payment_method)
+        @camp_enrollment.update(receiver_id: params[:camp_enrollment][:receiver_id])
+      end
+      flash[:notice] = "Paiement enregistré"
+    else
+      flash[:alert] = "Erreur lors de l'enregistrement"
+    end
+    handle_response
+  end
 
+  def handle_response
+    respond_to do |format|
+      format.turbo_stream do
+        flash.discard
+        case params[:camp_enrollment][:source]
+        when "list"
+          render "managers/camp_enrollments/update_from_index"
+        when "show_student"
+          render "managers/camp_enrollments/update_from_show"
+        end
+      end
+      format.html do
+        redirect_to "#{params[:camp_enrollment][:origin] || params[:origin] || managers_student_path(@student)}#target-#{@camp_enrollment.id}"
+      end
+    end
   end
 
   private
@@ -42,8 +84,12 @@ class Managers::CampEnrollmentsController < ApplicationController
     start_year = camp.starts_at.month >= 9 ? camp.starts_at.year : camp.starts_at.year - 1
     courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 7), Date.new(start_year + 1, 8, 31))
     membership = student.memberships.find_by(start_year: start_year)
-    if courses_during_civil_year.empty? && membership && membership.status == false
+    if courses_during_civil_year.empty? && membership && membership.paid == false
       membership&.destroy
     end
+  end
+
+  def camp_enrollment_params
+    params.require(:camp_enrollment).permit(:payment_method)
   end
 end

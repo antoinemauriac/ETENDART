@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<%= turbo_stream.replace "camp_enrollment_#{@camp_enrollment.id}" do %>
+  <%= render "managers/camp_enrollments/student", camp_enrollment: @camp_enrollment, index: params[:camp_enrollment][:index].to_i  %>
+<% end %>

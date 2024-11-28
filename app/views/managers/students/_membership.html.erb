@@ -1,0 +1,58 @@
+<tr id="membership_<%= membership.id %>">
+  <td class="align-middle"><%= "#{membership.start_year} - #{membership.start_year + 1}" %></td>
+  <td class="align-middle"><%= "#{membership.amount} €" %></td>
+  <% if membership.payment_date %>
+    <td class="align-middle"><%= l(membership.payment_date, formats: :default) %></td>
+  <% else %>
+    <td class="align-middle"></td>
+  <% end %>
+  <% if membership.payment_method %>
+    <td class="align-middle"><%= membership.payment_method  %></td>
+  <% else %>
+    <td class="align-middle">
+      <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#membership<%=membership.id%>Modal">
+         <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+      </button>
+      <!-- Modal -->
+      <div class="modal fade" id="membership<%=membership.id%>Modal" tabindex="-1" aria-labelledby="membership<%=membership.id%>ModalLabel" aria-hidden="true" data-controller="close-modal">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:80%;padding:0px">
+            <div class="modal-header modal-header-deposit">
+              <h5 class="modal-title"><%= "Paiement cotisation pour #{start_year} - #{start_year + 1}" %></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+              <%= simple_form_for membership, url: managers_membership_path(membership), data: { action: "submit->close-modal#closeModal" }, method: :patch do |f| %>
+                <div class="modal-body" style="text-align:left;">
+                  <%= f.hidden_field :source, value: "show_student" %>
+                  <%= f.input :payment_method,
+                              label: "Moyen de paiment",
+                              required: true,
+                              collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                              prompt: "Sélectionner" %>
+                  <%= f.input :receiver_id,
+                              label: "Personne ayant reçu le paiment",
+                              collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                              selected: membership.receiver_id.present? ? membership.receiver_id : current_user.id,
+                              prompt: "Sélectionner" %>
+                </div>
+                <div class="modal-footer d-flex justify-content-around">
+                  <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                  <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                </div>
+              <% end %>
+          </div>
+        </div>
+      </div>
+    </td>
+  <% end %>
+  <td class="align-middle"><%= membership.receiver&.full_name %></td>
+  <% if membership.paid %>
+    <td class="align-middle text-center">
+      <i class="fa-solid fa-circle-check text-success fa-small">
+    </td>
+  <% else %>
+    <td class="align-middle text-center">
+      <i class="fa-solid fa-circle-xmark fa-pink fa-small">
+    </td>
+  <% end %>
+</tr>
