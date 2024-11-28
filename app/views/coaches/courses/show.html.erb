@@ -4,18 +4,18 @@
   <div class="col-xxl-4 col-lg-6 col-md-8 col-sm-12" style="width:100%;max-width:450px">
     <div class="header-info header-info-coach">INFOS</div>
     <div class="content-info content-info-coach">
-      <div style="width: 13em";>
-        <p class="mb-1" style="word-break: break-all">ADRESSE : <strong><%= @activity.location.name %></strong></p>
-        <p class="mb-1">TOTAL ÉLÈVES : <strong><%= @course.students.count %></strong></p>
+      <div class="course-infos">
+        <p style="word-break: break-all">LIEU : <strong><%= @activity.location.name %></strong></p>
+        <p>TOTAL ÉLÈVES : <strong><%= @course.students.count %></strong></p>
         <% if @course.status %>
-          <p class="green-text mb-1">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
-          <p class="red-text mb-1">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
+          <p class="green-text">PRÉSENTS : <strong><%= @course.present_students_count %></strong></p>
+          <p class="red-text">ABSENTS : <strong><%= @course.missing_students_count %></strong></p>
         <% end %>
         <% if @school_period && @school_period.paid %>
-          <p class="mb-1">PRIX DU STAGE : <strong><%= @school_period.price %>€</strong></p>
+          <p>PRIX DU STAGE : <strong><%= @school_period.price %>€</strong></p>
         <% end %>
         <% if @academy.banished %>
-          <p class="mb-1">EXCLUS : <strong><%= @banished_students.count %></strong></p>
+          <p>EXCLUS : <strong><%= @banished_students.count %></strong></p>
         <% end %>
       </div>
       <div class="course-status">
@@ -39,9 +39,6 @@
             <th class="presence-head align-middle"style="min-width: 60px;"></th>
             <th class="presence-head align-middle" style="text-align:left">Élève</th>
             <th class="presence-head align-middle" style="text-align:left; padding-right:5px">Présent ?</th>
-            <%# if @school_period && @school_period.paid %>
-<!--              <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Payé ?</th>-->
-            <%# end %>
             <% if @school_period && @school_period.tshirt %>
               <th class="presence-head align-middle" style="text-align:center">Tshirt ?</th>
             <% end %>

@@ -5,3 +5,15 @@
   align-items: center;
   gap: 1em;
 }
+
+.course-infos {
+  width: 13em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
+
+    p {
+      margin: 0;
+    }
+}
