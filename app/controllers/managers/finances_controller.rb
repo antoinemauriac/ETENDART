@@ -121,7 +121,7 @@ class Managers::FinancesController < ApplicationController
               student.city,
               membership.payment_method,
               membership.payment_date ? l(membership.payment_date, format: :date) : '',
-              membership.receiver.full_name,
+              membership.receiver&.full_name,
               student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : '',
               membership.academy&.name,
               student.predominant_sport
