@@ -58,9 +58,6 @@ application.register("past-annual-courses", PastAnnualCoursesController)
 import PastCampCoursesController from "./past_camp_courses_controller"
 application.register("past-camp-courses", PastCampCoursesController)
 
-import PresenceSheetController from "./presence_sheet_controller"
-application.register("presence-sheet", PresenceSheetController)
-
 import SearchCoachController from "./search_coach_controller"
 application.register("search-coach", SearchCoachController)
 

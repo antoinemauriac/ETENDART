@@ -10,7 +10,7 @@ class UpdateEnrollmentsJob < ApplicationJob
     annual_program = activity.annual_program if activity.annual_program
     academy = activity.academy
 
-    enrollments_params.each do |enrollment_id, data|
+    enrollments_params.each do |enrollment_id, student_params|
 
       enrollment = CourseEnrollment.find(enrollment_id.to_i)
       student = enrollment.student
@@ -18,18 +18,6 @@ class UpdateEnrollmentsJob < ApplicationJob
       camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
       school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) if school_period
       annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program) if annual_program
-
-      #########################################################################
-      # NB : UN SEUL TSHIRT PEUT ÊTRE DISTRIBUÉ PAR ACADEMY ET PAR STUDENT
-      # UNE NOUVELLE OPERATION DE DISTRIBUTION DE TSHIRT EST POSSIBLE
-      # DANS CE CAS, ON REMET TOUS LES SCHOOL_PERIOD_ENROLLMENT.TSHIRT_DELIVERED À FALSE
-      #########################################################################
-      if school_period && school_period.tshirt
-        school_period_enrollments = student.school_period_enrollments
-                                           .joins(:school_period)
-                                           .where(school_periods: { academy_id: academy.id })
-        school_period_enrollments.update_all(tshirt_delivered: school_period_enrollment.tshirt_delivered)
-      end
 
       update_presence_if_needed(activity_enrollment, enrollment.present)
 
@@ -46,10 +34,10 @@ class UpdateEnrollmentsJob < ApplicationJob
       # CODE DANS LE CAS DES ELEVES EXCLUS ( academy.banished == true )
       ##################################################################
 
-      # if camp_enrollment && category.name != "Accompagnement" && data[:changes].present? && academy.banished
-      #   # je vérifie si la statut de présence a changé. data[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
-      #   previous_value = data[:changes].first
-      #   present = data[:present].to_i == 1 ? true : false
+      # if camp_enrollment && category.name != "Accompagnement" && student_params[:changes].present? && academy.banished
+      #   # je vérifie si la statut de présence a changé. student_params[:changes] est un array de 2 éléments, le premier est l'ancien statut, le deuxième le nouveau
+      #   previous_value = student_params[:changes].first
+      #   present = student_params[:present].to_i == 1 ? true : false
       #   if !present && previous_value == true
       #     camp_enrollment.update(number_of_absences: camp_enrollment.number_of_absences + 1)
       #   elsif present && previous_value ==  false
@@ -62,8 +50,23 @@ class UpdateEnrollmentsJob < ApplicationJob
       #     unban_because_of_late(student, camp_enrollment)
       #   end
       # end
+    end
 
 
+    #########################################################################
+    # NB : UN SEUL TSHIRT PEUT ÊTRE DISTRIBUÉ PAR ACADEMY ET PAR STUDENT
+    # UNE NOUVELLE OPERATION DE DISTRIBUTION DE TSHIRT EST POSSIBLE
+    # DANS CE CAS, ON REMET TOUS LES SCHOOL_PERIOD_ENROLLMENT.TSHIRT_DELIVERED À FALSE
+    #########################################################################
+    if school_period && school_period.tshirt
+      enrollments_params.each do |enrollment_id, student_params|
+        student = CourseEnrollment.find(enrollment_id.to_i).student
+        school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) if school_period
+        school_period_enrollments = student.school_period_enrollments
+                                          .joins(:school_period)
+                                          .where(school_periods: { academy_id: academy.id })
+        school_period_enrollments.update_all(tshirt_delivered: school_period_enrollment.tshirt_delivered)
+      end
     end
   end
 

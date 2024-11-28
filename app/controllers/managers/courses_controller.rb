@@ -47,18 +47,13 @@ class Managers::CoursesController < ApplicationController
     enrollments_params = permitted_enrollments_params.to_h
 
     if enrollments_params.present?
-      enrollments_params.each do |enrollment_id, enrollment_params|
+      enrollments_params.each do |enrollment_id, student_params|
         enrollment = CourseEnrollment.find(enrollment_id.to_i)
-        enrollment.present = enrollment_params[:present].to_i
-        if enrollment.changes.present?
-          enrollments_params[enrollment_id][:changes] = enrollment.changes[:present]
+        enrollment.present = student_params[:present].to_i
+        if school_period && school_period.paid == true
+          update_student_tshirt(enrollment, student_params, school_period)
         end
-        if enrollment.save
-          update_student_enrollment(enrollment, enrollment_params, camp, school_period)
-        else
-          flash[:alert] = "Erreur lors de la mise à jour de l'inscription"
-          redirect_to managers_course_path(course) and return
-        end
+        enrollment.save
       end
       course.update(status: true)
       UpdateEnrollmentsJob.perform_later(course.id, enrollments_params)
@@ -103,17 +98,13 @@ class Managers::CoursesController < ApplicationController
     authorize([:managers, @course], policy_class: Managers::CoursePolicy)
   end
 
-  def update_student_enrollment(enrollment, enrollment_params, camp, school_period)
+  def update_student_tshirt(enrollment, student_params, school_period)
     student = enrollment.student
-    # camp_enrollment = student.camp_enrollments.find_by(camp: camp) if camp
-    # if school_period && school_period.paid == true && camp_enrollment
-    #   camp_enrollment.update(paid: enrollment_params[:paid])
-    # end
     school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
-    if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false && enrollment_params[:tshirt_delivered] == "1"
+    if school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == false && student_params[:tshirt_delivered] == "1"
       school_period_enrollment.update(tshirt_delivered: true)
       student.update(number_of_tshirts: student.number_of_tshirts + 1)
-    elsif school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true && enrollment_params[:tshirt_delivered] == "0"
+    elsif school_period && school_period.tshirt == true && school_period_enrollment.tshirt_delivered == true && student_params[:tshirt_delivered] == "0"
       school_period_enrollment.update(tshirt_delivered: false)
       student.update(number_of_tshirts: student.number_of_tshirts - 1)
     end
