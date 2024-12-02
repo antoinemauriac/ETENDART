@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       member do
         get :show_school_period
         get :show_camp
+        get :academy_infos
       end
       collection do
         get :membership_finances_overview

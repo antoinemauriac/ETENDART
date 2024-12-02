@@ -117,10 +117,10 @@
   //display:block;
   height: 45px;
   width: 200px;
-  margin: 10px 7px;
-  padding: 5px 5px;
+  margin: 1rem;
+  padding: 1rem;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 1rem;
   letter-spacing: 2px;
   color: black;
   border: 2px black solid;
@@ -143,6 +143,10 @@
   color: $yellow;
 }
 
+.btn-select-academy {
+  width: 229px;
+  margin: 0.5rem!important;
+}
 
 
 .btn-add-student-small {

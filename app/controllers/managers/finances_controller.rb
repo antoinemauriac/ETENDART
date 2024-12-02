@@ -87,7 +87,15 @@ class Managers::FinancesController < ApplicationController
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     # RÉCUPÉRER LES ACADÉMIES GÉRÉES PAR L'UTILISATEUR QUI ONT AU MOINS UNE SCHOOL_PERIOD AVEC UNE COLONNE PAID À TRUE
-    @academies = current_user.academies.joins(:school_periods).where(school_periods: { paid: true, new: true }).distinct
+    @academies = current_user.academies.joins(:school_periods).where(school_periods: { paid: true, new: true }).distinct.order(:name)
+    @selected_academy = @academies.first
+  end
+
+  def academy_infos
+    @academy = Academy.find(params[:id])
+    skip_policy_scope
+    authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
+    render partial: "managers/finances/academy_infos", locals: { academy: @academy }
   end
 
   def show_school_period
