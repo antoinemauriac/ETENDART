@@ -27,7 +27,7 @@ class Managers::AnnualEnrollmentsController < ApplicationController
       start_year = annual_program.starts_at.year
       membership = @student.memberships.find_by(start_year: start_year)
       if membership.nil?
-        @student.memberships.create(amount: 15, start_year: start_year, academy: academy)
+        @student.memberships.create(amount: Membership::PRICE, start_year: start_year, academy: academy)
       end
       flash.now[:notice] = "Inscription validée"
       @activity_enrollment = @student.activity_enrollments.find_by(activity: activity)

@@ -129,7 +129,7 @@ end
   student.save
   student.academies << kuerten
   student.academies << [zidane, batum].sample if i.even?
-  student.memberships << Membership.create!(academy: [kuerten, zidane].sample, student: student, start_year: 2024, amount: 15, paid: rand < 0.7)
+  student.memberships << Membership.create!(academy: [kuerten, zidane].sample, student: student, start_year: 2024, amount: Membership::PRICE, paid: rand < 0.7)
 end
 
 # MISE À JOUR DES PAID MEMBERSHIPS

@@ -60,7 +60,7 @@ class Managers::ImportAnnualStudentsController < ApplicationController
 
           membership = student.memberships.find_by(start_year: start_year)
           if membership.nil?
-            membership = Membership.create(student: student, amount: 15, start_year: start_year, academy: academy)
+            membership = Membership.create(student: student, amount: Membership::PRICE, start_year: start_year, academy: academy)
           end
 
           if !Membership::PAYMENT_METHODS.include?(row['cotisation'])
