@@ -1,6 +1,6 @@
 <div id="camp_enrollment_<%= camp_enrollment.id %>">
-  <% name_style = !camp_enrollment.paid ? 'color: red;font-weight:bold' : '' %>
-  <div id="target-<%=camp_enrollment.id%>" class="row card-row card-row-higher clickable-tr <%= 'bg-white' if index.odd? %>" data-clickable-table-target="clickable" data-url="<%= managers_student_path(camp_enrollment.student) %>">
+  <% name_style = !camp_enrollment.paid ? 'color: #fc3535;font-weight:bold' : '' %>
+  <div id="target-<%=camp_enrollment.id%>" class="row card-row card-row-higher card-row-no-transform clickable-tr <%= 'bg-white' if index.odd? %>" data-clickable-table-target="clickable" data-url="<%= managers_student_path(camp_enrollment.student) %>">
     <% student = camp_enrollment.student %>
     <div class="col-2 flexy-row">
       <span class="ellipsis" style="<%= name_style %>"><%= student.last_name %></span>
@@ -9,10 +9,10 @@
       <span class="ellipsis" style="<%= name_style %>"><%= student.first_name %></span>
     </div>
     <div class="col-2 flexy-row">
-      <span class="ellipsis"><%= "#{camp_enrollment.camp.academy.name }-#{camp_enrollment.camp.school_period.name}-#{camp_enrollment.camp.name}" %></span>
+      <span class="ellipsis" style="<%= name_style %>" ><%= "#{camp_enrollment.camp.academy.name }-#{camp_enrollment.camp.school_period.name}-#{camp_enrollment.camp.name}" %></span>
     </div>
     <div class="col-1 flexy-row small-col">
-      <span class="ellipsis"><%= camp_enrollment.camp.school_period.price %>€</span>
+      <span class="ellipsis" style="<%= name_style %>"><%= camp_enrollment.camp.school_period.price %>€</span>
     </div>
     <% if camp_enrollment.paid %>
       <% if camp_enrollment.payment_date %>
@@ -35,18 +35,15 @@
       </div>
     <% else %>
       <div class="col-4 flexy-row">
-        <span class="ellipsis">
-          <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#campEnrollment<%=camp_enrollment.id%>Modal">
-            <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-          </button>
-        </span>
+        <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#campEnrollment<%=camp_enrollment.id%>Modal">
+          <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+        </button>
       </div>
       <div class="col-1 flexy-row small-col">
         <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
       </div>
     <% end %>
   </div>
-
 </div>
   <!-- Modal -->
   <div class="modal fade" id="campEnrollment<%= camp_enrollment.id %>Modal" tabindex="-1" aria-labelledby="campEnrollment<%= camp_enrollment.id %>ModalLabel" aria-hidden="true" data-controller="close-modal">
@@ -56,7 +53,7 @@
           <h5 class="modal-title"><%= "Stage #{camp_enrollment.camp.academy.name }-#{camp_enrollment.camp.school_period.name}-#{camp_enrollment.camp.name}" %><br><%= camp_enrollment.student.full_name %></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <%= simple_form_for camp_enrollment, url: managers_camp_enrollment_path(camp_enrollment), data: { action: "submit->close-modal#closeModal", turbo: local_assigns[:reload] ? false : true }, method: :patch do |f| %>
+        <%= simple_form_for camp_enrollment, url: managers_camp_enrollment_path(camp_enrollment), data: { controller: "payment-method", action: "submit->close-modal#closeModal", turbo: local_assigns[:reload] ? false : true }, method: :patch do |f| %>
           <div class="modal-body">
             <%= f.hidden_field :source, value: "list" %>
             <%= f.hidden_field :index, value: index %>
@@ -65,13 +62,15 @@
                         label: "Moyen de paiment",
                         required: true,
                         collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
-                        prompt: "Sélectionner" %>
+                        prompt: "Sélectionner",
+                        input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
             <%= f.input :receiver_id,
                         label: "Personne ayant reçu le paiment",
                         collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
                         selected: camp_enrollment.receiver_id.present? ? camp_enrollment.receiver_id : current_user.id,
                         prompt: "Sélectionner",
-                        include_blank: true %>
+                        include_blank: true,
+                        input_html: { data: { payment_method_target: "receiver" } } %>
           </div>
           <div class="modal-footer d-flex justify-content-around">
             <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>

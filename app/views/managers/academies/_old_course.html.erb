@@ -1,4 +1,4 @@
-<%= link_to managers_course_path(course), id: "old_course_#{course.id}", class: "row card-row" do %>
+<%= link_to managers_course_path(course), id: "old_course_#{course.id}", class: "row card-row #{'bg-white' if index.odd?}"  do %>
   <div class="col-3 flexy-row"><%= course.activity.name %></div>
   <div class="col-3 flexy-row"><%= course.activity.coach.try(:full_name) || "" %></div>
   <div class="col flexy-row"><%= course.activity.coach.try(:phone_number) || "" %></div>

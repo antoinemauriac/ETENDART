@@ -58,21 +58,33 @@ class Managers::StudentsController < ApplicationController
     @academy = @student.first_academy
     @feedback = Feedback.new
     @feedbacks = @student.feedbacks.order(created_at: :desc)
+    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
+    @membership = @student.memberships.find_by(start_year: @start_year)
+    @memberships = @student.memberships.order(start_year: :desc)
+    @camp_enrollments = @student.paid_camp_enrollments
+    @camp_enrollment = @camp_enrollments.last
+  end
+
+  def current_activities
+    @student = Student.find(params[:id])
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
+    @academies = (current_user.academies + @student.academies).uniq
     @next_camp_activities = @student.next_camp_activities
     @next_annual_activities = @student.next_annual_activities
     next_courses = @student.next_courses
     @next_annual_courses = next_courses.where(annual: true)
     @next_camp_courses = next_courses.where(annual: false)
+    render partial: "managers/students/current_activities", locals: { student: @student }
+  end
+
+  def past_activities
+    @student = Student.find(params[:id])
+    authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     past_courses = @student.past_courses
     @past_annual_courses = past_courses.where(annual: true)
     @past_camp_courses = past_courses.where(annual: false)
-    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
-    @membership = @student.memberships.find_by(start_year: @start_year)
-    @memberships = @student.memberships.order(start_year: :desc)
-    @camp_enrollments = @student.paid_camp_enrollments.first(2)
-    @camp_enrollment = @camp_enrollments.last
+    render partial: "managers/students/past_activities", locals: { student: @student }
   end
-
   def new
     @student = Student.new
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
@@ -113,8 +125,8 @@ class Managers::StudentsController < ApplicationController
     authorize([:managers, student], policy_class: Managers::StudentPolicy)
     if student.update(student_params)
       update_academies(student) if params[:student][:academy1_id].present?
-      redirect_to managers_student_path(student)
       flash[:notice] = "Informations modifiées avec succès"
+      redirect_to managers_student_path(student)
     else
       flash[:error] = "Une erreur est survenue"
       redirect_to managers_student_path(student)

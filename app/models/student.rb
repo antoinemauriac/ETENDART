@@ -177,7 +177,7 @@ class Student < ApplicationRecord
 
   def next_camp_activities
     activities.joins(:camp)
-              .where('camps.ends_at > ?', Time.current)
+              .where('camps.ends_at >= ?', Date.current)
               .order('camps.starts_at ASC')
   end
 

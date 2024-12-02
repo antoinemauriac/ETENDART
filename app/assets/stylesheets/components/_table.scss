@@ -47,11 +47,11 @@
 }
 
 .green-text strong {
-  color: green;
+  color: #1CDD87;
 }
 
 .red-text strong {
-  color: red;
+  color: $pink;
 }
 
 .table-search-header {
@@ -128,12 +128,12 @@
 .card-row-container {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  padding: 1rem;
+  gap: 0.2rem;
+  padding: 0px!important;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  background-color: white;
+  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  // background-color: white;
 }
 
 .card-row-container-camp {
@@ -141,6 +141,7 @@
  box-shadow: none!important;
  background-color: inherit!important;
  gap: 0.3rem;
+ padding: 0.5rem!important;
 }
 
 .card-row-container-no-padding {
@@ -150,11 +151,11 @@
 .card-row {
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  background-color: #f3f3f3;
+  background-color: white;
   height: 2.5rem;
   transition: background-color 0.2s ease, transform 0.2s ease;
   &:hover {
-    background-color: #d9d8d8;
+    background-color: $yellow!important;
     transform: scale(1.008);
   }
 }
@@ -171,15 +172,20 @@
 }
 
 .card-row-higher {
-  height: 3rem;
+  height: 2.8rem;
 }
 
 .header-row {
-  border-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.08);
   // border-bottom: 1px solid #dee2e6;
   font-weight: bold;
-  background-color: white;
+  background-color: #f3f2f2;
+}
+
+.header-row-border {
+  border: 2px solid black;
 }
 
 // .header-row-black {

@@ -10,8 +10,8 @@
       <div class="col flexy-row">Date</div>
       <div class="col flexy-row">Appel fait ?</div>
     </div>
-    <% old_presence_sheet.each do |course| %>
-      <%= render "managers/academies/old_course", course: course %>
+    <% old_presence_sheet.each_with_index do |course, index| %>
+      <%= render "managers/academies/old_course", course: course, index: index %>
     <% end %>
   </div>
 </div>

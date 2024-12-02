@@ -1,14 +1,16 @@
 class Managers::ActivityEnrollmentsController < ApplicationController
   def destroy
-    activity_enrollment = ActivityEnrollment.find(params[:id])
-    authorize([:managers, activity_enrollment])
+    @activity_enrollment = ActivityEnrollment.find(params[:id])
+    authorize([:managers, @activity_enrollment])
 
-    student = activity_enrollment.student
-    activity = activity_enrollment.activity
+    student = @activity_enrollment.student
+    activity = @activity_enrollment.activity
     camp_enrollment = student.camp_enrollments.find_by(camp: activity.camp)
 
-    activity_enrollment.destroy
-    student.course_enrollments.where(course: activity.next_courses).destroy_all
+    @activity_enrollment.destroy
+    @next_course_enrollments = student.course_enrollments.where(course: activity.next_courses)
+    @next_course_enrollment_ids = @next_course_enrollments.pluck(:id)
+    @next_course_enrollments.destroy_all
 
     past_course_enrollments = student.course_enrollments.joins(:course).where(course: activity.courses).where('courses.ends_at < ?', Time.current)
     if past_course_enrollments.attended.count.zero?
@@ -32,7 +34,11 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       manage_membership(student, camp, nil)
 
       if params[:redirect_to] == 'student'
-        redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
+        flash.now[:notice] = "Élève retiré de l'activité."
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to managers_student_path(student), notice: "Élève retiré de l'activité." }
+        end
       else
         redirect_to managers_activity_path(activity), notice: "Élève retiré de l'activité."
       end
@@ -47,7 +53,11 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       manage_membership(student, nil, annual_program)
 
       if params[:redirect_to] == 'student'
-        redirect_to managers_student_path(student), notice: "Élève retiré de l'activité."
+        flash.now[:notice] = "Élève retiré de l'activité."
+        respond_to do |format|
+          format.turbo_stream
+          format.html { redirect_to managers_student_path(student), notice: "Élève retiré de l'activité." }
+        end
       else
         redirect_to show_for_annual_managers_activity_path(activity), notice: "Élève retiré de l'activité."
       end

@@ -11,6 +11,14 @@ class Managers::StudentPolicy < ApplicationPolicy
     user.manager? || user.coordinator?
   end
 
+  def current_activities?
+    user.manager? || user.coordinator?
+  end
+
+  def past_activities?
+    user.manager? || user.coordinator?
+  end
+
   def create?
     user.manager? || user.coordinator?
   end

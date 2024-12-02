@@ -21,19 +21,22 @@
               <h5 class="modal-title"><%= "Paiement cotisation pour #{start_year} - #{start_year + 1}" %></h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-              <%= simple_form_for membership, url: managers_membership_path(membership), data: { action: "submit->close-modal#closeModal" }, method: :patch do |f| %>
+              <%= simple_form_for membership, url: managers_membership_path(membership), data: { action: "submit->close-modal#closeModal", controller: "payment-method"  }, method: :patch do |f| %>
                 <div class="modal-body" style="text-align:left;">
                   <%= f.hidden_field :source, value: "show_student" %>
                   <%= f.input :payment_method,
                               label: "Moyen de paiment",
                               required: true,
                               collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
-                              prompt: "Sélectionner" %>
+                              prompt: "Sélectionner",
+                              input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
                   <%= f.input :receiver_id,
                               label: "Personne ayant reçu le paiment",
                               collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
                               selected: membership.receiver_id.present? ? membership.receiver_id : current_user.id,
-                              prompt: "Sélectionner" %>
+                              prompt: "Sélectionner",
+                              include_blank: true,
+                              input_html: { data: { payment_method_target: "receiver" } } %>
                 </div>
                 <div class="modal-footer d-flex justify-content-around">
                   <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>

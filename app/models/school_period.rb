@@ -25,6 +25,8 @@ class SchoolPeriod < ApplicationRecord
   validates :name, inclusion: { in: %w[Février Printemps Été Toussaint], message: "Le nom du stage doit être Automne, Hiver, Printemps ou Été." }
 
   before_validation :normalize_name
+  before_save :set_default_price
+
 
   def full_name
     "#{name} - #{year}"
@@ -236,5 +238,9 @@ class SchoolPeriod < ApplicationRecord
 
   def normalize_name
     self.name = name.split.map(&:capitalize).join(' ')
+  end
+
+  def set_default_price
+    self.price = 0 if paid == false
   end
 end

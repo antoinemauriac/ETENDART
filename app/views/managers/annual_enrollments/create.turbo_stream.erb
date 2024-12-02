@@ -1,0 +1,30 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<%= turbo_stream.append "next-annual-activities" do %>
+  <tr id=<%= "activity-enrollment-#{@activity_enrollment.id}" %>>
+    <td class="align-middle"><%= @activity_enrollment.activity.academy.name %></td>
+    <td class="align-middle"><%= @activity_enrollment.activity.annual_program.name %></td>
+    <td class="align-middle"><%= @activity_enrollment.activity.name %></td>
+    <td class="align-middle">
+      <% if @activity_enrollment && policy([:managers, @activity_enrollment]).destroy? %>
+        <%= link_to managers_activity_enrollment_path(@activity_enrollment, redirect_to: 'student', origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+          <i class="fas fa-trash trash"></i>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+
+<% @courses.each do |course| %>
+  <%= turbo_stream.append "next-annual-courses" do %>
+    <% course_enrollment = @student.course_enrollments.find_by(course: course)  %>
+    <tr id=<%= "course-enrollment-#{course_enrollment.id}" %> class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
+      <td class="align-middle"><%= course.academy.name %></td>
+      <td class="align-middle"><%= course.annual_program.name %></td>
+      <td class="align-middle"><%= course.activity.name %></td>
+      <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
+    </tr>
+  <% end %>
+<% end %>

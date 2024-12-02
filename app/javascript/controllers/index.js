@@ -58,6 +58,12 @@ application.register("past-annual-courses", PastAnnualCoursesController)
 import PastCampCoursesController from "./past_camp_courses_controller"
 application.register("past-camp-courses", PastCampCoursesController)
 
+import PaymentMethodController from "./payment_method_controller"
+application.register("payment-method", PaymentMethodController)
+
+import SchoolPeriodPriceController from "./school_period_price_controller"
+application.register("school-period-price", SchoolPeriodPriceController)
+
 import SearchCoachController from "./search_coach_controller"
 application.register("search-coach", SearchCoachController)
 

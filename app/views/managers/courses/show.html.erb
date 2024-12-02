@@ -71,7 +71,7 @@
             <% student = enrollment.student %>
             <% camp_enrollment = student.camp_enrollments.find_by(camp: @course.camp) %>
             <% membership = student.memberships.find_by(start_year: @start_year) %>
-            <% name_style = camp_enrollment&.paid == false ? "color: red;font-weight:bold" : "" %>
+            <% name_style = camp_enrollment&.paid == false ? "color: #fc3535;font-weight:bold" : "" %>
             <tr style="position:relative">
               <td class="align-middle">
                 <%= link_to managers_student_path(student) do %>

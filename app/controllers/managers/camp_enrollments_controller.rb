@@ -7,9 +7,6 @@ class Managers::CampEnrollmentsController < ApplicationController
     camp = @camp_enrollment.camp
     school_period = camp.school_period
 
-    start_year = camp.starts_at.month >= 9 ? camp.starts_at.year : camp.starts_at.year - 1
-
-
     student.activity_enrollments.where(activity: camp.activities).destroy_all
     student.course_enrollments.where(course: camp.courses).destroy_all
 
@@ -20,12 +17,11 @@ class Managers::CampEnrollmentsController < ApplicationController
       if camp_enrollments.empty?
         student.school_period_enrollments.find_by(school_period: school_period).destroy
       end
-      flash[:notice] = "Élève retiré de la semaine"
+      flash.now[:notice] = "Élève retiré de la semaine"
     else
-      flash[:alert] = "Erreur lors de la suppression"
+      flash.now[:alert] = "Erreur lors de la suppression"
     end
     # render partial: "managers/camps/students", locals: { students: camp.students, camp: camp, academy: camp.academy, school_period: school_period, start_year: start_year }
-    flash.discard
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to managers_camp_path(camp) }
@@ -51,12 +47,12 @@ class Managers::CampEnrollmentsController < ApplicationController
     payment_method = params[:camp_enrollment][:payment_method]
     if @camp_enrollment.update(camp_enrollment_params)
       @camp_enrollment.update(paid: true, payment_date: Date.current)
-      if ["cash", "cheque", "offert"].include?(payment_method)
-        @camp_enrollment.update(receiver_id: params[:camp_enrollment][:receiver_id])
+      if !["cash", "cheque", "offert"].include?(payment_method)
+        @camp_enrollment.update(receiver_id: nil)
       end
       flash[:notice] = "Paiement enregistré"
     else
-      flash[:alert] = "Erreur lors de l'enregistrement"
+      flash[:alert] = @camp_enrollment.errors.full_messages.to_sentence
     end
     handle_response
   end
@@ -90,6 +86,6 @@ class Managers::CampEnrollmentsController < ApplicationController
   end
 
   def camp_enrollment_params
-    params.require(:camp_enrollment).permit(:payment_method)
+    params.require(:camp_enrollment).permit(:payment_method, :receiver_id)
   end
 end

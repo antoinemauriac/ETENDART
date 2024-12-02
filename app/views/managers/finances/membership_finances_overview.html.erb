@@ -58,7 +58,7 @@
           <tr>
             <td><strong><%= @current_year_received_revenue %>€</strong></td>
             <% Membership::PAYMENT_METHODS.compact.each do |method| %>
-              <td><%= @current_year_memberships.where(payment_method: method).sum(:amount) %>€</td>
+              <td><%= replace_zero_with_dash(@current_year_memberships.where(payment_method: method).sum(:amount)) %></td>
             <% end %>
           </tr>
         </tbody>
@@ -218,28 +218,3 @@
   </div>
 
 </div>
-
-
-<!--  <div class="col-lg-6 col-sm-12 mt-4">
-    <div class="header-info">DÉTAILS PAR ACADÉMIE</div>
-    <div class="content-info">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Total Attendu</th>
-            <th>Payées</th>
-            <th>En attente</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <%# @academies.each do |academy| %>-->
-<!--            <td><%#= @current_year_memberships.where(academy: academy).count %>€</td>-->
-            <%# ["cash", "cheque", "hello_asso", "virement", "offert"].each do |method| %>
-<!--              <td><%#= @current_year_memberships.where(payment_method: method).sum(:amount) %>€</td>-->
-            <%# end %>
-<!--          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>-->
