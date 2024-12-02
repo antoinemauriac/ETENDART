@@ -194,7 +194,9 @@ class Camp < ApplicationRecord
   end
 
   def total_received_revenue
-    camp_enrollments.paid.where.not(payment_method: ['offert', nil]).count * school_period.price
+    camp_enrollments.paid
+                    .where("payment_method IS NULL OR payment_method != ?", "offert")
+                    .count * school_period.price
   end
 
   def missing_revenue

@@ -194,7 +194,10 @@ class SchoolPeriod < ApplicationRecord
     if self.free_judo == true
       camp_enrollments.attended.count * price - camps.sum(&:missing_clarisse_revenue)
     else
-      camp_enrollments.attended.count * price
+      (camp_enrollments.attended.count +
+      camp_enrollments.unattended.paid.count -
+      camp_enrollments.paid.where(payment_method: "offert").count) * price
+      # camp_enrollments.attended.count * price
     end
   end
 
