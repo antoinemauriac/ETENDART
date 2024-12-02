@@ -1,3 +1,4 @@
+import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="loading-message"
 export default class extends Controller {
   static targets = [ "turboFrame" ];
@@ -19,7 +20,7 @@ export default class extends Controller {
           </div>
         `;
       }
-    }, 300);
+    }, 500);
   }
 
   hideLoading() {
