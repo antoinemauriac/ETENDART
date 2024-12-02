@@ -7,28 +7,30 @@
   <div class="header-nav-item active"><%= @student.full_name.upcase %></div>
 </div>
 
-<div class="flexy-wrap mt-2 mb-2 gap-4" data-controller="selected-button">
-  <%= link_to "INFORMATIONS",
-              managers_student_path(@student),
-              data: { turbo_frame: "selected_content",
-                      selected_button_target: "button",
-                      action: "click->selected-button#toggleButtons" },
-              class: "btn-selection btn-fill selected" %>
-  <%= link_to "ACTIVITÉS À VENIR",
-              current_activities_managers_student_path(@student),
-              data: { turbo_frame: "selected_content",
-                      selected_button_target: "button",
-                      action: "click->selected-button#toggleButtons" },
-              class: "btn-selection btn-fill" %>
-  <%= link_to "HISTORIQUE",
-              past_activities_managers_student_path(@student),
-              data: { turbo_frame: "selected_content",
-                      selected_button_target: "button",
-                      action: "click->selected-button#toggleButtons" },
-              class: "btn-selection btn-fill" %>
-</div>
+<div data-controller="loading-message">
 
-  <%= turbo_frame_tag "selected_content" do %>
+  <div class="flexy-wrap mt-2 mb-2 gap-4" data-controller="selected-button">
+    <%= link_to "INFORMATIONS",
+                managers_student_path(@student),
+                data: { turbo_frame: "selected_content",
+                        selected_button_target: "button",
+                        action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                class: "btn-selection btn-fill selected" %>
+    <%= link_to "ACTIVITÉS À VENIR",
+                current_activities_managers_student_path(@student),
+                data: { turbo_frame: "selected_content",
+                        selected_button_target: "button",
+                        action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                class: "btn-selection btn-fill" %>
+    <%= link_to "HISTORIQUE",
+                past_activities_managers_student_path(@student),
+                data: { turbo_frame: "selected_content",
+                        selected_button_target: "button",
+                        action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                class: "btn-selection btn-fill" %>
+  </div>
+
+  <%= turbo_frame_tag "selected_content", data: { loading_message_target: "turboFrame" }  do %>
     <div class="row justify-content-center align-items-stretch">
       <div class="col-lg-5 col-md-7 col-sm-12" data-upload-photo-student-id-value="<%=@student.id%>">
         <div class="header-info">INFORMATIONS</div>
@@ -255,3 +257,4 @@
     </div>
     <%= render "shared/flashes" %>
   <% end %>
+</div>

@@ -8,7 +8,14 @@ class Managers::CampsController < ApplicationController
     @school_period = @camp.school_period
     @academy = @school_period.academy
     @activities = @camp.activities
-    @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
+  end
+
+  def activities
+    # sleep 200
+    @camp = Camp.find(params[:id])
+    authorize([:managers, @camp])
+    @activities = @camp.activities
+    render partial: "managers/camps/activities", locals: { activities: @activities, camp: @camp }
   end
 
   def students

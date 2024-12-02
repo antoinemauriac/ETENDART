@@ -49,6 +49,9 @@ application.register("hidden-forms", HiddenFormsController)
 import ImportCsvController from "./import_csv_controller"
 application.register("import-csv", ImportCsvController)
 
+import LoadingMessageController from "./loading_message_controller"
+application.register("loading-message", LoadingMessageController)
+
 import NavbarController from "./navbar_controller"
 application.register("navbar", NavbarController)
 
