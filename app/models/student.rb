@@ -318,7 +318,7 @@ class Student < ApplicationRecord
   # end
 
   def paid_camp_enrollments_without_free_judo_activity
-    camp_enrollments.joins(activity: :category)
+    camp_enrollments.joins(camp: { activities: :category })
                     .where.not(categories: { name: 'Judo' })
                     .joins(camp: :school_period)
                     .where(school_periods: { paid: true, free_judo: true })
