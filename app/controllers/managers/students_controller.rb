@@ -66,12 +66,14 @@ class Managers::StudentsController < ApplicationController
   end
 
   def current_activities
-    @student = Student.find(params[:id])
+    @student = Student.includes(:activity_enrollments, :course_enrollments).find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
     @academies = (current_user.academies + @student.academies).uniq
-    @next_camp_activities = @student.next_camp_activities
-    @next_annual_activities = @student.next_annual_activities
-    next_courses = @student.next_courses
+
+    @next_camp_activities = @student.next_camp_activities.includes(:camp, :school_period)
+    @next_annual_activities = @student.next_annual_activities.includes(:annual_program)
+    next_courses = @student.next_courses.includes(:activity, :camp, :school_period, :annual_program)
+
     @next_annual_courses = next_courses.where(annual: true)
     @next_camp_courses = next_courses.where(annual: false)
     render partial: "managers/students/current_activities", locals: { student: @student }
@@ -80,7 +82,7 @@ class Managers::StudentsController < ApplicationController
   def past_activities
     @student = Student.find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    past_courses = @student.past_courses
+    past_courses = @student.past_courses.includes(:course_enrollments)
     @past_annual_courses = past_courses.where(annual: true)
     @past_camp_courses = past_courses.where(annual: false)
     render partial: "managers/students/past_activities", locals: { student: @student }
