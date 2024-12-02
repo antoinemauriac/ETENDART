@@ -57,7 +57,6 @@ class Managers::AnnualProgramsController < ApplicationController
     authorize [:managers, @annual_program]
     @activities = @annual_program.active_sorted_activities
     @students = @annual_program.students.order(:last_name)
-    @start_year = @annual_program.starts_at.year
   end
 
   def destroy

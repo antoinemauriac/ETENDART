@@ -312,17 +312,22 @@ class Student < ApplicationRecord
   #                   .sort_by(&:camp_starts_at).reverse
   # end
 
-  # def camp_enrollments_with_judo_activity
+  # def camp_enrollments_with_free_judo_activity
   #   camp_enrollments.joins(activity: :category)
   #                   .where(categories: { name: 'Judo' })
   # end
 
   def paid_camp_enrollments_without_free_judo_activity
-    camp_enrollments.joins(camp: { activities: :category })
-                    .where.not(categories: { name: 'Judo' })
+    judo_camp_ids = activities.joins(:category, camp: :school_period)
+                              .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true })
+                              .pluck('camps.id')
+
+    camp_enrollments.attended
                     .joins(camp: :school_period)
-                    .where(school_periods: { paid: true, free_judo: true })
-                    .sort_by(&:camp_starts_at).reverse
+                    .where.not(camp_id: judo_camp_ids)
+                    .where(school_periods: { paid: true })
+                    .sort_by { |enrollment| enrollment.camp.starts_at }
+                    .reverse
   end
 
   private
