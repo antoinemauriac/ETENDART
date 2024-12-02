@@ -190,14 +190,21 @@ class SchoolPeriod < ApplicationRecord
     camps.sum(&:new_students_count)
   end
 
+  # def expected_revenue
+  #   camps.sum(&:expected_revenue)
+  # end
+
   def expected_revenue
     if self.free_judo == true
-      camp_enrollments.attended.count * price - camps.sum(&:missing_clarisse_revenue)
+      (camp_enrollments.attended.where.not(student_id: student_with_judo_ids).count +
+        camp_enrollments.unattended.paid.count -
+        camp_enrollments.paid.where(payment_method: "offert").count) *
+        price
     else
       (camp_enrollments.attended.count +
-      camp_enrollments.unattended.paid.count -
-      camp_enrollments.paid.where(payment_method: "offert").count) * price
-      # camp_enrollments.attended.count * price
+        camp_enrollments.unattended.paid.count -
+        camp_enrollments.paid.where(payment_method: "offert").count) *
+        price
     end
   end
 
@@ -229,9 +236,9 @@ class SchoolPeriod < ApplicationRecord
     camp_enrollments.attended.unpaid.count
   end
 
-  def missing_clarisse_revenue
-    camps.sum(&:missing_clarisse_revenue)
-  end
+  # def missing_clarisse_revenue
+  #   camps.sum(&:missing_clarisse_revenue)
+  # end
 
   def student_with_judo_count
     camps.sum(&:student_with_judo_count)

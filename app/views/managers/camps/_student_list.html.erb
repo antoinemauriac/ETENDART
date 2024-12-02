@@ -20,9 +20,15 @@
       <span class="ellipsis"><%= camp_enrollment&.image_consent ? "" : "Non" %></span>
     </div>
     <% if school_period.paid %>
-      <div class="col flexy-row small-col <%= camp_enrollment&.paid ? '' : 'non-bg' %>">
-        <span class="ellipsis"><%= camp_enrollment&.paid ? "Oui" : "Non" %></span>
-      </div>
+      <% if !students_with_free_judo.include?(student) %>
+        <div class="col flexy-row small-col <%= camp_enrollment&.paid ? '' : 'non-bg' %>">
+          <span class="ellipsis"><%= camp_enrollment&.paid ? "Oui" : "Non" %></span>
+        </div>
+      <% else %>
+        <div class="col flexy-row small-col">
+          <span class="ellipsis">Judo Gratuit</span>
+        </div>
+      <% end %>
     <% end %>
     <% if school_period.tshirt %>
       <div class="col flexy-row small-col <%= school_period_enrollment&.tshirt_delivered ? '' : 'non-bg' %>">
