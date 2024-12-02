@@ -1,7 +1,7 @@
 <div id="camp_enrollment_<%= camp_enrollment.id %>">
   <% student = camp_enrollment.student %>
   <% name_style = camp_enrollment.present && !camp_enrollment.paid && !students_with_free_judo.include?(student) ? 'color: #fc3535;font-weight:bold' : '' %>
-  <div id="target-<%=camp_enrollment.id%>" class="row card-row card-row-higher card-row-no-transform clickable-tr <%= 'bg-white' if index.odd? %>" data-clickable-table-target="clickable" data-url="<%= managers_student_path(camp_enrollment.student) %>">
+  <div id="target-<%=camp_enrollment.id%>" class="row card-row card-row-higher card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(camp_enrollment.student) %>">
     <div class="col-2 flexy-row">
       <span class="ellipsis" style="<%= name_style %>"><%= student.last_name %></span>
     </div>
@@ -64,7 +64,7 @@
         <%= simple_form_for camp_enrollment, url: managers_camp_enrollment_path(camp_enrollment), data: { controller: "payment-method", action: "submit->close-modal#closeModal", turbo: local_assigns[:reload] ? false : true }, method: :patch do |f| %>
           <div class="modal-body">
             <%= f.hidden_field :source, value: "list" %>
-            <%= f.hidden_field :index, value: index %>
+            <%#= f.hidden_field :index, value: index %>
             <%= f.hidden_field :origin, value: show_camp_managers_finance_path(camp_enrollment.camp) %>
             <%= f.input :payment_method,
                         label: "Moyen de paiment",

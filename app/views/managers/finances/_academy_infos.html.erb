@@ -1,0 +1,53 @@
+<%= turbo_frame_tag "selected_academy" do %>
+  <div class="row justify-content-center align-items-stretch">
+    <div class="col-lg-11 col-sm-12 mb-2">
+      <div class="black-title yellow-title-border-top mb-0"><%= academy.name.upcase %></div>
+      <div class="content-info">
+        <table class="table table-responsive table-center table-striped table-align-middle">
+          <thead>
+            <tr>
+              <th style="min-width:200px">Période</th>
+              <th>Revenu attendu</th>
+              <th>Perçu par les coachs</th>
+              <th>Déposé par les coachs</th>
+              <th>En attente de dépôt</th>
+              <th>En attente de paiement élève</th>
+              <th>Prix du stage</th>
+              <th>Nb élèves présents</th>
+              <th>Ayant payé (présents)</th>
+              <% if academy == Academy.find_by(name: "Djokovic") %>
+                <th>N'ayant pas payé (présents) <br> (dont Clarisse) </th>
+              <% else %>
+                <th>N'ayant pas payé (présents)</th>
+              <% end %>
+              <th>Ayant payé (absents)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% academy.school_periods.where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%=  show_school_period_managers_finance_path(school_period) %>'">
+                <td style="min-width:200px"><%= school_period.full_name %> </td>
+                <td><%= replace_zero_with_dash(school_period.expected_revenue) %></td>
+                <% received_revenue = school_period.received_revenue %>
+                <td><%= replace_zero_with_dash(received_revenue) %></td>
+                <% total_old_camp_deposits = school_period.total_old_camp_deposits %>
+                <td><%= replace_zero_with_dash(total_old_camp_deposits) %></td>
+                <td style="<%= (received_revenue - total_old_camp_deposits) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(received_revenue - total_old_camp_deposits) %></td>
+                <td style="<%= school_period.missing_revenue != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(school_period.missing_revenue) %></td>
+                <td><%= school_period.price %>€</td>
+                <td><%= school_period.show_count %></td>
+                <td><%= school_period.paid_students_count %></td>
+                <% if school_period.free_judo == true %>
+                  <td><%= school_period.unpaid_students_count %> (<%= school_period.student_with_judo_count %>) </td>
+                <% else %>
+                  <td><%= school_period.unpaid_students_count %></td>
+                <% end %>
+                <td><%= replace_zero_with_dash(school_period.absent_paid_students_count, false) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>
