@@ -206,18 +206,20 @@ class SchoolPeriod < ApplicationRecord
     camp_enrollments.unattended.paid.count * price
   end
 
-  # def received_revenue
-  #   camp_enrollments.paid.count * price
-  # end
-
-  def total_received_revenue
+  def received_revenue
     camp_enrollments.paid
                     .where("payment_method IS NULL OR payment_method != ?", "offert")
                     .count * price
   end
 
+  # def total_received_revenue
+  #   camp_enrollments.paid
+  #                   .where("payment_method IS NULL OR payment_method != ?", "offert")
+  #                   .count * price
+  # end
+
   def missing_revenue
-    expected_revenue - total_received_revenue
+    expected_revenue - received_revenue
   end
 
   def absent_paid_students_count
