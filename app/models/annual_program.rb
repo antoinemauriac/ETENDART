@@ -108,7 +108,7 @@ class AnnualProgram < ApplicationRecord
   end
 
   def week_absent_enrollments_sorted_by_day
-    enrollments = course_enrollments.where(present: false).where(courses: { starts_at: Time.current.beginning_of_week..Time.current.end_of_week }).distinct
+    enrollments = course_enrollments.includes([:student, :course, :activity]).where(present: false).where(courses: { starts_at: Time.current.beginning_of_week..Time.current.end_of_week }).distinct
 
     enrollments.sort_by do |enrollment|
       [DAY_NAME_TO_NUMBER[enrollment.activity.day_of_activity], enrollment.activity.name]

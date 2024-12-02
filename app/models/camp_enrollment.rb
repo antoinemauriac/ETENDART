@@ -1,6 +1,8 @@
 class CampEnrollment < ApplicationRecord
   belongs_to :student
   belongs_to :camp
+  has_one :school_period, through: :camp
+  has_one :academy, through: :school_period
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
 
   PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze

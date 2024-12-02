@@ -60,8 +60,8 @@ class Managers::StudentsController < ApplicationController
     @feedbacks = @student.feedbacks.order(created_at: :desc)
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     @membership = @student.memberships.find_by(start_year: @start_year)
-    @memberships = @student.memberships.order(start_year: :desc)
-    @camp_enrollments = @student.paid_camp_enrollments_without_free_judo_activity
+    @memberships = @student.memberships.includes(:receiver).order(start_year: :desc)
+    @camp_enrollments = @student.paid_camp_enrollments_without_free_judo_activity.includes(:camp, :receiver)
     @camp_enrollment = @camp_enrollments.last
   end
 

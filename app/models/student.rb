@@ -317,6 +317,18 @@ class Student < ApplicationRecord
   #                   .where(categories: { name: 'Judo' })
   # end
 
+  # def paid_camp_enrollments_without_free_judo_activity
+  #   judo_camp_ids = activities.joins(:category, camp: :school_period)
+  #                             .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true })
+  #                             .pluck('camps.id')
+
+  #   camp_enrollments.attended
+  #                   .joins(camp: :school_period)
+  #                   .where.not(camp_id: judo_camp_ids)
+  #                   .where(school_periods: { paid: true })
+  #                   .order('camps.starts_at DESC')
+  # end
+
   def paid_camp_enrollments_without_free_judo_activity
     judo_camp_ids = activities.joins(:category, camp: :school_period)
                               .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true })
@@ -326,8 +338,8 @@ class Student < ApplicationRecord
                     .joins(camp: :school_period)
                     .where.not(camp_id: judo_camp_ids)
                     .where(school_periods: { paid: true })
-                    .sort_by { |enrollment| enrollment.camp.starts_at }
-                    .reverse
+                    .includes(camp: [:school_period, :academy]) # Précharge academy ici
+                    .order('camps.starts_at DESC')
   end
 
   private

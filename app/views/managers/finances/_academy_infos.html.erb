@@ -24,7 +24,7 @@
             </tr>
           </thead>
           <tbody>
-            <% academy.school_periods.where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
+            <% academy.school_periods.includes(:camps).where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
               <tr class="clickable-tr" onclick="window.location.href='<%=  show_school_period_managers_finance_path(school_period) %>'">
                 <td style="min-width:200px"><%= school_period.full_name %> </td>
                 <td><%= replace_zero_with_dash(school_period.expected_revenue) %></td>
