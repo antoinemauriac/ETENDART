@@ -199,29 +199,25 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def expected_revenue
-    if self.free_judo == true
-      (camp_enrollments.attended.where.not(student_id: student_with_judo_ids).count +
-        camp_enrollments.unattended.paid.count -
-        camp_enrollments.paid.where(payment_method: "offert").count) *
-        price
-    else
-      (camp_enrollments.attended.count +
-        camp_enrollments.unattended.paid.count -
-        camp_enrollments.paid.where(payment_method: "offert").count) *
-        price
-    end
+    camps.sum(&:expected_revenue)
   end
 
   def unexpected_revenue
     camp_enrollments.unattended.paid.count * price
   end
 
-  def received_revenue
-    camp_enrollments.paid.count * price
+  # def received_revenue
+  #   camp_enrollments.paid.count * price
+  # end
+
+  def total_received_revenue
+    camp_enrollments.paid
+                    .where("payment_method IS NULL OR payment_method != ?", "offert")
+                    .count * price
   end
 
   def missing_revenue
-    expected_revenue + unexpected_revenue - received_revenue
+    expected_revenue - total_received_revenue
   end
 
   def absent_paid_students_count
