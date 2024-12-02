@@ -1,7 +1,7 @@
 <div id="camp_enrollment_<%= camp_enrollment.id %>">
-  <% name_style = !camp_enrollment.paid ? 'color: #fc3535;font-weight:bold' : '' %>
+  <% student = camp_enrollment.student %>
+  <% name_style = !camp_enrollment.paid && !students_with_free_judo.include?(student) ? 'color: #fc3535;font-weight:bold' : '' %>
   <div id="target-<%=camp_enrollment.id%>" class="row card-row card-row-higher card-row-no-transform clickable-tr <%= 'bg-white' if index.odd? %>" data-clickable-table-target="clickable" data-url="<%= managers_student_path(camp_enrollment.student) %>">
-    <% student = camp_enrollment.student %>
     <div class="col-2 flexy-row">
       <span class="ellipsis" style="<%= name_style %>"><%= student.last_name %></span>
     </div>
@@ -33,7 +33,7 @@
       <div class="col-1 flexy-row small-col">
         <i class="fa-solid fa-circle-check text-success fa-small"></i>
       </div>
-    <% else %>
+    <% elsif !camp_enrollment.paid && !students_with_free_judo.include?(student) %>
       <div class="col-4 flexy-row">
         <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#campEnrollment<%=camp_enrollment.id%>Modal">
           <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
@@ -41,6 +41,10 @@
       </div>
       <div class="col-1 flexy-row small-col">
         <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+      </div>
+    <% else %>
+      <div class="col-5 flexy-row">
+        <span class="ellipsis">Judo Gratuit</span>
       </div>
     <% end %>
   </div>
