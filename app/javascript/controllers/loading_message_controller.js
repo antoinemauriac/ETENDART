@@ -19,7 +19,7 @@ export default class extends Controller {
           </div>
         `;
       }
-    }, 800);
+    }, 300);
   }
 
   hideLoading() {
