@@ -10,6 +10,8 @@ export default class extends Controller {
   }
 
   toggleButtons(event) {
+    console.log('toggleButtons');
+
     this.buttonTargets.forEach((button) => {
       button.classList.remove('selected')
     })
