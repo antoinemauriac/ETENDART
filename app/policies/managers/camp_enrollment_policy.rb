@@ -9,6 +9,6 @@ class Managers::CampEnrollmentPolicy < ApplicationPolicy
   end
 
   def index?
-    user.coach? || user.manager?
+    user.coach? || user.manager? || user.coordinator?
   end
 end

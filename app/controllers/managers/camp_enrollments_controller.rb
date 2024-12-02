@@ -30,7 +30,9 @@ class Managers::CampEnrollmentsController < ApplicationController
 
   def index
     @camp = Camp.find(params[:camp_id])
-    @camp_enrollments = @camp.camp_enrollments.joins(:student).order('students.last_name ASC')
+    @camp_enrollments = @camp.camp_enrollments
+                            .includes(:student, :camp, :receiver)
+                            .order('students.last_name ASC')
     @students_with_free_judo = @camp.student_with_judo
     skip_policy_scope
     authorize([:managers, @camp_enrollments])

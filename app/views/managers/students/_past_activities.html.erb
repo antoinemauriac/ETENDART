@@ -22,7 +22,7 @@
                 <td class="align-middle"><%= course.camp.name %></td>
                 <td class="align-middle"><%= course.activity.name %></td>
                 <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
-                <% if course.student_presence(@student) %>
+                <% if course.course_enrollments.find_by(student: student).present %>
                   <td class="align-middle"><i class="fa-solid fa-circle-check text-success fa-small"></i></td>
                 <% else %>
                   <td class="align-middle"><i class="fa-solid fa-circle-xmark fa-pink fa-small"></i></td>
@@ -57,7 +57,7 @@
                 <td class="align-middle"><%= course.annual_program.name %></td>
                 <td class="align-middle"><%= course.activity.name %></td>
                 <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
-                <% if course.student_presence(@student) %>
+                <% if course.course_enrollments.find_by(student: student).present %>
                   <td class="align-middle"><i class="fa-solid fa-circle-check text-success fa-small"></i></td>
                 <% else %>
                   <td class="align-middle"><i class="fa-solid fa-circle-xmark fa-pink fa-small"></i></td>

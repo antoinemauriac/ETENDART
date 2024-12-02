@@ -1,6 +1,6 @@
 <div class="row justify-content-center align-items-stretch" data-controller="clickable-table">
     <div class="col-lg-10 col-sm-12 mb-4 mt-4">
-      <div class="black-title yellow-title-border-top mb-0"><%= @school_period.academy.name.upcase %> - <%= @school_period.full_name %></div>
+      <div class="black-title yellow-title-border-top mb-0"><%= @school_period.academy.name.upcase %> - <%= @school_period.full_name.upcase %></div>
       <div class="content-info">
         <table class="table table-responsive table-center table-align-middle table-striped">
           <thead>
@@ -20,7 +20,7 @@
                 <th>N'ayant pas payé (présents)</th>
               <% end %>
               <th>Ayant payé (absents)</th>
-              <% if current_user.manager? || current_user.coordinator? %>
+              <% if !@school_period.camps.first.new && (current_user.manager? || current_user.coordinator?) %>
                 <th></th>
               <% end %>
             </tr>
@@ -52,7 +52,7 @@
                     <td><%= replace_zero_with_dash(camp.unpaid_students_count, false) %></td>
                   <% end %>
                   <td><%= replace_zero_with_dash(camp.absent_paid_students_count, false) %></td>
-                  <% if !camp.new && current_user.manager? || current_user.coordinator? %>
+                    <% if !camp.new && (current_user.manager? || current_user.coordinator?) %>
                     <td>
                       <button type="button" style="margin:0" class="btn-etendart-yellow" data-bs-toggle="modal" data-bs-target="#modal-<%= camp.id %>">
                         Déposer
