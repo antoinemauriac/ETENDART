@@ -58,6 +58,10 @@ ul {
   justify-content: center;
 }
 
+.blur-effect {
+  filter: blur(2px);
+  transition: filter 0.1s ease; /* Transition fluide */
+}
 // @media screen and (max-width: 599px) {
 //   .content {
 //     width: calc(100% - 255px);

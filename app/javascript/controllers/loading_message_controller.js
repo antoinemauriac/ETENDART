@@ -1,33 +1,29 @@
-import { Controller } from "@hotwired/stimulus"
-// Connects to data-controller="loading-message"
-export default class extends Controller {
-  static targets = [ "turboFrame" ];
-  timeoutId = null;
+// import { Controller } from "@hotwired/stimulus";
 
-  connect() {
-    this.turboFrameTarget.addEventListener("turbo:frame-load", () => this.hideLoading());
-  }
+// // Connects to data-controller="loading-message"
+// export default class extends Controller {
+//   static targets = ["turboFrame"];
 
-  showLoading() {
-    const turboFrame = this.turboFrameTarget;
+//   connect() {
+//     // S'assurer que l'effet disparaît après le chargement
+//     this.turboFrameTarget.addEventListener("turbo:frame-load", () => this.hideBlur());
+//   }
 
-    // Délai avant d'afficher le loader (1 seconde ici)
-    this.timeoutId = setTimeout(() => {
-      if (turboFrame) {
-        turboFrame.innerHTML = `
-          <div class="flexy" style="height: 20vh;">
-            <div class="small-loader"></div>
-          </div>
-        `;
-      }
-    }, 500);
-  }
+//   showLoading() {
+//     const turboFrame = this.turboFrameTarget;
 
-  hideLoading() {
-    // Annuler le timeout si le chargement est terminé avant 1 seconde
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-      this.timeoutId = null;
-    }
-  }
-}
+//     if (turboFrame) {
+//       // Ajouter la classe CSS pour l'effet blur
+//       turboFrame.classList.add("blur-effect");
+//     }
+//   }
+
+//   hideBlur() {
+//     const turboFrame = this.turboFrameTarget;
+
+//     if (turboFrame) {
+//       // Supprimer la classe CSS une fois chargé
+//       turboFrame.classList.remove("blur-effect");
+//     }
+//   }
+// }
