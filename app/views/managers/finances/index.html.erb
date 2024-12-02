@@ -1,18 +1,20 @@
-<div class="row justify-content-center">
-  <div class="col-11 d-flex justify-content-center flex-wrap gap-1 mt-2 mb-2" data-controller="selected-button">
-    <% @academies.each do |academy| %>
-      <%= link_to academy.name,
-                  academy_infos_managers_finance_path(academy),
-                  data: { turbo_frame: "selected_academy",
-                          selected_button_target: "button",
-                          action: "click->selected-button#toggleButtons" },
-                  class: "btn btn-select-academy btn-selection btn-fill #{'selected' if academy == @selected_academy}" %>
-    <% end %>
+<div data-controller="loading-message">
+  <div class="row justify-content-center">
+    <div class="col-11 d-flex justify-content-center flex-wrap gap-1 mt-2 mb-2" data-controller="selected-button">
+      <% @academies.each do |academy| %>
+        <%= link_to academy.name,
+                    academy_infos_managers_finance_path(academy),
+                    data: { turbo_frame: "selected_academy",
+                            selected_button_target: "button",
+                            action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                    class: "btn-select-academy btn-selection btn-fill #{'selected' if academy == @selected_academy}" %>
+      <% end %>
+    </div>
   </div>
-</div>
 
-<%= turbo_frame_tag "selected_academy" do %>
-  <% if @selected_academy %>
-    <%= render partial: "managers/finances/academy_infos", locals: { academy: @selected_academy } %>
+  <%= turbo_frame_tag "selected_academy", data: { loading_message_target: "turboFrame" } do %>
+    <% if @selected_academy %>
+      <%= render partial: "managers/finances/academy_infos", locals: { academy: @selected_academy } %>
+    <% end %>
   <% end %>
-<% end %>
+</div>

@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "selected_content" do %>
   <!--<div class="yellow-title">LES ACTIVITÉS</div>-->
   <div class="container">
-    <% if activities.any? %>
+    <% if @activities.any? %>
       <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
         <thead>
           <tr>
@@ -14,7 +14,7 @@
           </tr>
         </thead>
         <tbody>
-          <% activities.sort.each do |activity| %>
+          <% @activities.sort.each do |activity| %>
             <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_activity_path(activity) %>">
               <td><%= activity.name %></td>
               <td><%= activity.category.name %></td>
@@ -38,7 +38,7 @@
       <div class="flexy mb-4 mt-4">Aucune activité pour le moment.</div>
     <% end %>
     <div class="flexy">
-      <%= link_to new_managers_activity_path(camp: camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-1" do %>
+      <%= link_to new_managers_activity_path(camp: @camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-1" do %>
         <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE ACTIVITÉ<i class="fa-solid fa-square-plus fa-square-bigger"></i>
       <% end %>
     </div>

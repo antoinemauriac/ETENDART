@@ -13,7 +13,7 @@
       <div class="col flexy-row">Téléphone</div>
       <div class="col-3 flexy-row">Email</div>
     </div>
-    <% week_absent_enrollments do |enrollment| %>
+    <% @week_absent_enrollments.each do |enrollment| %>
       <%= link_to managers_student_path(enrollment.student), class: "row card-row"  do %>
         <div class="col flexy-row"><%= l(enrollment.course.starts_at, format: :day_name) %></div>
         <div class="col-3 flexy-row"><%= enrollment.activity.name %></div>

@@ -7,34 +7,34 @@
   <div class="header-nav-item active"><%= @camp.name.upcase %></div>
 </div>
 
-
-<div class="flexy-wrap mt-2 mb-2 gap-4" data-controller="selected-button">
-  <%= link_to "LES ACTIVITÉS",
-              managers_camp_path(@camp),
-              data: { turbo_frame: "selected_content",
-                      selected_button_target: "button",
-                      action: "click->selected-button#toggleButtons" },
-              class: "btn-selection btn-fill selected" %>
-  <%= link_to "LES ÉLÈVES",
-              students_managers_camp_path(@camp),
-              data: { turbo_frame: "selected_content",
-                      selected_button_target: "button",
-                      action: "click->selected-button#toggleButtons" },
-              class: "btn-selection btn-fill" %>
-  <% if @camp.school_period.paid %>
-    <%= link_to "LES PAIMENTS",
-                managers_camp_enrollments_path(camp_id: @camp.id),
+<div data-controller="loading-message">
+  <div class="flexy-wrap mt-2 mb-2 gap-4" data-controller="selected-button" >
+    <%= link_to "LES ACTIVITÉS",
+                activities_managers_camp_path(@camp),
                 data: { turbo_frame: "selected_content",
                         selected_button_target: "button",
-                        action: "click->selected-button#toggleButtons" },
+                        action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                class: "btn-selection btn-fill selected" %>
+    <%= link_to "LES ÉLÈVES",
+                students_managers_camp_path(@camp),
+                data: { turbo_frame: "selected_content",
+                        selected_button_target: "button",
+                        action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
                 class: "btn-selection btn-fill" %>
+    <% if @camp.school_period.paid %>
+      <%= link_to "LES PAIMENTS",
+                  managers_camp_enrollments_path(camp_id: @camp.id),
+                  data: { turbo_frame: "selected_content",
+
+                          selected_button_target: "button",
+                          action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                  class: "btn-selection btn-fill" %>
+    <% end %>
+  </div>
+
+  <%= turbo_frame_tag "selected_content", src: activities_managers_camp_path(@camp), data: { loading_message_target: "turboFrame" } do %>
   <% end %>
 </div>
-
-<%= turbo_frame_tag "selected_content" do %>
-  <%= render "managers/camps/activities", activities: @activities, camp: @camp %>
-<% end %>
-
 
 <% if false %>
   <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
