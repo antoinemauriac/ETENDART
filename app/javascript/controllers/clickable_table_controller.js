@@ -10,7 +10,7 @@ export default class extends Controller {
     this.clickableTargets.forEach((row) => {
       row.addEventListener('click', (event) => {
         const target = event.target;
-        if (target.classList.contains('trash')) {
+        if (target.classList.contains('trash') || target.classList.contains('btn-add-student')) {
           return;
         }
         window.location.href = row.getAttribute('data-url');

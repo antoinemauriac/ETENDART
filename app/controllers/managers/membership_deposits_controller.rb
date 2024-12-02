@@ -3,7 +3,7 @@ class Managers::MembershipDepositsController < ApplicationController
   def index
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     academy_ids = current_user.academies.pluck(:id)
-    user_ids = Membership.where(academy_id: academy_ids, start_year: @start_year, status: true).distinct.pluck(:receiver_id)
+    user_ids = Membership.where(academy_id: academy_ids, start_year: @start_year, paid: true).distinct.pluck(:receiver_id)
     @users = User.where(id: user_ids).order(:last_name)
 
     if params[:coach].present? && params[:coach] != "all"
@@ -22,10 +22,25 @@ class Managers::MembershipDepositsController < ApplicationController
   def create
     membership_deposit = MembershipDeposit.new(membership_deposit_params)
     authorize([:managers, membership_deposit], policy_class: Managers::MembershipDepositPolicy)
-    membership_deposit.manager = current_user
-    membership_deposit.depositor = User.find(params[:membership_deposit][:depositor_id])
-    membership_deposit.date = Date.current
+    depositor = User.find(params[:membership_deposit][:depositor_id])
     start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
+
+    cash_received = Membership.paid.where(receiver: depositor, start_year: start_year, payment_method: "cash").sum(:amount)
+    cash_deposit = depositor.membership_deposits_as_depositor.where(start_year: start_year).sum(:cash_amount)
+    cash_to_deposit = cash_received - cash_deposit
+
+    cheque_received = Membership.paid.where(receiver: depositor, start_year: start_year, payment_method: "cheque").sum(:amount)
+    cheque_deposit = depositor.membership_deposits_as_depositor.where(start_year: start_year).sum(:cheque_amount)
+    cheque_to_deposit = cheque_received - cheque_deposit
+
+    if cash_to_deposit < params[:membership_deposit][:cash_amount].to_f || cheque_to_deposit < params[:membership_deposit][:cheque_amount].to_f
+      flash[:alert] = "Erreur : le montant du dépôt est supérieur au montant qu'il reste à déposer popur ce coach"
+      redirect_to membership_finances_overview_managers_finances_path
+      return
+    end
+    membership_deposit.manager = current_user
+    membership_deposit.depositor = depositor
+    membership_deposit.date = Date.current
     membership_deposit.start_year = start_year
     if membership_deposit.save
       flash[:notice] = 'Dépôt enregistré'

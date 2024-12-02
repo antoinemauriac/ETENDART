@@ -17,9 +17,9 @@
           <% if course.starts_at < Time.current %>
             <td class="align-middle coach-font">
               <% if course.status %>
-                <i class="fa-solid fa-check text-success fa-big"></i>
+                <i class="fa-solid fa-circle-check text-success fa-small"></i>
               <% else %>
-                <i class="fa-solid fa-xmark text-danger fa-big"></i>
+                <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
               <% end %>
             </td>
           <% else %>
@@ -47,7 +47,7 @@
           <td class="align-middle coach-font"><%= course.activity.name %></td>
           <td class="align-middle coach-font" style="white-space: nowrap"><%= l(course.starts_at, format: :default) %></td>
           <td class="align-middle coach-font">
-            <i class="fa-solid fa-xmark text-danger fa-big"></i>
+            <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
           </td>
         </tr>
       <% end %>

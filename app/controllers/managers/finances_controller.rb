@@ -29,11 +29,11 @@ class Managers::FinancesController < ApplicationController
 
     # PAYÉES EXIGIBLES + PAYÉS MAIS NON EXIGIBLES
     @current_year_memberships_count = @current_year_expected_memberships.where("payment_method IS NULL OR payment_method != ?", 'offert').count +
-                                      @current_year_not_expected_memberships_count
+    @current_year_not_expected_memberships_count
 
     @current_year_revenue = @current_year_expected_memberships
-                                    .where("payment_method IS NULL OR payment_method != ?", 'offert')
-                                    .sum(:amount) + @current_year_not_expected_revenue
+    .where("payment_method IS NULL OR payment_method != ?", 'offert')
+    .sum(:amount) + @current_year_not_expected_revenue
 
 
     # TOUTES LES COTISATIONS DE L'ANNÉE SCOLAIRE PAYEES OU NON
@@ -42,9 +42,9 @@ class Managers::FinancesController < ApplicationController
 
     # COTISATIONS OFFERTES
     @current_year_offered_memberships_count = @current_year_expected_memberships.where(payment_method: 'offert').count +
-                                              @current_year_not_expected_memberships.where(payment_method: 'offert').count
+    @current_year_not_expected_memberships.where(payment_method: 'offert').count
     @current_year_offered_revenue = @current_year_expected_memberships.where(payment_method: 'offert').sum(:amount) +
-                                    @current_year_not_expected_memberships.where(payment_method: 'offert').sum(:amount)
+    @current_year_not_expected_memberships.where(payment_method: 'offert').sum(:amount)
 
     # COTISATIONS PAYÉES (HORS OFFERTS)
     current_year_paid_memberships_excluding_offered = @current_year_expected_memberships.paid.where.not(payment_method: 'offert')
@@ -66,9 +66,9 @@ class Managers::FinancesController < ApplicationController
     # DEPOSITS
     @last_membership_deposits = MembershipDeposit.where(depositor_id: @users.ids).order(created_at: :desc).limit(3)
 
+    membership_deposits = MembershipDeposit.where(depositor_id: @users.ids, start_year: @start_year)
     @current_year_deposited_revenue =
-      MembershipDeposit.where(depositor_id: @users.ids, start_year: @start_year).sum(:cash_amount) +
-      MembershipDeposit.where(depositor_id: @users.ids, start_year: @start_year).sum(:cheque_amount) +
+      membership_deposits.sum(:cash_amount) + membership_deposits.sum(:cheque_amount) +
       current_year_paid_memberships_excluding_offered.where.not(payment_method: ["cash", "cheque"]).sum(:amount) +
       @current_year_not_expected_memberships.where.not(payment_method: ["cash", "cheque"]).sum(:amount)
 
@@ -90,10 +90,43 @@ class Managers::FinancesController < ApplicationController
     @academies = current_user.academies.joins(:school_periods).where(school_periods: { paid: true, new: true }).distinct
   end
 
-  def show
+  def show_school_period
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     @school_period = SchoolPeriod.find(params[:id])
+    @price = @school_period.price
+  end
+
+  def show_camp
+    skip_policy_scope
+    authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
+    @camp = Camp.find(params[:id])
+    @school_period = @camp.school_period
+    @price = @school_period.price
+    @academy = @camp.academy
+    @camp_enrollments = @camp.camp_enrollments
+    # GLOBAL
+    show_students = @camp.show_students
+    @paid_camp_enrollments = @camp_enrollments.paid
+    @paid_camp_enrollments_excluding_offer = @paid_camp_enrollments.where.not(payment_method: 'offert').count
+    @unpaid_camp_enrollments = @camp_enrollments.unpaid.where(student_id: show_students.ids)
+    @offered_camp_enrollments_count = @camp_enrollments.paid.where(payment_method: 'offert').count
+    @paid_but_not_present = @camp_enrollments.paid.where.not(student_id: show_students.ids).count
+    # TOTAL PAR UTILISATEUR
+    revenue_by_user = @camp_enrollments.paid.where(payment_method: ['cash', 'cheque']).group(:receiver_id).count
+    revenue_by_user.transform_values! { |count| count * @price }
+    @revenue_by_user = revenue_by_user.sort_by { |_, total_received| -total_received }.to_h
+    # RÉPARTITION PAR MOYEN DE PAIEMENT PAR UTILISATEUR
+    @payment_details_by_user  = @camp_enrollments.paid
+                           .where(payment_method: ['cash', 'cheque', 'offert'])
+                           .group(:receiver_id, :payment_method)
+                           .count
+                           .transform_values { |count| count * @price }
+    @camp_deposits_amount =
+      @camp.camp_deposits.sum(:cash_amount) +
+      @camp.camp_deposits.sum(:cheque_amount) +
+      @paid_camp_enrollments.where.not(payment_method: ["cash", "cheque", "offert"]).count * @price
+
   end
 
   def export_members_csv

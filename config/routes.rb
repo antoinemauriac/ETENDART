@@ -31,7 +31,11 @@ Rails.application.routes.draw do
 
 
   namespace :managers do
-    resources :finances, only: %i[index show] do
+    resources :finances, only: %i[index] do
+      member do
+        get :show_school_period
+        get :show_camp
+      end
       collection do
         get :membership_finances_overview
         get :export_members_csv
@@ -48,6 +52,8 @@ Rails.application.routes.draw do
     resources :students, only: %i[show new create edit update index] do
       member do
         put :update_photo
+        get :current_activities
+        get :past_activities
       end
       collection do
         get :index_for_admin
@@ -125,11 +131,12 @@ Rails.application.routes.draw do
 
     resources :membership_deposits, only: %i[create index]
     resources :camp_deposits, only: %i[create]
+    resources :old_camp_deposits, only: %i[create]
     resources :coach_feedbacks, only: %i[create destroy]
     resources :annual_enrollments, only: %i[create]
     resources :feedbacks, only: %i[new create destroy]
     resources :activity_enrollments, only: %i[destroy]
-    resources :camp_enrollments, only: %i[destroy]
+    resources :camp_enrollments, only: %i[index destroy update]
     resources :categories, only: %i[index create edit update destroy]
     resources :enrollments, only: %i[new create]
     resources :locations, only: %i[create show index edit update]

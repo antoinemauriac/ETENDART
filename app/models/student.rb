@@ -177,7 +177,7 @@ class Student < ApplicationRecord
 
   def next_camp_activities
     activities.joins(:camp)
-              .where('camps.ends_at > ?', Time.current)
+              .where('camps.ends_at >= ?', Date.current)
               .order('camps.starts_at ASC')
   end
 
@@ -304,6 +304,12 @@ class Student < ApplicationRecord
       .limit(1)
       .pluck('courses.ends_at')
       .first
+  end
+
+  def paid_camp_enrollments
+    camp_enrollments.joins(camp: :school_period)
+                    .where(school_periods: { paid: true })
+                    .sort_by(&:camp_starts_at).reverse
   end
 
   private

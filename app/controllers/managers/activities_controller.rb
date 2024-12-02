@@ -259,7 +259,9 @@ class Managers::ActivitiesController < ApplicationController
       start_datetime = Time.zone.local(date.year, date.month, date.day, start_time.hour, start_time.min, start_time.sec)
       end_datetime = Time.zone.local(date.year, date.month, date.day, end_time.hour, end_time.min, end_time.sec)
 
-      Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach, annual: false)
+      if start_datetime <= activity.camp.ends_at.to_time.end_of_day
+        Course.create!(activity: activity, starts_at: start_datetime, ends_at: end_datetime, manager: current_user, coach: coach, annual: false)
+      end
     end
   end
 

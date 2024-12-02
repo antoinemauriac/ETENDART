@@ -7,7 +7,11 @@ class Coaches::StudentProfilesController < ApplicationController
     authorize([:coaches, @student], policy_class: Coaches::StudentProfilePolicy)
     @feedbacks = @student.feedbacks.where(coach_id: current_user.id).order(created_at: :desc)
     @feedback = Feedback.new
-    @url = params[:url_origin]
+    @course = Course.find(params[:course_id]) if params[:course_id]
+    if @course && @course.camp
+      @camp_enrollment = CampEnrollment.find_by(student: @student, camp: @course.camp)
+    end
+    @origin = params[:origin]
   end
 
   def index

@@ -34,7 +34,9 @@
 
   <body>
     <%= render "shared/navbar" %>
-    <%= render "shared/flashes" %>
+    <div id="flash-messages">
+      <%= render "shared/flashes" %>
+    </div>
     <div id="content">
       <%= yield %>
     </div>

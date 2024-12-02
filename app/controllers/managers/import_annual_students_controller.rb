@@ -67,7 +67,7 @@ class Managers::ImportAnnualStudentsController < ApplicationController
             flash[:alert] = "Le mode de paiement de la cotisation doit être cash, cheque, hello_asso, offert, pass ou virement"
             redirect_to managers_annual_program_path(annual_program) and return
           end
-          if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.status == false
+          if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.paid == false
             membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
         end

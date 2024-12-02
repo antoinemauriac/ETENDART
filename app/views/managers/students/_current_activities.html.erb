@@ -1,0 +1,219 @@
+<%= turbo_frame_tag "selected_content" do %>
+  <div class="row justify-content-center align-items-stretch">
+    <div class="col-lg-6 col-sm-12">
+      <div class="header-info">STAGES - PROCHAINES ACTIVITÉS</div>
+      <div class="content-info">
+        <table class="table table-striped table-responsive table-center">
+          <thead>
+            <tr>
+              <th>Académie</th>
+              <th>Stage</th>
+              <th>Semaine</th>
+              <th>Activité</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody id="next-camp-activities">
+            <% @next_camp_activities.each do |activity| %>
+              <% activity_enrollment = @student.activity_enrollments.find_by(activity: activity) %>
+              <tr id=<%= "activity-enrollment-#{activity_enrollment.id}" %>>
+                <td class="align-middle"><%= activity.academy.name %></td>
+                <td class="align-middle"><%= activity.school_period.full_name %></td>
+                <td class="align-middle"><%= activity.camp.name %></td>
+                <td class="align-middle"><%= activity.name %></td>
+                <td class="align-middle">
+                  <% if activity_enrollment && policy([:managers, activity_enrollment]).destroy? %>
+                    <%= link_to managers_activity_enrollment_path(activity_enrollment, redirect_to: 'student', origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+                      <i class="fas fa-trash trash"></i>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div data-controller="enrollment-form">
+          <div class="flexy">
+            <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#campActivityModal">
+              <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+            </button>
+          </div>
+          <!-- Modal -->
+          <div class="modal fade" id="campActivityModal" tabindex="-1" aria-labelledby="campActivityModalLabel" aria-hidden="true" data-controller="close-modal">
+            <div class="modal-dialog">
+              <div class="modal-content" style="width:80%;padding:0px">
+                <div class="modal-header modal-header-deposit">
+                  <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                  <%= form_with url: managers_enrollments_path, data: { action: "submit->close-modal#closeModal" }, local: true do |form| %>
+                    <div class="modal-body">
+                      <%= form.hidden_field :student_id, value: @student.id %>
+
+                      <%= form.label :academy, "Académie" %>
+                      <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'academy', action: "change->enrollment-form#updateSchoolPeriods" } } %>
+
+                      <%= form.label :school_period, "Période" %>
+                      <%= form.collection_select :school_period, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'schoolPeriod', action: "change->enrollment-form#updateCamps" } } %>
+
+                      <%= form.label :camp, "Stage" %>
+                      <%= form.collection_select :camp, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'camp', action: "change->enrollment-form#updateActivities" } } %>
+
+                      <%= form.label :activity, "Activité" %>
+                      <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { enrollment_form_target: 'activity' } } %>
+
+                      <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
+                      <%= form.radio_button :image_consent, true %> Oui
+                      <%= form.radio_button :image_consent, false, checked: true %> Non
+                    </div>
+                    <div class="modal-footer d-flex justify-content-around">
+                      <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                      <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                    </div>
+                  <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-sm-12">
+      <div class="header-info">PROGRAMME ANNUEL - PROCHAINES ACTIVITÉS</div>
+      <div class="content-info">
+        <div>
+          <table class="table table-striped table-responsive table-center">
+            <thead>
+              <tr>
+                <th>Académie</th>
+                <th>Année</th>
+                <th>Activité</th>
+                <th>Supprimer</th>
+              </tr>
+            </thead>
+            <tbody id="next-annual-activities">
+              <% @next_annual_activities.each do |activity| %>
+              <% activity_enrollment = @student.activity_enrollments.find_by(activity: activity) %>
+              <tr id=<%= "activity-enrollment-#{activity_enrollment.id}" %>>
+                <td class="align-middle"><%= activity.academy.name %></td>
+                <td class="align-middle"><%= activity.annual_program.name %></td>
+                <td class="align-middle"><%= activity.name %></td>
+                <td class="align-middle">
+                  <% activity_enrollment = @student.activity_enrollments.find_by(activity: activity) %>
+                  <% if activity_enrollment && policy([:managers, activity_enrollment]).destroy? %>
+                    <%= link_to managers_activity_enrollment_path(activity_enrollment, redirect_to: 'student', origin: 'camp'), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir enlever cet élève ?", turbo_confirm_class: "confirmation-message" } do %>
+                      <i class="fas fa-trash trash"></i>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div data-controller="annual-enrollments-form enrollment-form">
+          <div class="flexy">
+            <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#programActivityModal">
+              <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+            </button>
+          </div>
+          <!-- Modal -->
+          <div class="modal fade" id="programActivityModal" tabindex="-1" aria-labelledby="programActivityModalLabel" aria-hidden="true" data-controller="close-modal">
+            <div class="modal-dialog">
+              <div class="modal-content" style="width:80%;padding:0px">
+                <div class="modal-header modal-header-deposit">
+                  <h5 class="modal-title"><%= "Inscription de #{@student.first_name} #{@student.last_name}" %></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <%= form_with url: managers_annual_enrollments_path, data: { action: "submit->close-modal#closeModal" }, local: true do |form| %>
+                  <div class="modal-body">
+                    <%= form.hidden_field :student_id, value: @student.id %>
+
+                    <%= form.label :academy, "Académie" %>
+                    <%= form.collection_select :academy, @academies, :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'academy', action: "change->annual-enrollments-form#updateAnnualPrograms" } } %>
+
+                    <%= form.label :annual_program, "Programme" %>
+                    <%= form.collection_select :annual_program, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'annualProgram', action: "change->annual-enrollments-form#updateActivities" } } %>
+
+                    <%= form.label :activity, "Activité" %>
+                    <%= form.collection_select :activity, [], :id, :name, {}, {class: "form-select", required: true, data: { annual_enrollments_form_target: 'activity' } } %>
+
+                    <%= form.label :image_consent, "Droit à l'image", class: "mt-2 mb-2" %><br>
+                    <%= form.radio_button :image_consent, true %> Oui
+                    <%= form.radio_button :image_consent, false, checked: true %> Non
+                  </div>
+                  <div class="modal-footer d-flex justify-content-around">
+                    <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                    <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div data-controller="camp-courses" class="row justify-content-center align-items-stretch">
+    <div data-camp-courses-target="header" class="col-6 mt-3">
+      <div class="header-info">STAGES - COURS A VENIR</div>
+      <div class="content-info">
+        <table data-camp-courses-target="table" class="table table-responsive table-striped table-center show-more">
+          <thead>
+            <tr>
+              <th>Academie</th>
+              <th>Stage</th>
+              <th>Semaine</th>
+              <th>Activité</th>
+              <th>Jour</th>
+            </tr>
+          </thead>
+          <tbody id="next-camp-courses">
+            <% @next_camp_courses.each do |course| %>
+              <% course_enrollment = @student.course_enrollments.find_by(course: course)  %>
+              <tr id=<%= "course-enrollment-#{course_enrollment.id}" %> class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
+                <td class="align-middle"><%= course.academy.name %></td>
+                <td class="align-middle"><%= course.school_period.full_name %></td>
+                <td class="align-middle"><%= course.camp.name %></td>
+                <td class="align-middle"><%= course.activity.name %></td>
+                <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="flexy">
+          <button data-action="click->camp-courses#toggleTable" data-camp-courses-target="button" class="btn-add-student">Voir +</button>
+        </div>
+      </div>
+    </div>
+    <div data-camp-courses-target="header" class="col-6 mt-3">
+      <div class="header-info">PROGRAMME ANNUEL - COURS A VENIR</div>
+      <div class="content-info">
+        <table data-camp-courses-target="table" class="table table-responsive table-striped table-center show-more">
+          <thead>
+            <tr>
+              <th>Academie</th>
+              <th>Année</th>
+              <th>Activité</th>
+              <th>Jour</th>
+            </tr>
+          </thead>
+          <tbody id="next-annual-courses">
+            <% @next_annual_courses.each do |course| %>
+              <% course_enrollment = @student.course_enrollments.find_by(course: course)  %>
+              <tr id=<%= "course-enrollment-#{course_enrollment.id}" %> class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
+                <td class="align-middle"><%= course.academy.name %></td>
+                <td class="align-middle"><%= course.annual_program.name %></td>
+                <td class="align-middle"><%= course.activity.name %></td>
+                <td class="align-middle"><%= l(course.starts_at, format: :default) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="flexy">
+          <button data-action="click->camp-courses#toggleTable" data-camp-courses-target="button" class="btn-add-student">Voir +</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

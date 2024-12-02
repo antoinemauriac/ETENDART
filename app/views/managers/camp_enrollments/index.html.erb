@@ -1,0 +1,22 @@
+<%= turbo_frame_tag "selected_content" do %>
+  <% if @camp_enrollments.any? %>
+    <div class="container container-big" data-controller="clickable-table">
+      <div class="card-row-container card-row-container-camp">
+        <div class="row pb-2 pt-2 header-row align-items-center">
+          <div class="col-2 flexy-row">Nom</div>
+          <div class="col-2 flexy-row">Prénom</div>
+          <div class="col-2 flexy-row">Stage</div>
+          <div class="col-1 flexy-row small-col">Prix</div>
+          <div class="col-1 flexy-row medium-col text-wrap">Date du paiement</div>
+          <div class="col-1 flexy-row medium-col text-wrap">Mode de paiement</div>
+          <div class="col-2 flexy-row">Reçu par</div>
+          <div class="col-1 flexy-row small-col">Payé ?</div>
+        </div>
+        <% @camp_enrollments.each_with_index do |camp_enrollment, index| %>
+          <%= render "managers/camp_enrollments/student", camp_enrollment: camp_enrollment, index: index %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <%= render "shared/flashes" %>
+<% end %>

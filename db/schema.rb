@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_26_172301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -166,12 +166,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
 
   create_table "camp_deposits", force: :cascade do |t|
     t.bigint "manager_id", null: false
+    t.bigint "depositor_id", null: false
     t.bigint "camp_id", null: false
-    t.integer "amount"
+    t.integer "cash_amount"
+    t.integer "cheque_amount"
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["camp_id"], name: "index_camp_deposits_on_camp_id"
+    t.index ["depositor_id"], name: "index_camp_deposits_on_depositor_id"
     t.index ["manager_id"], name: "index_camp_deposits_on_manager_id"
   end
 
@@ -180,13 +183,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
     t.bigint "camp_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "has_paid", default: false
+    t.boolean "paid", default: false
     t.boolean "banished", default: false
     t.integer "number_of_absences", default: 0
     t.datetime "banishment_day"
     t.boolean "present", default: false
     t.boolean "image_consent", default: true
+    t.date "payment_date"
+    t.string "payment_method"
+    t.bigint "receiver_id"
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
+    t.index ["receiver_id"], name: "index_camp_enrollments_on_receiver_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
   end
 
@@ -220,6 +227,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
     t.bigint "school_period_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "new", default: true
     t.index ["school_period_id"], name: "index_camps_on_school_period_id"
   end
 
@@ -347,7 +355,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
 
   create_table "memberships", force: :cascade do |t|
     t.bigint "student_id", null: false
-    t.boolean "status", default: false
+    t.boolean "paid", default: false
     t.integer "start_year"
     t.integer "amount"
     t.string "payment_method"
@@ -358,6 +366,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
     t.integer "academy_id"
     t.index ["receiver_id"], name: "index_memberships_on_receiver_id"
     t.index ["student_id"], name: "index_memberships_on_student_id"
+  end
+
+  create_table "old_camp_deposits", force: :cascade do |t|
+    t.bigint "manager_id", null: false
+    t.bigint "camp_id", null: false
+    t.integer "amount"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["camp_id"], name: "index_old_camp_deposits_on_camp_id"
+    t.index ["manager_id"], name: "index_old_camp_deposits_on_manager_id"
   end
 
   create_table "program_periods", force: :cascade do |t|
@@ -494,9 +513,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
   add_foreign_key "annual_program_stats", "annual_programs"
   add_foreign_key "annual_programs", "academies"
   add_foreign_key "camp_deposits", "camps"
+  add_foreign_key "camp_deposits", "users", column: "depositor_id"
   add_foreign_key "camp_deposits", "users", column: "manager_id"
   add_foreign_key "camp_enrollments", "camps"
   add_foreign_key "camp_enrollments", "students"
+  add_foreign_key "camp_enrollments", "users", column: "receiver_id"
   add_foreign_key "camp_stats", "camps"
   add_foreign_key "camps", "school_periods"
   add_foreign_key "coach_academies", "academies"
@@ -520,6 +541,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171021) do
   add_foreign_key "membership_deposits", "users", column: "manager_id"
   add_foreign_key "memberships", "students"
   add_foreign_key "memberships", "users", column: "receiver_id"
+  add_foreign_key "old_camp_deposits", "camps"
+  add_foreign_key "old_camp_deposits", "users", column: "manager_id"
   add_foreign_key "program_periods", "annual_programs"
   add_foreign_key "school_period_enrollments", "school_periods"
   add_foreign_key "school_period_enrollments", "students"

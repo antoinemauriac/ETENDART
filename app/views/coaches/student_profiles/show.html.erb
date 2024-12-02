@@ -18,11 +18,12 @@
   </div>
 </div>
 
-<% if @membership && !@membership.status %>
-  <div class="black-title mt-0 mb-0">COTISATION <%= "#{@start_year} - #{@start_year +  1}"  %></div>
+
+<% if @camp_enrollment && !@camp_enrollment.paid %>
+  <div class="black-title mt-0 mb-0">PAIEMENT STAGE</div>
 
   <div class="membership-container special-container mt-0">
-    <%= simple_form_for @membership, url: managers_membership_path(@membership, url: @url), method: :patch do |f| %>
+    <%= simple_form_for @camp_enrollment, url: managers_camp_enrollment_path(@camp_enrollment, origin: @origin), data: { turbo: false }, method: :patch do |f| %>
       <div class="d-flex justify-content-around">
           <%= f.input :payment_method,
                       label: false,

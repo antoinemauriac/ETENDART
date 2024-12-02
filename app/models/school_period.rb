@@ -8,7 +8,7 @@ class SchoolPeriod < ApplicationRecord
   has_many :camp_enrollments, through: :camps
   has_many :students, through: :camp_enrollments
 
-  has_many :camp_deposits, through: :camps
+  has_many :old_camp_deposits, through: :camps
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps
@@ -25,6 +25,8 @@ class SchoolPeriod < ApplicationRecord
   validates :name, inclusion: { in: %w[Février Printemps Été Toussaint], message: "Le nom du stage doit être Automne, Hiver, Printemps ou Été." }
 
   before_validation :normalize_name
+  before_save :set_default_price
+
 
   def full_name
     "#{name} - #{year}"
@@ -196,16 +198,24 @@ class SchoolPeriod < ApplicationRecord
     end
   end
 
+  def unexpected_revenue
+    camp_enrollments.unattended.paid.count * price
+  end
+
   def received_revenue
     camp_enrollments.paid.count * price
   end
 
   def missing_revenue
-    expected_revenue - received_revenue
+    expected_revenue + unexpected_revenue - received_revenue
   end
 
-  def total_camp_deposits
-    camps.joins(:camp_deposits).sum('camp_deposits.amount')
+  def absent_paid_students_count
+    camp_enrollments.unattended.paid.count
+  end
+
+  def total_old_camp_deposits
+    camps.joins(:old_camp_deposits).sum('old_camp_deposits.amount')
   end
 
   def paid_students_count
@@ -228,5 +238,9 @@ class SchoolPeriod < ApplicationRecord
 
   def normalize_name
     self.name = name.split.map(&:capitalize).join(' ')
+  end
+
+  def set_default_price
+    self.price = 0 if paid == false
   end
 end

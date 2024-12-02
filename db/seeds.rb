@@ -10,6 +10,7 @@ end
 
 
 # DESTROY ALL
+Feedback.destroy_all
 ActivityStat.destroy_all
 CampStat.destroy_all
 SchoolPeriodStat.destroy_all
@@ -24,6 +25,8 @@ SchoolPeriodEnrollment.destroy_all
 SchoolPeriod.destroy_all
 MembershipDeposit.destroy_all
 Membership.destroy_all
+CampDeposit.destroy_all
+OldCampDeposit.destroy_all
 Student.destroy_all
 Location.destroy_all
 AnnualProgram.destroy_all
@@ -65,6 +68,7 @@ end
 
 # CREATE 6 USERS, DONT 1 ADMIN, 1 MANAGER, 1 COORDINATOR AND 3 COACHES (ROLES)
 manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+manager1 = User.create!(email: 'manager1@gmail.com', password: 123456, first_name: "Leon", last_name: "Marchand", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
@@ -73,6 +77,7 @@ coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "
 
 # ASSIGN ROLES TO USERS
 manager.roles << Role.find_by(name: 'manager')
+manager1.roles << Role.find_by(name: 'manager')
 coordinator.roles << Role.find_by(name: 'coordinator')
 admin.roles << Role.find_by(name: 'admin')
 coach1.roles << Role.find_by(name: 'coach')
@@ -124,18 +129,18 @@ end
   student.save
   student.academies << kuerten
   student.academies << [zidane, batum].sample if i.even?
-  student.memberships << Membership.create!(academy: kuerten, student: student, start_year: 2024, amount: 20, status: rand < 0.8)
+  student.memberships << Membership.create!(academy: [kuerten, zidane].sample, student: student, start_year: 2024, amount: 15, paid: rand < 0.7)
 end
 
 # MISE À JOUR DES PAID MEMBERSHIPS
 payment_methods = ["cash", "cheque", "hello_asso"]
 Membership.all.each do |membership|
-  if membership.status
-    payment_method = rand < 0.9 ? payment_methods.sample : "offert"
+  if membership.paid
+    payment_method = rand < 0.95 ? payment_methods.sample : "offert"
     membership.update!(
       payment_method: payment_method,
       payment_date: Date.today - rand(1..100).days,
-      receiver: [coach1, coach2, coach3, manager, coordinator].sample
+      receiver: ([coach1, coach2, coach3, manager, manager1, coordinator].sample if payment_method != "hello_asso")
       )
   end
 end
@@ -162,19 +167,27 @@ camp_names = ["semaine1", "semaine2"]
     camp = Camp.create!(
       name: camp_names[i],
       school_period: school_period,
+      new: false,
       starts_at: Date.new(2024, 10, 7) + 7*i.days,
       ends_at: Date.new(2024, 10, 11) + 7*i.days
       )
     # INSCRIPTION DES STUDENTS AUX CAMPS
     Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
     # MISE À JOUR DE LA PAIEMENT DES CAMPS
-    CampEnrollment.all.each { |camp_enrollment| camp_enrollment.update(has_paid: rand < 0.7) if camp_enrollment.camp.school_period.paid }
-
+    camp_enrollments = CampEnrollment.where(camp: camp)
+    camp_enrollments.each { |camp_enrollment| camp_enrollment.update(paid: rand < 0.95) if camp_enrollment.camp.school_period.paid }
+    camp_enrollments.each { |camp_enrollment| camp_enrollment.update(payment_method: CampEnrollment::PAYMENT_METHODS.compact.reject { |method| method == "offert" }.sample, payment_date: (camp.starts_at..camp.ends_at).to_a.sample) if camp_enrollment.paid }
+    camp_enrollments.each { |camp_enrollment| camp_enrollment.update(receiver: [coach1, coach2, coach3, manager, coordinator].sample) if camp_enrollment.paid && !["hello_asso", "virement", "pass"].include?(camp_enrollment.payment_method) }
     # CREATE 2 ACTIVITIES FOR EACH CAMP
     2.times do |j|
       category = Category.all.sample
       activity_name = generate_activity_name(category.name)
       coach = coachs.sample
+      # Ensure unique activity names within the same camp
+      used_activity_names = camp.activities.pluck(:name)
+      while used_activity_names.include?(activity_name)
+        activity_name = generate_activity_name(category.name)
+      end
       activity = Activity.create!(
         name: activity_name,
         coach: coach,
@@ -207,39 +220,6 @@ camp_names = ["semaine1", "semaine2"]
     end
   end
 end
-# MISE A JOUR DE LA PRESENCE DES STUDENTS POUR ACTIVITY_ENROLLMENTS, CAMP_ENROLLMENTS ET SCHOOL_PERIOD_ENROLLMENTS
-Student.all.each do |student|
-  if student == Student.first
-    student.course_enrollments.update_all(present: false)
-  end
-  school_period_enrollments = student.school_period_enrollments.where(school_period_id: student.school_periods.pluck(:id))
-  school_period_enrollments.each do |school_period_enrollment|
-    school_period = school_period_enrollment.school_period
-    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.camp_id IN (?)', school_period.camps.pluck(:id))
-    if course_enrollments.any? { |course_enrollment| course_enrollment.present }
-      school_period_enrollment.update(present: true)
-    end
-  end
-
-  camp_ids = student.camps.where(school_period_id: student.school_periods.pluck(:id)).pluck(:id)
-  camp_enrollments = student.camp_enrollments.where(camp_id: camp_ids)
-  camp_enrollments.each do |camp_enrollment|
-    camp = camp_enrollment.camp
-    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.camp_id = ?', camp.id)
-    if course_enrollments.any? { |course_enrollment| course_enrollment.present }
-      camp_enrollment.update(present: true)
-    end
-  end
-
-  activity_enrollments = student.activity_enrollments.joins(:activity).where('activities.camp_id IN (?)', camp_ids)
-  activity_enrollments.each do |activity_enrollment|
-    activity = activity_enrollment.activity
-    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.id = ?', activity.id)
-    if course_enrollments.any? { |course_enrollment| course_enrollment.present }
-      activity_enrollment.update(present: true)
-    end
-  end
-end
 
 # CREATE A NEW SCHOOL PERIOD WITH TWO CAMPS
 new_school_period = SchoolPeriod.create!(
@@ -254,21 +234,43 @@ new_school_period.update(price: 15) if new_school_period.paid
 Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, school_period: new_school_period) }
 
 # CREATE 2 CAMPS FOR THE NEW SCHOOL PERIOD
+starts_at = Date.current.beginning_of_week
 2.times do |i|
   camp = Camp.create!(
     name: "semaine#{i + 1}",
     school_period: new_school_period,
-    starts_at: Date.new(2024, 11, 19) + 7 * i.days,
-    ends_at: Date.new(2024, 11, 22) + 7 * i.days
+    starts_at: starts_at + 7 * i.days,
+    ends_at: starts_at + 4.day + 7 * i.days
   )
   # INSCRIPTION DES STUDENTS AUX CAMPS
   Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
-
+  camp_enrollments = CampEnrollment.where(camp: camp)
+  if camp.starts_at <= Date.current
+    camp_enrollments.each do |camp_enrollment|
+      camp_enrollment.update(paid: rand < 0.75)
+      if camp_enrollment.paid
+        camp_enrollment.update(payment_method: CampEnrollment::PAYMENT_METHODS.compact.sample, payment_date: (camp.starts_at - 20.day..Date.current).to_a.sample)
+        camp_enrollment.update(receiver: [coach1, coach2, coach3, manager, coordinator].sample) if !["hello_asso", "virement", "pass", nil].include?(camp_enrollment.payment_method)
+      end
+    end
+  else
+    camp_enrollments.each do |camp_enrollment|
+      camp_enrollment.update(paid: rand < 0.3)
+      if camp_enrollment.paid
+        camp_enrollment.update(payment_method: ["virement", "virement", "virement", "pass", "hello_asso"].sample, payment_date: (camp.starts_at - 20.day..Date.current).to_a.sample)
+      end
+    end
+  end
   # CREATE 2 ACTIVITIES FOR EACH CAMP
-  2.times do |j|
+  3.times do |j|
     category = Category.all.sample
     activity_name = generate_activity_name(category.name)
     coach = coachs.sample
+    # Ensure unique activity names within the same camp
+    used_activity_names = camp.activities.pluck(:name)
+    while used_activity_names.include?(activity_name)
+      activity_name = generate_activity_name(category.name)
+    end
     activity = Activity.create!(
       name: activity_name,
       coach: coach,
@@ -283,7 +285,7 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
     coach.camps << camp unless activity.coach.camps.include?(camp)
     activity.coaches << coach
     # CREATE 5 COURSES FOR EACH ACTIVITY, THE FIRST ONE STARTING ON MONDAY OF THE CAMP
-    start_hour = j.even? ? 14 : 16
+    start_hour = j.even? ? 10 : 13
     5.times do |k|
       start_day = camp.starts_at + k.days
       start = start_day + start_hour.hour
@@ -293,9 +295,45 @@ Student.all.each { |student| SchoolPeriodEnrollment.create!(student: student, sc
         activity: activity,
         manager: manager,
         coach: activity.coach,
+        status: (true if start + 2.hour <= Time.current)
         )
       # INSCRIPTION DES STUDENTS AUX COURSES
-      Student.all.each { |student| CourseEnrollment.create!(student: student, course: course) }
+      Student.all.each { |student| CourseEnrollment.create!(student: student, course: course, present: (course.status ? rand < 0.9 : true )) }
+    end
+  end
+end
+
+# MISE A JOUR DE LA PRESENCE DES STUDENTS POUR ACTIVITY_ENROLLMENTS, CAMP_ENROLLMENTS ET SCHOOL_PERIOD_ENROLLMENTS
+# MISE A JOUR DE LA PRESENCE DES STUDENTS POUR ACTIVITY_ENROLLMENTS, CAMP_ENROLLMENTS ET SCHOOL_PERIOD_ENROLLMENTS
+Student.all.each do |student|
+  # if student == Student.first
+  #   student.course_enrollments.update_all(present: false)
+  # end
+  school_period_enrollments = student.school_period_enrollments
+  school_period_enrollments.each do |school_period_enrollment|
+    school_period = school_period_enrollment.school_period
+    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.camp_id IN (?) AND courses.starts_at < ?', school_period.camps.pluck(:id), Time.current)
+    if course_enrollments.any? { |course_enrollment| course_enrollment.present }
+      school_period_enrollment.update(present: true)
+    end
+  end
+
+  camp_ids = student.camps.pluck(:id)
+  camp_enrollments = student.camp_enrollments
+  camp_enrollments.each do |camp_enrollment|
+    camp = camp_enrollment.camp
+    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.camp_id = ? AND courses.starts_at < ?', camp.id, Time.current)
+    if course_enrollments.any? { |course_enrollment| course_enrollment.present }
+      camp_enrollment.update(present: true)
+    end
+  end
+
+  activity_enrollments = student.activity_enrollments.joins(:activity).where('activities.camp_id IN (?)', camp_ids)
+  activity_enrollments.each do |activity_enrollment|
+    activity = activity_enrollment.activity
+    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.id = ? AND courses.starts_at < ?', activity.id, Time.current)
+    if course_enrollments.any? { |course_enrollment| course_enrollment.present }
+      activity_enrollment.update(present: true)
     end
   end
 end
@@ -333,6 +371,10 @@ end
   category = Category.all.sample
   activity_name = generate_activity_name(category.name)
   coach = coachs.sample
+  used_activity_names = annual_program.activities.pluck(:name)
+  while used_activity_names.include?(activity_name)
+    activity_name = generate_activity_name(category.name)
+  end
   activity = Activity.create!(
     name: activity_name,
     coach: coach,
@@ -342,8 +384,8 @@ end
   )
   coach.academies_as_coach << zidane unless coach.academies_as_coach.include?(zidane)
   coach.categories << category unless coach.categories.include?(category)
-  coach.activities << activity
-  activity.coaches << coach
+  coach.activities << activity unless coach.activities.include?(activity)
+  activity.coaches << coach unless activity.coaches.include?(coach)
 
   # INSCRIPTION DES STUDENTS AUX ACTIVITÉS
   Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
@@ -380,14 +422,14 @@ end
 
 Student.all.each do |student|
   annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program)
-  course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.annual_program_id = ?', annual_program.id)
+  course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.annual_program_id = ? AND courses.starts_at < ?', annual_program.id, Time.current)
   if course_enrollments.any? { |course_enrollment| course_enrollment.present }
     annual_program_enrollment.update(present: true)
   end
   activity_enrollments = student.activity_enrollments.joins(:activity).where('activities.annual_program_id = ?', annual_program.id)
   activity_enrollments.each do |activity_enrollment|
     activity = activity_enrollment.activity
-    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.id = ?', activity.id)
+    course_enrollments = student.course_enrollments.joins(course: :activity).where('activities.id = ? AND courses.starts_at < ?', activity.id, Time.current)
     if course_enrollments.any? { |course_enrollment| course_enrollment.present }
       activity_enrollment.update(present: true)
     end

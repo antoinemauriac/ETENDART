@@ -22,6 +22,9 @@ application.register("camp-courses", CampCoursesController)
 import ClickableTableController from "./clickable_table_controller"
 application.register("clickable-table", ClickableTableController)
 
+import CloseModalController from "./close_modal_controller"
+application.register("close-modal", CloseModalController)
+
 import CoachCoursesController from "./coach_courses_controller"
 application.register("coach-courses", CoachCoursesController)
 
@@ -55,8 +58,11 @@ application.register("past-annual-courses", PastAnnualCoursesController)
 import PastCampCoursesController from "./past_camp_courses_controller"
 application.register("past-camp-courses", PastCampCoursesController)
 
-import PresenceSheetController from "./presence_sheet_controller"
-application.register("presence-sheet", PresenceSheetController)
+import PaymentMethodController from "./payment_method_controller"
+application.register("payment-method", PaymentMethodController)
+
+import SchoolPeriodPriceController from "./school_period_price_controller"
+application.register("school-period-price", SchoolPeriodPriceController)
 
 import SearchCoachController from "./search_coach_controller"
 application.register("search-coach", SearchCoachController)

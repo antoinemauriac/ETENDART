@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Managers::CampDepositsControllerTest < ActionDispatch::IntegrationTest
+class OldCampDepositTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

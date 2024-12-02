@@ -3,7 +3,7 @@
   data-update-photo-from-course-target="studentPhoto"
   data-update-photo-from-course-student-id-value="<%= student.id %>">
   <% if student.photo.attached? %>
-  <%= link_to coaches_student_profile_path(student) do %>
+  <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id) do %>
     <%= cl_image_tag student.photo_or_default,
              class: "avatar-small",
              crop: "thumb",

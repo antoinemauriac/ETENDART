@@ -10,23 +10,25 @@
 
 <div class="flexy-wrap mt-2 mb-2 gap-4" data-controller="selected-button">
   <%= link_to "LES ACTIVITÉS",
-              activities_managers_camp_path(@camp),
+              managers_camp_path(@camp),
               data: { turbo_frame: "selected_content",
                       selected_button_target: "button",
                       action: "click->selected-button#toggleButtons" },
-              class: "btn-add-student btn-selection selected" %>
+              class: "btn-selection btn-fill selected" %>
   <%= link_to "LES ÉLÈVES",
               students_managers_camp_path(@camp),
               data: { turbo_frame: "selected_content",
                       selected_button_target: "button",
                       action: "click->selected-button#toggleButtons" },
-              class: "btn-add-student btn-selection" %>
-  <%= link_to "LES PAIMENTS",
-              payment_details_managers_camp_path(@camp),
-              data: { turbo_frame: "selected_content",
-                      selected_button_target: "button",
-                      action: "click->selected-button#toggleButtons" },
-              class: "btn-add-student btn-selection" %>
+              class: "btn-selection btn-fill" %>
+  <% if @camp.school_period.paid %>
+    <%= link_to "LES PAIMENTS",
+                managers_camp_enrollments_path(camp_id: @camp.id),
+                data: { turbo_frame: "selected_content",
+                        selected_button_target: "button",
+                        action: "click->selected-button#toggleButtons" },
+                class: "btn-selection btn-fill" %>
+  <% end %>
 </div>
 
 <%= turbo_frame_tag "selected_content" do %>

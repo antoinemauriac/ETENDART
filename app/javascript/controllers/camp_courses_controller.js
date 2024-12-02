@@ -10,8 +10,12 @@ export default class extends Controller {
 
   toggleTable() {
     this.showMore = !this.showMore;
-    this.tableTarget.classList.toggle("show-more", this.showMore);
-    this.buttonTarget.textContent = this.showMore ? "Voir +" : "Voir -";
+    this.tableTargets.forEach(table => {
+      table.classList.toggle("show-more", this.showMore);
+    })
+    this.buttonTargets.forEach(button => {
+      button.textContent = this.showMore ? "Voir +" : "Voir -";
+    });
 
     if (this.showMore) {
       // Scroll to the top of the table when "Voir -" is clicked

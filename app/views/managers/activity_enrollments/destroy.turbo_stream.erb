@@ -1,0 +1,9 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<% @next_course_enrollment_ids.each do |id| %>
+  <%= turbo_stream.remove "course-enrollment-#{id}" %>
+<% end %>
+
+<%= turbo_stream.remove "activity-enrollment-#{@activity_enrollment.id}" %>

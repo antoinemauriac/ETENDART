@@ -4,10 +4,12 @@ class Membership < ApplicationRecord
   belongs_to :academy, optional: true
 
   PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
+  PAYMENT_METHODS_WITH_RECEIVER = ["cash", "cheque", "offert"].freeze
   validates :payment_method, inclusion: { in: Membership::PAYMENT_METHODS }
+  PRICE = 15
 
-  scope :paid, -> { where(status: true) }
-  scope :unpaid, -> { where(status: false) }
+  scope :paid, -> { where(paid: true) }
+  scope :unpaid, -> { where(paid: false) }
 
   # MÉTHODE QUI RENVOIE LES MEMBERSHIPS A PRIORI NON EXIGIBLES
   def self.with_all_course_enrollments_present_false

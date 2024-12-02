@@ -25,19 +25,125 @@
   justify-content: space-evenly;
 }
 
-.btn-selection {
-  font-weight: 900;
+.btn-add-pink {
+  width: 140px;
+  border-radius: 8px;
+  color: white;
+  background-color: $pink;
+  height: 34px!important;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgb(255, 10, 10)!important;
+    color: white!important;
+    transform: scale(1.06);
+  }
 }
 
-.btn-add-student.selected {
-  background-color: $yellow;
-  color: black;
+.btn-add-payment {
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: black;
+  color: white;
+  border: none;
+  width: 160px;
+
+  i {
+    font-size: 15px!important;
+  }
 }
 
-.btn-add-student.selected:hover {
-  background-color: $yellow;
-  color: black;
+.btn-add-payment:hover {
+  color: $yellow;
 }
+
+// .btn-selection {
+//   font-weight: 900;
+//   text-align: center;
+//   padding: 7px;
+//   border-radius: 20px;
+//   background-color: black;
+//   color: white;
+//   border: none;
+//   width: 200px;
+//   height: 42px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+
+// .btn-selection:hover {
+//   background-color: black;
+//   color: $yellow;
+//   transition: 0.3s;
+// }
+
+// .btn-selection.selected {
+//   background-color: $yellow;
+//   color: black;
+// }
+
+// .btn-selection.selected:hover {
+//   background-color: $yellow;
+//   color: black;
+// }
+
+.btn-fill:hover {
+  color: $yellow;
+}
+
+.btn-fill:before {
+  content: "";
+  position: absolute;
+  background: black;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: -1;
+  -webkit-transition: top 0.15s ease-in;
+}
+
+.btn-fill:hover:before {
+  top: 0;
+}
+
+.btn-fill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  //display:block;
+  height: 45px;
+  width: 200px;
+  margin: 10px 7px;
+  padding: 5px 5px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 2px;
+  color: black;
+  border: 2px black solid;
+  border-radius: 4px;
+  text-transform: uppercase;
+  outline: 0;
+  overflow:hidden;
+  background: none;
+  z-index: 1;
+  cursor: pointer;
+  transition:         0.15s ease-in;
+  -o-transition:      0.15s ease-in;
+  -ms-transition:     0.15s ease-in;
+  -moz-transition:    0.15s ease-in;
+  -webkit-transition: 0.15s ease-in;
+}
+
+.btn-fill.selected {
+  background-color: black;
+  color: $yellow;
+}
+
+
 
 .btn-add-student-small {
   width: 120px;
@@ -56,6 +162,10 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.btn-large {
+  width: 300px;
 }
 
 .fa-square-bigger {
@@ -276,11 +386,23 @@
 }
 
 .fa-trash:hover {
-  color: red;
+  color: $pink;
 }
 
 .fa-big {
-  font-size: 2em;
+  font-size: 2.5em;
+}
+
+.fa-bigger {
+  font-size: 3em;
+}
+
+.fa-small {
+  font-size: 1.7em;
+}
+
+.fa-pink {
+  color: $pink;
 }
 
 .fa-test {

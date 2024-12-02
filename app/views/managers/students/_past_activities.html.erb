@@ -1,0 +1,75 @@
+<%= turbo_frame_tag "selected_content" do %>
+  <div class="row justify-content-center align-items-stretch">
+    <div data-controller="past-camp-courses" data-past-camp-courses-target="header" class="col-10">
+      <div class="header-info">STAGES - COURS PASSÉS</div>
+      <div class="content-info">
+        <table data-past-camp-courses-target="table" class="table table-responsive table-center show-more">
+          <thead>
+            <tr>
+              <th>Academie</th>
+              <th>Stage</th>
+              <th>Semaine</th>
+              <th>Activité</th>
+              <th>Jour</th>
+              <th>Présent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @past_camp_courses.each do |course| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
+                <td class="align-middle"><%= course.academy.name %></td>
+                <td class="align-middle"><%= course.school_period.full_name %></td>
+                <td class="align-middle"><%= course.camp.name %></td>
+                <td class="align-middle"><%= course.activity.name %></td>
+                <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
+                <% if course.student_presence(@student) %>
+                  <td class="align-middle"><i class="fa-solid fa-circle-check text-success fa-small"></i></td>
+                <% else %>
+                  <td class="align-middle"><i class="fa-solid fa-circle-xmark fa-pink fa-small"></i></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="flexy">
+          <button data-action="click->past-camp-courses#toggleTable" data-past-camp-courses-target="button" class="btn-add-student">Voir +</button>
+        </div>
+      </div>
+    </div>
+
+    <div data-controller="past-annual-courses" data-past-annual-courses-target="header" class="col-10 mt-3">
+      <div class="header-info">PROGRAMME ANNUEL - COURS PASSÉS</div>
+      <div class="content-info">
+        <table data-past-annual-courses-target="table" class="table table-responsive table-center show-more">
+          <thead>
+            <tr>
+              <th>Academie</th>
+              <th>Programme</th>
+              <th>Activité</th>
+              <th>Jour</th>
+              <th>Présent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @past_annual_courses.each do |course| %>
+              <tr class="clickable-tr" onclick="window.location.href='<%= managers_course_path(course) %>'">
+                <td class="align-middle"><%= course.academy.name %></td>
+                <td class="align-middle"><%= course.annual_program.name %></td>
+                <td class="align-middle"><%= course.activity.name %></td>
+                <td class="align-middle"><%= l(course.starts_at, format: :date) %></td>
+                <% if course.student_presence(@student) %>
+                  <td class="align-middle"><i class="fa-solid fa-circle-check text-success fa-small"></i></td>
+                <% else %>
+                  <td class="align-middle"><i class="fa-solid fa-circle-xmark fa-pink fa-small"></i></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="flexy">
+          <button data-action="click->past-annual-courses#toggleTable" data-past-annual-courses-target="button" class="btn-add-student">Voir +</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

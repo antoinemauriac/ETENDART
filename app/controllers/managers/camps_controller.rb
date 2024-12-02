@@ -7,18 +7,8 @@ class Managers::CampsController < ApplicationController
     authorize([:managers, @camp])
     @school_period = @camp.school_period
     @academy = @school_period.academy
-    # @school_periods = @academy.school_periods
     @activities = @camp.activities
-    # @activity = Activity.new
-    # @students = @camp.students.order(:last_name)
     @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
-  end
-
-  def activities
-    @camp = Camp.find(params[:id])
-    authorize([:managers, @camp])
-    @activities = @camp.activities
-    render partial: "managers/camps/activities", locals: { activities: @activities, camp: @camp }
   end
 
   def students
@@ -28,14 +18,7 @@ class Managers::CampsController < ApplicationController
     @students = @camp.students.includes(:memberships, :camp_enrollments, :school_period_enrollments, :activity_enrollments).order(:last_name)
     @academy = @camp.academy
     @school_period = @camp.school_period
-    # render partial: "managers/camps/students"
     render partial: "managers/camps/students", locals: { students: @students, camp: @camp, academy: @academy, school_period: @school_period, start_year: @start_year }
-  end
-
-  def payment_details
-    @camp = Camp.find(params[:id])
-    authorize([:managers, @camp])
-    render partial: "managers/camps/payment_details"
   end
 
   def create
@@ -88,7 +71,7 @@ class Managers::CampsController < ApplicationController
             camp_enrollment = student.camp_enrollments.find_by(camp: camp)
             image_consent = camp_enrollment.image_consent ? "Oui" : "Non"
             banished = camp_enrollment.banished ? "Oui" : "Non" if academy.banished
-            paid = camp_enrollment.has_paid ? "Oui" : "Non" if school_period.paid
+            paid = camp_enrollment.paid ? "Oui" : "Non" if school_period.paid
             school_periods = student.school_periods.where(academy: academy)
             school_period_enrollments = student.school_period_enrollments.where(school_period: school_periods)
             thsirt_delivered = school_period_enrollments.any?(&:tshirt_delivered) ? "Oui" : "Non" if school_period.tshirt

@@ -8,14 +8,14 @@
   <% if academy.banished %>
     <div class="col flexy-row"><%= course.starts_at < Time.current ? content_tag(:span, course.activity.banished_students.where.not(id: course.course_enrollments.joins(:student).pluck(:student_id)).count, style: 'font-weight:bold;') : "-" %></div>
   <% end %>
-  <div class="col flexy-row"><%= course.starts_at < Time.current ? content_tag(:span, course.present_students_count, style: 'color:green; font-weight:bold;') : "-" %></div>
-  <div class="col flexy-row"><%= course.starts_at < Time.current ? content_tag(:span, course.missing_students_count, style: 'color:red; font-weight:bold;') : "-" %></div>
+  <div class="col flexy-row"><%= course.starts_at < Time.current ? content_tag(:span, course.present_students_count, style: 'color:#1CDD87; font-weight:bold;') : "-" %></div>
+  <div class="col flexy-row"><%= course.starts_at < Time.current ? content_tag(:span, course.missing_students_count, style: 'color:#FF5656; font-weight:bold;') : "-" %></div>
   <div class="col flexy-row">
     <% if course.starts_at < Time.current %>
       <% if course.status %>
-        <i class="fa-solid fa-check text-success fa-big"></i>
+        <i class="fa-solid fa-circle-check text-success fa-small"></i>
       <% else %>
-        <i class="fa-solid fa-xmark text-danger fa-big"></i>
+        <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
       <% end %>
     <% end %>
   </div>
