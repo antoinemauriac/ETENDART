@@ -306,9 +306,22 @@ class Student < ApplicationRecord
       .first
   end
 
-  def paid_camp_enrollments
-    camp_enrollments.joins(camp: :school_period)
-                    .where(school_periods: { paid: true })
+  # def paid_camp_enrollments
+  #   camp_enrollments.joins(camp: :school_period)
+  #                   .where(school_periods: { paid: true })
+  #                   .sort_by(&:camp_starts_at).reverse
+  # end
+
+  # def camp_enrollments_with_judo_activity
+  #   camp_enrollments.joins(activity: :category)
+  #                   .where(categories: { name: 'Judo' })
+  # end
+
+  def paid_camp_enrollments_without_free_judo_activity
+    camp_enrollments.joins(activity: :category)
+                    .where.not(categories: { name: 'Judo' })
+                    .joins(camp: :school_period)
+                    .where(school_periods: { paid: true, free_judo: true })
                     .sort_by(&:camp_starts_at).reverse
   end
 
