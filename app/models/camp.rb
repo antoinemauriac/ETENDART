@@ -241,7 +241,7 @@ class Camp < ApplicationRecord
   end
 
   def student_with_judo_ids
-    student_with_judo.map(:id)
+    student_with_judo.map(&:id)
   end
 
   def student_with_judo_count

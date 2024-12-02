@@ -193,6 +193,10 @@ class SchoolPeriod < ApplicationRecord
   # def expected_revenue
   #   camps.sum(&:expected_revenue)
   # end
+  #
+  def student_with_judo_ids
+    camps.map(&:student_with_judo_ids).flatten
+  end
 
   def expected_revenue
     if self.free_judo == true
