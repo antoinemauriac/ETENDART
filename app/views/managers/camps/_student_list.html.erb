@@ -20,13 +20,17 @@
       <span class="ellipsis"><%= camp_enrollment&.image_consent ? "" : "Non" %></span>
     </div>
     <% if school_period.paid %>
-      <% if !students_with_free_judo.include?(student) %>
+      <% if camp_enrollment.present && !students_with_free_judo.include?(student) %>
         <div class="col flexy-row small-col <%= camp_enrollment&.paid ? '' : 'non-bg' %>">
           <span class="ellipsis"><%= camp_enrollment&.paid ? "Oui" : "Non" %></span>
         </div>
-      <% else %>
+      <% elsif camp_enrollment.present && students_with_free_judo.include?(student) %>
         <div class="col flexy-row small-col">
           <span class="ellipsis">Gratuit</span>
+        </div>
+      <% else %>
+        <div class="col flexy-row small-col">
+          <span class="ellipsis">Absent</span>
         </div>
       <% end %>
     <% end %>
