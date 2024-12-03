@@ -82,7 +82,7 @@ class Managers::FinancesController < ApplicationController
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     # RÉCUPÉRER LES ACADÉMIES GÉRÉES PAR L'UTILISATEUR QUI ONT AU MOINS UNE SCHOOL_PERIOD AVEC UNE COLONNE PAID À TRUE
     @academies = current_user.academies.includes(:school_periods).joins(:school_periods).where(school_periods: { paid: true, new: true }).distinct.order(:created_at)
-    @selected_academy = @academies.first
+    @selected_academy = @academies.includes(:school_periods).first
   end
 
   def academy_infos
