@@ -24,11 +24,12 @@
             </tr>
           </thead>
           <tbody>
-            <% academy.school_periods.includes(:camps, :camp_enrollments).where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
-                <% expected_revenue = school_period.expected_revenue %>
-                <% received_revenue = school_period.received_revenue %>
-                <% total_old_camp_deposits = school_period.total_old_camp_deposits %>
-                <% camp_enrollments = school_period.camp_enrollments %>
+            <% academy.school_periods.includes(:camps).where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
+              <% expected_revenue = school_period.expected_revenue %>
+              <% received_revenue = school_period.received_revenue %>
+              <% total_old_camp_deposits = school_period.total_old_camp_deposits %>
+              <% camp_enrollments = school_period.camp_enrollments %>
+              <% attended_camp_enrollments = camp_enrollments.attended %>
               <tr class="clickable-tr" onclick="window.location.href='<%=  show_school_period_managers_finance_path(school_period) %>'">
                 <td style="min-width:200px"><%= school_period.full_name %> </td>
                 <td><%= replace_zero_with_dash(expected_revenue) %></td>
@@ -37,12 +38,12 @@
                 <td style="<%= (received_revenue - total_old_camp_deposits) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(received_revenue - total_old_camp_deposits) %></td>
                 <td style="<%= expected_revenue - received_revenue != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(expected_revenue - received_revenue) %></td>
                 <td><%= school_period.price %>€</td>
-                <td><%= camp_enrollments.attended.count %></td>
-                <td><%= camp_enrollments.attended.paid.count%></td>
+                <td><%= attended_camp_enrollments.count %></td>
+                <td><%= attended_camp_enrollments.paid.count%></td>
                 <% if school_period.free_judo == true %>
-                  <td><%= camp_enrollments.attended.unpaid.count %> (<%= school_period.student_with_judo_count %>) </td>
+                  <td><%= attended_camp_enrollments.unpaid.count %> (<%= school_period.student_with_judo_count %>) </td>
                 <% else %>
-                  <td><%= camp_enrollments.attended.unpaid.count %></td>
+                  <td><%= attended_camp_enrollments.unpaid.count %></td>
                 <% end %>
                 <td><%= replace_zero_with_dash(camp_enrollments.unattended.paid.count, false) %></td>
               </tr>

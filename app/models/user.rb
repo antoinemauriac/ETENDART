@@ -52,6 +52,8 @@ class User < ApplicationRecord
   has_many :activity_coaches, foreign_key: :coach_id, dependent: :destroy
   has_many :activities, through: :activity_coaches
   has_many :courses, through: :activities
+  has_many :course_enrollments, through: :courses
+  has_many :students, through: :course_enrollments
 
   has_many :coach_feedbacks, foreign_key: :coach_id, dependent: :destroy
 
@@ -105,24 +107,28 @@ class User < ApplicationRecord
   end
 
   def next_courses
-    courses.where('starts_at > ?', Time.current).order(:starts_at)
+    courses.includes(:activity) # Inclut camp et annual_program
+           .where('starts_at > ?', Time.current)
+           .order(:starts_at)
   end
 
   def past_courses
-    courses.where('ends_at < ?', Time.current).order(starts_at: :desc)
+    courses.includes(:activity) # Inclut camp et annual_program
+           .where('ends_at < ?', Time.current)
+           .order(starts_at: :desc)
   end
 
   def today_courses
-    courses.where('DATE(starts_at) = ?', Time.current.to_date).order(:starts_at)
+    courses.includes(:activity, :students).where('DATE(starts_at) = ?', Time.current.to_date).order(:starts_at)
   end
 
   def missing_attendance
     courses.where('ends_at < ?', Time.current).where('status = ?', false)
   end
 
-  def students
-    courses.map(&:students).flatten.uniq
-  end
+  # def students
+  #   courses.map(&:students).flatten.uniq
+  # end
 
   def academies_ordered
     academies_as_coach.order('coach_academies.created_at')

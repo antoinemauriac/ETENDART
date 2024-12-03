@@ -21,11 +21,12 @@ class Managers::CampsController < ApplicationController
   def students
     @camp = Camp.find(params[:id])
     authorize([:managers, @camp])
-    @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
+    # @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
     @students = @camp.students.includes(:memberships, :camp_enrollments, :school_period_enrollments, :activity_enrollments).order(:last_name)
+    @camp_enrollments = @camp.camp_enrollments.includes(:student)
     @academy = @camp.academy
     @school_period = @camp.school_period
-    render partial: "managers/camps/students", locals: { students: @students, camp: @camp, academy: @academy, school_period: @school_period, start_year: @start_year }
+    render partial: "managers/camps/students", locals: { students: @students, camp: @camp, academy: @academy, school_period: @school_period, camp_enrollments: @camp_enrollments }
   end
 
   def create
