@@ -194,8 +194,8 @@ class SchoolPeriod < ApplicationRecord
   #   camps.sum(&:expected_revenue)
   # end
   #
-  def student_with_judo_ids
-    camps.map(&:student_with_judo_ids).flatten
+  def present_students_with_free_judo_ids
+    camps.map(&:present_students_with_free_judo_ids).flatten
   end
 
   def expected_revenue
@@ -242,8 +242,8 @@ class SchoolPeriod < ApplicationRecord
   #   camps.sum(&:missing_clarisse_revenue)
   # end
 
-  def student_with_judo_count
-    camps.sum(&:student_with_judo_count)
+  def present_students_with_free_judo_count
+    camps.sum(&:students_free_with_judo_count)
   end
 
   private

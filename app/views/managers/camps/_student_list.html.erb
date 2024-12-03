@@ -3,7 +3,7 @@
   <% camp_enrollment = student.camp_enrollments.find_by(camp: camp) %>
   <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) %>
   <% activities = student.student_activities_without_acc(camp) %>
-  <% name_style = school_period.paid && camp_enrollment.present && !camp_enrollment.paid && !students_with_free_judo.include?(student) ? 'color: #fc3535;font-weight:bold' : '' %>
+  <% name_style = school_period.paid && camp_enrollment.present && !camp_enrollment.paid && !all_students_with_free_judo.include?(student) ? 'color: #fc3535;font-weight:bold' : '' %>
     <div id="camp-enrollment-<%= camp_enrollment.id %>" class="row card-row card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student) %>">
     <div class="col flexy-row" style="<%= name_style %>">
       <span class="ellipsis"><%= student.last_name %></span>
@@ -23,15 +23,27 @@
     </div>
 
     <% if school_period.paid %>
-      <% if camp_enrollment&.present && !students_with_free_judo.include?(student) %>
-        <div class="col flexy-row small-col <%= camp_enrollment&.paid ? '' : 'non-bg' %>">
-          <span class="ellipsis"><%= camp_enrollment&.paid ? "Oui" : "Non" %></span>
-        </div>
-      <% elsif camp_enrollment&.present && students_with_free_judo.include?(student) %>
+      <% if all_students_with_free_judo.include?(student) %>
         <div class="col flexy-row small-col">
-          <span class="ellipsis">Gratuit</span>
+          <% if camp_enrollment.paid %>
+            <span class="ellipsis"><i class="fa-solid fa-circle-check text-success fa-small"></i></span>
+          <% else %>
+            <span class="ellipsis">Gratuit</i></span>
+          <% end %>
         </div>
-      <% else %>
+      <% elsif camp_enrollment&.present %>
+        <div class="col flexy-row small-col">
+          <% if camp_enrollment.paid %>
+            <span class="ellipsis"><i class="fa-solid fa-circle-check text-success fa-small"></i></span>
+          <% else %>
+            <span class="ellipsis"><i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i></span>
+          <% end %>
+        </div>
+      <% elsif !camp_enrollment&.present && camp_enrollment.paid %>
+        <div class="col flexy-row small-col">
+          <span class="ellipsis"><i class="fa-solid fa-circle-check text-success fa-small"></i></span>
+        </div>
+      <% elsif !camp_enrollment&.present %>
         <div class="col flexy-row small-col">
           <span class="ellipsis">Absent</span>
         </div>

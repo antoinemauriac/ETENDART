@@ -338,8 +338,14 @@ class Student < ApplicationRecord
                     .joins(camp: :school_period)
                     .where.not(camp_id: judo_camp_ids)
                     .where(school_periods: { paid: true })
-                    .includes(camp: [:school_period, :academy]) # Précharge academy ici
-                    .order('camps.starts_at DESC')
+                    .includes(camp: [:school_period, :academy])
+                    .or(
+                      camp_enrollments.unattended
+                              .joins(camp: :school_period)
+                              .where(school_periods: { paid: true })
+                              .where('camps.ends_at > ?', Time.current)
+                              .includes(camp: [:school_period, :academy])
+                    ).order('camps.starts_at DESC')
   end
 
   private

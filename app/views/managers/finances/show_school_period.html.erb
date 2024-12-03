@@ -47,7 +47,7 @@
                   <td><%= replace_zero_with_dash(camp.show_count, false) %></td>
                   <td><%= replace_zero_with_dash(camp.paid_students_count, false) %></td>
                   <% if camp.school_period.free_judo == true %>
-                    <td><%= replace_zero_with_dash(camp.unpaid_students_count , false)%> (<%= replace_zero_with_dash(camp.student_with_judo_count, false) %>)</td>
+                    <td><%= replace_zero_with_dash(camp.unpaid_students_count , false)%> (<%= replace_zero_with_dash(camp.present_students_with_free_judo_count, false) %>)</td>
                   <% else %>
                     <td><%= replace_zero_with_dash(camp.unpaid_students_count, false) %></td>
                   <% end %>

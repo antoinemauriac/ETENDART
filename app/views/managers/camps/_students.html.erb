@@ -28,14 +28,14 @@
           <div class="col flexy-row small-col">Taux abs</div>
           <div class="col flexy-row small-col">Suppr</div>
         </div>
-        <% students_with_free_judo = camp.student_with_judo %>
+        <% all_students_with_free_judo = camp.all_students_with_free_judo %>
         <%= render "managers/camps/student_list",
               students: students,
               camp: camp,
               school_period: school_period,
               academy: academy,
               camp_enrollments: camp_enrollments,
-              students_with_free_judo: students_with_free_judo %>
+              all_students_with_free_judo: all_students_with_free_judo %>
       </div>
     </div>
   <% end %>

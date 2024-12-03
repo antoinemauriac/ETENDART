@@ -103,7 +103,7 @@ class Managers::FinancesController < ApplicationController
     skip_policy_scope
     authorize([:managers, :finance], policy_class: Managers::FinancePolicy)
     @camp = Camp.find(params[:id])
-    @students_with_free_judo = @camp.student_with_judo
+    @present_students_with_free_judo = @camp.present_students_with_free_judo
     @school_period = @camp.school_period
     @price = @school_period.price
     @academy = @camp.academy

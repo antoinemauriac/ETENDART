@@ -41,7 +41,7 @@
                 <td><%= attended_camp_enrollments.count %></td>
                 <td><%= attended_camp_enrollments.paid.count%></td>
                 <% if school_period.free_judo == true %>
-                  <td><%= attended_camp_enrollments.unpaid.count %> (<%= school_period.student_with_judo_count %>) </td>
+                  <td><%= attended_camp_enrollments.unpaid.count %> (<%= school_period.present_students_with_free_judo_count %>) </td>
                 <% else %>
                   <td><%= attended_camp_enrollments.unpaid.count %></td>
                 <% end %>
