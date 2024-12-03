@@ -4,11 +4,15 @@ class Academy < ApplicationRecord
   has_many :memberships
   has_many :locations
   has_many :school_periods
+
   has_many :camps, through: :school_periods
-  has_many :activities, through: :camps
-  has_many :courses, through: :activities
+  has_many :activities_through_camps, through: :camps, source: :activities
+  has_many :courses_through_camps, through: :activities_through_camps, source: :courses
 
   has_many :annual_programs
+  has_many :activities_through_annual_programs, through: :annual_programs, source: :activities
+  has_many :courses_through_annual_programs, through: :activities_through_annual_programs, source: :courses
+
 
   belongs_to :manager, class_name: 'User'
   belongs_to :coordinator, class_name: 'User', optional: true
@@ -50,7 +54,9 @@ class Academy < ApplicationRecord
   #   (today_camp_courses + today_annual_courses).order(:starts_at)
   # end
   def today_courses
-    courses.includes(activity: :coach).where(starts_at: Time.current.all_day).order(:starts_at)
+    Course.where(id: (today_camp_courses.ids + today_annual_courses.ids).uniq)
+          .includes(activity: :coach)
+          .order(:starts_at)
   end
 
   # def tomorrow_courses
@@ -78,5 +84,9 @@ class Academy < ApplicationRecord
     else
       ActionController::Base.helpers.asset_path('home.jpg')
     end
+  end
+
+  def courses
+    Course.where(id: (courses_through_camps.ids + courses_through_annual_programs.ids).uniq)
   end
 end
