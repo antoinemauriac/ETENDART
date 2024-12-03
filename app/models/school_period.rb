@@ -243,7 +243,7 @@ class SchoolPeriod < ApplicationRecord
   # end
 
   def present_students_with_free_judo_count
-    camps.sum(&:students_free_with_judo_count)
+    camps.sum(&:present_students_with_free_judo_count)
   end
 
   private
