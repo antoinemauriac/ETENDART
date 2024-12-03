@@ -13,7 +13,7 @@
           <div class="col-1 flexy-row small-col">Payé ?</div>
         </div>
         <% @camp_enrollments.each do |camp_enrollment| %>
-          <%= render "managers/camp_enrollments/student", camp_enrollment: camp_enrollment, students_with_free_judo: @students_with_free_judo %>
+          <%= render "managers/camp_enrollments/student", camp: @camp, camp_enrollment: camp_enrollment, all_students_with_free_judo: @all_students_with_free_judo %>
         <% end %>
       </div>
     </div>
