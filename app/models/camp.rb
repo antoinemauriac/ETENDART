@@ -251,7 +251,8 @@ class Camp < ApplicationRecord
   def student_with_judo
     if school_period.free_judo == true
       judo_activity_ids = self.activities.joins(:category).where(categories: { name: 'Judo' }).pluck(:id)
-      show_students.select { |student| student.courses.where(activity_id: judo_activity_ids).exists? }
+      show_students.joins(:courses).where(courses: { activity_id: judo_activity_ids }).distinct
+      # show_students.select { |student| student.courses.where(activity_id: judo_activity_ids).exists? }
     else
       []
     end
