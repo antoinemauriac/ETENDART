@@ -142,8 +142,15 @@ class Student < ApplicationRecord
     activities.where(camp: camp).order(name: :desc)
   end
 
+  # def student_activities_without_acc(camp)
+  #   activities.where(camp: camp).where.not(category: Category.find_by(name: "Accompagnement")).order(name: :desc)
+  # end
   def student_activities_without_acc(camp)
-    activities.where(camp: camp).where.not(category: Category.find_by(name: "Accompagnement")).order(name: :desc)
+    activities.where(camp: camp)
+              .where.not(category: Category.find_by(name: "Accompagnement"))
+              .left_joins(:courses)
+              .group('activities.id')
+              .order('COUNT(courses.id) DESC, activities.name DESC')
   end
 
   def age
@@ -284,6 +291,10 @@ class Student < ApplicationRecord
       .where(course_enrollments: { present: true })
       .group('students.id')
       .pluck(:id)
+  end
+
+  def courses_count_during_period
+    course_enrollments.where(present: true).joins(:course).where('courses.starts_at > ? AND courses.ends_at <= ?', Date.new(2024, 4, 7), Date.today).count
   end
 
 

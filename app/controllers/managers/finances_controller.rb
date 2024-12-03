@@ -13,7 +13,6 @@ class Managers::FinancesController < ApplicationController
 
     # COTISATIONS DES ÉLÈVES AYANT PARTICPÉ À AU MONS UN COURS PENDANT L'ANNÉE SCOLAIRE
     all_expected_memberships = Membership.includes(:student, :receiver).where(academy_id: academy_ids, student_id: Student.with_at_least_one_course(@start_year))
-
     # COTISATION DES ÉLÈVES QUI N'ONT PARTICPÉ À AUCUN COURS ET DONC COTISATION NON EXIGIBLE
     all_not_expected_memberships = Membership.includes(:student, :receiver).where(academy_id: academy_ids).where.not(student_id: Student.with_at_least_one_course(@start_year))
 
