@@ -91,16 +91,16 @@ class Student < ApplicationRecord
     camp = options[:camp] if options.present?
 
     if activity
-      course_enrollments.unattended.joins(:course)
+      course_enrollments.includes(:activity).unattended.joins(:course)
                         .where('ends_at < ? AND activity_id = ?', Time.current, activity.id)
                         .count
     elsif camp
-      course_enrollments.unattended.joins(course: :camp)
+      course_enrollments.includes(:activity, :camp).unattended.joins(course: :camp)
                         .where('courses.ends_at < ?', Time.current)
                         .where('camps.id = ?', camp.id)
                         .count
     else
-      course_enrollments.unattended.joins(:course)
+      course_enrollments.includes(:course).unattended.joins(:course)
                         .where('courses.ends_at < ?', Time.current)
                         .count
     end
@@ -143,7 +143,7 @@ class Student < ApplicationRecord
   end
 
   def student_activities_without_acc(camp)
-    activities.where.not(category: Category.find_by(name: "Accompagnement")).where(camp: camp).order(name: :desc)
+    activities.where(camp: camp).where.not(category: Category.find_by(name: "Accompagnement")).order(name: :desc)
   end
 
   def age
