@@ -9,10 +9,12 @@ class Managers::CoursesController < ApplicationController
   end
 
   def show
-    @start_year = @course.starts_at.month >= 9 ? Date.current.year : Date.current.year - 1
-    @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
+    @enrollments = course.course_enrollments
+                         .includes(student: [:photo_attachment, :camp_enrollments])
+                         .joins(:student)
+                         .order('students.last_name ASC')
+
     @academy = course.academy
-    @school_periods = @academy.school_periods
     @activity = course.activity
     @school_period = course.school_period if course.school_period
     @camp = course.camp if course.camp

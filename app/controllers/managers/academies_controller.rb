@@ -5,7 +5,7 @@ class Managers::AcademiesController < ApplicationController
     authorize [:managers, @academy]
     @course = Course.first
 
-    @feedbacks = Feedback.includes(:student).includes(:coach).last_five(@academy)
+    @feedbacks = Feedback.includes(:student, :coach).includes(:coach).last_five(@academy)
 
     @today_courses = @academy.today_courses
     @tomorrow_courses = @academy.tomorrow_courses

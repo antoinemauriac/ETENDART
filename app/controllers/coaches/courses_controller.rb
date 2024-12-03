@@ -4,17 +4,18 @@ class Coaches::CoursesController < ApplicationController
 
   def index
     @coach = current_user
-    @next_courses = @coach.next_courses
-    @past_courses = @coach.past_courses
+    @next_courses = @coach.next_courses.includes(:activity)
+    @past_courses = @coach.past_courses.includes(:activity)
     skip_policy_scope
     authorize([:coaches, @camps], policy_class: Coaches::CoursePolicy)
   end
 
   def show
-    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
-    @enrollments = course.course_enrollments.joins(:student).order(last_name: :asc)
+    @enrollments = course.course_enrollments
+                         .includes(student: [:photo_attachment, :camp_enrollments])
+                         .joins(:student)
+                         .order('students.last_name ASC')
     @academy = course.academy
-    # @school_periods = @academy.school_periods
     @camp = course.camp
     @school_period = course.school_period
     @category = course.category

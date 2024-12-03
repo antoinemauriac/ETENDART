@@ -2,7 +2,7 @@ class Managers::SchoolPeriodsController < ApplicationController
 
   def index
     @academy = Academy.find(params[:academy])
-    @school_periods = @academy.school_periods.sort_by { |sp| sp.starts_at }.reverse
+    @school_periods = @academy.school_periods.includes(:camps).sort_by { |sp| sp.starts_at }.reverse
     @school_period = SchoolPeriod.new(paid: true)
     skip_policy_scope
     authorize([:managers, @school_periods], policy_class: Managers::SchoolPeriodPolicy)

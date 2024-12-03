@@ -47,8 +47,7 @@
         <tbody>
           <% @enrollments.each do |enrollment| %>
             <% student = enrollment.student %>
-            <% camp_enrollment = student.camp_enrollments.find_by(camp: @course.camp) %>
-            <% membership = student.memberships.find_by(start_year: @start_year) %>
+            <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == @camp&.id } %>
             <% name_style = camp_enrollment&.paid == false ? "color: #FF5656;font-weight:bold" : "" %>
 
             <tr>
@@ -74,7 +73,8 @@
               <% if @school_period && @school_period.tshirt %>
                 <td class="align-middle">
                   <div class="has-paid">
-                    <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: @school_period) %>
+                    <% school_period_enrollment = student.school_period_enrollments.find { |spe| spe.school_period_id == @school_period&.id } %>
+                    <%# school_period_enrollment = student.school_period_enrollments.find_by(school_period: @school_period) %>
                     <% has_tshirt = school_period_enrollment.tshirt_delivered %>
                     <% if has_tshirt == true %>
                       <%= form.check_box "enrollments[#{enrollment.id}][tshirt_delivered]", { class: "form-check-input green-check", checked: true, readonly: true, disabled: true } %>

@@ -19,27 +19,45 @@ class Academy < ApplicationRecord
   has_many :students, through: :academy_enrollments
 
   def today_camp_courses
-    courses.includes(:activity).where(starts_at: Time.current.all_day).order(:starts_at)
+    Course.joins(activity: :camp)
+          .where(camps: { id: camps.ids })
+          .where(starts_at: Time.current.all_day)
+          .order(:starts_at)
   end
 
   def today_annual_courses
-    annual_programs.map(&:today_courses).flatten.sort_by(&:starts_at)
+    Course.joins(:annual_program)
+          .where(annual_programs: { id: annual_programs.ids })
+          .where(starts_at: Time.current.all_day)
+          .order(:starts_at)
   end
 
   def tomorrow_camp_courses
-    courses.includes(:activity).where(starts_at: Time.current.tomorrow.all_day).order(:starts_at)
+    Course.joins(activity: :camp)
+          .where(camps: { id: camps.ids })
+          .where(starts_at: Time.current.tomorrow.all_day)
+          .order(:starts_at)
   end
 
   def tomorrow_annual_courses
-    annual_programs.map(&:tomorrow_courses).flatten.sort_by(&:starts_at)
+    Course.joins(:annual_program)
+          .where(annual_programs: { id: annual_programs.ids })
+          .where(starts_at: Time.current.tomorrow.all_day)
+          .order(:starts_at)
   end
 
+  # def today_courses
+  #   (today_camp_courses + today_annual_courses).order(:starts_at)
+  # end
   def today_courses
-    (today_camp_courses + today_annual_courses).sort_by(&:starts_at)
+    courses.includes(activity: :coach).where(starts_at: Time.current.all_day).order(:starts_at)
   end
 
+  # def tomorrow_courses
+  #   (tomorrow_camp_courses + tomorrow_annual_courses).sort_by(&:starts_at)
+  # end
   def tomorrow_courses
-    (tomorrow_camp_courses + tomorrow_annual_courses).sort_by(&:starts_at)
+    courses.includes(activity: :coach).where(starts_at: Time.current.tomorrow.all_day).order(:starts_at)
   end
 
   def today_absent_students
