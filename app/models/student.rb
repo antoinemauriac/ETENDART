@@ -280,7 +280,7 @@ class Student < ApplicationRecord
     end_date = Date.current
 
     joins(:courses)
-      .where('courses.starts_at > ? AND courses.starts_at <= ?', start_date, end_date)
+      .where('courses.starts_at > ? AND courses.ends_at <= ?', start_date, end_date)
       .where(course_enrollments: { present: true })
       .group('students.id')
       .pluck(:id)
