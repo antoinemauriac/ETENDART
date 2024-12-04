@@ -11,6 +11,7 @@ class Coaches::CoursesController < ApplicationController
   end
 
   def show
+    authorize([:coaches, @course], policy_class: Coaches::CoursePolicy)
     @enrollments = course.course_enrollments
                          .includes(student: [:photo_attachment, :camp_enrollments])
                          .joins(:student)
@@ -21,7 +22,8 @@ class Coaches::CoursesController < ApplicationController
     @category = course.category
     @activity = course.activity
     @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id)).order(last_name: :asc)
-    authorize([:coaches, @course], policy_class: Coaches::CoursePolicy)
+    @present_students_count = @course.present_students_count
+    @missing_students_count = @course.missing_students_count
   end
 
   private

@@ -1,0 +1,11 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<%= turbo_stream.replace "camp_enrollment_#{@camp_enrollment.id}" do %>
+  <% if params[:camp_enrollment][:source] == "list" %>
+    <%= render "managers/camp_enrollments/student", camp_enrollment: @camp_enrollment %>
+  <% else %>
+    <%= render "managers/students/camp_enrollment", camp_enrollment: @camp_enrollment, student: @student %>
+  <% end %>
+<% end %>

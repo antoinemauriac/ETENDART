@@ -1,7 +1,0 @@
-<%= turbo_stream.replace "flash-messages" do %>
-  <%= render "shared/flashes" %>
-<% end %>
-
-<%= turbo_stream.replace "camp_enrollment_#{@camp_enrollment.id}" do %>
-  <%= render "managers/students/camp_enrollment", camp_enrollment: @camp_enrollment, student: @student %>
-<% end %>

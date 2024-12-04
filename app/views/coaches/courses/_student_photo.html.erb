@@ -3,29 +3,29 @@
   data-update-photo-from-course-target="studentPhoto"
   data-update-photo-from-course-student-id-value="<%= student.id %>">
   <% if student.photo.attached? %>
-  <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id) do %>
-    <%= cl_image_tag student.photo_or_default,
-             class: "avatar-small",
-             crop: "thumb",
-             gravity: "face",
-             width: 300,
-             height: 300 %>
-  <% end %>
+    <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id) do %>
+      <%= cl_image_tag student.photo_or_default,
+              class: "avatar-small",
+              crop: "thumb",
+              gravity: "face",
+              width: 300,
+              height: 300 %>
+    <% end %>
   <% else %>
-  <input type="file" id="photo_<%= student.id %>"
-       data-action="change->update-photo-from-course#submit"
-       data-update-photo-from-course-target="input"
-       accept="image/*" capture="environment"
-       data-origin="course"
-       style="display:none;cursor:pointer;">
-  <label for="photo_<%= student.id %>"
-       data-update-photo-from-course-target="label">
-    <div class="student-photo-profile student-photo-profile-small">
-    <%= image_tag('camera-yellow.svg', style: "width:40px", alt: 'description de l\'image') %>
+    <input type="file" id="photo_<%= student.id %>"
+        data-action="change->update-photo-from-course#submit"
+        data-update-photo-from-course-target="input"
+        accept="image/*" capture="environment"
+        data-origin="course"
+        style="display:none;cursor:pointer;">
+    <label for="photo_<%= student.id %>"
+        data-update-photo-from-course-target="label">
+      <div class="student-photo-profile student-photo-profile-small">
+      <%= image_tag('camera-yellow.svg', style: "width:40px", alt: 'description de l\'image') %>
+      </div>
+    </label>
+    <div class="loader-container">
+      <div class="loader-small d-none" data-update-photo-from-course-target="spinner"></div>
     </div>
-  </label>
-  <div class="loader-container">
-    <div class="loader-small d-none" data-update-photo-from-course-target="spinner"></div>
-  </div>
   <% end %>
 </td>
