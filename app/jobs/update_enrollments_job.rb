@@ -63,8 +63,8 @@ class UpdateEnrollmentsJob < ApplicationJob
         student = CourseEnrollment.find(enrollment_id.to_i).student
         school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) if school_period
         school_period_enrollments = student.school_period_enrollments
-                                          .joins(:school_period)
-                                          .where(school_periods: { academy_id: academy.id })
+                                           .joins(:school_period)
+                                           .where(school_periods: { academy_id: academy.id })
         school_period_enrollments.update_all(tshirt_delivered: school_period_enrollment.tshirt_delivered)
       end
     end
