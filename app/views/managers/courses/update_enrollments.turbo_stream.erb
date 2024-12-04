@@ -1,0 +1,20 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<% partial = params[:redirect_to] == "manager" ? "managers/courses/course" : "coaches/courses/course" %>
+
+<%= turbo_stream.replace "course_#{@course.id}" do %>
+  <%= render partial, {
+    course: @course,
+    activity: @activity,
+    school_period: @school_period,
+    academy: @academy,
+    enrollments: @enrollments,
+    camp: @camp,
+    category: @category,
+    banished_students: @banished_students,
+    missing_students_count: @missing_students_count,
+    present_students_count: @present_students_count
+  } %>
+<% end %>

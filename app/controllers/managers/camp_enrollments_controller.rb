@@ -53,24 +53,16 @@ class Managers::CampEnrollmentsController < ApplicationController
       if !["cash", "cheque", "offert"].include?(payment_method)
         @camp_enrollment.update(receiver_id: nil)
       end
-      flash[:notice] = "Paiement enregistré"
+      flash.now[:notice] = "Paiement enregistré"
     else
-      flash[:alert] = @camp_enrollment.errors.full_messages.to_sentence
+      flash.now[:alert] = @camp_enrollment.errors.full_messages.to_sentence
     end
     handle_response
   end
 
   def handle_response
     respond_to do |format|
-      format.turbo_stream do
-        flash.discard
-        case params[:camp_enrollment][:source]
-        when "list"
-          render "managers/camp_enrollments/update_from_index"
-        when "show_student"
-          render "managers/camp_enrollments/update_from_show"
-        end
-      end
+      format.turbo_stream
       format.html do
         redirect_to "#{params[:camp_enrollment][:origin] || params[:origin] || managers_student_path(@student)}#target-#{@camp_enrollment.id}"
       end
