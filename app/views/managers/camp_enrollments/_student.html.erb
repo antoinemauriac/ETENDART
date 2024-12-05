@@ -62,13 +62,13 @@
             <%#= f.hidden_field :index, value: index %>
             <%= f.hidden_field :origin, value: show_camp_managers_finance_path(camp_enrollment.camp) %>
             <%= f.input :payment_method,
-                        label: "Moyen de paiment",
+                        label: "Moyen de paiement",
                         required: true,
                         collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
                         prompt: "Sélectionner",
                         input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
             <%= f.input :receiver_id,
-                        label: "Personne ayant reçu le paiment",
+                        label: "Personne ayant reçu le paiement",
                         collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
                         selected: camp_enrollment.receiver_id.present? ? camp_enrollment.receiver_id : current_user.id,
                         prompt: "Sélectionner",
