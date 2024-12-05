@@ -12,9 +12,16 @@
   border-radius: 50%;
 }
 
-.content-info {
-  position: relative;
+.avatar-medium {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
 }
+
+// .content-info {
+//   position: relative;
+// }
 
 .student-photo {
   position: absolute;
@@ -30,7 +37,7 @@
 }
 
 .student-info {
-  width: 85%;
+  width: 70%;
 
   p {
     margin-bottom: 0.75rem;

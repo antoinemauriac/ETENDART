@@ -8,7 +8,7 @@
 </div>
 
 <div data-controller="loading-message">
-  <div class="flexy-wrap mt-2 mb-2 gap-4" data-controller="selected-button">
+  <div class="flexy-wrap gap-4" data-controller="selected-button">
     <%= link_to "INFORMATIONS",
                 managers_student_path(@student),
                 data: { turbo_frame: "selected_content",
@@ -31,14 +31,14 @@
 
   <%= turbo_frame_tag "selected_content", data: { loading_message_target: "turboFrame" }  do %>
     <div class="row justify-content-center align-items-stretch">
-      <div class="col-lg-7 col-md-7 col-sm-12" data-upload-photo-student-id-value="<%=@student.id%>">
+      <div class="col-lg-4 col-md-7 col-sm-12" data-upload-photo-student-id-value="<%=@student.id%>">
         <div class="header-info">
           INFORMATIONS
           <%= link_to edit_managers_student_path(@student), style: "margin-left:1rem" do %>
             <i class="fa-solid fa-user-pen"></i>
           <% end %>
         </div>
-        <div class="content-info" style="position:relative">
+        <div class="content-info content-info-show-student" style="position:relative">
           <div class="student-info">
             <p>NOM : <strong><%= @student.last_name.try(:upcase) %></strong></p>
             <p>PRÉNOM : <strong><%= @student.first_name %></strong></p>
@@ -52,7 +52,7 @@
             <% if @student.photo.key? %>
               <%= cl_image_tag @student.photo_or_default,
                       data: { upload_photo_target: "photo" },
-                      class: "avatar",
+                      class: "avatar-medium",
                       crop: "thumb",
                       gravity: "face",
                       width: 300,
@@ -60,13 +60,51 @@
             <% else %>
               <%= image_tag "avatar.png",
                       data: { upload_photo_target: "photo" },
-                      class: "avatar" %>
+                      class: "avatar-medium" %>
             <% end %>
           </div>
-          <table class="table table-striped table-responsive mb-0">
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-5 col-sm-12">
+        <div class="header-info">ACADEMIES</div>
+        <div class="content-info content-info-show-student">
+            <%= simple_form_for @student, url: managers_student_path(@student), method: :put do |form| %>
+            <div>
+                <%= form.input :academy1_id, label: "Académie 1", collection: @academies, label_method: :name, value_method: :id, required: true, selected: @academy1&.id, wrapper_html: { style: 'margin-bottom:0.5rem!important' } %>
+
+                <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy2&.id || 'Sélectionnez une académie', wrapper_html: { style: 'margin-bottom:0.5rem!important' } %>
+
+                <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy3&.id || 'Sélectionnez une académie', wrapper_html: { style: 'margin-bottom:0.5rem!important' } %>
+            </div>
+
+            <div class="flexy">
+              <%= form.button :submit, "VALIDER", class: "btn-add-student btn-add-student-small btn-no-hover" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-5 col-sm-12">
+        <div class="header-info">HISTORIQUE</div>
+        <div class="content-info content-info-show-student">
+          <div>
+            <p><%= "STAGES : #{@student.camps_count}" %></p>
+            <p><%= "PROGRAMMES : #{@student.annual_programs_count}" %></p>
+            <p><%= "COURS : #{@student.past_courses_count}" %></p>
+            <p><%= "ABSENCES: #{@student.unattended_courses_count}" %></p>
+            <p><%= "TAUX ABS : #{@student.unattended_rate}%" %></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-10 col-sm-12 mt-3">
+        <div class="header-info"> PAIEMENT COTISATIONS </div>
+        <div class="content-info content-info-show-student">
+          <table class="table table-striped table-responsive">
             <thead>
               <tr>
-                <th>Cotisation</th>
+                <th>Année</th>
                 <th>Montant</th>
                 <th>Date du paiement</th>
                 <th>Mode de paiement</th>
@@ -81,7 +119,7 @@
             </tbody>
           </table>
           <% if !@membership %>
-            <div class="flexy mt-2">
+            <div class="flexy">
               <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#membershipModal">
                 <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER COTISATION<i class="fa-solid fa-square-plus fa-square-bigger"></i>
               </button>
@@ -97,21 +135,17 @@
                     <%= form_with(model: Membership.new, url: managers_memberships_path, local: true) do |form| %>
                       <div class="modal-body">
                         <%= form.hidden_field :student_id, value: @student.id %>
-
                         <%= form.label :start_year, "Année" %>
                         <%= form.text_field :start_year_display, value: "#{@start_year}-#{@start_year + 1}", class: "form-control mb-3", readonly: true %>
                         <%= form.hidden_field :start_year, value: @start_year %>
-
                         <%= form.label :amount, "Montant" %>
                         <%= form.number_field :amount, value: 15, class: "form-control mb-3", required: true %>
-
                         <%= form.label :payment_method, "Méthode de Paiement" %>
                         <%= form.collection_select :payment_method,
                                                     [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
                                                     :last, :first,
                                                     { prompt: 'Sélectionnez une méthode de paiement' },
                                                     { class: "form-select mb-3", required: true } %>
-
                         <%= form.label :receiver_id, "Personne ayant reçu le paiement" %>
                         <%= form.collection_select :receiver_id,
                                                     User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
@@ -132,41 +166,9 @@
         </div>
       </div>
 
-      <div class="col-lg-3 col-md-5 col-sm-12">
-        <div class="header-info">ACADEMIES</div>
-        <div class="content-info">
-            <%= simple_form_for @student, url: managers_student_path(@student), html: {class: 'd-flex flex-column justify-content-between', style: "height:100%"}, method: :put do |form| %>
-            <div>
-              <%= form.input :academy1_id, label: "Académie 1", collection: @academies, label_method: :name, value_method: :id, required: true, selected: @academy1&.id %>
-
-              <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy2&.id || 'Sélectionnez une académie' %>
-
-              <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true, selected: @academy3&.id || 'Sélectionnez une académie' %>
-            </div>
-
-            <div class="flexy">
-              <%= form.button :submit, "VALIDER", class: "btn-add-student btn-add-student-small btn-no-hover" %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="col-lg-2 col-md-5 col-sm-12">
-        <div class="header-info">HISTORIQUE</div>
-        <div class="content-info">
-          <div>
-            <p><%= "STAGES : #{@student.camps_count}" %></p>
-            <p><%= "PROGRAMMES : #{@student.annual_programs_count}" %></p>
-            <p><%= "COURS : #{@student.past_courses_count}" %></p>
-            <p><%= "ABSENCES: #{@student.unattended_courses_count}" %></p>
-            <p><%= "TAUX ABS : #{@student.unattended_rate}%" %></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-12 col-sm-12 mt-3 mb-4">
+      <div class="col-lg-10 col-sm-12 mt-3">
         <div class="header-info"> PAIEMENT STAGES </div>
-        <div class="content-info">
+        <div class="content-info content-info-show-student">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -189,9 +191,9 @@
         </div>
       </div>
 
-      <div class="col-12 mt-3 mb-4">
+      <div class="col-10 mt-3 mb-4">
         <div class="header-info">FEEDBACKS</div>
-        <div class="content-info">
+        <div class="content-info content-info-show-student">
           <div>
             <table class="table table-striped table-responsive">
               <thead>
