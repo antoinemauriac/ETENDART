@@ -25,13 +25,13 @@
                 <div class="modal-body" style="text-align:left;">
                   <%= f.hidden_field :source, value: "show_student" %>
                   <%= f.input :payment_method,
-                              label: "Moyen de paiment",
+                              label: "Moyen de paiement",
                               required: true,
                               collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
                               prompt: "Sélectionner",
                               input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
                   <%= f.input :receiver_id,
-                              label: "Personne ayant reçu le paiment",
+                              label: "Personne ayant reçu le paiement",
                               collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
                               selected: membership.receiver_id.present? ? membership.receiver_id : current_user.id,
                               prompt: "Sélectionner",

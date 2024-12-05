@@ -22,7 +22,7 @@
                         action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
                 class: "btn-selection btn-fill" %>
     <% if @camp.school_period.paid %>
-      <%= link_to "LES PAIMENTS",
+      <%= link_to "LES PAIEMENTS",
                   managers_camp_enrollments_path(camp_id: @camp.id),
                   data: { turbo_frame: "selected_content",
 
