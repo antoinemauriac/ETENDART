@@ -1,6 +1,7 @@
 <td class="align-middle text-center"
   data-controller="update-photo-from-course"
   data-update-photo-from-course-target="studentPhoto"
+  data-update-photo-from-course-course-id-value="<%= course.id %>"
   data-update-photo-from-course-student-id-value="<%= student.id %>">
   <% if student.photo.attached? %>
     <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id) do %>

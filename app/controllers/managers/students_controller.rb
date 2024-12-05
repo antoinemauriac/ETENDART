@@ -145,6 +145,8 @@ class Managers::StudentsController < ApplicationController
   def update_photo
     @student = Student.find(params[:id])
     @origin = params[:origin]
+    @course = Course.find(params[:course_id]) if params[:course_id].present?
+
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
 
     # Supprimer l'ancienne photo de Cloudinary si elle existe
@@ -172,7 +174,7 @@ class Managers::StudentsController < ApplicationController
       format.json { render json: { imageUrl: url_for(@student.photo) } }
       format.text do
         partial = choose_partial_based_on_origin
-        render partial: partial, locals: { student: @student }, formats: [:html]
+        render partial: partial, locals: { student: @student, course: @course }, formats: [:html]
       end
     end
   end

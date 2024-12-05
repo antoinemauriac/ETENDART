@@ -14,6 +14,10 @@ export default class extends Controller {
   }
 
   submitForm(event) {
+    console.log('submitForm');
+    console.log(this.studentIdValue);
+
+
     event.preventDefault();
 
     this.showSpinner();
