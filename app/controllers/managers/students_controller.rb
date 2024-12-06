@@ -130,7 +130,7 @@ class Managers::StudentsController < ApplicationController
       flash[:notice] = "Informations modifiées avec succès"
       redirect_to managers_student_path(student)
     else
-      flash[:error] = "Une erreur est survenue"
+      flash[:alert] = "Une erreur est survenue"
       redirect_to managers_student_path(student)
     end
   end
@@ -178,9 +178,6 @@ class Managers::StudentsController < ApplicationController
       end
     end
   end
-
-
-
 
   def export_students_csv
     if params[:academy].present? && params[:academy] != "all"

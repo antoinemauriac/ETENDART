@@ -9,9 +9,9 @@ class Managers::FeedbacksController < ApplicationController
     @feedback.coach = current_user
     if @feedback.save
       redirect_to managers_student_path(@student)
-      flash.now[:notice] = "Feedback ajouté avec succès"
+      flash[:notice] = "Feedback ajouté avec succès"
     else
-      flash.now[:alert] = "Une erreur est survenue"
+      flash[:alert] = "Une erreur est survenue"
       render :new, status: :unprocessable_entity
     end
   end
