@@ -19,7 +19,6 @@ export default class extends Controller {
     this.labelTarget.classList.add("d-none");
     const studentId = this.studentIdValue;
     const courseId = this.courseIdValue;
-    console.log(studentId);
 
     let url;
     if (courseId) {

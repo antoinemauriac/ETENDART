@@ -1,10 +1,10 @@
-<td class="align-middle text-center"
+<td class="align-middle flexy" style="width: 30%;text-align:center"
   data-controller="update-photo-from-course"
   data-update-photo-from-course-target="studentPhoto"
   data-update-photo-from-course-course-id-value="<%= course.id %>"
   data-update-photo-from-course-student-id-value="<%= student.id %>">
   <% if student.photo.attached? %>
-    <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id) do %>
+    <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id), class: "flexy" do %>
       <%= cl_image_tag student.photo_or_default,
               class: "avatar-small",
               crop: "thumb",
@@ -13,6 +13,7 @@
               height: 300 %>
     <% end %>
   <% else %>
+  <div>
     <input type="file" id="photo_<%= student.id %>"
         data-action="change->update-photo-from-course#submit"
         data-update-photo-from-course-target="input"
@@ -28,5 +29,6 @@
     <div class="loader-container">
       <div class="loader-small d-none" data-update-photo-from-course-target="spinner"></div>
     </div>
+  </div>
   <% end %>
 </td>

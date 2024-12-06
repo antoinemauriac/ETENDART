@@ -31,23 +31,32 @@
 
   <%= turbo_frame_tag "selected_content", data: { loading_message_target: "turboFrame" }  do %>
     <div class="row justify-content-center align-items-stretch">
-      <div class="col-lg-4 col-md-7 col-sm-12" data-upload-photo-student-id-value="<%=@student.id%>">
+      <div class="col-lg-5 col-md-7 col-sm-12" data-upload-photo-student-id-value="<%=@student.id%>">
         <div class="header-info">
           INFORMATIONS
           <%= link_to edit_managers_student_path(@student), style: "margin-left:1rem" do %>
             <i class="fa-solid fa-user-pen"></i>
           <% end %>
         </div>
-        <div class="content-info content-info-show-student" style="position:relative">
+        <div class="content-info content-info-show-student">
           <div class="student-info">
             <p>NOM : <strong><%= @student.last_name.try(:upcase) %></strong></p>
             <p>PRÉNOM : <strong><%= @student.first_name %></strong></p>
+            <strong>
+              <p class="d-flex gap-2">
+              COTISANT <%= @start_year %>-<%= @start_year + 1 %> :
+              <% if @membership&.paid %>
+                <i class="fa-solid fa-circle-check text-success fa-small"></i>
+              <% else %>
+                <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+              <% end %>
+              </p>
+            </strong>
             <p><%= @student.gender %> - <%= @student.age %> ans </p>
-            <p>EMAIL: <%= @student.email %></p>
+            <p>EMAIL : <%= @student.email %></p>
             <p>TEL : <%= @student.phone_number %></p>
             <p>ADRESSE : <%= @student.address %></p>
-            <p>VILLE : <%= @student.city %></p>
-            <p>CP : <%= @student.zipcode %></p>
+            <p>VILLE : <%= @student.city %> - <%= @student.zipcode %></p>
           </div>
           <div class="student-photo">
             <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
@@ -100,7 +109,7 @@
         </div>
       </div>
 
-      <div class="col-lg-10 col-sm-12 mt-3">
+      <div class="col-lg-11 col-sm-12 mt-3">
         <div class="header-info"> PAIEMENT COTISATIONS </div>
         <div class="content-info content-info-show-student">
           <table class="table table-striped table-responsive">
@@ -127,38 +136,44 @@
               </button>
             </div>
             <!-- Modal -->
-            <div class="modal fade" id="membershipModal" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true">
+            <div class="modal fade" id="membershipModal" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true" data-controller="close-modal">
               <div class="modal-dialog">
                 <div class="modal-content" style="width:80%;padding:0px">
                   <div class="modal-header modal-header-deposit">
                     <h5 class="modal-title"><%= "Nouvelle cotisation pour #{@student.first_name} #{@student.last_name}" %></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                    <%= form_with(model: Membership.new, url: managers_memberships_path, local: true) do |form| %>
-                      <div class="modal-body">
-                        <%= form.hidden_field :student_id, value: @student.id %>
-                        <%= form.label :start_year, "Année" %>
-                        <%= form.text_field :start_year_display, value: "#{@start_year}-#{@start_year + 1}", class: "form-control mb-3", readonly: true %>
-                        <%= form.hidden_field :start_year, value: @start_year %>
-                        <%= form.label :amount, "Montant" %>
-                        <%= form.number_field :amount, value: 15, class: "form-control mb-3", required: true %>
-                        <%= form.label :payment_method, "Méthode de Paiement" %>
-                        <%= form.collection_select :payment_method,
-                                                    [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
-                                                    :last, :first,
-                                                    { prompt: 'Sélectionnez une méthode de paiement' },
-                                                    { class: "form-select mb-3", required: true } %>
-                        <%= form.label :receiver_id, "Personne ayant reçu le paiement" %>
-                        <%= form.collection_select :receiver_id,
-                                                    User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
-                                                    :second,
-                                                    :first,
-                                                    { selected: current_user.id, prompt: 'Sélectionnez une personne' },
-                                                    { class: "form-select mb-3", required: true } %>
+                    <%= simple_form_for Membership.new, url: managers_memberships_path, data: { action: "submit->close-modal#closeModal", controller: "payment-method" }, method: :post do |f| %>
+                      <div class="modal-body" style="text-align:left;">
+                        <%= f.hidden_field :student_id, value: @student.id %>
+                        <%= f.hidden_field :start_year, value: @start_year %>
+
+                        <%= f.input :start_year_display,
+                                    label: "Année",
+                                    input_html: { value: "#{@start_year}-#{@start_year + 1}", readonly: true, class: "form-control mb-3" } %>
+
+                        <%= f.input :amount,
+                                    label: "Montant",
+                                    input_html: { value: Membership::PRICE, class: "form-control mb-3", required: true, readonly: true } %>
+
+                        <%= f.input :payment_method,
+                                    label: "Moyen de paiement",
+                                    required: true,
+                                    collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                                    prompt: "Sélectionner",
+                                    input_html: { class: "form-select mb-3", data: { action: "change->payment-method#toggleReceiverRequired" } } %>
+
+                        <%= f.input :receiver_id,
+                                    label: "Personne ayant reçu le paiement",
+                                    collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                                    selected: current_user.id, # Si aucune valeur n'est pré-sélectionnée
+                                    prompt: "Sélectionner",
+                                    include_blank: true,
+                                    input_html: { class: "form-select mb-3", data: { payment_method_target: "receiver" }} %>
                       </div>
                       <div class="modal-footer d-flex justify-content-around">
-                          <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-                          <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                        <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                        <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
                       </div>
                     <% end %>
                 </div>
@@ -168,7 +183,7 @@
         </div>
       </div>
 
-      <div class="col-lg-10 col-sm-12 mt-3">
+      <div class="col-lg-11 col-sm-12 mt-3">
         <div class="header-info"> PAIEMENT STAGES </div>
         <div class="content-info content-info-show-student">
           <table class="table table-striped">
@@ -193,7 +208,7 @@
         </div>
       </div>
 
-      <div class="col-10 mt-3 mb-4">
+      <div class="col-11 mt-3 mb-4">
         <div class="header-info">FEEDBACKS</div>
         <div class="content-info content-info-show-student">
           <div>
@@ -256,6 +271,5 @@
         </div>
       </div>
     </div>
-    <%= render "shared/flashes" %>
   <% end %>
 </div>

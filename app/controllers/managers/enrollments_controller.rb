@@ -19,12 +19,15 @@ class Managers::EnrollmentsController < ApplicationController
       school_period = SchoolPeriod.find(params[:school_period])
       @student.school_periods << school_period unless @student.school_periods.include?(school_period)
 
+       # je vérifie si une distribution de tshirt est prévue pour la school_period
       if school_period.tshirt == true
+        # je recherche les school_period_enrollments de l'élève pour l'academy concernée
         school_period_enrollments = @student.school_period_enrollments
                                           .joins(:school_period)
                                           .where(school_periods: { academy_id: academy.id })
-
+        # je récupère le school_period_enrollment de la school_period en cours
         school_period_enrollment = @student.school_period_enrollments.find_by(school_period: school_period)
+        # je vérifie si l'élève a déjà reçu un tshirt pour une des school_period de l'academy
         if school_period_enrollments.any? { |school_period_enrollment| school_period_enrollment.tshirt_delivered == true }
           school_period_enrollment.update(tshirt_delivered: true)
         end

@@ -20,7 +20,7 @@ class Managers::StudentPolicy < ApplicationPolicy
   end
 
   def create?
-    user.manager? || user.coordinator?
+    user.manager?
   end
 
   def update?

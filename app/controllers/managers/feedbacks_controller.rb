@@ -1,9 +1,4 @@
 class Managers::FeedbacksController < ApplicationController
-  def new
-    @student = Student.find(params[:student_id])
-    authorize([:managers, @student], policy_class: Managers::FeedbackPolicy)
-    @feedback = Feedback.new
-  end
 
   def create
     @student = Student.find(params[:student_id])
@@ -14,9 +9,9 @@ class Managers::FeedbacksController < ApplicationController
     @feedback.coach = current_user
     if @feedback.save
       redirect_to managers_student_path(@student)
-      flash[:notice] = "Feedback ajouté avec succès"
+      flash.now[:notice] = "Feedback ajouté avec succès"
     else
-      flash[:alert] = "Une erreur est survenue"
+      flash.now[:alert] = "Une erreur est survenue"
       render :new, status: :unprocessable_entity
     end
   end

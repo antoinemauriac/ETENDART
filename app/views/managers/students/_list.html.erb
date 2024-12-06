@@ -1,31 +1,32 @@
-  <div class="form-container table-center" data-search-student-target="list">
-    <table id="myTable" class="table table-striped table-responsive">
-      <thead>
-        <tr>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="nom">Nom</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="prenom">Prénom</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="genre">Genre</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="email">Email</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="phone">Téléphone</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="datenaissance">Date de naissance</th>
-          <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="city">Ville</th>
+
+<div class="form-container table-center col-11" data-search-student-target="list">
+  <table id="myTable" class="table table-striped table-responsive">
+    <thead>
+      <tr>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="nom">Nom</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="prenom">Prénom</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="genre">Genre</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="email">Email</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="phone">Téléphone</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="datenaissance">Date de naissance</th>
+        <th data-orderable="true" data-searchable="true" class="table-search-header" data-name="city">Ville</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+        <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
+          <td class="align-middle"><%= student.last_name %></td>
+          <td class="align-middle"><%= student.first_name %></td>
+          <td class="align-middle"><%= student.gender %></td>
+          <td class="align-middle"><%= student.email %></td>
+          <td class="align-middle"><%= student.phone_number %></td>
+          <td class="align-middle"><%= student.date_of_birth %></td>
+          <td class="align-middle"><%= student.city %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% @students.each do |student| %>
-          <tr class="clickable-tr" onclick="window.location.href='<%= managers_student_path(student) %>'">
-            <td class="align-middle"><%= student.last_name %></td>
-            <td class="align-middle"><%= student.first_name %></td>
-            <td class="align-middle"><%= student.gender %></td>
-            <td class="align-middle"><%= student.email %></td>
-            <td class="align-middle"><%= student.phone_number %></td>
-            <td class="align-middle"><%= student.date_of_birth %></td>
-            <td class="align-middle"><%= student.city %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-  <div class="flexy mb-3 pagy-list">
-    <%== pagy_bootstrap_nav(@pagy, link_extra: "data-search-student-target='paginationLink'") if @pagy.pages > 1 %>
-  </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="flexy mb-3 pagy-list">
+  <%== pagy_bootstrap_nav(@pagy, link_extra: "data-search-student-target='paginationLink'") if @pagy.pages > 1 %>
+</div>

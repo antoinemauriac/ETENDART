@@ -40,7 +40,7 @@
             <tr>
               <th class="presence-head align-middle"></th>
               <th class="presence-head align-middle" style="text-align:left">Élève</th>
-              <th class="presence-head align-middle" style="text-align:center; padding-right:5px">Présent ?</th>
+              <th class="presence-head align-middle" style="text-align:center">Présent ?</th>
               <% if school_period && school_period.tshirt %>
                 <th class="presence-head align-middle" style="text-align:center">Tshirt ?</th>
               <% end %>
@@ -51,9 +51,9 @@
               <% student = enrollment.student %>
               <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
               <% name_style = camp_enrollment&.paid == false ? "color: #fc3535;font-weight:bold" : "" %>
-              <tr>
-                <td class="align-middle flexy">
-                  <%= link_to managers_student_path(student) do %>
+              <tr class="equal-height-row">
+                <td class="align-middle flexy" style="width: 30%">
+                  <%= link_to managers_student_path(student), class: "flexy" do %>
                     <% if student.photo.key? %>
                       <%= cl_image_tag student.photo.key,
                         class: "avatar-small",
@@ -68,25 +68,25 @@
                     <% end %>
                   <% end %>
                 </td>
-                <td class="align-middle" style="text-align:left; padding-left:10px; max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
-                  <%= link_to managers_student_path(student), class: "full-width-link" do %>
-                    <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
-                    <span class="student-mr" style="white-space: normal; <%= name_style %>"><%= student.first_name%></span><br>
+                <td class="align-middle" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
+                  <%= link_to managers_student_path(student), class: "full-width-course" do %>
+                    <span class="student-mr" style="<%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
+                    <span class="student-mr" style="<%= name_style %>"><%= student.first_name%></span><br>
                     <% if category.super_category == 'Cuisine' || category.super_category == 'Accompagnement' %>
-                      <span style="color: red; font-weight: bold;"><%= student.allergy if student.allergy != "Non" %></span>
+                      <span style="color: #ef00ff;font-weight:bold"><%= student.allergy if student.allergy != "Non" %></span>
                     <% end %>
                   <% end %>
                 </td>
                 <td class="align-middle">
-                  <div class="form-switch form-switch-lg">
-                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input", checked: enrollment.present? }, 1, 0 %>
+                  <div class="form-switch flexy">
+                    <%= form.check_box "enrollments[#{enrollment.id}][present]", { class: "form-check-input form-switch-input large-switch", checked: enrollment.present? }, 1, 0 %>
                   </div>
                 </td>
                 <% if school_period && school_period.tshirt %>
-                  <td class="align-middle">
+                  <td class="align-middle" style="width: 15%;">
                     <% school_period_enrollment = student.school_period_enrollments.find { |spe| spe.school_period_id == school_period&.id } %>
                     <% has_tshirt = school_period_enrollment.tshirt_delivered %>
-                    <div class="has-paid">
+                    <div class="flexy">
                       <%= form.check_box "enrollments[#{enrollment.id}][tshirt_delivered]", { class: "form-check-input green-check", checked: has_tshirt || false } %>
                     </div>
                   </td>
