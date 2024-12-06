@@ -68,7 +68,7 @@ class Managers::StudentsController < ApplicationController
   def current_activities
     @student = Student.includes(:activity_enrollments, :course_enrollments).find(params[:id])
     authorize([:managers, @student], policy_class: Managers::StudentPolicy)
-    @academies = (current_user.academies + @student.academies).uniq
+    @academies = current_user.academies
 
     @next_camp_activities = @student.next_camp_activities.includes(:camp, :school_period)
     @next_annual_activities = @student.next_annual_activities.includes(:annual_program)

@@ -22,7 +22,9 @@
           <th>Début</th>
           <th>Fin</th>
           <th>Élèves inscrits</th>
-          <th>Supprimer</th>
+          <% if current_user.manager? %>
+            <th>Supprimer</th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
@@ -34,14 +36,16 @@
           <td class="align-middle"><%= l(camp.starts_at, format: :date) %></td>
           <td class="align-middle"><%= l(camp.ends_at, format: :date) %></td>
           <td class="align-middle"><%= camp.students_count %></td>
-          <% if camp.can_import? %>
-            <td class="align-middle">
-              <%= link_to managers_camp_path(camp), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette semaine ?" } do %>
-                <i class="fas fa-trash trash"></i>
-              <% end %>
-            </td>
-          <% else %>
-            <td></td>
+          <% if current_user.manager? %>
+            <% if camp.can_import? &&  %>
+              <td class="align-middle">
+                <%= link_to managers_camp_path(camp), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette semaine ?" } do %>
+                  <i class="fas fa-trash trash"></i>
+                <% end %>
+              </td>
+            <% else %>
+              <td></td>
+            <% end %>
           <% end %>
         </tr>
         <% end %>
@@ -51,20 +55,23 @@
     <div class="flexy mb-4 mt-4">Aucune semaine pour le moment.</div>
   <% end %>
 </div>
-<div class="flexy" data-controller="hidden-forms">
-  <button class="btn-add-student btn-flex btn-large mt-1" data-action="click->hidden-forms#displayCampForm">
-    <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE SEMAINE<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-  </button>
-  <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
-    <%= form.label :name, "Nom :" %>
-    <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: true }, { class: "form-select", required: true } %>
-    <%= form.label :starts_at, "Date de début :" %>
-    <%= form.date_field :starts_at, class: "form-control", required: true %>
-    <%= form.label :ends_at, "Date de fin :" %>
-    <%= form.date_field :ends_at, class: "form-control", required: true %>
-    <div class="flex-btn mt-3">
-      <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-      <button class="btn-add-student btn-add-student-small btn-add-student-grey" data-action="click->hidden-forms#displayCampForm" type="button">Annuler</button>
-    </div>
-  <% end %>
-</div>
+
+<% if current_user.manager? %>
+  <div class="flexy" data-controller="hidden-forms">
+    <button class="btn-add-student btn-flex btn-large mt-1" data-action="click->hidden-forms#displayCampForm">
+      <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE SEMAINE<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+    </button>
+    <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
+      <%= form.label :name, "Nom :" %>
+      <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: true }, { class: "form-select", required: true } %>
+      <%= form.label :starts_at, "Date de début :" %>
+      <%= form.date_field :starts_at, class: "form-control", required: true %>
+      <%= form.label :ends_at, "Date de fin :" %>
+      <%= form.date_field :ends_at, class: "form-control", required: true %>
+      <div class="flex-btn mt-3">
+        <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+        <button class="btn-add-student btn-add-student-small btn-add-student-grey" data-action="click->hidden-forms#displayCampForm" type="button">Annuler</button>
+      </div>
+    <% end %>
+  </div>
+<% end %>

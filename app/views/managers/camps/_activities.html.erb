@@ -10,7 +10,9 @@
             <th>Lieu</th>
             <th>Coach Référent</th>
             <th>Nombre d'élèves inscrits</th>
-            <th>Supprimer</th>
+            <% if current_user.manager? %>
+              <th>Supprimer</th>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -21,14 +23,16 @@
               <td><%= activity.location.name %></td>
               <td><%= activity.coach.try(:full_name) || "" %></td>
               <td><%= activity.students.count %></td>
-              <% if activity.can_delete? %>
-                <td>
-                  <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
-                    <i class="fas fa-trash trash"></i>
-                  <% end %>
-                </td>
-              <% else %>
-                <td></td>
+              <% if current_user.manager? %>
+                <% if activity.can_delete? %>
+                  <td>
+                    <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
+                      <i class="fas fa-trash trash"></i>
+                    <% end %>
+                  </td>
+                <% else %>
+                  <td></td>
+                <% end %>
               <% end %>
             </tr>
           <% end %>
@@ -37,10 +41,12 @@
     <% else %>
       <div class="flexy mb-4 mt-4">Aucune activité pour le moment.</div>
     <% end %>
-    <div class="flexy">
-      <%= link_to new_managers_activity_path(camp: @camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-1" do %>
-        <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE ACTIVITÉ<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-      <% end %>
-    </div>
+    <% if current_user.manager? %>
+      <div class="flexy">
+        <%= link_to new_managers_activity_path(camp: @camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-1" do %>
+          <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE ACTIVITÉ<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>

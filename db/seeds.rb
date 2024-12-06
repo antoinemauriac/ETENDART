@@ -110,7 +110,7 @@ Academy.all.each do |academy|
 end
 
 # CREATE 20 STUDENTS
-20.times do |i|
+25.times do |i|
   student = Student.new(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,

@@ -8,9 +8,9 @@ class Managers::MembershipsController < ApplicationController
 
     if @membership.update(membership_params)
       update_membership(payment_method)
-      flash[:notice] = "Cotisation de #{@student.first_name} validée"
+      flash.now[:notice] = "Cotisation de #{@student.first_name} validée"
     else
-      flash[:alert] = "Une erreur est survenue"
+      flash.now[:alert] = "Une erreur est survenue"
     end
     flash.discard
     respond_to do |format|

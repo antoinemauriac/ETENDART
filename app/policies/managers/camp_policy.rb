@@ -1,7 +1,7 @@
 class Managers::CampPolicy < ApplicationPolicy
 
   def create?
-    authorized?
+    user.manager?
   end
 
   def show?
@@ -21,7 +21,7 @@ class Managers::CampPolicy < ApplicationPolicy
   end
 
   def destroy?
-    authorized?
+    user.manager?
   end
 
   def export_students_csv?

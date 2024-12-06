@@ -135,7 +135,7 @@ Rails.application.routes.draw do
     resources :old_camp_deposits, only: %i[create]
     resources :coach_feedbacks, only: %i[create destroy]
     resources :annual_enrollments, only: %i[create]
-    resources :feedbacks, only: %i[new create destroy]
+    resources :feedbacks, only: %i[create destroy]
     resources :activity_enrollments, only: %i[destroy]
     resources :camp_enrollments, only: %i[index destroy update]
     resources :categories, only: %i[index create edit update destroy]

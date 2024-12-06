@@ -226,3 +226,11 @@
 .medium-col {
   max-width: 8%;
 }
+
+.equal-height-row {
+  display: table-row; /* Force le comportement des cellules comme une ligne de tableau */
+}
+
+.equal-height-row td {
+  display: table-cell; /* Comportement cellulaire */
+}
