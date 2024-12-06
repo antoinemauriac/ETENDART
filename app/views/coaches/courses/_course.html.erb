@@ -47,7 +47,7 @@
             <% enrollments.each do |enrollment| %>
               <% student = enrollment.student %>
               <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
-              <% name_style = camp_enrollment&.paid == false ? "color: #FF5656;font-weight:bold" : "" %>
+              <% name_style = school_period && school_period.paid && !camp_enrollment&.paid ? "color: #FF5656;font-weight:bold" : "" %>
 
               <tr class="equal-height-row">
                 <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: course }%>

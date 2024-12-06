@@ -50,7 +50,7 @@
             <% enrollments.each do |enrollment| %>
               <% student = enrollment.student %>
               <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
-              <% name_style = camp_enrollment&.paid == false ? "color: #fc3535;font-weight:bold" : "" %>
+              <% name_style = school_period && school_period.paid && !camp_enrollment&.paid ? "color: #fc3535;font-weight:bold" : "" %>
               <tr class="equal-height-row">
                 <td class="align-middle flexy" style="width: 30%">
                   <%= link_to managers_student_path(student), class: "flexy" do %>

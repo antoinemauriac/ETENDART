@@ -8,7 +8,7 @@ class Coaches::StudentProfilesController < ApplicationController
     @feedbacks = @student.feedbacks.where(coach_id: current_user.id).order(created_at: :desc)
     @feedback = Feedback.new
     @course = Course.find(params[:course_id]) if params[:course_id]
-    if @course && @course.camp
+    if @course && @course.camp && @course.camp.school_period.paid
       @camp_enrollment = CampEnrollment.find_by(student: @student, camp: @course.camp)
     end
     @origin = params[:origin]
