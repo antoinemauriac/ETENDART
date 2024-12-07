@@ -16,7 +16,7 @@
   color: white;
   font-size: 24px;
   font-weight: 900;
-  height: 12rem;
+  height: 10rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +30,7 @@
 .card-admin {
   height: 9rem!important;
 }
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

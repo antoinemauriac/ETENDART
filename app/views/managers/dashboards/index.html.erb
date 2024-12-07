@@ -1,14 +1,5 @@
 <div class="dashboard-container">
   <div class="row justify-content-center align-items-center">
-    <% if @academies.size <= 5 %>
-      <% @academies.each do |academy| %>
-        <%= link_to managers_academy_path(academy), class: "col-12 col-lg-7 mt-1" do %>
-          <div class="card-academy card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
-            <%= academy.name.upcase %>
-          </div>
-        <% end %>
-      <% end %>
-    <% else %>
       <% @academies.each do |academy| %>
         <%= link_to managers_academy_path(academy), class: "col-12 col-lg-5 mt-1" do %>
           <div class="card-academy" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
@@ -16,6 +7,5 @@
           </div>
         <% end %>
       <% end %>
-    <% end %>
   </div>
 </div>
