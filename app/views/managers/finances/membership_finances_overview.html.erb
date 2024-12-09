@@ -100,8 +100,8 @@
             <tr>
               <td><%= receiver&.full_name || "Utilisateur inconnu" %></td>
               <!-- Total columns (Reçu, Déposé, En attente de dépôt) -->
-              <% cash_deposit = receiver.membership_deposits_as_depositor.where(start_year: @start_year).sum(:cash_amount) || 0 %>
-              <% cheque_deposit = receiver.membership_deposits_as_depositor.where(start_year: @start_year).sum(:cheque_amount) || 0 %>
+              <% cash_deposit = receiver&.membership_deposits_as_depositor&.where(start_year: @start_year)&.sum(:cash_amount) || 0 %>
+              <% cheque_deposit = receiver&.membership_deposits_as_depositor&.where(start_year: @start_year)&.sum(:cheque_amount) || 0 %>
               <%# other_deposit = receiver.memberships.where(payment_method: ["hello_asso", "pass", "virement"], start_year: @start_year).sum(:amount) || 0 %>
               <% total_deposit = cash_deposit + cheque_deposit %>
               <td><%= replace_zero_with_dash(total_received) %></td>
@@ -120,7 +120,7 @@
               <!-- Others -->
               <td><%= replace_zero_with_dash(@payment_details_by_user[[receiver_id, "offert"]] || 0) %></td>
               <!-- Last deposit -->
-              <td><%= receiver.membership_deposits_as_depositor.where(start_year: @start_year).order(created_at: :desc).first&.created_at&.strftime("%d/%m/%Y") %></td>
+              <td><%= receiver&.membership_deposits_as_depositor&.where(start_year: @start_year)&.order(created_at: :desc)&.first&.created_at&.strftime("%d/%m/%Y") %></td>
               <% if current_user.manager? || current_user.coordinator? %>
                 <td>
                   <button type="button" style="margin:0" class="btn-etendart-yellow" data-bs-toggle="modal" data-bs-target="#modal-<%= receiver.id %>">
@@ -135,7 +135,7 @@
                         </div>
                         <div class="modal-body">
                           <%= form_for MembershipDeposit.new, url: managers_membership_deposits_path do |f| %>
-                            <%= f.hidden_field :depositor_id, value: receiver.id %>
+                            <%= f.hidden_field :depositor_id, value: receiver&.id %>
                             <div class="mb-3 row align-items-center">
                               <%= f.label :cash_amount, "Espèces (€) :", class: "col-5" %>
                               <%= f.number_field :cash_amount, class: "form-deposit col-4" %>
