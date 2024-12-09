@@ -123,14 +123,14 @@
               <td><%= receiver&.membership_deposits_as_depositor&.where(start_year: @start_year)&.order(created_at: :desc)&.first&.created_at&.strftime("%d/%m/%Y") %></td>
               <% if current_user.manager? || current_user.coordinator? %>
                 <td>
-                  <button type="button" style="margin:0" class="btn-etendart-yellow" data-bs-toggle="modal" data-bs-target="#modal-<%= receiver.id %>">
+                  <button type="button" style="margin:0" class="btn-etendart-yellow" data-bs-toggle="modal" data-bs-target="#modal-<%= receiver&.id %>">
                     Déposer
                   </button>
-                  <div class="modal fade" id="modal-<%= receiver.id %>" tabindex="-1" aria-labelledby="modalLabel-<%= receiver.id %>" aria-hidden="true">
+                  <div class="modal fade" id="modal-<%= receiver&.id %>" tabindex="-1" aria-labelledby="modalLabel-<%= receiver&.id %>" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content" style="width:80%;padding:0px">
                         <div class="modal-header modal-header-deposit">
-                          <h1 class="modal-title fs-5" id="modalLabel-<%= receiver.id %>"><%= receiver.full_name %> le <%= l(Date.current, format: :default) %></h1>
+                          <h1 class="modal-title fs-5" id="modalLabel-<%= receiver&.id %>"><%= receiver&.full_name %> le <%= l(Date.current, format: :default) %></h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
