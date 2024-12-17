@@ -7,7 +7,7 @@
     <% if camp_enrollment.payment_date %>
       <td class="align-middle"><%= l(camp_enrollment.payment_date, formats: :default) %></td>
     <% else %>
-      <td class="align-middle">-</td>
+      <td class="align-middle"></td>
     <% end %>
     <td class="align-middle"><%= camp_enrollment.payment_method %></td>
   <% else %>

@@ -101,7 +101,7 @@ class Managers::StudentsController < ApplicationController
     student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
     student.academies << Academy.find(params[:student][:academy3_id]) if params[:student][:academy3_id].present?
     excel_serial_date = (student.date_of_birth - Date.new(1899, 12, 30)).to_i
-    username = "#{student.first_name.downcase}#{student.last_name.downcase}#{excel_serial_date }"
+    username = "#{student.first_name.downcase}#{student.last_name.downcase}#{excel_serial_date}"
     student.update(username: username)
     if student.save
       redirect_to managers_student_path(student)
