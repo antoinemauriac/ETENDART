@@ -1,9 +1,8 @@
 <%= link_to managers_course_path(course), id: dom_id(course), class: "row card-row" do %>
-  <div class="col-2 flexy-row"><%= course.activity.name %></div>
+  <div class="col-3 flexy-row"><%= course.activity.name %></div>
   <div class="col-2 flexy-row"><%= course.activity.coach.try(:full_name) || "" %></div>
   <div class="col flexy-row"><%= course.activity.coach.try(:phone_number) || "" %></div>
-  <div class="col flexy-row"><%= l(course.starts_at, format: :hour_min) %></div>
-  <div class="col flexy-row"><%= l(course.ends_at, format: :hour_min) %></div>
+  <div class="col flexy-row"><%= l(course.starts_at, format: :hour_min) %> - <%= l(course.ends_at, format: :hour_min) %></div>
   <div class="col flexy-row"><%= course.students.count %></div>
   <% if academy.banished %>
     <div class="col flexy-row"><%= course.starts_at < Time.current ? content_tag(:span, course.activity.banished_students.where.not(id: course.course_enrollments.joins(:student).pluck(:student_id)).count, style: 'font-weight:bold;') : "-" %></div>
