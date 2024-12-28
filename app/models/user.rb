@@ -86,6 +86,10 @@ class User < ApplicationRecord
     roles.any? { |role| role.name == 'coach' }
   end
 
+  def parent?
+    roles.any? { |role| role.name == 'parent' }
+  end
+
   def manager_or_coordinator?
     manager? || coordinator?
   end

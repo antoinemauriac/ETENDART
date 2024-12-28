@@ -13,7 +13,6 @@
 ActiveRecord::Schema[7.0].define(version: 2024_11_26_172301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "unaccent"
 
   create_table "academies", force: :cascade do |t|
     t.string "name"
@@ -69,12 +68,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_172301) do
     t.bigint "camp_id"
     t.bigint "category_id", null: false
     t.bigint "coach_id"
+    t.integer "min_capacity"
+    t.integer "max_capacity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id", null: false
     t.bigint "annual_program_id"
     t.boolean "annual", default: false
-    t.integer "max_capacity"
     t.index ["annual_program_id"], name: "index_activities_on_annual_program_id"
     t.index ["camp_id"], name: "index_activities_on_camp_id"
     t.index ["category_id"], name: "index_activities_on_category_id"
