@@ -1,6 +1,7 @@
-<div id="no-user" class="row">
-  <div class="devise-form">
-    <h2 class="header-info mb-3">Connexion</h2>
+<div id="no-user">
+  <div class="bg-white container-sm p-3 rounded-3 ">
+    <h1 class="header-info mb-3">Connexion</h1>
+
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: :false }) do |f| %>
       <div class="form-inputs">
         <%= f.input :email,
@@ -18,9 +19,15 @@
       </div>
 
       <div class="flexy">
-        <%= f.button :submit, "Valider", class: "btn-etendart btn-connexion-bis mb-4", style:"width:100%" %>
+        <%= f.button :submit, "Valider", class: "btn-etendart btn-connexion-bis mb-4" %>
       </div>
       <%= render "devise/shared/links" %>
     <% end %>
-  </div>
+
+    <hr>
+    <div class="flexy">
+      <p class="text-center">Vous n'avez pas de compte ?</p>
+      <%= link_to "Inscription", new_user_registration_path, class: "btn btn-outline-primary" %>
+    </div>
+
 </div>

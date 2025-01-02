@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_26_172301) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_30_133652) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -379,6 +379,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_172301) do
     t.index ["manager_id"], name: "index_old_camp_deposits_on_manager_id"
   end
 
+  create_table "parent_profiles", force: :cascade do |t|
+    t.string "gender"
+    t.string "relationship_to_child"
+    t.string "phone_number"
+    t.string "address"
+    t.string "zipcode"
+    t.string "city"
+    t.boolean "has_valid_rgpd"
+    t.boolean "has_newsletter"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_parent_profiles_on_user_id"
+  end
+
   create_table "program_periods", force: :cascade do |t|
     t.date "start_date"
     t.date "end_date"
@@ -488,6 +503,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_172301) do
     t.string "status"
     t.boolean "admin", default: false, null: false
     t.string "gender"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.boolean "first_login", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -543,6 +563,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_172301) do
   add_foreign_key "memberships", "users", column: "receiver_id"
   add_foreign_key "old_camp_deposits", "camps"
   add_foreign_key "old_camp_deposits", "users", column: "manager_id"
+  add_foreign_key "parent_profiles", "users"
   add_foreign_key "program_periods", "annual_programs"
   add_foreign_key "school_period_enrollments", "school_periods"
   add_foreign_key "school_period_enrollments", "students"

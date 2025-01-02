@@ -23,10 +23,21 @@ Rails.application.routes.draw do
     root to: "coaches/dashboards#index", as: :coach_root
   end
 
-  root to: "pages#home"
+  authenticated :user, ->(user) { user.first_login } do
+    namespace :users do
+      resource :first_login, only: [:show, :update], controller: "first_logins"
+      root to: "first_logins#show", as: :user_root
+    end
+  end
 
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
+  end
+
+  root to: "pages#home"
+
+  namespace :parents do
+    resource :profile, only: %i[new create show edit update]
   end
 
 

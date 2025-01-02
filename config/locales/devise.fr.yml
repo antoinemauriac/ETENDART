@@ -25,6 +25,16 @@ fr:
         unconfirmed_email: Email non confirmé
         unlock_token: Clé de déverrouillage
         updated_at: Date de mise à jour
+    errors:
+      models:
+        user:
+          attributes:
+            first_name:
+              blank: "Le prénom ne peut pas être vide"
+            last_name:
+              blank: "Le nom ne peut pas être vide"
+      messages:
+        blank: "ne peut pas être vide"
     models:
       user: Utilisateur
   devise:

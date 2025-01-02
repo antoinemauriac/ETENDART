@@ -13,9 +13,12 @@ class User < ApplicationRecord
   attr_accessor :academy_1_id, :academy_2_id, :academy_3_id, :category_1_id, :category_2_id, :category_3_id, :category_4_id, :category_5_id
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
 
-  validates :first_name, :last_name, :email, presence: true
+  validates :first_name, presence: { message: 'Le prénom est obligatoire' }
+  validates :last_name, presence: { message: 'Le nom est obligatoire' }
+  validates :email, presence: { message: 'L\'email est obligatoire' }
+
   validates :email, uniqueness: true
 
   has_many :memberships, foreign_key: :receiver_id
@@ -92,6 +95,10 @@ class User < ApplicationRecord
 
   def manager_or_coordinator?
     manager? || coordinator?
+  end
+
+  def no_role?
+    roles.empty?
   end
 
   def full_name

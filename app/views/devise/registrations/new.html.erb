@@ -1,25 +1,63 @@
-<h2>Sign up</h2>
+<section id="no-user">
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: :false }) do |f| %>
-  <%= f.error_notification %>
+  <div class="bg-white container-sm p-3 rounded-3">
+    <h1 class="header-info mb-3">Inscription</h1>
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" }%>
-    <%= f.input :password,
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: :false }) do |f| %>
+      <%= f.error_notification %>
+      <%= render "devise/shared/error_messages", resource: @user %>
+
+      <div class="form-inputs">
+
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :first_name, label: "Prénom", required: true %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :last_name, label: "Nom", required: true %>
+          </div>
+
+          <div class="col-12">
+            <%= f.input :email,
+                        required: true,
+                        input_html: { autocomplete: "email" }%>
+          </div>
+
+          <div class="col-12">
+            <%= f.input :password,
+                        required: true,
+                        hint: ("#{@minimum_password_length} caractères minimum" if @minimum_password_length),
+                        input_html: { autocomplete: "new-password" } %>
+          </div>
+
+          <div class="col-12">
+            <%= f.input :password_confirmation,
+                        required: true,
+                        input_html: { autocomplete: "new-password" } %>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="form-actions text-center">
+        <%= f.button :submit, "S'inscrire", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+
+    <hr>
+    <p class="text-center">
+      Vous avez déjà un compte ? <%= link_to "Connexion", new_user_session_path, class: "text-primary" %>
+    </p>
+    <p class="text-center">
+      ou
+    </p>
+
+    <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <p class="text-center">
+      <%= link_to "Je n'ai pas reçu l'email de confirmation", new_confirmation_path(resource_name), class: "text-primary" %>
+    </p>
+    <% end %>
+
   </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</section>
