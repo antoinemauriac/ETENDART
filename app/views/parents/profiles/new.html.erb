@@ -1,12 +1,25 @@
-<%= simple_form_for @parent_profile, url: new_parents_profile_path do |f| %>
-  <div class="form-inputs">
-    <%= f.input :gender, label: "Genre", collection: ["Homme", "Femme", "Autre"], include_blank: false %>
-    <%= f.input :relationship_to_child, label: "Relation avec l'enfant", collection: ["Père", "Mère", "Tuteur", "Autre"], include_blank: false, as: :select %>
-    <%= f.input :email %>
-    <%= f.input :phone_number %>
-  </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>
+<section class="bg-white container-sm p-3 rounded-3">
+  <h1 class="header-info mb-3">
+    Configuration du profil
+  </h1>
+
+  <%= simple_form_for @parent_profile, url: new_parents_profile_path do |f| %>
+    <div class="form-inputs">
+      <%= f.input :gender, label: "Genre", collection: ["Homme", "Femme", "Autre"], include_blank: false %>
+      <%= f.input :relationship_to_child, label: "Relation avec l'enfant", collection: ["Père", "Mère", "Tuteur", "Autre"], include_blank: false, as: :select %>
+
+      <%= f.input :phone_number, label: "Numéro de téléphone" %>
+      <%= f.input :address, label: "Adresse", placeholder: "12 rue de la Paix" %>
+      <%= f.input :zipcode, label: "Code postal", placeholder: "75000" %>
+      <%= f.input :city, label: "Ville", placeholder: "Paris" %>
+      <%= f.input :has_valid_rgpd, label: "J'accepte les conditions d'utilisation", as: :boolean, input_html: { checked: false, required: true } %>
+      <%= f.input :has_newsletter, label: "Je souhaite recevoir la newsletter", as: :boolean %>
+    </div>
+
+    <div class="form-actions text-center">
+      <%= f.button :submit, "Enregistrer", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+</section>
