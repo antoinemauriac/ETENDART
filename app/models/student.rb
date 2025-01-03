@@ -16,6 +16,8 @@ class Student < ApplicationRecord
 
   has_one_attached :photo
 
+  belongs_to :user
+
   has_many :memberships, dependent: :destroy
 
   has_many :academy_enrollments, dependent: :destroy

@@ -36,7 +36,7 @@
     <% if current_user && current_user.no_role? %>
       <%= render "shared/no_role_navbar" %>
     <% elsif current_user && current_user.parent? %>
-      <%# render "shared/parent_navbar" %>
+      <%= render "shared/parent_navbar" %>
     <% else %>
       <%= render "shared/navbar" %>
     <% end %>

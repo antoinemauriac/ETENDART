@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_12_30_133652) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_03_040432) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -478,6 +478,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_30_133652) do
     t.integer "zipcode"
     t.string "allergy"
     t.integer "number_of_tshirts", default: 0
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_students_on_user_id"
   end
 
   create_table "user_roles", force: :cascade do |t|
@@ -569,6 +571,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_12_30_133652) do
   add_foreign_key "school_period_enrollments", "students"
   add_foreign_key "school_period_stats", "school_periods"
   add_foreign_key "school_periods", "academies"
+  add_foreign_key "students", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
 end

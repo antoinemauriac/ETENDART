@@ -57,7 +57,12 @@ fr:
     errors:
       messages:
         record_invalid: "L'enregistrement est invalide"
+        required: "Ce champ est obligatoire"
       models:
+        parent_profile:
+          attributes:
+            has_valid_rgpd:
+              accepted: "Vous devez accepter les conditions RGPD."
         camp:
           attributes:
             starts_at:

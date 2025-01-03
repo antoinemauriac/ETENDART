@@ -9,6 +9,22 @@ class Parents::ProfilesPolicy < ApplicationPolicy
     user.present? && user.parent?
   end
 
+  def create?
+    new?
+  end
+
+  def show?
+    user.present? && user.parent?
+  end
+
+  def edit?
+    show?
+  end
+
+  def update?
+    edit?
+  end
+
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve

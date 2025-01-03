@@ -1,0 +1,70 @@
+<section id="no-user">
+
+  <div class="bg-white container-sm p-3 rounded-3">
+    <h1 class="header-info mb-3">
+      Mon Profil
+    </h1>
+
+    <div class="row">
+
+      <div class="col-md-6">
+        <p>
+          <strong>Prénom:</strong>
+          <%= @parent.first_name %>
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <p>
+          <strong>Nom:</strong>
+          <%= @parent.last_name %>
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <p>
+          <strong>Email:</strong>
+          <%= @parent.email %>
+        </p>
+
+        <p>
+          <strong>Numéro de téléphone:</strong>
+          <%= @parent_profile.phone_number %>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <p>
+          <strong>Adresse:</strong>
+          <%= @parent_profile.address %>
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <p>
+          <strong>Code postal:</strong>
+          <%= @parent_profile.zipcode %>
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <p>
+          <strong>Ville:</strong>
+          <%= @parent_profile.city %>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center">
+        <%= link_to "Modifier mon Profil", edit_parents_profile_path, class: "btn btn-secondary" %>
+      </div>
+    </div>
+
+  </div>
+
+</section>

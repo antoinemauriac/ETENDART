@@ -4,16 +4,16 @@
     Configuration du profil
   </h1>
 
-  <%= simple_form_for @parent_profile, url: new_parents_profile_path do |f| %>
+  <%= simple_form_for @parent_profile, url: parents_profile_path do |f| %>
     <div class="form-inputs">
       <%= f.input :gender, label: "Genre", collection: ["Homme", "Femme", "Autre"], include_blank: false %>
       <%= f.input :relationship_to_child, label: "Relation avec l'enfant", collection: ["Père", "Mère", "Tuteur", "Autre"], include_blank: false, as: :select %>
 
-      <%= f.input :phone_number, label: "Numéro de téléphone" %>
+      <%= f.input :phone_number, label: "Numéro de téléphone", placeholder: "06 12 34 56 78" %>
       <%= f.input :address, label: "Adresse", placeholder: "12 rue de la Paix" %>
       <%= f.input :zipcode, label: "Code postal", placeholder: "75000" %>
       <%= f.input :city, label: "Ville", placeholder: "Paris" %>
-      <%= f.input :has_valid_rgpd, label: "J'accepte les conditions d'utilisation", as: :boolean, input_html: { checked: false, required: true } %>
+      <%= f.input :has_valid_rgpd, label: "J'accepte les conditions d'utilisation", as: :boolean, input_html: { required: true } %>
       <%= f.input :has_newsletter, label: "Je souhaite recevoir la newsletter", as: :boolean %>
     </div>
 

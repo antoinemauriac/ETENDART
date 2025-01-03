@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
   authenticated :user, ->(user) { user.first_login } do
     namespace :users do
-      resource :first_login, only: [:show, :update], controller: "first_logins"
+      resource :first_login, only: [:show, :update], controller: "users/first_logins"
       root to: "first_logins#show", as: :user_root
     end
   end
@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   namespace :parents do
+    resources :students, only: %i[index show new create edit update]
     resource :profile, only: %i[new create show edit update]
   end
 

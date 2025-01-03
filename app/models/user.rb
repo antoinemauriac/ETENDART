@@ -21,6 +21,8 @@ class User < ApplicationRecord
 
   validates :email, uniqueness: true
 
+  has_many :students
+
   has_many :memberships, foreign_key: :receiver_id
 
   has_many :academies_as_manager, class_name: 'Academy', foreign_key: :manager_id
@@ -59,6 +61,9 @@ class User < ApplicationRecord
   has_many :students, through: :course_enrollments
 
   has_many :coach_feedbacks, foreign_key: :coach_id, dependent: :destroy
+
+  has_one :parent_profile, dependent: :destroy
+  accepts_nested_attributes_for :parent_profile
 
   before_validation :normalize_fields
   before_validation :normalize_phone_number
