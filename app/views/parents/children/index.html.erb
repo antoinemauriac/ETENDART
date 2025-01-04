@@ -8,12 +8,61 @@
   Mes Enfants
 </h1>
 
-<% if @parent.students.any? %>
-  <ul>
-    <% @parent.students.each do |student| %>
-      <li><%= student.name %></li>
+<% if @parent.children.any? %>
+
+  <ul class="row justify-content-center">
+    <% @parent.children.each do |child| %>
+      <li class="col-md-8">
+
+        <div class="card">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <%= cl_image_tag(child.photo.key, class: "img-fluid rounded-circle", alt: "...") %>
+            </div>
+
+            <div class="col-md-8">
+
+              <div class="card-header">
+                <h5 class="card-title text-center">
+                  <%= child.first_name %> <%= child.last_name %>
+                </h5>
+              </div>
+
+              <div class="card-body">
+                <ul class="row">
+                  <li class="col-md-6"><%= child.username %></li>
+                  <li class="col-md-6"><%= child.date_of_birth %></li>
+                  <li class="col-md-6"><%= child.gender %></li>
+                  <li class="col-md-6">Frères et soeurs : <%= child.siblings_count %></li>
+                  <li class="col-md-6"><%# child.photo.key %></li>
+
+                  <li class="col-md-6"><%= child.email %></li>
+                  <li class="col-md-6"><%= child.phone_number %></li>
+                  <li class="col-md-6"><%= child.school %></li>
+                  <li class="col-md-6">Traitement médical : <%= child.has_medical_treatment ? "Oui" : "Aucun" %></li>
+                  <li class="col-md-6"><%= child.medical_treatment_description.nil? ? child.medical_treatment_description : "Aucun traitement" %></li>
+                  <li class="col-md-6"><%= child.has_consent_for_photos ? "Accepte les photos" : "Refus de photos" %></li>
+                  <li class="col-md-6"><%= child.rules_signed ? "Règlement Intérieur signé" : "En attente de signature" %></li>
+                </ul>
+              </div>
+
+              <div class="card-footer text-center">
+                <%= link_to 'Modifier', edit_parents_child_path(child), class: "btn btn-outline-secondary" %>
+
+                <%= link_to 'Voir', parents_child_path(child), class: "card-link btn btn-outline-primary" %>
+              </div>
+
+
+          </div>
+
+          <div class="card-body text-center">
+          </div>
+        </div>
+
+      </li>
     <% end %>
   </ul>
+
 <% else %>
   <p class="text-center">
     Vous n'avez pas encore d'enfants enregistrés.
@@ -21,6 +70,6 @@
 <% end %>
 
 <div class="text-center">
-  <%= link_to 'Ajouter un enfant', new_parents_student_path, class: "btn btn-primary" %>
+  <%= link_to 'Ajouter un enfant', new_parents_child_path, class: "btn btn-primary" %>
 
 </div>
