@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   namespace :parents do
-    resources :students, only: %i[index show new create edit update]
+    resources :children, only: %i[index show new create edit update]
     resource :profile, only: %i[new create show edit update]
   end
 

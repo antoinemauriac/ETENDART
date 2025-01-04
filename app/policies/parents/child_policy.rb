@@ -1,4 +1,4 @@
-class Parents::StudentPolicy < ApplicationPolicy
+class Parents::ChildPolicy < ApplicationPolicy
   # NOTE: Up to Pundit v2.3.1, the inheritance was declared as
   # `Scope < Scope` rather than `Scope < ApplicationPolicy::Scope`.
   # In most cases the behavior will be identical, but if updating existing
@@ -10,7 +10,7 @@ class Parents::StudentPolicy < ApplicationPolicy
       if user.admin?
         scope.all
       elsif user.parent?
-        scope.where(user: user)
+        scope.where(user_id: user.id)
       else
         scope.none
       end

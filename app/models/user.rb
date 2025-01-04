@@ -21,7 +21,7 @@ class User < ApplicationRecord
 
   validates :email, uniqueness: true
 
-  has_many :students
+  has_many :children, class_name: 'Student', foreign_key: :user_id
 
   has_many :memberships, foreign_key: :receiver_id
 

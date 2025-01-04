@@ -19,12 +19,13 @@ class Student < ApplicationRecord
   # t.string "allergy"
   # t.integer "number_of_tshirts", default: 0
   # t.bigint "user_id"
-  # t.integer "siblings_count", default: 0, null: false
-  # t.string "school"
-  # t.boolean "rules_signed", default: false, null: false
-  # t.boolean "has_medical_treatment", default: false, null: false
-  # t.text "medical_treatment_description"
+  # -- t.integer "siblings_count", default: 0, null: false
+  # -- t.string "school"
+  # -- t.boolean "rules_signed", default: false, null: false
+  # -- t.boolean "has_medical_treatment", default: false, null: false
+  # -- t.text "medical_treatment_description"
   # t.index ["user_id"], name: "index_students_on_user_id"
+  # -- t.boolean "has_consent_for_photos", default: false
 
   validates :username, :first_name, :last_name, :date_of_birth, :gender, presence: true
 
@@ -36,7 +37,7 @@ class Student < ApplicationRecord
 
   has_one_attached :photo
 
-  belongs_to :user
+  belongs_to :parent, class_name: 'User', foreign_key: 'user_id'
 
   has_many :memberships, dependent: :destroy
 
