@@ -2,13 +2,13 @@ class Parents::StudentsController < ApplicationController
   before_action :set_parent
 
   def index
-    @students = @parent.students
-    authorize [:parents, :students], :index?
+    @students = policy_scope([:parents, Student])
+    authorize [:parents, :student], :index?
   end
 
   def new
     @student = Student.new
-    authorize [:parents, :students], :new?
+    authorize [:parents, :student], :new?
   end
 
   def create
@@ -46,6 +46,7 @@ class Parents::StudentsController < ApplicationController
 
   def set_parent
     @parent = current_user
+    @parent_profile = @parent.parent_profile
   end
 
 end

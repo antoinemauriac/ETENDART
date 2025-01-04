@@ -1,2 +1,26 @@
-<h1>Parents::Students#index</h1>
-<p>Find me in app/views/parents/students/index.html.erb</p>
+
+<%#
+  Cette vue affiche une liste des enfants enregistrés pour les parents.
+  Les parents peuvent ajouter de nouveaux enfants et accéder aux informations détaillées de chaque enfant.
+%>
+
+<h1 class="text-center">
+  Mes Enfants
+</h1>
+
+<% if @parent.students.any? %>
+  <ul>
+    <% @parent.students.each do |student| %>
+      <li><%= student.name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-center">
+    Vous n'avez pas encore d'enfants enregistrés.
+  </p>
+<% end %>
+
+<div class="text-center">
+  <%= link_to 'Ajouter un enfant', new_parents_student_path, class: "btn btn-primary" %>
+
+</div>

@@ -6,6 +6,26 @@ class Student < ApplicationRecord
       tsearch: { prefix: true }
     }
 
+  # -- t.string "first_name"
+  # -- t.string "last_name"
+  # -- t.string "email"
+  # -- t.date "date_of_birth"
+  # t.string "address"
+  # -- t.string "username"
+  # -- t.string "gender"
+  # -- t.string "phone_number"
+  # t.string "city"
+  # t.integer "zipcode"
+  # t.string "allergy"
+  # t.integer "number_of_tshirts", default: 0
+  # t.bigint "user_id"
+  # t.integer "siblings_count", default: 0, null: false
+  # t.string "school"
+  # t.boolean "rules_signed", default: false, null: false
+  # t.boolean "has_medical_treatment", default: false, null: false
+  # t.text "medical_treatment_description"
+  # t.index ["user_id"], name: "index_students_on_user_id"
+
   validates :username, :first_name, :last_name, :date_of_birth, :gender, presence: true
 
   DEFAULT_AVATAR = "xkhgd88iqzlk5ctay2hu.png"
