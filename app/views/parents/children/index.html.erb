@@ -17,7 +17,7 @@
         <div class="card">
           <div class="row g-0">
             <div class="col-md-4">
-              <%= cl_image_tag(child.photo.key, class: "img-fluid rounded-circle", alt: "...") %>
+              <%= cl_image_tag(child.photo_or_default, class: "img-fluid rounded-circle", alt: "...") %>
             </div>
 
             <div class="col-md-8">
