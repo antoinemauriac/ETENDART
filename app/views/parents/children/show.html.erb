@@ -82,7 +82,7 @@
             </thead>
             <tbody>
               <% @memberships.each do |membership| %>
-                <%= render "managers/students/membership", membership: membership, student: @student, start_year: membership.start_year %>
+                <%= render "managers/students/membership", membership: membership, student: @child, start_year: membership.start_year %>
               <% end %>
             </tbody>
           </table>
@@ -97,12 +97,12 @@
               <div class="modal-dialog">
                 <div class="modal-content" style="width:80%;padding:0px">
                   <div class="modal-header modal-header-deposit">
-                    <h5 class="modal-title"><%= "Nouvelle cotisation pour #{@student.first_name} #{@student.last_name}" %></h5>
+                    <h5 class="modal-title"><%= "Nouvelle cotisation pour #{@child.first_name} #{@child.last_name}" %></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                     <%= simple_form_for Membership.new, url: managers_memberships_path, data: { action: "submit->close-modal#closeModal", controller: "payment-method" }, method: :post do |f| %>
                       <div class="modal-body" style="text-align:left;">
-                        <%= f.hidden_field :student_id, value: @student.id %>
+                        <%= f.hidden_field :student_id, value: @child.id %>
                         <%= f.hidden_field :start_year, value: @start_year %>
 
                         <%= f.input :start_year_display,

@@ -1,0 +1,17 @@
+<h1 class="text-center my-3 text-black bg-warning p-2">
+  <%= @academy.name %> - <%= @school_period.name %> <%= @school_period.year %>
+</h1>
+
+<div class="row">
+  <% @school_period.activities.each do |activity| %>
+    <div class="col-md-4">
+      <div class="card border p-3">
+        <h3>
+          <%= activity.camp.name %>
+        </h3>
+        <h4>
+          <%= link_to activity.name, academy_school_period_activity_path(@academy, @school_period, activity) %>
+        </h4>
+      </div>
+    </div>
+  <% end %>

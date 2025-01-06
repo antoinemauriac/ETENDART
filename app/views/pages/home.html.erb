@@ -1,3 +1,40 @@
 <div id="no-user">
-<%= link_to "CONNEXION", user_session_path, class: "btn-connexion btn-etendart" %>
+  <section class="container bg-white p-3">
+    <h1 class="text-center my-3">
+      Bienvenue Chez Etendart !
+    </h1>
+
+    <% @academies.each do |academy| %>
+      <div class="academy">
+        <%= link_to academy_path(academy) do %>
+
+          <h2 class="my-3">
+            <%= academy.name %>
+          </h2>
+
+          <div class="row">
+            <% academy.next_school_periods.each do |school_period|  %>
+              <div class="col-md-4 border p-3">
+                <h3><%= school_period.name %> <%= school_period.year %></h3>
+
+                <div class="row">
+
+                  <% school_period.activities.each do |activity| %>
+                    <div class="col-md-6">
+                      <h4><%= activity.name %></h4>
+                    </div>
+                  <% end %>
+
+                </div>
+
+
+              </div>
+
+            <% end %>
+          </div>
+
+        <% end %>
+      </div>
+    <% end %>
+  </section>
 </div>

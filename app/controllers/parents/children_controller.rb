@@ -3,6 +3,7 @@ class Parents::ChildrenController < ApplicationController
 
   def index
     @children = policy_scope([:parents, Student])
+    @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     authorize [:parents, :student], :index?
   end
 
@@ -68,6 +69,7 @@ class Parents::ChildrenController < ApplicationController
   def edit
     @child = Student.find(params[:id])
     authorize [:parents, :student], :edit?
+
   end
 
   def update

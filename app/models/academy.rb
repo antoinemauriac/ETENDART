@@ -89,4 +89,8 @@ class Academy < ApplicationRecord
   def courses
     Course.where(id: (courses_through_camps.ids + courses_through_annual_programs.ids).uniq)
   end
+
+  def next_school_periods
+    school_periods.select { |school_period| !school_period.ended? }
+  end
 end

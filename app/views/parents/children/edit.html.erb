@@ -3,7 +3,7 @@
     Modifier les informations de mon enfant
   </h1>
 
-  <%= simple_form_for @child, url: parents_children_path do |f| %>
+  <%= simple_form_for @child, url: parents_child_path(@child) do |f| %>
 
     <div class="form-inputs">
 
