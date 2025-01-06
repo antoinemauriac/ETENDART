@@ -10,7 +10,9 @@
               <th>Stage</th>
               <th>Semaine</th>
               <th>Activité</th>
-              <th>Supprimer</th>
+              <% if current_user.manager? %>
+                <th>Supprimer</th>
+              <% end %>
             </tr>
           </thead>
           <tbody id="next-camp-activities">
@@ -33,11 +35,13 @@
           </tbody>
         </table>
         <div data-controller="enrollment-form">
-          <div class="flexy">
-            <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#campActivityModal">
-              <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-            </button>
-          </div>
+          <% if current_user.manager? %>
+            <div class="flexy">
+              <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#campActivityModal">
+                <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+              </button>
+            </div>
+          <% end %>
           <!-- Modal -->
           <div class="modal fade" id="campActivityModal" tabindex="-1" aria-labelledby="campActivityModalLabel" aria-hidden="true" data-controller="close-modal">
             <div class="modal-dialog">
@@ -88,7 +92,9 @@
                 <th>Académie</th>
                 <th>Année</th>
                 <th>Activité</th>
-                <th>Supprimer</th>
+                <% if current_user.manager? %>
+                  <th>Supprimer</th>
+                <% end %>
               </tr>
             </thead>
             <tbody id="next-annual-activities">
@@ -111,11 +117,13 @@
           </table>
         </div>
         <div data-controller="annual-enrollments-form enrollment-form">
-          <div class="flexy">
-            <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#programActivityModal">
-              <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-            </button>
-          </div>
+          <% if current_user.manager? %>
+            <div class="flexy">
+              <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#programActivityModal">
+                <i class="fa-solid fa-square-plus fa-square-bigger"></i>Inscrire à une activité<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+              </button>
+            </div>
+          <% end %>
           <!-- Modal -->
           <div class="modal fade" id="programActivityModal" tabindex="-1" aria-labelledby="programActivityModalLabel" aria-hidden="true" data-controller="close-modal">
             <div class="modal-dialog">
