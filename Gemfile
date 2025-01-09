@@ -94,3 +94,7 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+
+# payment system
+gem 'stripe', '~> 13.3', '>= 13.3.0'

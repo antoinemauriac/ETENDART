@@ -9,8 +9,23 @@ class Parents::ProfilesController < ApplicationController
     @parent = current_user
     authorize [:parents, :profiles], :new?
     @parent_profile = ParentProfile.new(parent_profile_params)
+
     @parent_profile.user = @parent
     if @parent_profile.save
+      stripe_customer = Stripe::Customer.create(
+        address: {
+          line1: @parent_profile.address,
+          postal_code: @parent_profile.zipcode,
+          city: @parent_profile.city,
+          country: 'FR',
+          state: 'France'
+        },
+        email: @parent.email,
+        name: @parent.full_name,
+        phone: @parent_profile.phone_number
+      )
+      @parent_profile.update!(stripe_customer_id: stripe_customer.id)
+      @parent.cart.create!(status: 'pending')
       redirect_to parents_profile_path, notice: 'Votre profil a bien été créé.'
     else
       redirect_to new_parents_profile_path, alert: 'Une erreur est survenue.'
@@ -34,6 +49,18 @@ class Parents::ProfilesController < ApplicationController
     @parent_profile = @parent.parent_profile
     authorize [:parents, :profiles], :update?
     if @parent_profile.update(parent_profile_params)
+      Stripe::Customer.update(@parent_profile.stripe_customer_id,
+        address: {
+          line1: @parent_profile.address,
+          postal_code: @parent_profile.zipcode,
+          city: @parent_profile.city,
+          country: 'FR',
+          state: 'France'
+        },
+        email: @parent.email,
+        name: @parent.full_name,
+        phone: @parent_profile.phone_number
+      )
       redirect_to parents_profile_path, notice: 'Votre profil a bien été mis à jour.'
     else
       render :edit, alert: 'Une erreur est survenue lors de la modification du profil.'

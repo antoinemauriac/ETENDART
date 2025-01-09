@@ -1,17 +1,27 @@
-<h1 class="text-center my-3 text-black bg-warning p-2">
-  <%= @academy.name %> - <%= @school_period.name %> <%= @school_period.year %>
+<h1 class="text-center my-3 bg-warning text-black p-1">
+  <%= @academy.name.upcase %> - <%= @school_period.name %> <%= @school_period.year %>
 </h1>
 
-<div class="row">
-  <% @school_period.activities.each do |activity| %>
-    <div class="col-md-4">
-      <div class="card border p-3">
-        <h3>
-          <%= activity.camp.name %>
-        </h3>
+
+
+<%# Il faut le nom du camp %>
+<%# date du camp et prix du stage %>
+<%# Les activités du camps en liste %>
+
+<% @school_period.camps.each do |camp| %>
+  <h3 class="text-white bg-black p-3 rounded-top-4">
+    <%= camp.name %> - <%= l(camp.starts_at, format: :date) %> - <%= l(camp.ends_at, format: :date) %> - <%= @school_period.price %>€
+  </h3>
+
+  <div class="row">
+    <% camp.activities.each do |activity| %>
+      <div class="col-md-4">
         <h4>
-          <%= link_to activity.name, academy_school_period_activity_path(@academy, @school_period, activity) %>
+          <%= activity.name %>
         </h4>
+
+        <%= link_to "Voir", academy_school_period_activity_path(@academy, @school_period, activity), class: "btn btn-outline-primary" %>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
+<% end %>

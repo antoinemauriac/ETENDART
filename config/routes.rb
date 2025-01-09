@@ -49,6 +49,14 @@ Rails.application.routes.draw do
     resource :profile, only: %i[new create show edit update]
   end
 
+  namespace :commerce do
+    get 'checkout/success'
+    get 'checkout/cancel'
+    resource :cart, only: %i[show create update]
+    resources :cart_items, only: %i[create destroy]
+    resources :orders, only: %i[create show]
+  end
+
 
   namespace :managers do
     resources :finances, only: %i[index] do

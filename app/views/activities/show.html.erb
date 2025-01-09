@@ -1,2 +1,75 @@
-<h1>Activities#show</h1>
-<p>Find me in app/views/activities/show.html.erb</p>
+<h1 class="text-center my-3 bg-warning text-black p-1">
+  <%= @academy.name.upcase %> - <%= @school_period.name %> <%= @school_period.year %> - <%= @camp.name %>
+  <br>
+  <%= @activity.name %>
+</h1>
+
+<section class="container-sm">
+
+  <div class="row">
+
+
+    <div class="col-md-8 col-12 my-3">
+      <h2 class="header-info">
+        PROCHAINS COURS
+      </h2>
+
+      <table class="table">
+        <tr>
+          <th>Date</th>
+          <th>Horaires</th>
+          <th>Lieu</th>
+
+        </tr>
+
+        <% @courses.each do |course| %>
+          <tr>
+            <td><%= l(course.starts_at, format: :abbr) %></td>
+            <td><%= course.starts_at.strftime("%H:%M") %> - <%= course.ends_at.strftime("%H:%M") %></td>
+            <td><%= @activity.location.name %></td>
+          </tr>
+        <% end %>
+      </table>
+
+      <div class="text-center">
+        <a href="#" class="btn btn-primary">
+          Inscrire mon enfant
+        </a>
+      </div>
+
+    </div>
+
+    <div class="col-md-4 col-12 my-3">
+
+        <h2 class="header-info">
+          COACH
+        </h2>
+
+        <ul>
+          <li>
+            <strong>Coach Principal</strong>
+            <br>
+            <%= @activity.coach.full_name %>
+          </li>
+          <li>
+            <strong>Autres coachs</strong>
+            <br>
+            <% @activity.coaches.each do |coach| %>
+              <%= coach.full_name %>
+            <% end %>
+          </li>
+        </ul>
+
+        <h2 class="header-info">
+          LIEU
+        </h2>
+
+        <p>
+          <%= @activity.location.address %>
+        </p>
+
+    </div>
+
+  </div>
+
+</section>

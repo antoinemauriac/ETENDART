@@ -6,11 +6,15 @@
   <div class="header-nav-item"><%= link_to @camp.name.upcase, managers_camp_path(@camp) %></div>
   <div class="header-nav-item active"><%= @activity.name.upcase %></div>
 </div>
+
 <div class="yellow-title"><%= @activity.name.upcase %></div>
+
 <div class="row justify-content-center align-items-stretch">
+
   <div class="col-8">
     <%= render "managers/activities/next_courses", courses: @courses %>
   </div>
+
   <div class="col-4">
     <div class="header-info">COACH</div>
     <div class="form-container form-container-activity">
