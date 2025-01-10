@@ -1,5 +1,5 @@
 class Commerce::Cart < ApplicationRecord
-  belongs_to :parent, class_name: 'User'
+  belongs_to :parent, class_name: 'User', foreign_key: :user_id
   has_many :cart_items, class_name: 'Commerce::CartItem', dependent: :destroy
 
   validates :status, presence: true, inclusion: { in: %w(pending completed cancelled) }

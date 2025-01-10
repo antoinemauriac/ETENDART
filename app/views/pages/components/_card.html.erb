@@ -1,0 +1,20 @@
+<%# app/views/pages/components/_card.html.erb %>
+
+<div class="card rounded-5 bg-black border-0 h-100">
+
+  <%= image_tag src, alt: "...", class: "card-img-top rounded-4 img-fluid h-50 object-fit-cover" %>
+
+  <div class="card-body d-flex flex-column justify-content-start">
+    <h4 class="card-title" style="color: yellow">
+      <strong>
+        <%= h3 %>
+      </strong>
+    </h3>
+    <p class="card-text text-white">
+      <%= p %>
+    </p>
+  </div>
+
+</div>
+
+<%# render "components/card", src: src, h3: h3, p: p %>

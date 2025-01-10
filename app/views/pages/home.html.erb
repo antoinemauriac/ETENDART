@@ -1,9 +1,191 @@
-<div id="no-user">
-  <section class="container bg-white p-3">
-    <h1 class="text-center my-3">
-      Bienvenue Chez Etendart !
-    </h1>
 
+
+<%# Section avec titre et background avec image opaque avec class bootstrap %>
+  <section class="bg-image text-black text-center py-5">
+    <h1 class="text-center my-3">
+      Etendart Academy, c'est l'association qui favorise le développement personnel des jeunes grâce à l'initiation au sport et aux arts.
+    </h1>
+  </section>
+
+  <%# section "Notre approche" en parlant des projets et de la philosophie. bg-white avec 6 cards %>
+
+  <section class="bg-white py-5 rounded-top-5">
+    <div class="container">
+      <h2>
+        Notre approche
+      </h2>
+      <p>
+        Tous nos projets combinent:
+      </p>
+
+      <div class="row">
+
+        <div class="col-md-2">
+          <%= render "pages/components/card",
+          src: "home/card-1.jpg",
+          h3: "L'inspiration",
+          p: "Par une infrastructure, un parrain, des expériences pédagogiques" %>
+        </div>
+
+        <div class="col-md-2">
+          <%= render "pages/components/card",
+          src: "home/card-2.jpg",
+          h3: "Un sport",
+          p: "pilier de nos projets comme vecteur de développement et de transmission" %>
+        </div>
+
+        <div class="col-md-2">
+          <%= render "pages/components/card",
+          src: "home/card-3.jpg",
+          h3: "Des activités artistiques",
+          p: "par une infrastructure, un parrain, des expériences pédagogiques" %>
+        </div>
+
+        <div class="col-md-2">
+          <%= render "pages/components/card",
+          src: "home/card-4.jpg",
+          h3: "Un format d'expérience",
+          p: "stages, programmes annuels ou événements" %>
+        </div>
+
+        <div class="col-md-2">
+          <%= render "pages/components/card",
+          src: "home/card-5.JPG",
+          h3: "Un projet éducatif",
+          p: "chaque activité permet de travailler des axes de développement personnel" %>
+        </div>
+
+        <div class="col-md-2">
+          <%= render "pages/components/card",
+          src: "home/card-6.jpg",
+          h3: "Des valeurs",
+          p: "mixité sociale, parité, fair-play et partage" %>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <%# section "Programmation à venir sur l'ensemble des académies" %>
+
+  <section class="bg-black text-white py-5 rounded-top-5">
+    <div class="container">
+      <h2 class="mb-3">
+        Programmation à venir sur l'ensemble des académies
+      </h2>
+
+      <ul class="d-flex gap-3 mb-3 flex-wrap">
+        <li class="rounded-pill bg-white text-black px-4 py-2">
+          Clichy
+        </li>
+        <li class="rounded-pill bg-white text-black px-4 py-2">
+          Levallois
+        </li>
+        <li class="rounded-pill bg-white text-black px-4 py-2">
+          Paris IX
+        </li>
+        <li class="rounded-pill bg-white text-black px-4 py-2">
+          Aubervilliers
+        </li>
+        <li class="rounded-pill bg-white text-black px-4 py-2">
+          Saint-Quentin
+        </li>
+      </ul>
+
+      <div class="bg-white py-5 rounded-3 text-black">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Académie</th>
+              <th>Prochaines périodes</th>
+              <th>Activités</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @academies.each do |academy| %>
+              <tr>
+                <td><%= academy.name %></td>
+                <td>
+                  <% academy.next_school_periods.each do |school_period|  %>
+                    <%= school_period.name %> <%= school_period.year %>
+                  <% end %>
+                </td>
+                <td>
+                  <% academy.next_school_periods.each do |school_period|  %>
+                    <% school_period.activities.each do |activity| %>
+                      <%= activity.name %>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <%# section "Notre impact" %>
+
+  <section class="bg-white py-5 rounded-top-5">
+    <div class="container">
+      <h2>
+        Notre impact
+      </h2>
+      <p>
+        Pour plus d'informations, <%= link_to "téléchargez notre rapport d'impact", "#", class: "link-underline-dark" %>
+      </p>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card rounded-5" style="background-color: yellow">
+            <div class="card-body">
+              <h3 class="card-title">
+                11
+              </h3>
+              <p class="card-text">
+                Académies Etendart dans 9 villes à travers la France
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card rounded-5" style="background-color: yellow">
+            <div class="card-body">
+              <h3 class="card-title">
+                + DE 4500
+              </h3>
+              <p class="card-text">
+                jeunes accompagnés depuis notre lancement
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card rounded-5" style="background-color: yellow">
+            <div class="card-body">
+              <h3 class="card-title">
+                + DE 30
+              </h3>
+              <p class="card-text">
+                activités artistiques, académiques
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!--
     <% @academies.each do |academy| %>
       <div class="academy">
         <%= link_to academy_path(academy) do %>
@@ -36,5 +218,4 @@
         <% end %>
       </div>
     <% end %>
-  </section>
-</div>
+  -->

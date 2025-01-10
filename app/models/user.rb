@@ -62,6 +62,8 @@ class User < ApplicationRecord
 
   has_many :coach_feedbacks, foreign_key: :coach_id, dependent: :destroy
 
+  has_many :carts, class_name: 'Commerce::Cart'
+
   has_one :parent_profile, dependent: :destroy
   accepts_nested_attributes_for :parent_profile
 
