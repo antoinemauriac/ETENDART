@@ -134,14 +134,16 @@
   <section class="bg-white py-5 rounded-top-5">
     <div class="container">
       <h2>
-        Notre impact
+        <strong>
+          Notre impact
+        </strong>
       </h2>
       <p>
         Pour plus d'informations, <%= link_to "téléchargez notre rapport d'impact", "#", class: "link-underline-dark" %>
       </p>
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card rounded-5" style="background-color: yellow">
             <div class="card-body">
               <h3 class="card-title">
@@ -154,7 +156,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card rounded-5" style="background-color: yellow">
             <div class="card-body">
               <h3 class="card-title">
@@ -167,7 +169,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card rounded-5" style="background-color: yellow">
             <div class="card-body">
               <h3 class="card-title">
@@ -180,10 +182,160 @@
           </div>
         </div>
 
+        <div class="col-md-3">
+          <div class="card rounded-5" style="background-color: yellow">
+            <div class="card-body">
+              <h3 class="card-title">
+                5
+              </h3>
+              <p class="card-text">
+                SPORTS
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
   </section>
+
+  <section class="bg-white rounded-top-5">
+    <%= image_tag "home/bg-section-experience.jpg", class: "w-100 object-fit-cover rounded-top-5", style: "height: 16rem" %>
+  </section>
+
+  <%# section "Tu veux participer ?" %>
+
+  <section class="" style="background-color: #FFD700">
+    <div class="container py-5">
+      <h2 class="text-center mb-1">
+        <strong>
+          Tu veux participer à une de nos expériences ?
+        </strong>
+      </h2>
+      <p class="text-center mb-3">
+        Si tu as entre 8 et 17 ans, tu peux adhérer à Etendart Academy et avoir accès à nos programmes éducatifs près de chez toi.
+      </p>
+
+      <div class="text-center">
+        <%= link_to "Adhérer", "#", class: "btn btn-dark rounded-4 px-5" %>
+      </div>
+    </div>
+  </section>
+
+  <%# section "Nous soutenir" %>
+
+  <section class="bg-white rounded-top-5">
+    <div class="container py-5">
+      <h2>
+        Nous soutenir
+      </h2>
+
+      <div class="row space-y-3">
+        <div class="col-md-6">
+          <div class="card rounded-5 bg-black border-0" style="height: 40rem">
+            <%= image_tag "home/soutenir.jpg", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
+            <div class="card-body">
+              <p class="card-text text-white p-3">
+                Vous souhaitez soutenir notre association ? En effectuant un don, vous soutenez nos programmes éducatifs et le déploiement de nouvelles actions.
+              </p>
+              <div class="text-center">
+                <%= link_to "Faire un don", "#", class: "btn btn-warning px-4 rounded-5" %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card rounded-5 bg-black border-0" style="height: 40rem">
+            <%= image_tag "home/benevole.JPG", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
+            <div class="card-body">
+              <p class="card-text text-white p-3">
+                Vous souhaitez soutenir notre association ? En effectuant un don, vous soutenez nos programmes éducatifs et le déploiement de nouvelles actions.
+              </p>
+              <div class="text-center">
+                <%= link_to "Faire un don", "#", class: "btn btn-warning px-4 rounded-5" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <%# section "Ils parlent d'Etendart Academy" %>
+
+  <section class="bg-black rounded-top-5">
+    <div class="container py-5">
+
+      <h2 class="text-white mb-5">
+        Ils parlent d'Etendart Academy
+      </h2>
+
+      <div class="row justify-content-center space-x-3 mb-3">
+
+        <div class="col-md-5">
+          <div class="card rounded-5 bg-white border-0">
+            <div class="card-body p-4">
+              <p class="card-text">
+                "Mes filles Jamelia et Shaina ont adoré sortir et découvrir un autre univers, loin de leur département. Je ne les ai jamais vues autant motivées à se lever le matin !"
+              </p>
+              <p class="">
+                <strong>Grégory</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="card rounded-5 bg-white border-0">
+            <div class="card-body p-4">
+              <p class="card-text">
+                "2ème session pour mon fils Melvin. A chaque fois il est super motivé et rentre plus que ravi. Bravo et merci pour ces stages qui apportent beaucoup aux jeunes."
+              </p>
+              <p class="">
+                <strong>Krystel</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row justify-content-center space-x-3">
+
+        <div class="col-md-5">
+          <div class="card rounded-5 bg-white border-0">
+            <div class="card-body p-4">
+              <p class="card-text">
+                "Les stages sont biens, good vibes, il y a une bonne ambiance. On s'entend tous bien, petits et grands, on joue tous ensemble. Il n'y a pas de jugement."
+              </p>
+              <p class="">
+                <strong></strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="card rounded-5 bg-white border-0">
+            <div class="card-body p-4">
+              <p class="card-text">
+                "Merci, mes enfants ont beaucoup aimé le stage et ils sont motivés pour les prochaines vacances. Merci aux animateurs !"
+              </p>
+              <p class="">
+                <strong></strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
 
   <!--
     <% @academies.each do |academy| %>
