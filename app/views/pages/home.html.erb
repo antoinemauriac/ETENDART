@@ -334,7 +334,126 @@
       </div>
 
     </div>
+
   </section>
+
+  <section style="background: linear-gradient(to bottom, black 50%, white 50%)">
+    <div class="container">
+      <div class="card p-5 rounded-5" style="background-color: #FFD700">
+        <h2 class="card-title">
+          <strong>
+            Suivez-nous !
+          </strong>
+        </h2>
+
+        <p class="card-text">
+          Restez informés de toutes nos actualités en nous suivant sur les réseaux sociaux.
+        </p>
+
+        <div id="social-media">
+          <a href="#" class="btn btn-dark rounded-pill px-4">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="btn btn-dark rounded-pill px-4">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="btn btn-dark rounded-pill px-4">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="btn btn-dark rounded-pill px-4">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# section "Suivez-Nous" %>
+
+  <footer class="bg-white py-5">
+      <div class="row justify-content-center gap-5 gap-md-0">
+
+        <div class="col-md-2 col-6 text-center">
+          <%= image_tag "home/logos/LOGO_EA_MINI_NOIR.png", class: "w-50" %>
+        </div>
+
+        <div class="col-md-10">
+          <div class="row gap-3 gap-md-0">
+
+            <div class="col-md-3">
+              <ul>
+                <li>
+                  <strong>
+                    <%= link_to "APPROCHE", "#notre-approche", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+                <li>
+                  <strong>
+                    <%= link_to "PROGRAMMATION", "#programmation", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+                <li>
+                  <strong>
+                    <%= link_to "IMPACT", "#impact", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-3">
+              <ul>
+                <li>
+                  <strong>
+                    <%= link_to "ADHERER", "#adherer", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+                <li>
+                  <strong>
+                    <%= link_to "FAIRE UN DON", "#don", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+                <li>
+                  <strong>
+                    <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-3">
+              <ul>
+                <li>
+                  <strong>
+                    <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+                <li>
+                  <p>
+                    <%= mail_to "contact@weareetendart.org" %>
+                    <br>
+                    <%= link_to "6 rue des Bateliers", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
+                    <br>
+                    <%= link_to "92110 Clichy", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-3">
+              <ul>
+                <li>
+                  <strong>
+                    <%= link_to "ILS NOUS SOUTIENNENT", "#soutien", class: "text-decoration-underline" %>
+                  </strong>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+  </footer>
 
 
   <!--
