@@ -14,7 +14,7 @@ class Commerce::Cart < ApplicationRecord
   end
 
   def self.current_cart_for(parent)
-    find_by(status: 'pending', parent: parent)
+    find_or_create_by(parent: parent, status: 'pending')
   end
 end
 

@@ -3,7 +3,9 @@ class Membership < ApplicationRecord
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
   belongs_to :academy, optional: true
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
+  has_many :cart_items, as: :products, class_name: 'Commerce::CartItem'
+
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "carte", nil].freeze
   PAYMENT_METHODS_WITH_RECEIVER = ["cash", "cheque", "offert"].freeze
   PRICE = 15
 
@@ -30,3 +32,19 @@ class Membership < ApplicationRecord
   #   end
   # end
 end
+
+# create_table "memberships", force: :cascade do |t|
+#   t.bigint "student_id", null: false
+#   t.boolean "paid", default: false
+#   t.integer "start_year"
+#   t.integer "amount"
+#   t.string "payment_method"
+#   t.date "payment_date"
+#   t.bigint "receiver_id"
+#   t.datetime "created_at", null: false
+#   t.datetime "updated_at", null: false
+#   t.integer "academy_id"
+#   t.string "stripe_price_id"
+#   t.index ["receiver_id"], name: "index_memberships_on_receiver_id"
+#   t.index ["student_id"], name: "index_memberships_on_student_id"
+# end

@@ -11,4 +11,9 @@ class Commerce::CartPolicy < ApplicationPolicy
     #   scope.all
     # end
   end
+
+  def show?
+    # NOTE: The user is always present, but may be `nil`.
+    user.present? && user.parent?
+  end
 end

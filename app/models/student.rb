@@ -63,6 +63,19 @@ class Student < ApplicationRecord
 
   before_validation :normalize_fields, :normalize_phone_number
 
+  after_create :new_student_add_membership_to_cart
+
+  # la cotisation
+  def membership?(start_year)
+    return memberships.find_by(start_year: start_year).present?
+  end
+
+  def new_student_add_membership_to_cart
+    membership = self.memberships.create!(start_year: Date.current.year - 1, amount: Membership::PRICE, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
+    cart = parent.carts.current_cart_for(parent)
+    cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end

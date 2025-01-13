@@ -9,6 +9,12 @@ class ParentProfile < ApplicationRecord
   validates :city, presence: true
   validates :has_valid_rgpd, acceptance: { accept: true }
 
+  after_create :parent_get_a_cart
+
+  def parent_get_a_cart
+    self.user.carts.create(status: 'pending', total_price: 0)
+  end
+
   # gender: string, select only one, options: ["homme", "femme", "autre"]
   # relationship_to_child: string
   # phone_number: string, only numeric characters for phone

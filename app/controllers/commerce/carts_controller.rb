@@ -5,6 +5,7 @@ class Commerce::CartsController < ApplicationController
   def show
     @parent = current_user
     @cart = Commerce::Cart.current_cart_for(@parent)
+    authorize @cart
     @cart_items = @cart.cart_items
   end
 

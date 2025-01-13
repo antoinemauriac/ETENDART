@@ -5,6 +5,8 @@ class CampEnrollment < ApplicationRecord
   has_one :academy, through: :school_period
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
 
+  has_many :cart_items, as: :products, class_name: 'Commerce::CartItem'
+
   PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
   validates :payment_method, inclusion: { in: Membership::PAYMENT_METHODS }
   validate :receiver_presence_for_specific_payment_methods

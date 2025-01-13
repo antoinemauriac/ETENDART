@@ -33,8 +33,14 @@ class Managers::CampsController < ApplicationController
     camp = Camp.new(camp_params)
     camp.school_period = SchoolPeriod.find(params[:school_period])
     authorize([:managers, camp])
-
+    if camp.valid?
+      # creer un produit stripe au nom du camp et de la periode scolaire et de l'academie
+      product = Stripe::Product.create(name: "#{camp.name} - #{camp.school_period.name} - #{camp.school_period.academy.name}")
+      price = Stripe::Price.create(product: product.id, unit_amount: camp.school_period.price * 100, currency: 'eur')
+      camp.stripe_price_id = price.id
+    end
     if camp.save
+      # créer un nouveau product stripe pour le camp
       camp.camp_stat = CampStat.create(camp: camp)
       flash[:notice] = "Semaine créée avec succès"
     else

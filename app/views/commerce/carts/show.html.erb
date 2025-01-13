@@ -1,0 +1,28 @@
+<%# permet d'afficher tous les stages achetés et les cotisations en attente de paiement %>
+
+<h1 class="text-center my-3 bg-warning text-black p-1">
+  Mon panier
+</h1>
+
+<% if @cart.cart_items.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Produit</th>
+        <th>Prix</th>
+        <th>Quantité</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart.cart_items.each do |cart_item| %>
+        <tr>
+          <td><%= cart_item.product %></td>
+          <td><%= cart_item.price %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Votre panier est vide.</p>
+<% end %>

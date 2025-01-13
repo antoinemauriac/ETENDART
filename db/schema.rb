@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_08_233403) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_13_043307) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -192,6 +192,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_08_233403) do
     t.date "payment_date"
     t.string "payment_method"
     t.bigint "receiver_id"
+    t.string "stripe_price_id"
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
     t.index ["receiver_id"], name: "index_camp_enrollments_on_receiver_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
@@ -228,17 +229,21 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_08_233403) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "new", default: true
+    t.string "stripe_price_id"
     t.index ["school_period_id"], name: "index_camps_on_school_period_id"
   end
 
   create_table "cart_items", force: :cascade do |t|
     t.bigint "cart_id", null: false
-    t.string "product"
     t.decimal "price"
     t.bigint "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stripe_price_id"
+    t.string "product_type", null: false
+    t.bigint "product_id", null: false
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
+    t.index ["product_type", "product_id"], name: "index_cart_items_on_product"
     t.index ["student_id"], name: "index_cart_items_on_student_id"
   end
 
@@ -385,6 +390,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_08_233403) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "academy_id"
+    t.string "stripe_price_id"
     t.index ["receiver_id"], name: "index_memberships_on_receiver_id"
     t.index ["student_id"], name: "index_memberships_on_student_id"
   end
