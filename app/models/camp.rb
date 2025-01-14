@@ -28,6 +28,77 @@ class Camp < ApplicationRecord
   validate :starts_at_must_be_before_ends_at
   validates :name, uniqueness: { scope: [:school_period_id], message: "Une semaine avec le même nom existe déjà pour ce stage" }
 
+  ###############################################################################
+  # Pour la recherche de camps
+  ###############################################################################
+
+  # les camps qui n'ont pas encore commencé
+  def self.next_camps
+    where("starts_at > ?", Date.today)
+  end
+
+  # les camps qui ont commencé
+  def self.current_camps
+    where("starts_at <= ? AND ends_at >= ?", Date.today, Date.today)
+  end
+
+  # les camps qui sont terminés
+  def self.past_camps
+    where("ends_at < ?", Date.today)
+  end
+
+  # les camps qui n'ont pas encore commencé ou qui sont en cours
+  def self.current_or_next_camps
+    where("ends_at >= ?", Date.today)
+  end
+
+  # les camps qui ont commencé ou qui sont terminés
+  def self.current_or_next_camps_by_academy(academy)
+    joins(:school_period).where("school_periods.academy_id = ?", academy.id).where("ends_at >= ?", Date.today)
+  end
+
+  # les camps qui sont terminés
+  def self.past_camps_by_academy(academy)
+    joins(:school_period).where("school_periods.academy_id = ?", academy.id).where("ends_at < ?", Date.today)
+  end
+
+  # les camps qui n'ont pas encore commencé ou qui sont en cours
+  def self.current_or_next_camps_by_coach(coach)
+    joins(:coach_camps).where("coach_camps.coach_id = ?", coach.id).where("ends_at >= ?", Date.today)
+  end
+
+  # les camps qui sont terminés
+  def self.past_camps_by_coach(coach)
+    joins(:coach_camps).where("coach_camps.coach_id = ?", coach.id).where("ends_at < ?", Date.today)
+  end
+
+  # les camps qui n'ont pas encore commencé ou qui sont en cours
+  def self.current_or_next_camps_by_student(student)
+    joins(:camp_enrollments).where("camp_enrollments.student_id = ?", student.id).where("ends_at >= ?", Date.today)
+  end
+
+  # les camps qui sont terminés
+  def self.past_camps_by_student(student)
+    joins(:camp_enrollments).where("camp_enrollments.student_id = ?", student.id).where("ends_at < ?", Date.today)
+  end
+
+  # les camps qui n'ont pas encore commencé ou qui sont en cours
+  def self.current_or_next_camps_by_parent(parent)
+    joins(:camp_enrollments).where("camp_enrollments.student_id IN (?)", parent.children.pluck(:id)).where("ends_at >= ?", Date.today)
+  end
+
+  # les camps qui sont terminés
+  def self.past_camps_by_parent(parent)
+    joins(:camp_enrollments).where("camp_enrollments.student_id IN (?)", parent.children.pluck(:id)).where("ends_at < ?", Date.today)
+  end
+
+  # les camps qui n'ont pas encore commencé ou qui sont en cours
+  def self.current_or_next_camps_by_academy_and_coach(academy, coach)
+    joins(:school_period).joins(:coach_camps).where("school_periods.academy_id = ?", academy.id).where("coach_camps.coach_id = ?", coach.id).where("ends_at >= ?", Date.today)
+  end
+
+  ###################################################################################
+
   def current?
     ends_at >= Time.current - 7.days
   end

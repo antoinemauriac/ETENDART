@@ -5,24 +5,39 @@
 </h1>
 
 <% if @cart.cart_items.any? %>
-  <table>
-    <thead>
-      <tr>
-        <th>Produit</th>
-        <th>Prix</th>
-        <th>Quantité</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @cart.cart_items.each do |cart_item| %>
+  <div class="container mt-5">
+
+    <table class="table table-bordered">
+      <thead class="thead-light">
         <tr>
-          <td><%= cart_item.product %></td>
-          <td><%= cart_item.price %></td>
+          <th>Étudiant</th>
+          <th>Produit</th>
+          <th>Prix</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @cart.cart_items.sort_by { |cart_item| cart_item.student.first_name }.each do |cart_item| %>
+          <tr>
+            <td><%= cart_item.student.first_name %></td>
+            <td><%= cart_item.name %></td>
+            <td class="text-end"><%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="text-end my-4">
+      <h3>Total: <%= number_with_precision(@cart.total_price, precision: 2, delimiter: ',') %> €</h3>
+
+      <div>
+        <a href="#" class="btn btn-primary">
+          Payer
+        </a>
+      </div>
+    </div>
+  </div>
 <% else %>
-  <p>Votre panier est vide.</p>
+  <div class="container mt-5">
+    <p class="alert alert-warning">Votre panier est vide.</p>
+  </div>
 <% end %>

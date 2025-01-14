@@ -5,16 +5,16 @@ class Commerce::Cart < ApplicationRecord
   validates :status, presence: true, inclusion: { in: %w(pending completed cancelled) }
   validates :total_price, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
-  def get_total_price!
-    total_price = 0
-    cart_items.each do |cart_item|
-      total_price += cart_item.price
-    end
-    total_price
-  end
+  # apres l'ajout ou la suppression d'un article dans le panier, on met à jour le prix total du panier
 
   def self.current_cart_for(parent)
     find_or_create_by(parent: parent, status: 'pending')
+  end
+
+  # Quand un panier est payé avec succès, son statut devient 'completed', les articles du panier sont marqués comme payés.
+  def update_total_price
+    self.total_price = cart_items.sum('price')
+    save!
   end
 end
 

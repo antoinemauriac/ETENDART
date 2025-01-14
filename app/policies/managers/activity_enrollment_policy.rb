@@ -1,4 +1,5 @@
 class Managers::ActivityEnrollmentPolicy < ApplicationPolicy
+
   def destroy?
     if record.camp
       academy = record.camp.school_period.academy

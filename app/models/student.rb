@@ -63,17 +63,49 @@ class Student < ApplicationRecord
 
   before_validation :normalize_fields, :normalize_phone_number
 
-  after_create :new_student_add_membership_to_cart
+  after_create :must_pay_membership
+
+  after_update :must_pay_membership, if: :saved_change_to_parent_id?
+
+  # Tous les students sans parent
+  def self.no_parent
+    where(parent_id: nil)
+  end
+
+  # Tous les students avec parent
+  def self.has_parent
+    where.not(parent: nil)
+  end
+
+  # vérifier si il est enrollé dans un camp
+  def is_enrolled_in_camp?(camp)
+    camp_enrollments.find_by(camp_id: camp.id).present?
+  end
+
+  # vérifier si il est enrollé dans une activity
+  def is_enrolled_in_activity?(activity)
+    activity_enrollments.find_by(activity_id: activity.id).present?
+  end
+
 
   # la cotisation
   def membership?(start_year)
     return memberships.find_by(start_year: start_year).present?
   end
 
-  def new_student_add_membership_to_cart
-    membership = self.memberships.create!(start_year: Date.current.year - 1, amount: Membership::PRICE, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
-    cart = parent.carts.current_cart_for(parent)
-    cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
+  # la cotisation n'est pas payée
+  def membership_not_paid?
+    return memberships.find_by(start_year: Date.current.year - 1, paid: false).present?
+  end
+
+  # les étudiants qui obtiennent un parent créent automatiquement un cart_item avec le membership s'il n'est pas adhérent
+  def must_pay_membership
+    # est ce qu'il y a une adhésion pour l'année en cours ?
+    if membership_not_paid?
+      membership = self.memberships.find_or_create_by(start_year: Date.current.year - 1, amount: Membership::PRICE, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
+      cart = parent.carts.current_cart_for(parent)
+      cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
+    end
   end
 
   def full_name

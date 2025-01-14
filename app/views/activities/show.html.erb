@@ -8,8 +8,7 @@
 
   <div class="row">
 
-
-    <div class="col-md-8 col-12 my-3">
+    <div class="col-md-8 col-12 my-3 justify-content-center">
       <h2 class="header-info">
         PROCHAINS COURS
       </h2>
@@ -30,14 +29,58 @@
           </tr>
         <% end %>
       </table>
-
-      <div class="text-center">
-        <a href="#" class="btn btn-primary">
-          Inscrire mon enfant
-        </a>
-      </div>
-
     </div>
+
+<!--
+      <div class="text-center">
+         Button trigger modal
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#campEnrollmentModal">
+          Inscrire mon enfant
+        </button>
+
+         Modal
+        <div class="modal fade" id="campEnrollmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                  Sélectionnez les enfants à inscrire
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <%# L'objectif est de créer des cart_items à l'inscription des students dans l'activité pour payer un panier par le parent %>
+                <%# L'inscription a une activité :activity_enrollment, a un camp. %>
+                <%# la création d'une activity_enrollment doit vérifier si il existe déjà un camp_enrollment pour le camp et le student %>
+                <%# si non, on crée un camp_enrollment, puis un cart_item %>
+                <%# si oui, on crée juste une activity_enrollment %>
+                <%# academy_school_period_activity_activity_enrollments %>
+
+                <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollments_path(@academy, @school_period, @activity), method: :post do |f| %>
+                  <div class="form-group">
+                    <%= f.label :students, "Sélectionner les étudiants" %>
+
+                    <% @children.each do |child| %>
+                      <div class="form-check">
+                        <%= check_box_tag "student_ids[]", child.id, false, class: "form-check-input" %>
+                        <%= label_tag "student_ids_#{child.id}", child.full_name, class: "form-check-label" %>
+                      </div>
+                    <% end %>
+                  </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <%= f.submit "Inscrire", class: "btn btn-primary" %>
+
+              <% end %>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+-->
 
     <div class="col-md-4 col-12 my-3">
 
@@ -67,6 +110,38 @@
         <p>
           <%= @activity.location.address %>
         </p>
+
+    </div>
+
+
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-12 my-3">
+
+      <h2 class="header-info">
+        Inscrire mes enfants
+      </h2>
+
+      <% @children.each do |child| %>
+        <div class="row">
+
+          <div class="col-md-6 my-3 align-self-center">
+            <%= child.full_name %>
+          </div>
+
+          <div class="col-md-6 my-3 align-self-center text-center">
+
+            <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollments_path(@academy, @school_period, @activity), method: :post do |f| %>
+              <%= f.hidden_field :student_id, value: child.id %>
+              <%= f.hidden_field :activity_id, value: @activity.id %>
+              <%= f.submit "Inscrire", class: "btn btn-primary" %>
+            <% end %>
+          </div>
+
+        </div>
+      <% end %>
+
 
     </div>
 

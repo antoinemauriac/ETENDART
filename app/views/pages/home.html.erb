@@ -80,21 +80,11 @@
       </h2>
 
       <ul class="d-flex gap-3 mb-3 flex-wrap">
-        <li class="rounded-pill bg-white text-black px-4 py-2">
-          Clichy
-        </li>
-        <li class="rounded-pill bg-white text-black px-4 py-2">
-          Levallois
-        </li>
-        <li class="rounded-pill bg-white text-black px-4 py-2">
-          Paris IX
-        </li>
-        <li class="rounded-pill bg-white text-black px-4 py-2">
-          Aubervilliers
-        </li>
-        <li class="rounded-pill bg-white text-black px-4 py-2">
-          Saint-Quentin
-        </li>
+        <% @academies.each do |academy| %>
+          <li class="rounded-pill bg-white text-black px-4 py-2">
+            <%= academy.name %>
+          </li>
+        <% end %>
       </ul>
 
       <div class="bg-white py-5 rounded-3 text-black">

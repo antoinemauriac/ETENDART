@@ -13,6 +13,8 @@ class Membership < ApplicationRecord
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
 
+  after_update :get_payment_date, if: -> { saved_change_to_paid? && paid }
+
   # MÉTHODE QUI RENVOIE LES MEMBERSHIPS A PRIORI NON EXIGIBLES
   def self.with_all_course_enrollments_present_false
     joins(student: { course_enrollments: :course })
@@ -21,6 +23,17 @@ class Membership < ApplicationRecord
       .having('bool_and(course_enrollments.present = false)')
       .pluck('students.id', 'memberships.id')
       .to_h
+  end
+
+  # Maintenant que les memberships ne sont payables que par carte, le payment date est la date au moment où paid est true
+  def get_payment_date
+    self.payment_date = Date.current
+    self.save
+  end
+
+  # cotisation payée ?
+  def paid?
+    paid
   end
 
   # SUPPRESSION DES MEMBERSHIPS A PRIORI NON EXIGIBLES SI L'ELEVE N'A PAS DE COURS FUTUR
