@@ -131,12 +131,50 @@
           </div>
 
           <div class="col-md-6 my-3 align-self-center text-center">
-
+<!--
             <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollments_path(@academy, @school_period, @activity), method: :post do |f| %>
               <%= f.hidden_field :student_id, value: child.id %>
               <%= f.hidden_field :activity_id, value: @activity.id %>
               <%= f.submit "Inscrire", class: "btn btn-primary" %>
             <% end %>
+            !-->
+            <!-- Button trigger modal -->
+
+            <%# il n'est pas inscrit a cette activité %>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#<%= child.id %>">
+              Inscrire
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="<%= child.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Inscrire <%= child.first_name %> à l'activité</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      En privilégiant le paiement par carte bancaire, vous nous aidez à simplifier la gestion des inscriptions.
+                    </p>
+                    <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollment_path(@academy, @school_period, @activity), method: :post do |f| %>
+                      <%= f.hidden_field :student_id, value: child.id %>
+                      <%= f.hidden_field :activity_id, value: @activity.id %>
+                      <%= f.label :payment_method, "Méthode de Paiement" %>
+                      <%= f.select :payment_method, [['Carte Bancaire', 'carte bancaire'], ['Autre', 'other']], {}, { class: 'form-select' } %>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <%= f.submit "Inscrire", class: "btn btn-primary" %>
+                  <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <%# il est inscrit et on veut le désinscrire %>
+            <%= link_to "Désinscrire", activity_enrollment_path(child.activity_enrollments.find_by(activity: @activity)), data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir désinscrire votre enfant ?" }, class: "btn btn-danger" %>
+
           </div>
 
         </div>

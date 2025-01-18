@@ -5,9 +5,9 @@ class CampEnrollment < ApplicationRecord
   has_one :academy, through: :school_period
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
 
-  has_many :cart_items, as: :product, class_name: 'Commerce::CartItem'
+  has_one :cart_item, as: :product, class_name: 'Commerce::CartItem', dependent: :destroy
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "carte bancaire", nil].freeze
   validates :payment_method, inclusion: { in: Membership::PAYMENT_METHODS }
   validate :receiver_presence_for_specific_payment_methods
 
@@ -19,9 +19,25 @@ class CampEnrollment < ApplicationRecord
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
 
+  # quand le parent inscrit son enfant à une activité, il l'inscrit également au stage et il doit le payer par carte si il a choisi cette option
+  after_create :create_cart_item
+
   def camp_starts_at
     camp.starts_at
   end
+
+  def create_cart_item
+    if payment_method == "carte bancaire"
+      cart_item = Commerce::CartItem.new(
+        cart_id: student.parent.carts.current_cart_for(student.parent).id,
+        student_id: student.id,
+        product: self,
+        price: school_period.price,
+        stripe_price_id: stripe_price_id)
+      cart_item.save!
+    end
+  end
+
 
 
   private

@@ -1,8 +1,8 @@
 class AcademiesController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :index, :show ]
+
   def index
-    authorize Academy
-    @academies = Academy.all
+    @academies = policy_scope(Academy)
   end
 
   def show

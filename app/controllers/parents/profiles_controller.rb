@@ -25,7 +25,7 @@ class Parents::ProfilesController < ApplicationController
         phone: @parent_profile.phone_number
       )
       @parent_profile.update!(stripe_customer_id: stripe_customer.id)
-      @parent.cart.create!(status: 'pending')
+      @parent.carts.create!(status: 'pending')
       redirect_to parents_profile_path, notice: 'Votre profil a bien été créé.'
     else
       redirect_to new_parents_profile_path, alert: 'Une erreur est survenue.'

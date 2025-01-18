@@ -65,16 +65,16 @@ class Student < ApplicationRecord
 
   after_create :must_pay_membership
 
-  after_update :must_pay_membership, if: :saved_change_to_parent_id?
+  after_update :must_pay_membership, if: :saved_change_to_user_id?
+
+  # Tous les students avec parent
+  def self.with_parent
+    where.not(parent: nil)
+  end
 
   # Tous les students sans parent
   def self.no_parent
     where(parent_id: nil)
-  end
-
-  # Tous les students avec parent
-  def self.has_parent
-    where.not(parent: nil)
   end
 
   # vérifier si il est enrollé dans un camp
@@ -85,6 +85,15 @@ class Student < ApplicationRecord
   # vérifier si il est enrollé dans une activity
   def is_enrolled_in_activity?(activity)
     activity_enrollments.find_by(activity_id: activity.id).present?
+  end
+
+  # vérifier si il est dans une autre activité du même camp
+  def is_enrolled_in_other_activities?(activity)
+    camp = activity.camp
+    camp.activities.where.not(id: activity.id).each do |act|
+      return true if is_enrolled_in_activity?(act)
+    end
+    return false
   end
 
 

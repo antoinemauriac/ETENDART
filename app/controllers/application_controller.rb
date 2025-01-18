@@ -14,6 +14,16 @@ class ApplicationController < ActionController::Base
   #   redirect_to(root_path)
   # end
 
+  protected
+
+  def after_sign_in_path_for(resource)
+    if resource.first_login
+      users_first_login_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
+    else
+      super # Utilise le chemin par défaut fourni par Devise ou celui que tu as configuré
+    end
+  end
+
   private
 
   def skip_pundit?

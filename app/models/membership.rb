@@ -3,9 +3,9 @@ class Membership < ApplicationRecord
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
   belongs_to :academy, optional: true
 
-  has_many :cart_items, as: :products, class_name: 'Commerce::CartItem'
+  has_one :cart_item, as: :products, class_name: 'Commerce::CartItem'
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "carte", nil].freeze
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "carte bancaire", nil].freeze
   PAYMENT_METHODS_WITH_RECEIVER = ["cash", "cheque", "offert"].freeze
   PRICE = 15
 

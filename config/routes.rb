@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :academies, only: %i[index show] do
     resources :school_periods, only: %i[show] do
       resources :activities, only: %i[show] do
-        resources :activity_enrollments, only: %i[create]
+        resources :activity_enrollments, only: %i[create, destroy]
       end
     end
   end
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
   authenticated :user, ->(user) { user.first_login } do
     namespace :users do
-      resource :first_login, only: [:show, :update], controller: "users/first_logins"
+      resource :first_login, only: [:show, :update], controller: "first_logins"
       root to: "first_logins#show", as: :user_root
     end
   end

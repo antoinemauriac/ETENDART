@@ -31,34 +31,29 @@ class ActivityEnrollmentsController < ApplicationController
   def destroy
     @activity_enrollment = ActivityEnrollment.find(params[:id])
     authorize(@activity_enrollment)
-
-    if @activity_enrollment.camp.camp_enrollment
-      redirect_to academy_school_period_activity_path(@activity_enrollment.activity.academy, @activity_enrollment.activity.school_period, @activity_enrollment.activity), alert: 'Vous ne pouvez pas supprimer une inscription payée'
-      return
-    end
-
-    if @activity_enrollment.activity.past?
-      redirect_to academy_school_period_activity_path(@activity_enrollment.activity.academy, @activity_enrollment.activity.school_period, @activity_enrollment.activity), alert: 'Vous ne pouvez pas supprimer une inscription à une activité passée'
-      return
-    end
-
-    camp_enrollment = @activity_enrollment.camp_enrollment
-    other_activities = camp_enrollment.activity_enrollments.where.not(id: @activity_enrollment.id)
-
-    if other_activities.exists?
+    # est ce que je suis inscris a une autre activité du même camp ?
+    if @activity_enrollment.student.is_enrolled_in_other_activities?(@activity_enrollment.activity)
+      # Alors je supprime juste l'inscription a l'activité
       @activity_enrollment.destroy
+    elsif @activity_enrollment.student.camp_enrollments.find_by(camp: @activity_enrollment.camp).paid
+      @activity_enrollment.destroy
+    elsif @activity_enrollment.student.camp_enrollments.find_by(camp: @activity_enrollment.camp).camp.starts_at < Date.today
+      # Est ce que l'activité est passée ?
+      # Alors je ne peux pas supprimer l'inscription a l'activité
+      redirect_to academy_school_period_activity_path(@activity_enrollment.activity.academy, @activity_enrollment.activity.school_period, @activity_enrollment.activity), alert: 'Vous ne pouvez pas vous désinscrire d\'une activité passée'
     else
-      cart_item = camp_enrollment.cart_item
+      @activity_enrollment.destroy
+      camp_enrollment = @activity_enrollment.student.camp_enrollments.find_by(camp: @activity_enrollment.camp)
       camp_enrollment.destroy
-      cart_item.destroy unless cart_item.paid?
+      if cart_item = camp_enrollment.cart_item
+        cart_item.destroy
+      end
     end
-
-    redirect_to academy_school_period_activity_path(@activity_enrollment.activity.academy, @activity_enrollment.activity.school_period, @activity_enrollment.activity), notice: 'Inscription supprimée'
   end
 
   private
 
   def activity_enrollment_params
-    params.require(:activity_enrollment).permit(:student_id, :activity_id)
+    params.require(:activity_enrollment).permit(:student_id, :activity_id, :payment_method)
   end
 end

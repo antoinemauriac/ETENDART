@@ -1,7 +1,7 @@
 class Commerce::CartItem < ApplicationRecord
   belongs_to :cart, class_name: 'Commerce::Cart'
   belongs_to :student, class_name: 'Student'
-  belongs_to :product, polymorphic: true
+  belongs_to :product, polymorphic: true, dependent: :destroy
 
   validates :price, presence: true
 

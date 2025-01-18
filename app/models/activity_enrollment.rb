@@ -1,4 +1,7 @@
 class ActivityEnrollment < ApplicationRecord
+  # permet d'envoyer un params lors de l'inscription a une activité pour l'envoyer au camp_enrollment
+  attr_accessor :payment_method
+
   belongs_to :student
   belongs_to :activity
   has_one :camp, through: :activity
@@ -6,25 +9,42 @@ class ActivityEnrollment < ApplicationRecord
   scope :attended, -> { where(present: true) }
   scope :unattended, -> { where(present: false) }
 
-  after_create :create_camp_enrollment_and_cart_item
+  after_create -> { create_camp_enrollment(self.student) }
+
+  # after_destroy -> { destroy_camp_enrollment(self.student) }
 
   # l'inscription à une activité doit créer un camp_enrollment et un cart_item
-  def create_camp_enrollment_and_cart_item(student)
+  def create_camp_enrollment(student)
     unless student.is_enrolled_in_camp?(self.camp)
-      camp_enrollment = CampEnrollment.new(
+      camp_enrollment_attributes = {
         student_id: student.id,
         camp_id: self.camp.id,
-        stripe_price_id: self.camp.stripe_price_id)
+        stripe_price_id: self.camp.stripe_price_id
+      }
+
+      # Ajouter le payment_method seulement si c'est "carte bancaire"
+      if self.payment_method == "carte bancaire"
+        camp_enrollment_attributes[:payment_method] = self.payment_method
+      end
+
+      camp_enrollment = CampEnrollment.new(camp_enrollment_attributes)
       camp_enrollment.save!
-      cart_item = Commerce::CartItem.new(
-        cart_id: student.parent.carts.current_cart_for(student.parent).id,
-        student_id: student.id,
-        product: camp_enrollment,
-        price: camp_enrollment.school_period.price,
-        stripe_price_id: camp_enrollment.stripe_price_id)
-      cart_item.save!
     end
   end
+
+  # def destroy_camp_enrollment(student)
+  #   camp_enrollment = self.student.camp_enrollments.find_by(camp: self.camp)
+  #   if self.student.is_enrolled_in_other_activities?(activity)
+  #     self.destroy
+  #   elsif camp_enrollment
+  #     cart_item = camp_enrollment.cart_item
+  #     camp_enrollment.destroy
+  #     if cart_item && !cart_item.paid?
+  #       cart_item.destroy
+  #     end
+  #   end
+  # end
+
 end
 
 
