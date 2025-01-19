@@ -31,25 +31,29 @@ class ActivityEnrollmentsController < ApplicationController
   def destroy
     @activity_enrollment = ActivityEnrollment.find(params[:id])
     authorize(@activity_enrollment)
-    # est ce que je suis inscris a une autre activité du même camp ?
-    if @activity_enrollment.student.is_enrolled_in_other_activities?(@activity_enrollment.activity)
-      # Alors je supprime juste l'inscription a l'activité
-      @activity_enrollment.destroy
-    elsif @activity_enrollment.student.camp_enrollments.find_by(camp: @activity_enrollment.camp).paid
-      @activity_enrollment.destroy
-    elsif @activity_enrollment.student.camp_enrollments.find_by(camp: @activity_enrollment.camp).camp.starts_at < Date.today
-      # Est ce que l'activité est passée ?
-      # Alors je ne peux pas supprimer l'inscription a l'activité
+
+    student = @activity_enrollment.student
+    camp_enrollment = student.camp_enrollments.find_by(camp: @activity_enrollment.camp)
+
+    # Vérifie si l'activité est passée
+    if camp_enrollment.camp.starts_at < Date.today
       redirect_to academy_school_period_activity_path(@activity_enrollment.activity.academy, @activity_enrollment.activity.school_period, @activity_enrollment.activity), alert: 'Vous ne pouvez pas vous désinscrire d\'une activité passée'
-    else
+
+    end
+
+    # Vérifie si l'étudiant est inscrit à d'autres activités ou si le camp est payé
+    if student.is_enrolled_in_other_activities?(@activity_enrollment.activity) || camp_enrollment.paid
       @activity_enrollment.destroy
-      camp_enrollment = @activity_enrollment.student.camp_enrollments.find_by(camp: @activity_enrollment.camp)
+      redirect_to academy_school_period_activity_path(@activity_enrollment.activity.academy, @activity_enrollment.activity.school_period, @activity_enrollment.activity), notice: 'Désinscription réussie, vous pouvez toujours vous réinscrire aux activités de ce stage.'
+    else
+      # Supprime le camp_enrollment et le cart_item associé si nécessaire
+      @activity_enrollment.destroy
       camp_enrollment.destroy
-      if cart_item = camp_enrollment.cart_item
-        cart_item.destroy
-      end
+      camp_enrollment.cart_item&.destroy
+      redirect_to academy_school_period_activity_path(@activity_enrollment.activity.academy, @activity_enrollment.activity.school_period, @activity_enrollment.activity), notice: 'Désinscription réussie, votre inscription au stage a également été annulée.'
     end
   end
+
 
   private
 

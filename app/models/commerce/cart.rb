@@ -16,6 +16,15 @@ class Commerce::Cart < ApplicationRecord
     self.total_price = cart_items.sum('price')
     save!
   end
+
+  def paid!
+    update!(status: 'completed')
+    cart_items.each(&:paid!)
+  end
+
+  def paid?
+    status == 'completed'
+  end
 end
 
 # create_table "carts", force: :cascade do |t|

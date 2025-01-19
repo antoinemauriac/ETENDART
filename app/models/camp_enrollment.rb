@@ -38,6 +38,11 @@ class CampEnrollment < ApplicationRecord
     end
   end
 
+  def paid!
+    self.update!(paid: true, payment_date: Date.current)
+  end
+
+
 
 
   private

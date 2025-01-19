@@ -30,9 +30,7 @@
       <h3>Total: <%= number_with_precision(@cart.total_price, precision: 2, delimiter: ',') %> €</h3>
 
       <div>
-        <a href="#" class="btn btn-primary">
-          Payer
-        </a>
+        <%= link_to 'Procéder au paiement', commerce_new_checkout_path, data: { turbo: "false" }, class: 'btn btn-primary' %>
       </div>
     </div>
   </div>

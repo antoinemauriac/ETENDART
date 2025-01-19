@@ -3,13 +3,16 @@ class Membership < ApplicationRecord
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
   belongs_to :academy, optional: true
 
-  has_one :cart_item, as: :products, class_name: 'Commerce::CartItem'
+  has_one :cart_item, as: :product, class_name: 'Commerce::CartItem', dependent: :destroy
 
   PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "carte bancaire", nil].freeze
   PAYMENT_METHODS_WITH_RECEIVER = ["cash", "cheque", "offert"].freeze
   PRICE = 15
 
   validates :payment_method, inclusion: { in: Membership::PAYMENT_METHODS }
+  # un validate qui vérifie que le student n'a pas déjà une membership pour l'année en cours
+  validates :student_id, uniqueness: { scope: :start_year, message: "Vous avez déjà payé votre cotisation pour cette année." }
+
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
 
@@ -36,12 +39,19 @@ class Membership < ApplicationRecord
     paid
   end
 
+  def paid!
+    self.update!(paid: true, payment_date: Date.current)
+  end
+
+
+
+
   # SUPPRESSION DES MEMBERSHIPS A PRIORI NON EXIGIBLES SI L'ELEVE N'A PAS DE COURS FUTUR
   # Membership.with_all_course_enrollments_present_false.each do |student_id, membership_id|
   #   student = Student.find(student_id)
   #   membership = Membership.find(membership_id)
   #   if student.courses.where('starts_at > ?', Date.current).empty?
-  #     membership.destroy
+  #     membership.destroy²
   #   end
   # end
 end

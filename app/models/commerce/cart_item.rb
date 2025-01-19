@@ -12,7 +12,7 @@ class Commerce::CartItem < ApplicationRecord
 
   def paid!
     self.update!(paid: true)
-    self.product.update!(paid: true)
+    self.product.paid!
   end
 
   def get_name
@@ -24,12 +24,9 @@ class Commerce::CartItem < ApplicationRecord
     self.save
   end
 
-
-
   def update_cart_total_price
     cart.update_total_price
   end
-
 
 end
 

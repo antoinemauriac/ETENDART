@@ -81,6 +81,7 @@
             </thead>
             <tbody>
               <% @memberships.each do |membership| %>
+              <%# raise %>
                 <%= render "managers/students/membership", membership: membership, student: @child, start_year: membership.start_year %>
               <% end %>
             </tbody>

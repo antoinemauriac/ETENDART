@@ -7,10 +7,11 @@ Rails.application.routes.draw do
   resources :academies, only: %i[index show] do
     resources :school_periods, only: %i[show] do
       resources :activities, only: %i[show] do
-        resources :activity_enrollments, only: %i[create, destroy]
+        resources :activity_enrollments, only: %i[create]
       end
     end
   end
+  resources :activity_enrollments, only: %i[destroy]
 
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
@@ -46,18 +47,28 @@ Rails.application.routes.draw do
 
   root to: "pages#home"
 
+  ################################################################################################
+  # CONTROLLER LE PROFIL DE L'UTILISATEUR PARENT
+  ################################################################################################
   namespace :parents do
     resources :children, only: %i[index show new create edit update]
     resource :profile, only: %i[new create show edit update]
   end
+  ################################################################################################
 
+
+  ################################################################################################
+  # CONTROLLER LE SYSTEME D'ACHAT
+  ################################################################################################
   namespace :commerce do
-    get 'checkout/success'
-    get 'checkout/cancel'
+    get '/checkout', to: 'checkout#new', as: 'new_checkout', controller: 'checkout'
+    get 'checkout/success', to: 'checkout#success', as: 'checkout_success', controller: 'checkout'
+    get 'checkout/cancel', to: 'checkout#cancel', as: 'checkout_cancel', controller: 'checkout'
     resource :cart, only: %i[show create update]
     resources :cart_items, only: %i[create destroy]
     resources :orders, only: %i[create show]
   end
+  ################################################################################################
 
 
   namespace :managers do

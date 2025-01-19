@@ -29,6 +29,8 @@ class Student < ApplicationRecord
 
   validates :username, :first_name, :last_name, :date_of_birth, :gender, presence: true
 
+
+
   DEFAULT_AVATAR = "xkhgd88iqzlk5ctay2hu.png"
 
   scope :today_birthday, -> { where('EXTRACT(month FROM date_of_birth) = ? AND EXTRACT(day FROM date_of_birth) = ?', Date.today.month, Date.today.day).order("created_at DESC") }
@@ -82,9 +84,9 @@ class Student < ApplicationRecord
     camp_enrollments.find_by(camp_id: camp.id).present?
   end
 
-  # vérifier si il est enrollé dans une activity
+  # renvoie VRAI si l'étudiant est inscrit à une activité précise
   def is_enrolled_in_activity?(activity)
-    activity_enrollments.find_by(activity_id: activity.id).present?
+    activity_enrollments.exists?(activity_id: activity.id)
   end
 
   # vérifier si il est dans une autre activité du même camp
