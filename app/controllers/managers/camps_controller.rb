@@ -144,6 +144,6 @@ class Managers::CampsController < ApplicationController
   end
 
   def camp_params
-    params.require(:camp).permit(:name, :starts_at, :ends_at)
+    params.require(:camp).permit(:name, :starts_at, :ends_at, :capacity, :waitlist_capacity)
   end
 end

@@ -11,8 +11,42 @@ class ParentProfile < ApplicationRecord
 
   after_create :parent_get_a_cart
 
+  after_create :create_stripe_customer
+  after_update :update_stripe_customer
+
   def parent_get_a_cart
     self.user.carts.create(status: 'pending', total_price: 0)
+  end
+
+  def create_stripe_customer
+    stripe_customer = Stripe::Customer.create(
+      address: {
+        line1: self.address,
+        postal_code: self.zipcode,
+        city: self.city,
+        country: 'FR',
+        state: 'France'
+      },
+      email: self.user.email,
+      name: self.user.full_name,
+      phone: self.phone_number
+    )
+    self.update!(stripe_customer_id: stripe_customer.id)
+  end
+
+  def update_stripe_customer
+    Stripe::Customer.update(self.stripe_customer_id,
+      address: {
+        line1: self.address,
+        postal_code: self.zipcode,
+        city: self.city,
+        country: 'FR',
+        state: 'France'
+      },
+      email: self.user.email,
+      name: self.user.full_name,
+      phone: self.phone_number
+    )
   end
 
   # gender: string, select only one, options: ["homme", "femme", "autre"]

@@ -1,7 +1,11 @@
-<h1 class="text-center my-3 bg-warning text-black p-1">
+<%# app/views/activities/show.html.erb %>
+<%# academy_school_period_activity_path(academy, school_period, activity) %>
+
+
+<h1 class="text-center my-3 bg-yellow text-black py-3 my-3">
   <%= @academy.name.upcase %> - <%= @school_period.name %> <%= @school_period.year %> - <%= @camp.name %>
   <br>
-  <%= @activity.name %>
+  <%= @activity.name %> - <i class="fa-solid fa-people-group"></i> <%= @activity.camp.camp_enrollments.count %>/<%= @activity.camp.capacity %>
 </h1>
 
 <section class="container-sm">
@@ -66,77 +70,178 @@
   </div>
 
   <div class="row justify-content-center">
-    <div class="col-md-6 col-12 my-3">
+    <div class="col-md-8 col-12 my-3">
 
       <h2 class="header-info">
-        Inscrire mes enfants
+        INSCRIRE MES ENFANTS
       </h2>
 
       <% @children.each do |child| %>
         <div class="row">
 
-          <div class="col-md-6 my-3 align-self-center">
+          <div class="col-6 my-3 align-self-center">
             <%= child.full_name %>
           </div>
 
-          <div class="col-md-6 my-3 align-self-center text-center">
+          <div class="col-6 my-3 align-self-center text-center">
 
-            <!-- Button trigger modal -->
+            <%# Camp_enrollment behavior pour ce child %>
 
-          <% if child.is_enrolled_in_activity?(@activity) %>
-          <%# il est inscrit et on veut le désinscrire %>
+            <%# il n'est pas inscrit à l'activité et n'est pas inscrit au camp ! %>
+            <%# Il peut s'inscrire à l'activité et au camp, on lui propose de payer soit par carte bancaire avec un panier, soit qu'il payera plus tard en reel %>
+            <% if !child.is_enrolled_in_activity?(@activity) && !child.is_enrolled_in_camp?(@camp) %>
 
-            <%= link_to "Désinscrire", activity_enrollment_path(child.activity_enrollments.find_by(activity: @activity).id), data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir désinscrire votre enfant ?" }, class: "btn btn-danger" %>
 
-          <% else %>
-          <%# il n'est pas inscrit a cette activité %>
+              <%# Il y a de la place dans le camp %>
+              <% if !@activity.camp.full? %>
 
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#<%= child.id %>">
-              Inscrire
-            </button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#<%= child.id %>">
+                  Inscrire
+                </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="<%= child.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Inscrire <%= child.first_name %> à l'activité</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal fade" id="<%= child.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Inscrire <%= child.first_name %> à l'activité</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+
+
+                          <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollments_path(@academy, @school_period, @activity), method: :post do |f| %>
+                            <div class="modal-body">
+                              <p>
+                                En privilégiant le paiement par carte bancaire, vous nous aidez à simplifier la gestion des inscriptions.
+                              </p>
+
+                                <%= f.hidden_field :student_id, value: child.id %>
+                                <%= f.hidden_field :activity_id, value: @activity.id %>
+                                <%= f.label :payment_method, "Méthode de Paiement" %>
+                                <%= f.select :payment_method, [['Carte Bancaire', 'carte bancaire'], ['Autre', 'other']], {}, { class: 'form-select' } %>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                              <%= f.submit "Inscrire", class: "btn btn-primary" %>
+                            </div>
+                          <% end %>
+                    </div>
                   </div>
+                </div>
+
+              <%# il n'est pas inscrit à l'activité et n'est pas inscrit au camp et il n'y a plus de place dans camp.capacity %>
+              <%# on peut l'inscrire au camp seulement sans qu'il rejoigne d'activité et sera sur liste d'attente %>
+              <% elsif @activity.camp.full? && !@activity.camp.waitlist_full? %>
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#<%= child.id %>">
+                  Inscrire
+                </button>
+
+                <div class="modal fade" id="<%= child.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Inscrire <%= child.first_name %> à l'activité</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
 
 
-                      <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollments_path(@academy, @school_period, @activity), method: :post do |f| %>
-                        <div class="modal-body">
-                          <p>
-                            En privilégiant le paiement par carte bancaire, vous nous aidez à simplifier la gestion des inscriptions.
-                          </p>
+                          <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollments_path(@academy, @school_period, @activity), method: :post do |f| %>
+                            <div class="modal-body">
+                              <p>
+                                Le stage est complet, vous pouvez inscrire votre enfant sur liste d'attente. En cas de désistement, nous vous contacterons.
+                              </p>
+
+                              <%= f.hidden_field :student_id, value: child.id %>
+                              <%= f.hidden_field :activity_id, value: @activity.id %>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Annuler
+                              </button>
+                              <%= f.submit "Inscrire", class: "btn btn-primary" %>
+                            </div>
+                          <% end %>
+                    </div>
+                  </div>
+                </div>
+
+              <% elsif @activity.camp.waitlist_full? %>
+
+                <button disabled type="button" class="btn btn-primary">
+                  Stage complet
+                </button>
+
+              <% end %>
+
+            <%# il est inscrit au camp mais pas à l'activité %>
+            <% elsif !child.is_enrolled_in_activity?(@activity) && child.is_enrolled_in_camp?(@camp) %>
+
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#<%= child.id %>">
+                Inscrire
+              </button>
+
+              <div class="modal fade" id="<%= child.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h3 class="modal-title fs-5" id="exampleModalLabel">Inscrire <%= child.first_name %> à l'activité</h3>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+
+                        <%= simple_form_for @activity_enrollment, url: academy_school_period_activity_activity_enrollments_path(@academy, @school_period, @activity), method: :post do |f| %>
+                          <div class="modal-body">
+                            <p>
+                              Votre enfant est déjà inscrit au stage, vous pouvez l'inscrire à cette activité.
+                            </p>
 
                             <%= f.hidden_field :student_id, value: child.id %>
                             <%= f.hidden_field :activity_id, value: @activity.id %>
-                            <%= f.label :payment_method, "Méthode de Paiement" %>
-                            <%= f.select :payment_method, [['Carte Bancaire', 'carte bancaire'], ['Autre', 'other']], {}, { class: 'form-select' } %>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                          <%= f.submit "Inscrire", class: "btn btn-primary" %>
-                        </div>
-                      <% end %>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                              Annuler
+                            </button>
+                            <%= f.submit "Inscrire", class: "btn btn-primary" %>
+                          </div>
+                        <% end %>
+                  </div>
                 </div>
               </div>
-            </div>
 
-          <% end %>
+            <%# il est inscrit à l'activité et au camp et il a payé %>
+            <% elsif child.is_enrolled_in_activity?(@activity) && child.has_paid_camp?(@camp) %>
+
+              <%= link_to "Désinscrire", activity_enrollment_path(child.activity_enrollments.find_by(activity: @activity).id), data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir désinscrire votre enfant ? Vous avez payé pour ce stage, vous ne perdez donc pas votre place prioritaire pour réinscrire votre enfant à l'activité." }, class: "btn btn-danger text-white" %>
+
+            <%# il est inscrit à l'activité, a une autre activité du même camp, et au camp mais il n'a pas payé %>
+            <% elsif child.is_enrolled_in_activity?(@activity) && child.is_enrolled_in_other_activities?(@activity) %>
+
+              <%= link_to "Désinscrire", activity_enrollment_path(child.activity_enrollments.find_by(activity: @activity).id), data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir désinscrire votre enfant ?" }, class: "btn btn-danger text-white" %>
 
 
+            <%# il est inscrit à l'activité, et au camp mais il n'a pas payé %>
+            <% elsif child.is_enrolled_in_activity?(@activity) && !child.has_paid_camp?(@camp) %>
 
+              <%= link_to "Désinscrire", activity_enrollment_path(child.activity_enrollments.find_by(activity: @activity).id), data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir désinscrire votre enfant ? Vous n'avez pas payé pour ce stage, vous perdez donc votre place prioritaire pour réinscrire votre enfant à l'activité." }, class: "btn btn-danger text-white" %>
+
+            <% end %>
 
 
           </div>
-
         </div>
       <% end %>
 
+    </div>
 
+    <div class="col-md-4 col-12 my-3">
+      <h2 class="header-info">
+        Prix du stage par enfant - <%= @activity.school_period.price %>€
+      </h2>
+
+      <p>
+        Nous rappelons que le paiement concerne la semaine de stage et qu'il inclut l'ensemble des activités proposées lors de cetete semaine. En inscrivant votre enfant à cette activité, vous pouvez également l'inscrire à d'autres activités de la même semaine.
+      </p>
     </div>
 
   </div>

@@ -55,7 +55,23 @@
           <div class="col-md-6">
             <%= f.input :phone_number, label: "Numéro de téléphone (si l'enfant en a un)", as: :tel %>
           </div>
+        </div>
 
+        <div class="row mb-2">
+          <div class="col-12">
+            <%= f.input :address, label: "Adresse" %>
+          </div>
+
+          <div class="col-md-6">
+            <%= f.input :zipcode, label: "Code Postal" %>
+          </div>
+
+          <div class="col-md-6">
+            <%= f.input :city, label: "Ville" %>
+          </div>
+        </div>
+
+        <div class="row mb-2">
           <div class="col-12">
             <%= f.input :school, label: "Etablissement Scolaire" %>
           </div>

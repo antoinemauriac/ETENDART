@@ -12,7 +12,7 @@ class ActivityEnrollmentsController < ApplicationController
     if @activity_enrollment.save
       redirect_to academy_school_period_activity_path(@academy, @school_period, @activity), notice: 'Inscription réussie'
     else
-      redirect_to academy_school_period_activity_path(@activity), alert: 'Erreur lors de l\'inscription'
+      redirect_to academy_school_period_activity_path(@academy, @school_period, @activity), alert: 'Erreur lors de l\'inscription'
     end
 
     # si je suis inscris je m'inscris a l'activité sans payer

@@ -68,6 +68,11 @@
       <%= form.date_field :starts_at, class: "form-control", required: true %>
       <%= form.label :ends_at, "Date de fin :" %>
       <%= form.date_field :ends_at, class: "form-control", required: true %>
+      <%= form.label :capacity, "Capacité maximale d'étudiants:" %>
+      <%= form.number_field :capacity, class: "form-control", required: true %>
+      <%= form.label :waitlist_capacity, "Capacité de la liste d'attente:" %>
+      <%= form.number_field :waitlist_capacity, class: "form-control", required: true %>
+
       <div class="flex-btn mt-3">
         <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
         <button class="btn-add-student btn-add-student-small btn-add-student-grey" data-action="click->hidden-forms#displayCampForm" type="button">Annuler</button>

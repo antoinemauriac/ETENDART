@@ -1,169 +1,27 @@
-<h1 class="text-center my-3 bg-warning text-black p-1">
+<h1 class="text-center my-3 bg-yellow text-black py-3 my-3">
   <%= @child.full_name %>
 </h1>
 
-<section class="row">
+<section class="row gy-3 justify-content-center">
+
   <div class="col-lg-5 col-md-7 col-sm-12" data-upload-photo-student-id-value="<%=@child.id%>">
-
-    <div class="header-info">
-      INFORMATIONS
-      <%= link_to edit_parents_child_path(@child), style: "margin-left:1rem" do %>
-        <i class="fa-solid fa-user-pen"></i>
-      <% end %>
-    </div>
-
-    <div class="content-info content-info-show-student">
-      <div class="student-info">
-        <p>NOM : <strong><%= @child.last_name.try(:upcase) %></strong></p>
-        <p>PRÉNOM : <strong><%= @child.first_name %></strong></p>
-        <strong>
-          <p class="d-flex gap-2">
-          COTISANT <%= @start_year %>-<%= @start_year + 1 %> :
-          <% if @membership&.paid %>
-            <i class="fa-solid fa-circle-check text-success fa-small"></i>
-          <% else %>
-            <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
-          <% end %>
-          </p>
-        </strong>
-        <p><%= @child.gender %> - <%= @child.age %> ans </p>
-        <p>EMAIL : <%= @child.email %></p>
-        <p>TEL : <%= @child.phone_number %></p>
-        <p>ADRESSE : <%= @child.address %></p>
-        <p>VILLE : <%= @child.city %> - <%= @child.zipcode %></p>
-      </div>
-      <div class="student-photo">
-        <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
-        <% if @child.photo.key? %>
-          <%= cl_image_tag @child.photo_or_default,
-                  data: { upload_photo_target: "photo" },
-                  class: "avatar-medium",
-                  crop: "thumb",
-                  gravity: "face",
-                  width: 300,
-                  height: 300 %>
-        <% else %>
-          <i class="fa-solid fa-circle-user" style="font-size: 7.5rem"></i>
-        <% end %>
-      </div>
-    </div>
-
+    <%= render "parents/children/components/information-card", child: @child, start_year: @start_year, membership: @membership %>
   </div>
 
   <div class="col-lg-3 col-md-5 col-sm-12">
-    <div class="header-info">HISTORIQUE</div>
-    <div class="content-info content-info-show-student">
-      <div>
-        <p><%= "STAGES : #{@child.camps_count}" %></p>
-        <p><%= "PROGRAMMES : #{@child.annual_programs_count}" %></p>
-        <p><%= "COURS : #{@child.past_courses_count}" %></p>
-        <p><%= "ABSENCES: #{@child.unattended_courses_count}" %></p>
-        <p><%= "TAUX ABS : #{@child.unattended_rate}%" %></p>
-      </div>
-    </div>
+    <%= render "parents/children/components/historic-card", child: @child %>
+  </div>
+
+</section>
+
+<section class="row justify-content-center">
+  <div class="col-lg-11 col-sm-12 mt-3">
+    <%= render "parents/children/components/memberships-card", memberships: @memberships %>
   </div>
 </section>
 
-<section class="row">
+<section class="row justify-content-center">
   <div class="col-lg-11 col-sm-12 mt-3">
-        <div class="header-info"> PAIEMENT COTISATIONS </div>
-        <div class="content-info content-info-show-student">
-          <table class="table table-striped table-responsive">
-            <thead>
-              <tr>
-                <th>Année</th>
-                <th>Montant</th>
-                <th>Date du paiement</th>
-                <th>Mode de paiement</th>
-                <th>Reçu par</th>
-                <th class="text-center">Payé ?</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @memberships.each do |membership| %>
-              <%# raise %>
-                <%= render "managers/students/membership", membership: membership, student: @child, start_year: membership.start_year %>
-              <% end %>
-            </tbody>
-          </table>
-          <% if !@membership %>
-            <div class="flexy">
-              <button type="button" class="btn-add-student btn-large" data-bs-toggle="modal" data-bs-target="#membershipModal">
-                <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER COTISATION<i class="fa-solid fa-square-plus fa-square-bigger"></i>
-              </button>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="membershipModal" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true" data-controller="close-modal">
-              <div class="modal-dialog">
-                <div class="modal-content" style="width:80%;padding:0px">
-                  <div class="modal-header modal-header-deposit">
-                    <h5 class="modal-title"><%= "Nouvelle cotisation pour #{@child.first_name} #{@child.last_name}" %></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                    <%= simple_form_for Membership.new, url: managers_memberships_path, data: { action: "submit->close-modal#closeModal", controller: "payment-method" }, method: :post do |f| %>
-                      <div class="modal-body" style="text-align:left;">
-                        <%= f.hidden_field :student_id, value: @child.id %>
-                        <%= f.hidden_field :start_year, value: @start_year %>
-
-                        <%= f.input :start_year_display,
-                                    label: "Année",
-                                    input_html: { value: "#{@start_year}-#{@start_year + 1}", readonly: true, class: "form-control mb-3" } %>
-
-                        <%= f.input :amount,
-                                    label: "Montant",
-                                    input_html: { value: Membership::PRICE, class: "form-control mb-3", required: true, readonly: true } %>
-
-                        <%= f.input :payment_method,
-                                    label: "Moyen de paiement",
-                                    required: true,
-                                    collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
-                                    prompt: "Sélectionner",
-                                    input_html: { class: "form-select mb-3", data: { action: "change->payment-method#toggleReceiverRequired" } } %>
-
-                        <%= f.input :receiver_id,
-                                    label: "Personne ayant reçu le paiement",
-                                    collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
-                                    selected: current_user.id, # Si aucune valeur n'est pré-sélectionnée
-                                    prompt: "Sélectionner",
-                                    include_blank: true,
-                                    input_html: { class: "form-select mb-3", data: { payment_method_target: "receiver" }} %>
-                      </div>
-                      <div class="modal-footer d-flex justify-content-around">
-                        <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-                        <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
-                      </div>
-                    <% end %>
-                </div>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-</section>
-
-<section class="row">
-  <div class="col-lg-11 col-sm-12 mt-3">
-    <div class="header-info"> PAIEMENT STAGES </div>
-    <div class="content-info content-info-show-student">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Académie</th>
-            <th>Stage</th>
-            <th>Semaine</th>
-            <th>Montant</th>
-            <th>Date du paiement</th>
-            <th>Mode de paiement</th>
-            <th>Reçu par</th>
-            <th class="text-center">Payé ?</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @camp_enrollments.each do |camp_enrollment| %>
-            <%= render "managers/students/camp_enrollment", camp_enrollment: camp_enrollment, student: @child %>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+    <%= render "parents/children/components/camp-enrollments-card", camp_enrollments: @camp_enrollments %>
   </div>
 </section>

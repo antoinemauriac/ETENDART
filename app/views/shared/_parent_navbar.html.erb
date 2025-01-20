@@ -17,42 +17,78 @@
         <ul class="">
 
           <li class="nav-item">
-            <%= link_to "Accueil", root_path, class: "nav-link active" %>
+            <%= link_to root_path, class: "nav-link active" do %>
+              <span>
+                Accueil
+              </span>
+              <i class="fa-solid fa-home"></i>
+            <% end %>
           </li>
 
           <hr>
 
           <li class="nav-item">
-            <%= link_to "Les Académies", academies_path, class: "nav-link active" %>
+            <%= link_to academies_path, class: "nav-link active" do %>
+              <span>
+                Les Académies
+              </span>
+              <i class="fa-solid fa-school"></i>
+            <% end %>
           </li>
 
           <hr>
 
 
           <li class="nav-item">
-            <%= link_to "Mon Panier", commerce_cart_path, class: "nav-link active" %>
+            <%= link_to commerce_cart_path, class: "nav-link active" do %>
+              Mon Panier <i class="fa-solid fa-shopping-cart"></i>
+              <span class="">
+                <%= current_user.carts.current_cart_for(current_user).cart_items.length if current_user.carts.current_cart_for(current_user).cart_items.any? %>
+              </span>
+            <% end %>
           </li>
 
           <hr>
 
           <li class="nav-item">
-            <%= link_to "Mes enfants", parents_children_path, class: "nav-link active" %>
+            <%= link_to parents_children_path, class: "nav-link active" do %>
+
+              <span>
+                Mes Enfants
+              </span>
+              <i class="fa-solid fa-children"></i>
+            <% end %>
           </li>
 
           <hr>
 
           <li class="nav-item">
-            <%= link_to "Mon Profil", parents_profile_path, class: "nav-link active" %>
+            <%= link_to parents_profile_path, class: "nav-link active" do %>
+              <span>
+                Mon Profil
+              </span>
+              <i class="fa-solid fa-user"></i>
+            <% end %>
           </li>
 
           <li class="nav-item">
-            <%= link_to "Mon compte", edit_user_registration_path, class: "nav-link active" %>
+            <%= link_to edit_user_registration_path, class: "nav-link active" do %>
+              <span>
+                Mon Compte
+              </span>
+              <i class="fa-solid fa-user-edit"></i>
+            <% end %>
           </li>
 
           <hr>
 
           <li class="nav-item">
-            <%= link_to "Déconnexion", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link active" %>
+            <%= link_to destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link active" do %>
+              <span>
+                Déconnexion
+              </span>
+              <i class="fa-solid fa-sign-out"></i>
+            <% end %>
           </li>
           <%# <li class="nav-item">
             <a class="nav-link" href="#">Link</a>

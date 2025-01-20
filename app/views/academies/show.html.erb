@@ -1,4 +1,4 @@
-<h1 class="text-center my-3 bg-warning text-black p-1">
+<h1 class="text-center my-3 bg-yellow text-black py-3 my-3">
   <%= @academy.name.upcase %> - Nos prochains stages
 </h1>
 <section class="container-sm p-3">
@@ -10,35 +10,74 @@
   <div class="row">
 
     <div class="col-md-8">
-      <% @academy.next_school_periods.each do |school_period| %>
 
-        <%= link_to academy_school_period_path(@academy, school_period) do %>
-        <h3 class="text-white bg-black p-3 rounded-top-4">
-          <%= school_period.name %> - <%= school_period.year %>
-        </h3>
+      <% if @academy.next_school_periods.any? %>
 
-        <div class="row">
-          <% school_period.camps.each do |camp| %>
+        <% @academy.next_school_periods.each do |school_period| %>
 
-            <div class="col-md-4">
-              <h4>
-                <%= camp.name %>
-              </h4>
+          <div class="mb-3">
 
-              <ul>
-                <% camp.activities.each do |activity| %>
-                  <li>
-                    <%= activity.name %>
-                  </li>
+            <%= link_to academy_school_period_path(@academy, school_period) do %>
+              <h2 class="text-white bg-black p-3 rounded-top-4 text-center">
+                <%= school_period.name %> - <%= school_period.year %>
+              </h2>
+            <% end %>
+
+            <div class="row">
+
+              <% if school_period.camps.any? %>
+
+                <% school_period.camps.each do |camp| %>
+
+                  <div class="col-md-4 col-6">
+                    <h3>
+                      <%= camp.name %>
+                    </h3>
+                    <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>
+
+                    <hr class="mb-3">
+
+
+                  <% if camp.activities.any? %>
+                    <ul>
+                      <% camp.activities.each do |activity| %>
+                        <li>
+                          <%= link_to activity.name, academy_school_period_activity_path(@academy, school_period, activity) %>
+                        </li>
+                      <% end %>
+                    </ul>
+
+                  <% else %>
+                    <p class="text-center">
+                      <em>
+                        Restez patients ! Les activités seront bientôt disponibles.
+                      </em>
+                    </p>
+                  <% end %>
+
+                  </div>
+
                 <% end %>
-              </ul>
 
+              <% else %>
+                <p class="text-center">
+                  <em>
+                    Restez patients ! Les stages seront bientôt disponibles.
+                  </em>
+                </p>
+              <% end %>
             </div>
 
-          <% end %>
-        </div>
+          </div>
 
         <% end %>
+
+      <% else %>
+        <p class="text-center">
+          <em>
+            Restez patients ! Les stages seront bientôt disponibles.
+          </em>
+        </p>
       <% end %>
     </div>
 

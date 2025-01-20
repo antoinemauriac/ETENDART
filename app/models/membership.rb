@@ -40,7 +40,7 @@ class Membership < ApplicationRecord
   end
 
   def paid!
-    self.update!(paid: true, payment_date: Date.current)
+    self.update!(paid: true, payment_date: Date.current, payment_method: 'carte bancaire')
   end
 
 

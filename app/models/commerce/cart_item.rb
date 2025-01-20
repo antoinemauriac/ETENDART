@@ -28,6 +28,12 @@ class Commerce::CartItem < ApplicationRecord
     cart.update_total_price
   end
 
+  def destroy_camp_enrollment
+    if self.product_type == 'CampEnrollment'
+      self.product.destroy
+    end
+  end
+
 end
 
 

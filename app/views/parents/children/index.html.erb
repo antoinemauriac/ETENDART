@@ -4,7 +4,7 @@
   Les parents peuvent ajouter de nouveaux enfants et accéder aux informations détaillées de chaque enfant.
 %>
 
-<h1 class="text-center bg-primary py-1 my-3">
+<h1 class="text-center py-1 my-3 bg-yellow">
   Mes Enfants
 </h1>
 
@@ -12,54 +12,58 @@
 
   <ul class="row justify-content-center">
     <% @parent.children.each do |child| %>
+
         <li class="col-lg-4 col-md-6 col-12" data-upload-photo-student-id-value="<%=child.id%>">
+          <%= link_to parents_child_path(child) do %>
 
-          <div class="header-info">
-            <%= child.first_name %> <%= child.last_name.upcase %>
-            <%= link_to edit_parents_child_path(child), style: "margin-left:1rem" do %>
-              <i class="fa-solid fa-user-pen"></i>
-            <% end %>
-          </div>
+            <div class="header-info">
+              <%= child.first_name %> <%= child.last_name.upcase %>
+            </div>
 
-          <div class="content-info content-info-show-student">
-            <div class="student-info">
-              <strong>
-                <p class="d-flex gap-2">
-                COTISANT <%= @start_year %>-<%= @start_year + 1 %> :
-                <% if @membership&.paid %>
-                  <i class="fa-solid fa-circle-check text-success fa-small"></i>
+            <div class="content-info content-info-show-student">
+              <div class="student-info">
+                <strong>
+                  <p class="d-flex gap-2">
+                  COTISANT <%= @start_year %>-<%= @start_year + 1 %> :
+                  <% if child.memberships.find_by(start_year: @start_year)&.paid %>
+                    <i class="fa-solid fa-circle-check text-success fa-small"></i>
+                  <% else %>
+                    <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+                  <% end %>
+                  </p>
+                </strong>
+                <p><%= child.gender %> - <%= child.age %> ans </p>
+              </div>
+              <div class="student-photo">
+                <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
+                <% if child.photo.key? %>
+                  <%= cl_image_tag child.photo_or_default,
+                          data: { upload_photo_target: "photo" },
+                          class: "avatar-medium",
+                          crop: "thumb",
+                          gravity: "face",
+                          width: 300,
+                          height: 300 %>
                 <% else %>
-                  <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+                  <i class="fa-solid fa-circle-user" style="font-size: 7.5rem"></i>
                 <% end %>
-                </p>
-              </strong>
-              <p><%= child.gender %> - <%= child.age %> ans </p>
-              <p><%= child.email %></p>
-              <p><%= child.phone_number %></p>
-              <p><%= child.address %></p>
-              <p><%= child.city %> - <%= child.zipcode %></p>
-            </div>
-            <div class="student-photo">
-              <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
-              <% if child.photo.key? %>
-                <%= cl_image_tag child.photo_or_default,
-                        data: { upload_photo_target: "photo" },
-                        class: "avatar-medium",
-                        crop: "thumb",
-                        gravity: "face",
-                        width: 300,
-                        height: 300 %>
-              <% else %>
-                <i class="fa-solid fa-circle-user" style="font-size: 7.5rem"></i>
+              </div>
+              <% if child.any_lack_of_infos? %>
+
+                <div class="text-center mt-5">
+                  <p class="text-danger">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                    <strong>Attention</strong> : des informations sont manquantes pour cet enfant.
+                  </p>
+                </div>
+                <div class="text-center">
+                  <%= link_to "Modifier", edit_parents_child_path(child), class: "btn btn-secondary" %>
+                </div>
               <% end %>
+
             </div>
 
-            <div class="d-flex justify-content-between">
-              <%= link_to "Voir", parents_child_path(child), class: "btn btn-primary" %>
-              <%= link_to "Modifier", edit_parents_child_path(child), class: "btn btn-secondary" %>
-            </div>
-          </div>
-
+          <% end %>
         </li>
 
     <% end %>

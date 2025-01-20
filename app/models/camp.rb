@@ -29,6 +29,27 @@ class Camp < ApplicationRecord
   validates :name, uniqueness: { scope: [:school_period_id], message: "Une semaine avec le même nom existe déjà pour ce stage" }
 
   ###############################################################################
+  # Pour la waitlist d'un camp
+  ###############################################################################
+
+  def full?
+    camp_enrollments.count >= capacity
+  end
+
+  def waitlist_full?
+    camp_enrollments.where(on_waitlist: true).count >= waitlist_capacity
+  end
+
+  def camp_enrollments_validated
+    camp_enrollments.where(on_waitlist: false).sort_by(&:created_at)
+  end
+
+  def camp_enrollments_waitlist
+    camp_enrollments.where(on_waitlist: true).sort_by(&:created_at)
+  end
+
+
+  ###############################################################################
   # Pour la recherche de camps
   ###############################################################################
 

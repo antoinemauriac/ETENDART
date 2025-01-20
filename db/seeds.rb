@@ -503,3 +503,6 @@ UpdateAnnualProgramStatsJob.perform_now
 # rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/b5cmmg95x1kuvmtm9ysu.jpg')
 # rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
 # rudy.save
+
+
+# tous les users sauf ceux qui ont un role parent, doivent avoir first_login à false

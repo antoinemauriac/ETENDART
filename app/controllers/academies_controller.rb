@@ -7,6 +7,6 @@ class AcademiesController < ApplicationController
 
   def show
     authorize Academy
-    @academy = Academy.find(params[:id])
+    @academy = Academy.includes(:school_periods, :locations, :camps, :activities_through_camps).find(params[:id])
   end
 end

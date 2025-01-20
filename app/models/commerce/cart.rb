@@ -4,11 +4,17 @@ class Commerce::Cart < ApplicationRecord
 
   validates :status, presence: true, inclusion: { in: %w(pending completed cancelled) }
   validates :total_price, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  # Un validate qui garantit que chaque user n'a qu'un seul panier en cours
+  validates :parent, uniqueness: { scope: :status, conditions: -> { where(status: 'pending') } }
 
   # apres l'ajout ou la suppression d'un article dans le panier, on met à jour le prix total du panier
 
   def self.current_cart_for(parent)
-    find_or_create_by(parent: parent, status: 'pending')
+    current_cart = find_by(parent: parent, status: 'pending')
+    unless current_cart
+      current_cart = create!(parent: parent, status: 'pending', total_price: 0)
+    end
+    return current_cart
   end
 
   # Quand un panier est payé avec succès, son statut devient 'completed', les articles du panier sont marqués comme payés.

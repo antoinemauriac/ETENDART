@@ -32,6 +32,13 @@ class ActivityEnrollment < ApplicationRecord
     end
   end
 
+  # Retrouver les enfants d'un parent qui sont inscrits à une activité
+  def self.find_children_activity_enrollments(parent)
+    joins(:student).where(students: { user_id: parent.id })
+  end
+
+  # Retrouver les enfants
+
   # def destroy_camp_enrollment(student)
   #   camp_enrollment = self.student.camp_enrollments.find_by(camp: self.camp)
   #   if self.student.is_enrolled_in_other_activities?(activity)

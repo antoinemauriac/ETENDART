@@ -1,0 +1,51 @@
+<div class="bg-black text-white text-center p-3">
+  PAIEMENT COTISATIONS
+</div>
+
+<div class="content-info content-info-show-student">
+
+  <table class="table table-striped table-responsive">
+
+    <thead>
+      <tr>
+        <th>Année</th>
+        <th>Montant</th>
+        <th>Date du paiement</th>
+        <th>Mode de paiement</th>
+        <th>Reçu par</th>
+        <th class="text-center">Payé ?</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% memberships.each do |membership| %>
+      <%# permet d'afficher les cotisations payées ou en attente de paiement par l'enfant %>
+      <tr>
+        <td><%= membership.start_year %> - <%= membership.start_year + 1 %></td>
+        <td><%= "#{membership.amount} €" %></td>
+
+        <% if membership.paid? %>
+          <td><%= membership.payment_date.strftime("%d/%m/%Y") %></td>
+          <td><%= membership.payment_method %></td>
+          <td><%= membership.receiver if membership.receiver %></td>
+        <% else %>
+          <td colspan="3" class="text-center">
+            <%= link_to "Payer", commerce_cart_path, class: "btn btn-primary" %>
+          </td>
+        <% end %>
+        <td class="text-center">
+          <% if membership.paid? %>
+            <i class="fa-solid fa-circle-check text-success fa-small"></i>
+          <% else %>
+            <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+          <% end %>
+        </td>
+      </tr>
+
+      <% end %>
+    </tbody>
+  </table>
+
+</div>
+
+<%# render "parents/children/components/memberships-card", locals: { memberships: @memberships } %>

@@ -6,26 +6,28 @@ class Student < ApplicationRecord
       tsearch: { prefix: true }
     }
 
-  # -- t.string "first_name"
-  # -- t.string "last_name"
-  # -- t.string "email"
-  # -- t.date "date_of_birth"
-  # t.string "address"
-  # -- t.string "username"
-  # -- t.string "gender"
-  # -- t.string "phone_number"
-  # t.string "city"
-  # t.integer "zipcode"
-  # t.string "allergy"
-  # t.integer "number_of_tshirts", default: 0
-  # t.bigint "user_id"
-  # -- t.integer "siblings_count", default: 0, null: false
-  # -- t.string "school"
-  # -- t.boolean "rules_signed", default: false, null: false
-  # -- t.boolean "has_medical_treatment", default: false, null: false
-  # -- t.text "medical_treatment_description"
-  # t.index ["user_id"], name: "index_students_on_user_id"
-  # -- t.boolean "has_consent_for_photos", default: false
+    # t.string "username"
+    # t.string "first_name"
+    # t.string "last_name"
+    # t.date "date_of_birth"
+    # t.string "gender"
+    # t.string "email"
+    # t.string "address"
+    # t.datetime "created_at", null: false
+    # t.datetime "updated_at", null: false
+    # t.string "phone_number"
+    # t.string "city"
+    # t.integer "zipcode"
+    # t.string "allergy"
+    # t.integer "number_of_tshirts", default: 0
+    # t.bigint "user_id"
+    # t.integer "siblings_count", default: 0, null: false
+    # t.string "school"
+    # t.boolean "rules_signed", default: false, null: false
+    # t.boolean "has_medical_treatment", default: false, null: false
+    # t.text "medical_treatment_description"
+    # t.boolean "has_consent_for_photos", default: false
+    # t.index ["user_id"], name: "index_students_on_user_id"
 
   validates :username, :first_name, :last_name, :date_of_birth, :gender, presence: true
 
@@ -69,6 +71,24 @@ class Student < ApplicationRecord
 
   after_update :must_pay_membership, if: :saved_change_to_user_id?
 
+  ##############################################################################
+  # GESTION DES INFORMATION DE L'ENFANT
+  ##############################################################################
+
+  def any_lack_of_infos?
+    address.blank? || zipcode.blank? || city.blank? || has_medical_treatment.nil? || has_consent_for_photos.nil? || rules_signed.nil? || (has_medical_treatment && medical_treatment_description.blank?) || school.blank?
+  end
+
+
+
+
+  ##############################################################################
+
+
+  ##############################################################################
+  # GESTION DES ENFANTS AVEC ET SANS PARENT
+  ##############################################################################
+
   # Tous les students avec parent
   def self.with_parent
     where.not(parent: nil)
@@ -79,9 +99,35 @@ class Student < ApplicationRecord
     where(parent_id: nil)
   end
 
-  # vérifier si il est enrollé dans un camp
+  ##############################################################################
+
+
+  ##############################################################################
+  # GESTION DES ENROLLMENTS
+  ##############################################################################
+
+  # VRAI si il est enrollé dans une school_period
+  def is_enrolled_in_school_period?(school_period)
+    return true if school_period_enrollments.find_by(school_period_id: school_period.id)
+  end
+
+  # VRAI si il est enrollé dans un camp
   def is_enrolled_in_camp?(camp)
-    camp_enrollments.find_by(camp_id: camp.id).present?
+    return true if camp_enrollments.find_by(camp_id: camp.id)
+  end
+
+  # VRAI si il est enrollé dans un autre camp de la même school_period
+  def is_enrolled_in_other_camps?(camp)
+    school_period = camp.school_period
+    school_period.camps.where.not(id: camp.id).each do |c|
+      return true if is_enrolled_in_camp?(c)
+    end
+    return false
+  end
+
+  # VRAI si il a payé un camp
+  def has_paid_camp?(camp)
+    return true if camp_enrollments.find_by(camp_id: camp.id, paid: true)
   end
 
   # renvoie VRAI si l'étudiant est inscrit à une activité précise
@@ -89,7 +135,7 @@ class Student < ApplicationRecord
     activity_enrollments.exists?(activity_id: activity.id)
   end
 
-  # vérifier si il est dans une autre activité du même camp
+  # VRAI si il est dans une autre activité du même camp
   def is_enrolled_in_other_activities?(activity)
     camp = activity.camp
     camp.activities.where.not(id: activity.id).each do |act|
@@ -98,6 +144,14 @@ class Student < ApplicationRecord
     return false
   end
 
+
+
+  ##############################################################################
+
+
+  ##############################################################################
+  # GESTION DES COTISATIONS POUR UN ENFANT
+  ##############################################################################
 
   # la cotisation
   def membership?(start_year)
@@ -118,6 +172,8 @@ class Student < ApplicationRecord
       cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
     end
   end
+
+  ##############################################################################
 
   def full_name
     "#{first_name} #{last_name}"

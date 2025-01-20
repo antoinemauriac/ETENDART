@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_13_193435) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -193,6 +193,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_13_193435) do
     t.string "payment_method"
     t.bigint "receiver_id"
     t.string "stripe_price_id"
+    t.boolean "on_waitlist", default: false
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
     t.index ["receiver_id"], name: "index_camp_enrollments_on_receiver_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
@@ -230,6 +231,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_13_193435) do
     t.datetime "updated_at", null: false
     t.boolean "new", default: true
     t.string "stripe_price_id"
+    t.integer "capacity", default: 20
+    t.integer "waitlist_capacity", default: 5
     t.index ["school_period_id"], name: "index_camps_on_school_period_id"
   end
 
