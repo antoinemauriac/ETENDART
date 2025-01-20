@@ -4,12 +4,32 @@
 
 <section class="row gy-3 justify-content-center">
 
-  <div class="col-lg-5 col-md-7 col-sm-12" data-upload-photo-student-id-value="<%=@child.id%>">
+  <div class="col-lg-5 col-md-8 col-sm-12" data-upload-photo-student-id-value="<%=@child.id%>">
     <%= render "parents/children/components/information-card", child: @child, start_year: @start_year, membership: @membership %>
   </div>
 
-  <div class="col-lg-3 col-md-5 col-sm-12">
+  <div class="col-lg-3 col-md-4 col-sm-12">
     <%= render "parents/children/components/historic-card", child: @child %>
+  </div>
+
+  <div class="col-lg-4 col-md-6 col-12">
+    <div class="bg-black text-white text-center p-3">
+      ACADEMIES
+    </div>
+
+    <div class="content-info content-info-show-student">
+      <ul class="d-flex gap-3">
+        <% if @child.academies.any? %>
+          <% @child.academies.each do |academy| %>
+            <%= link_to academy_path(academy) do %>
+              <li class="rounded-pill bg-secondary py-2 px-3"><%= academy.name %></li>
+            <% end %>
+          <% end %>
+        <% else %>
+          <li>Aucune académie</li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 
 </section>

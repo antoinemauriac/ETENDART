@@ -77,6 +77,14 @@
           </div>
         </div>
 
+        <div class="row mb-2">
+          <div class="col-12">
+            <%= f.association :academies, label: "Sélectionnez les Académies", as: :check_boxes %>
+          </div>
+        </div>
+
+
+
       </div>
 
 
@@ -95,6 +103,10 @@
             <%= f.input :medical_treatment_description, label: "Description du traitement médical", as: :text %>
           </div>
 
+          <div class="col-12">
+            <%= f.input :allergy, label: "Allergies (écrire 'aucune' si aucune allergie)", as: :text %>
+          </div>
+
         </div>
 
         <div class="row mb-2">
@@ -106,11 +118,13 @@
         <div class="row mb-2">
           <div class="col-md-6">
             <%= f.input :rules_signed,
-            label: "J'ai pris connaissance du règlement intérieur",
+            label: "J'ai pris connaissance du <a href='#' class='text-primary' data-bs-toggle='modal' data-bs-target='#termsModal'>règlement intérieur</a>".html_safe,
             as: :boolean,
             checked_value: true,
             unchecked_value: false,
             required: true %>
+
+            <%= render 'parents/children/components/rules-modal' %>
           </div>
         </div>
 

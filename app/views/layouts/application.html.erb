@@ -37,8 +37,10 @@
       <%= render "shared/no_role_navbar" %>
     <% elsif current_user && current_user.parent? %>
       <%= render "shared/parent_navbar" %>
-    <% else %>
+    <% elsif current_user %>
       <%= render "shared/navbar" %>
+    <% else %>
+      <%= render "shared/not-signed-navbar" %>
     <% end %>
     <div id="flash-messages">
       <%= render "shared/flashes" %>

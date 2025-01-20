@@ -27,7 +27,7 @@
         <% if membership.paid? %>
           <td><%= membership.payment_date.strftime("%d/%m/%Y") %></td>
           <td><%= membership.payment_method %></td>
-          <td><%= membership.receiver if membership.receiver %></td>
+          <td><%= membership.receiver.full_name if membership.receiver %></td>
         <% else %>
           <td colspan="3" class="text-center">
             <%= link_to "Payer", commerce_cart_path, class: "btn btn-primary" %>

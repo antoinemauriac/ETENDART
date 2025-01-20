@@ -10,11 +10,11 @@
           Vous êtes parent et vous souhaitez que vos enfants rejoignent l'aventure Etendart ? Poursuivez votre inscription !
       </p>
 
-      <p class="text-center">
+      <div class="text-center">
         <%= simple_form_for @user, url: users_first_login_path, method: :patch do |f| %>
           <%= f.button :submit, "Je suis parent", class: "btn btn-primary" %>
         <% end %>
-      </p>
+      </div>
     </div>
 
   </div>
@@ -23,9 +23,11 @@
 
   <div class="row justify-content-center">
 
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-10 col-md-offset-3">
       <p class="text-center">
-        Vous travaillez chez Etendart et vous souhaitez accéder à votre espace personnel ? Restez patient, un manager va vous contacter.
+        Vous travaillez chez Etendart et vous souhaitez accéder à votre espace personnel ?
+        <br>
+        Restez patient, un manager va vous contacter.
       </p>
     </div>
 

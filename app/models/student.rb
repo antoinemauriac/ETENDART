@@ -166,7 +166,7 @@ class Student < ApplicationRecord
   # les étudiants qui obtiennent un parent créent automatiquement un cart_item avec le membership s'il n'est pas adhérent
   def must_pay_membership
     # est ce qu'il y a une adhésion pour l'année en cours ?
-    if membership_not_paid?
+    if membership_not_paid? || memberships.find_by(start_year: Date.current.year - 1).nil?
       membership = self.memberships.find_or_create_by(start_year: Date.current.year - 1, amount: Membership::PRICE, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
       cart = parent.carts.current_cart_for(parent)
       cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")

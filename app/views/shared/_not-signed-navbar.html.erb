@@ -1,0 +1,65 @@
+<%# app/views/shared/not-signed-navbar.html.erb %>
+
+<nav class="navbar navbar-expand-lg bg-white">
+  <div class="container-fluid">
+
+    <%= link_to root_path, class:"navbar-brand" do %>
+      <%= image_tag "navbar/logo_ea_noir.png", alt: "Logo Etendart Academy", width: "100" %>
+    <% end %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <%= link_to "/#approche", class:"mx-2" do %>
+          <li>
+            Approche
+          </li>
+        <% end %>
+
+        <%= link_to "/#programmation", class:"mx-2" do %>
+          <li>
+            Programmation
+          </li>
+        <% end %>
+
+        <%= link_to "/#impact", class:"mx-2" do %>
+          <li>
+            Impact
+          </li>
+        <% end %>
+
+        <%= link_to "/#adherer", class:"mx-2" do %>
+          <li>
+            Adhérer
+          </li>
+        <% end %>
+
+        <%= link_to "/#soutenir", class:"mx-2" do %>
+          <li>
+            Nous soutenir
+          </li>
+        <% end %>
+
+        <%= link_to "/#contact", class:"mx-2" do %>
+          <li>
+            Contact
+          </li>
+        <% end %>
+
+        <%= link_to new_user_session_path, class:"mx-2" do %>
+          <li>
+            Connexion
+          </li>
+        <% end %>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+<%# render 'shared/not-signed-navbar' %>

@@ -13,7 +13,7 @@
   <ul class="row justify-content-center">
     <% @parent.children.each do |child| %>
 
-        <li class="col-lg-4 col-md-6 col-12" data-upload-photo-student-id-value="<%=child.id%>">
+        <li class="col-lg-6 col-md-6 col-12" data-upload-photo-student-id-value="<%=child.id%>">
           <%= link_to parents_child_path(child) do %>
 
             <div class="header-info">
@@ -33,6 +33,40 @@
                   </p>
                 </strong>
                 <p><%= child.gender %> - <%= child.age %> ans </p>
+
+                <% if child.email.blank? %>
+                  <p class="text-danger">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                    Email non renseigné
+                  </p>
+                <% else %>
+                  <p>
+                    EMAIL : <%= child.email %>
+                  </p>
+                <% end %>
+
+                <% if child.phone_number.blank? %>
+                  <p class="text-danger">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                    Numéro de téléphone non renseigné
+                  </p>
+                <% else %>
+                  <p>
+                    TEL : <%= child.phone_number %>
+                  </p>
+                <% end %>
+
+                <% if child.address.blank? || child.zipcode.blank? || child.city.blank? %>
+                  <p class="text-danger">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                    Adresse non renseignée
+                  </p>
+                <% else %>
+                  <p>
+                    ADRESSE : <%= child.address %>, <%= child.zipcode %> <%= child.city %>
+                  </p>
+                <% end %>
+
               </div>
               <div class="student-photo">
                 <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>

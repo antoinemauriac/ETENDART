@@ -15,51 +15,51 @@
 
   <section class="bg-white py-5 rounded-top-5 mt-n5 z-3 position-relative">
     <div class="container">
-      <h2>
-        Notre approche
+      <h2 id="approche">
+        <strong>Notre approche</strong>
       </h2>
       <p>
         Tous nos projets combinent:
       </p>
 
-      <div class="row">
+      <div class="row row-cols-1 row-cols-md-6 g-1">
 
-        <div class="col-md-2">
+        <div class="col">
           <%= render "pages/components/card",
           src: "home/card-1.jpg",
           h3: "L'inspiration",
           p: "Par une infrastructure, un parrain, des expériences pédagogiques" %>
         </div>
 
-        <div class="col-md-2">
+        <div class="col">
           <%= render "pages/components/card",
           src: "home/card-2.jpg",
           h3: "Un sport",
           p: "pilier de nos projets comme vecteur de développement et de transmission" %>
         </div>
 
-        <div class="col-md-2">
+        <div class="col">
           <%= render "pages/components/card",
           src: "home/card-3.jpg",
           h3: "Des activités artistiques",
           p: "par une infrastructure, un parrain, des expériences pédagogiques" %>
         </div>
 
-        <div class="col-md-2">
+        <div class="col">
           <%= render "pages/components/card",
           src: "home/card-4.jpg",
           h3: "Un format d'expérience",
           p: "stages, programmes annuels ou événements" %>
         </div>
 
-        <div class="col-md-2">
+        <div class="col">
           <%= render "pages/components/card",
           src: "home/card-5.JPG",
           h3: "Un projet éducatif",
           p: "chaque activité permet de travailler des axes de développement personnel" %>
         </div>
 
-        <div class="col-md-2">
+        <div class="col">
           <%= render "pages/components/card",
           src: "home/card-6.jpg",
           h3: "Des valeurs",
@@ -75,7 +75,7 @@
 
   <section class="bg-black text-white py-5 rounded-top-5">
     <div class="container">
-      <h2 class="mb-3">
+      <h2 class="mb-3" id="programmation">
         Programmation à venir sur l'ensemble des académies
       </h2>
 
@@ -88,31 +88,28 @@
       </ul>
 
       <div class="bg-white py-5 rounded-3 text-black">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Académie</th>
-              <th>Prochaines périodes</th>
-              <th>Activités</th>
-            </tr>
-          </thead>
+        <table class="table bg-white">
           <tbody>
             <% @academies.each do |academy| %>
+              <% academy.next_school_periods.each do |school_period|  %>
+
               <tr>
-                <td><%= academy.name %></td>
                 <td>
-                  <% academy.next_school_periods.each do |school_period|  %>
-                    <%= school_period.name %> <%= school_period.year %>
-                  <% end %>
+                  <strong>
+                    Stage <%= academy.name %> Academy
+                  </strong>
                 </td>
                 <td>
-                  <% academy.next_school_periods.each do |school_period|  %>
-                    <% school_period.activities.each do |activity| %>
-                      <%= activity.name %>
-                    <% end %>
-                  <% end %>
+                  <%= school_period.name %> <%= school_period.year %>
+                </td>
+                <td>
+                  <%= academy.locations.first.city %>
+                </td>
+                <td class="text-end pe-3">
+                  <%= link_to "S'inscrire", academy_path(academy), class: "" %> <i class="fa-sharp fa-solid fa-arrow-right"></i>
                 </td>
               </tr>
+              <% end %>
             <% end %>
           </tbody>
         </table>
@@ -127,7 +124,7 @@
 
   <section class="bg-white py-5 rounded-top-5">
     <div class="container">
-      <h2>
+      <h2 id="impact">
         <strong>
           Notre impact
         </strong>
@@ -202,7 +199,7 @@
 
   <section class="" style="background-color: #FFD700">
     <div class="container py-5">
-      <h2 class="text-center mb-1">
+      <h2 class="text-center mb-1" id="adherer">
         <strong>
           Tu veux participer à une de nos expériences ?
         </strong>
@@ -221,7 +218,7 @@
 
   <section class="bg-white rounded-top-5">
     <div class="container py-5">
-      <h2>
+      <h2 id="soutenir">
         Nous soutenir
       </h2>
 
@@ -334,7 +331,7 @@
   <section style="background: linear-gradient(to bottom, black 50%, white 50%)">
     <div class="container">
       <div class="card p-5 rounded-5" style="background-color: #FFD700">
-        <h2 class="card-title">
+        <h2 class="card-title" id="contact">
           <strong>
             Suivez-nous !
           </strong>

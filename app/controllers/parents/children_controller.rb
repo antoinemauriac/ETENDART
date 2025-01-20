@@ -69,7 +69,6 @@ class Parents::ChildrenController < ApplicationController
   def edit
     @child = Student.find(params[:id])
     authorize [:parents, :student], :edit?
-
   end
 
   def update
@@ -90,7 +89,7 @@ class Parents::ChildrenController < ApplicationController
   end
 
   def child_params
-    params.require(:student).permit(:first_name, :last_name, :date_of_birth, :gender, :photo, :siblings_count, :email, :phone_number, :school, :has_medical_treatment, :medical_treatment_description, :has_consent_for_photos, :rules_signed, :address, :zipcode, :city, :allergy)
+    params.require(:student).permit(:first_name, :last_name, :date_of_birth, :gender, :photo, :siblings_count, :email, :phone_number, :school, :has_medical_treatment, :medical_treatment_description, :has_consent_for_photos, :rules_signed, :address, :zipcode, :city, :allergy, academy_ids: [])
   end
 
 end
