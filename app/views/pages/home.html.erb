@@ -89,26 +89,28 @@
 
       <div class="bg-white py-5 rounded-3 text-black">
         <table class="table bg-white">
-          <tbody>
+          <tbody class="bg-white">
             <% @academies.each do |academy| %>
               <% academy.next_school_periods.each do |school_period|  %>
 
-              <tr>
-                <td>
-                  <strong>
-                    Stage <%= academy.name %> Academy
-                  </strong>
-                </td>
-                <td>
-                  <%= school_period.name %> <%= school_period.year %>
-                </td>
-                <td>
-                  <%= academy.locations.first.city %>
-                </td>
-                <td class="text-end pe-3">
-                  <%= link_to "S'inscrire", academy_path(academy), class: "" %> <i class="fa-sharp fa-solid fa-arrow-right"></i>
-                </td>
-              </tr>
+                <%= link_to academy_path(academy) do %>
+                  <tr class="bg-white">
+                      <td class="bg-white">
+                        <strong>
+                          Stage <%= academy.name %> Academy
+                        </strong>
+                      </td>
+                      <td class="bg-white">
+                        <%= school_period.name %> <%= school_period.year %>
+                      </td>
+                      <td class="bg-white">
+                        <%= academy.locations.first.city %>
+                      </td>
+                      <td class="text-end pe-3 bg-white">
+                        S'inscrire <i class="fa-sharp fa-solid fa-arrow-right"></i>
+                      </td>
+                  </tr>
+                <% end %>
               <% end %>
             <% end %>
           </tbody>
@@ -130,15 +132,18 @@
         </strong>
       </h2>
       <p>
-        Pour plus d'informations, <%= link_to "téléchargez notre rapport d'impact", "#", class: "link-underline-dark" %>
+        Pour plus d'informations, <%= link_to "téléchargez notre rapport d'impact", "#", class: "text-decoration-underline" %>
       </p>
 
-      <div class="row">
-        <div class="col-md-3">
-          <div class="card rounded-5" style="background-color: yellow">
-            <div class="card-body">
-              <h3 class="card-title">
-                11
+      <div class="row row-cols-2 row-cols-md-4 g-3 my-5">
+        <div class="col">
+          <div class="card rounded-5 border-0" style="background-color: yellow; height: 24rem">
+
+            <div class="card-body align-content-center text-center">
+              <h3 class="card-title text-center" style= "font-size: 6rem">
+                <strong>
+                  11
+                </strong>
               </h3>
               <p class="card-text">
                 Académies Etendart dans 9 villes à travers la France
@@ -147,11 +152,17 @@
           </div>
         </div>
 
-        <div class="col-md-3">
-          <div class="card rounded-5" style="background-color: yellow">
-            <div class="card-body">
-              <h3 class="card-title">
-                + DE 4500
+        <div class="col">
+          <div class="card rounded-5 border-0 bg-dark">
+            <%= image_tag "home/impact-img-1.jpg", class: "card-img rounded-5 opacity-50 object-fit-cover", style: "height: 24rem" %>
+
+            <div class="card-img-overlay align-content-center text-center text-white">
+              <h3 class="card-title" style= "font-size: 4rem">
+                <strong>
+                  + DE
+                  <br>
+                  4500
+                </strong>
               </h3>
               <p class="card-text">
                 jeunes accompagnés depuis notre lancement
@@ -160,46 +171,53 @@
           </div>
         </div>
 
-        <div class="col-md-3">
-          <div class="card rounded-5" style="background-color: yellow">
-            <div class="card-body">
-              <h3 class="card-title">
-                + DE 30
+        <div class="col">
+          <div class="card rounded-5 h-100 border-0 bg-black">
+            <div class="card-body text-white  align-content-center text-center">
+              <h3 class="card-title" style= "font-size: 4rem">
+                <strong>
+                  + DE
+                  <br>
+                  30
+                </strong>
               </h3>
               <p class="card-text">
-                activités artistiques, académiques
+                activités artistiques, académiques ou citoyennes proposées
               </p>
             </div>
           </div>
         </div>
 
-        <div class="col-md-3">
-          <div class="card rounded-5" style="background-color: yellow">
-            <div class="card-body">
-              <h3 class="card-title">
-                5
+        <div class="col">
+          <div class="card rounded-5 border-0 bg-dark">
+            <%= image_tag "home/impact-img-1.jpg", class: "card-img rounded-5 opacity-50 object-fit-cover", style: "height: 24rem" %>
+
+            <div class="card-img-overlay align-content-center text-center text-white">
+              <h3 class="card-title" >
+                <strong style= "font-size: 4rem">
+                  5
+                </strong>
+                  <br>
+                <strong style= "font-size: 3rem">
+                  SPORTS
+                </strong>
               </h3>
-              <p class="card-text">
-                SPORTS
-              </p>
             </div>
           </div>
         </div>
-
       </div>
-    </div>
 
   </section>
 
-  <section class="bg-white rounded-top-5">
-    <%= image_tag "home/bg-section-experience.jpg", class: "w-100 object-fit-cover rounded-top-5", style: "height: 16rem" %>
+  <section class="bg-white rounded-top-5" id="adherer">
+    <%= image_tag "home/bg-section-experience.jpg", class: "w-100 object-fit-cover rounded-top-5" %>
   </section>
 
   <%# section "Tu veux participer ?" %>
 
-  <section class="" style="background-color: #FFD700">
+  <section class="" style="background-color: yellow">
     <div class="container py-5">
-      <h2 class="text-center mb-1" id="adherer">
+      <h2 class="text-center mb-1">
         <strong>
           Tu veux participer à une de nos expériences ?
         </strong>
@@ -209,7 +227,7 @@
       </p>
 
       <div class="text-center">
-        <%= link_to "Adhérer", "#", class: "btn btn-dark rounded-4 px-5" %>
+        <%= link_to "Adhérer", new_user_registration_path, class: "btn btn-dark rounded-4 px-4" %>
       </div>
     </div>
   </section>
@@ -225,7 +243,7 @@
       <div class="row space-y-3">
         <div class="col-md-6">
           <div class="card rounded-5 bg-black border-0" style="height: 40rem">
-            <%= image_tag "home/soutenir.jpg", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
+            <%= image_tag "home/soutenir-card-1.jpeg", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
             <div class="card-body">
               <p class="card-text text-white p-3">
                 Vous souhaitez soutenir notre association ? En effectuant un don, vous soutenez nos programmes éducatifs et le déploiement de nouvelles actions.
@@ -330,32 +348,32 @@
 
   <section style="background: linear-gradient(to bottom, black 50%, white 50%)">
     <div class="container">
-      <div class="card p-5 rounded-5" style="background-color: #FFD700">
-        <h2 class="card-title" id="contact">
-          <strong>
-            Suivez-nous !
-          </strong>
-        </h2>
 
-        <p class="card-text">
-          Restez informés de toutes nos actualités en nous suivant sur les réseaux sociaux.
-        </p>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-11">
+          <div class="card p-5 rounded-5" style="background-color: yellow">
+            <h2 class="card-title" id="contact">
+              <strong>
+                Suivez-nous !
+              </strong>
+            </h2>
 
-        <div id="social-media">
-          <a href="#" class="btn btn-dark rounded-pill px-4">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="#" class="btn btn-dark rounded-pill px-4">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="#" class="btn btn-dark rounded-pill px-4">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="#" class="btn btn-dark rounded-pill px-4">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
+            <p class="card-text">
+              Restez informés de toutes nos actualités en nous suivant sur les réseaux sociaux.
+            </p>
+
+            <div id="social-media" class="d-flex justify-content-start gap-3">
+                <%= link_to "https://www.instagram.com/etendartacademy/", target: "_blank" do %>
+                  <i class="fab fa-instagram fa-2xl"></i>
+                <% end %>
+                <%= link_to "https://www.linkedin.com/company/etendart-academy/", target: "_blank" do %>
+                  <i class="fa-brands fa-linkedin-in fa-2xl"></i>
+                <% end %>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </section>
 
