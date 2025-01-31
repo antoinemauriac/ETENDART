@@ -237,8 +237,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
   end
 
   create_table "cart_items", force: :cascade do |t|
-    t.bigint "cart_id", null: false
     t.decimal "price"
+    t.bigint "cart_id", null: false
     t.bigint "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -246,14 +246,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.string "product_type", null: false
     t.bigint "product_id", null: false
     t.boolean "paid", default: false
-    t.string "name"
+    t.string "name", null: false
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
     t.index ["product_type", "product_id"], name: "index_cart_items_on_product"
     t.index ["student_id"], name: "index_cart_items_on_student_id"
   end
 
   create_table "carts", force: :cascade do |t|
-    t.string "status"
+    t.string "status", default: "pending", null: false
     t.decimal "total_price"
     t.string "stripe_payment_intent_id"
     t.bigint "user_id", null: false
@@ -526,9 +526,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.bigint "user_id"
     t.integer "siblings_count", default: 0, null: false
     t.string "school"
-    t.boolean "rules_signed", default: false, null: false
     t.boolean "has_medical_treatment", default: false, null: false
     t.text "medical_treatment_description"
+    t.boolean "photo_authorization", default: false, null: false
+    t.boolean "rules_signed", default: false, null: false
     t.boolean "has_consent_for_photos", default: false
     t.index ["user_id"], name: "index_students_on_user_id"
   end
@@ -561,6 +562,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.boolean "first_login", default: true
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

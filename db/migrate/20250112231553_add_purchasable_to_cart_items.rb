@@ -1,7 +1,7 @@
 class AddPurchasableToCartItems < ActiveRecord::Migration[7.0]
   def change
     # Ajoute une relation polymorphique correcte pour 'product'
-    add_reference :cart_items, :product, polymorphic: true, null: false
+    # add_reference :cart_items, :products, polymorphic: true, null: false
 
     # Ajoute les colonnes stripe_price_id pour les différentes tables
     add_column :cart_items, :stripe_price_id, :string
