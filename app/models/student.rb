@@ -41,7 +41,7 @@ class Student < ApplicationRecord
 
   has_one_attached :photo
 
-  belongs_to :parent, class_name: 'User', foreign_key: 'user_id'
+  belongs_to :parent, class_name: 'User', foreign_key: 'user_id', optional: true
 
   has_many :memberships, dependent: :destroy
 
@@ -67,9 +67,9 @@ class Student < ApplicationRecord
 
   before_validation :normalize_fields, :normalize_phone_number
 
-  after_create :must_pay_membership
+  # after_create :must_pay_membership
 
-  after_update :must_pay_membership, if: :saved_change_to_user_id?
+  # after_update :must_pay_membership, if: :saved_change_to_user_id?
 
   ##############################################################################
   # GESTION DES INFORMATION DE L'ENFANT
@@ -160,13 +160,15 @@ class Student < ApplicationRecord
 
   # la cotisation n'est pas payée
   def membership_not_paid?
-    return memberships.find_by(start_year: Date.current.year - 1, paid: false).present?
+    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
+    return memberships.find_by(start_year: start_year, paid: false).present?
   end
 
   # les étudiants qui obtiennent un parent créent automatiquement un cart_item avec le membership s'il n'est pas adhérent
   def must_pay_membership
     # est ce qu'il y a une adhésion pour l'année en cours ?
-    if membership_not_paid? || memberships.find_by(start_year: Date.current.year - 1).nil?
+    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
+    if membership_not_paid? || memberships.find_by(start_year: start_year).nil?
       membership = self.memberships.find_or_create_by(start_year: Date.current.year - 1, amount: Membership::PRICE, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
       cart = parent.carts.current_cart_for(parent)
       cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")

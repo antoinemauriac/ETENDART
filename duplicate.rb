@@ -1,21 +1,21 @@
 # identifier le main student et le duplicate
 
-main = Student.find(878)
-duplicate = Student.find(2998)
+# main = Student.find(878)
+# duplicate = Student.find(2998)
 
-if duplicate.photo.attached? && !main.photo.attached?
-  main.photo.attach(duplicate.photo.blob)
-end
+# if duplicate.photo.attached? && !main.photo.attached?
+#   main.photo.attach(duplicate.photo.blob)
+# end
 
-duplicate.academy_enrollments.where.not(academy_id: main.academies.ids).update_all(student_id: main.id)
-duplicate.annual_program_enrollments.where.not(annual_program_id: main.annual_programs.ids).update_all(student_id: main.id)
-duplicate.school_period_enrollments.where.not(school_period_id: main.school_periods.ids).update_all(student_id: main.id)
-duplicate.camp_enrollments.where.not(camp_id: main.camps.ids).update_all(student_id: main.id)
-duplicate.activity_enrollments.where.not(activity_id: main.activities.ids).update_all(student_id: main.id)
-duplicate.course_enrollments.where.not(course_id: main.courses.ids).update_all(student_id: main.id)
-duplicate.feedbacks.where.not(id: main.feedbacks.ids).update_all(student_id: main.id)
-duplicate.memberships.where(paid: true).where.not(id: main.memberships.ids).update_all(student_id: main.id)
-duplicate.destroy
+# duplicate.academy_enrollments.where.not(academy_id: main.academies.ids).update_all(student_id: main.id)
+# duplicate.annual_program_enrollments.where.not(annual_program_id: main.annual_programs.ids).update_all(student_id: main.id)
+# duplicate.school_period_enrollments.where.not(school_period_id: main.school_periods.ids).update_all(student_id: main.id)
+# duplicate.camp_enrollments.where.not(camp_id: main.camps.ids).update_all(student_id: main.id)
+# duplicate.activity_enrollments.where.not(activity_id: main.activities.ids).update_all(student_id: main.id)
+# duplicate.course_enrollments.where.not(course_id: main.courses.ids).update_all(student_id: main.id)
+# duplicate.feedbacks.where.not(id: main.feedbacks.ids).update_all(student_id: main.id)
+# duplicate.memberships.where(paid: true).where.not(id: main.memberships.ids).update_all(student_id: main.id)
+# duplicate.destroy
 
 # students_with_same_email = Student.group(:email).having('COUNT(email) > 1').pluck(:email)
 

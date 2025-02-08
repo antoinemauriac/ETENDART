@@ -7,7 +7,7 @@ class CampEnrollment < ApplicationRecord
 
   has_one :cart_item, as: :product, class_name: 'Commerce::CartItem', dependent: :destroy
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "carte bancaire", nil].freeze
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
   validates :payment_method, inclusion: { in: Membership::PAYMENT_METHODS }
   validate :receiver_presence_for_specific_payment_methods
 
@@ -20,8 +20,8 @@ class CampEnrollment < ApplicationRecord
   scope :unpaid, -> { where(paid: false) }
 
   # quand le parent inscrit son enfant à une activité, il l'inscrit également au stage et il doit le payer par carte si il a choisi cette option
-  after_create :create_cart_item
-  after_create :create_school_period_enrollment
+  # after_create :create_cart_item
+  # after_create :create_school_period_enrollment
 
   after_destroy :destroy_school_period_enrollment
 
@@ -30,7 +30,7 @@ class CampEnrollment < ApplicationRecord
   end
 
   def create_cart_item
-    if payment_method == "carte bancaire"
+    if payment_method == "virement"
       cart_item = Commerce::CartItem.new(
         cart_id: student.parent.carts.current_cart_for(student.parent).id,
         student_id: student.id,
@@ -50,25 +50,36 @@ class CampEnrollment < ApplicationRecord
   # ENROLLMENT
   ##########################################################################################
 
+  # def create_school_period_enrollment
+  #   unless student.is_enrolled_in_school_period?(self.school_period)
+  #     school_period_enrollment = SchoolPeriodEnrollment.new(
+  #       student_id: self.student.id,
+  #       school_period_id: self.school_period.id,
+  #     )
+  #     school_period_enrollment.save!
+  #   end
+  # end
+
   def create_school_period_enrollment
-    unless student.is_enrolled_in_school_period?(self.school_period)
-      school_period_enrollment = SchoolPeriodEnrollment.new(
-        student_id: self.student.id,
-        school_period_id: self.school_period.id,
-      )
-      school_period_enrollment.save!
-    end
+    student.school_periods << school_period unless student.school_periods.include?(school_period)
   end
 
 
-  def destroy_school_period_enrollment
-    if self.student.is_enrolled_in_other_camps?(self.camp)
-      true
-    else
-      school_period_enrollment = self.student.school_period_enrollments.find_by(school_period: self.school_period)
-      if school_period_enrollment
-        school_period_enrollment.destroy
-      end
+  # def destroy_school_period_enrollment
+  #   if self.student.is_enrolled_in_other_camps?(self.camp)
+  #     true
+  #   else
+  #     school_period_enrollment = self.student.school_period_enrollments.find_by(school_period: self.school_period)
+  #     if school_period_enrollment
+  #       school_period_enrollment.destroy
+  #     end
+  #   end
+  # end
+
+  def destroyy_school_period_enrollment
+    camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
+    if camp_enrollments.empty?
+      student.school_period_enrollments.find_by(school_period: school_period).destroy
     end
   end
 

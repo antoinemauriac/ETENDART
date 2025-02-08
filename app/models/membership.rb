@@ -5,7 +5,7 @@ class Membership < ApplicationRecord
 
   has_one :cart_item, as: :product, class_name: 'Commerce::CartItem', dependent: :destroy
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "carte bancaire", nil].freeze
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
   PAYMENT_METHODS_WITH_RECEIVER = ["cash", "cheque", "offert"].freeze
   PRICE = 15
 

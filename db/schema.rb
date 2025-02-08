@@ -242,9 +242,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.bigint "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "stripe_price_id"
     t.string "product_type", null: false
     t.bigint "product_id", null: false
+    t.string "stripe_price_id"
     t.boolean "paid", default: false
     t.string "name", null: false
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"

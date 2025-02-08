@@ -55,7 +55,15 @@ class ActivityEnrollmentsController < ApplicationController
   end
 
 
+  def finalisation
+    # passer à confirmed true les camp_enrollments et activity_enrollments du panier
+    # action sur memebrship
+    # incrire aux courses associés (student.courses << activity.courses)
+  end
+
+
   private
+
 
   def activity_enrollment_params
     params.require(:activity_enrollment).permit(:student_id, :activity_id, :payment_method)

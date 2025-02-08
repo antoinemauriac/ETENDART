@@ -9,7 +9,7 @@ class ActivityEnrollment < ApplicationRecord
   scope :attended, -> { where(present: true) }
   scope :unattended, -> { where(present: false) }
 
-  after_create -> { create_camp_enrollment(self.student) }
+  # after_create -> { create_camp_enrollment(self.student) }
 
   # after_destroy -> { destroy_camp_enrollment(self.student) }
 
@@ -23,7 +23,7 @@ class ActivityEnrollment < ApplicationRecord
       }
 
       # Ajouter le payment_method seulement si c'est "carte bancaire"
-      if self.payment_method == "carte bancaire"
+      if self.payment_method == "virement"
         camp_enrollment_attributes[:payment_method] = self.payment_method
       end
 
