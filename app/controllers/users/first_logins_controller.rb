@@ -9,7 +9,7 @@ class Users::FirstLoginsController < ApplicationController
     authorize [:users, :first_login], :update?
     @user.first_login = false
     @role = Role.find_by(name: 'parent')
-    @role.users << @user
+    @user.roles << @role
     if @user.save
       redirect_to new_parents_profile_path, notice: 'Bienvenu chez Etendart ! Veuillez compléter votre profil.'
     else

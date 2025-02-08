@@ -11,7 +11,12 @@ class Parents::ProfilesController < ApplicationController
     @parent_profile = ParentProfile.new(parent_profile_params)
 
     @parent_profile.user = @parent
-    if @parent_profile.save
+    email = @parent.email
+    existing_children = Student.where(email: email)
+
+    # si ya des enfants on redirige vers une page avec les enfants retrouvés
+    # sinon on conserve la redirection vers new_parents_profile_path,
+    if @parent_profile.save && @existing_children.present?
       redirect_to parents_profile_path, notice: 'Votre profil a bien été créé.'
     else
       redirect_to new_parents_profile_path, alert: 'Une erreur est survenue.'
