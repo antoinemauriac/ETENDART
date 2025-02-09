@@ -21,8 +21,9 @@ class Managers::AnnualEnrollmentsController < ApplicationController
       annual_program_enrollment = @student.annual_program_enrollments.find_by(annual_program: annual_program)
       annual_program_enrollment.update(image_consent: image_consent)
 
-      @student.courses << activity.next_courses
       @student.activities << activity
+      @student.activity_enrollments.find_by(activity: activity).update(confirmed: true)
+      @student.courses << activity.next_courses
 
       start_year = annual_program.starts_at.year
       membership = @student.memberships.find_by(start_year: start_year)

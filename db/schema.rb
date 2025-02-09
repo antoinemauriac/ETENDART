@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_09_142359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "academies", force: :cascade do |t|
     t.string "name"
@@ -68,13 +69,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.bigint "camp_id"
     t.bigint "category_id", null: false
     t.bigint "coach_id"
-    t.integer "min_capacity"
-    t.integer "max_capacity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id", null: false
     t.bigint "annual_program_id"
     t.boolean "annual", default: false
+    t.boolean "age_restricted", null: false
+    t.integer "min_age"
+    t.integer "max_age"
     t.index ["annual_program_id"], name: "index_activities_on_annual_program_id"
     t.index ["camp_id"], name: "index_activities_on_camp_id"
     t.index ["category_id"], name: "index_activities_on_category_id"
@@ -97,6 +99,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "present", default: false
+    t.boolean "confirmed", default: false
     t.index ["activity_id"], name: "index_activity_enrollments_on_activity_id"
     t.index ["student_id"], name: "index_activity_enrollments_on_student_id"
   end
@@ -194,6 +197,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.bigint "receiver_id"
     t.string "stripe_price_id"
     t.boolean "on_waitlist", default: false
+    t.boolean "confirmed", default: false
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
     t.index ["receiver_id"], name: "index_camp_enrollments_on_receiver_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
@@ -231,7 +235,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_033700) do
     t.datetime "updated_at", null: false
     t.boolean "new", default: true
     t.string "stripe_price_id"
-    t.integer "capacity", default: 20
+    t.integer "capacity"
     t.integer "waitlist_capacity", default: 5
     t.index ["school_period_id"], name: "index_camps_on_school_period_id"
   end

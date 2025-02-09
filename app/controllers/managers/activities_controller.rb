@@ -1,4 +1,5 @@
 class Managers::ActivitiesController < ApplicationController
+  include ActionView::Helpers::TextHelper
   before_action :camp, only: %i[new create]
 
   def new
@@ -38,11 +39,16 @@ class Managers::ActivitiesController < ApplicationController
       end
       camp.coaches << coach if coach && !camp.coaches.include?(coach)
 
-
-      if validate_courses && activity.save
-        activity.activity_stat = ActivityStat.create(activity: activity)
-        create_courses_for_activity(activity, coach, days)
-        redirect_to managers_camp_path(camp), notice: "Activité créée"
+      if validate_courses
+        if activity.save
+          activity.activity_stat = ActivityStat.create(activity: activity)
+          create_courses_for_activity(activity, coach, days)
+          redirect_to managers_camp_path(camp), notice: "Activité créée"
+        else
+          error_messages = activity.errors.full_messages
+          flash[:alert] = "Erreur lors de la création de l'activité : #{error_messages.join(', ')}"
+          redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
+        end
       else
         flash[:alert] = "L'heure de début doit être avant l'heure de fin"
         redirect_to new_managers_activity_path(camp: camp, school_period: school_period)
@@ -179,12 +185,15 @@ class Managers::ActivitiesController < ApplicationController
   end
 
   def destroy
-    activity = Activity.find(params[:id])
-    authorize([:managers, activity])
-    activity.destroy
-    if activity.camp
-    redirect_to managers_camp_path(activity.camp)
-    flash[:notice] = "Activité supprimée"
+    @activity = Activity.find(params[:id])
+    authorize([:managers, @activity])
+    @activity.destroy
+    flash.now[:notice] = "Activité supprimée"
+    if @activity.camp
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to managers_camp_path(@activity.camp) }
+      end
     else
       redirect_to managers_annual_program_path(activity.annual_program)
       flash[:notice] = "Activité supprimée"
@@ -219,7 +228,7 @@ class Managers::ActivitiesController < ApplicationController
   private
 
   def activity_params
-    params.require(:activity).permit(:name, :category_id, :coach_id, :location_id)
+    params.require(:activity).permit(:name, :category_id, :coach_id, :location_id, :age_restricted, :min_age, :max_age)
   end
 
   def camp

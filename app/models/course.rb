@@ -16,6 +16,10 @@ class Course < ApplicationRecord
   # after_update_commit -> { broadcast_replace_to "today_courses", partial: "managers/academies/today_course", locals: { course: self, academy: academy }, target: self }
   # after_update_commit -> { broadcast_remove_to "today_courses", target: "old_course_#{id}" }
 
+  validates :starts_at, presence: true
+  validates :ends_at, presence: true
+  validate :starts_at_before_ends_at
+  
   def academy
     return camp.academy if camp
     return annual_program.academy if annual_program

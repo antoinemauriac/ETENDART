@@ -19,9 +19,12 @@
           <th>Académie</th>
           <th>Stage</th>
           <th>Semaine</th>
+          <th>Prix</th>
           <th>Début</th>
           <th>Fin</th>
+          <th>Capacité</th>
           <th>Élèves inscrits</th>
+          <th>Places dispo</th>
           <% if current_user.manager? %>
             <th>Supprimer</th>
           <% end %>
@@ -33,9 +36,12 @@
           <td class="align-middle"><%= @school_period.academy.name %></td>
           <td class="align-middle"><%= @school_period.name %></td>
           <td class="align-middle"><%= camp.name %></td>
+          <td class="align-middle"><%= @school_period.paid ? "#{@school_period.price}€" : "Gratuit" %></td>
           <td class="align-middle"><%= l(camp.starts_at, format: :date) %></td>
           <td class="align-middle"><%= l(camp.ends_at, format: :date) %></td>
+          <td class="align-middle"><%= camp.capacity %></td>
           <td class="align-middle"><%= camp.students_count %></td>
+          <td class="align-middle"><%= camp.capacity - camp.students_count %></td>
           <% if current_user.manager? %>
             <% if camp.can_import? &&  %>
               <td class="align-middle">
@@ -68,10 +74,8 @@
       <%= form.date_field :starts_at, class: "form-control", required: true %>
       <%= form.label :ends_at, "Date de fin :" %>
       <%= form.date_field :ends_at, class: "form-control", required: true %>
-      <%= form.label :capacity, "Capacité maximale d'étudiants:" %>
+      <%= form.label :capacity, "Nombre de places :" %>
       <%= form.number_field :capacity, class: "form-control", required: true %>
-      <%= form.label :waitlist_capacity, "Capacité de la liste d'attente:" %>
-      <%= form.number_field :waitlist_capacity, class: "form-control", required: true %>
 
       <div class="flex-btn mt-3">
         <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>

@@ -31,7 +31,7 @@
             <span class="ellipsis">Gratuit</i></span>
           <% end %>
         </div>
-      <% elsif camp_enrollment&.present %>
+      <% else %>
         <div class="col flexy-row small-col">
           <% if camp_enrollment.paid %>
             <i class="fa-solid fa-circle-check text-success fa-small"></i>
@@ -39,14 +39,14 @@
             <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
           <% end %>
         </div>
-      <% elsif !camp_enrollment&.present && camp_enrollment.paid %>
-        <div class="col flexy-row small-col">
+      <%# elsif !camp_enrollment&.present && camp_enrollment.paid %>
+<!--        <div class="col flexy-row small-col">
           <i class="fa-solid fa-circle-check text-success fa-small"></i>
         </div>
-      <% elsif !camp_enrollment&.present %>
-        <div class="col flexy-row small-col">
+      <%# elsif !camp_enrollment&.present %>-->
+<!--        <div class="col flexy-row small-col">
           <span class="ellipsis">Absent</span>
-        </div>
+        </div>-->
       <% end %>
     <% end %>
 

@@ -12,7 +12,26 @@
   <div class="form-container form-min-width" data-controller="activity-form" data-activity-form-academy-id-value="<%= @academy.id  %>">
     <%= simple_form_for @activity, url: managers_activities_path(camp: @camp), method: :post do |f| %>
       <%= f.input :name, label: "Nom", input_html: { class: "activity-input" } %>
+      <%= f.hidden_field :age_restricted, value: false if @academy.name == "Éole" %>
+
+      <% unless @academy.name == "Éole" %>
+        <div class="mb-3">
+          <%= f.label :age_restricted, "Activité concernée par une tranche d'âge ?", class: "form-label" %>
+          <div>
+            <%= f.radio_button :age_restricted, true, class: "activity-input", checked: @activity.age_restricted == true, required: true, data: { action: 'change->activity-form#addRanges' } %>
+            <%= f.label :age_restricted_true, "Oui" %>
+
+            <%= f.radio_button :age_restricted, false, class: "activity-input", checked: @activity.age_restricted == false, required: true, data: { action: 'change->activity-form#removeRanges' } %>
+            <%= f.label :age_restricted_false, "Non" %>
+          </div>
+        </div>
+      <% end %>
+
+      <div data-activity-form-target="ageRanges">
+
+      </div>
       <%= f.input :category_id, as: :select, collection: Category.all.order(:name), label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", action: 'change->activity-form#onCategoryChange' }, class: "activity-input" } %>
+
       <div class="d-none" data-activity-form-target="subform">
         <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: User.all, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select", activity_form_target: "coach" } } %>
         <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: User.all, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select", activity_form_target: "coach" } } %>

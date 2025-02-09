@@ -22,7 +22,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       school_period = camp.school_period
 
       student_camp_courses = student.courses.joins(:activity).where("activities.camp_id = ?", camp.id)
-      if student_camp_courses.empty?
+      if student_camp_courses.empty? && camp_enrollment.paid == false
         camp_enrollment.destroy
       end
 

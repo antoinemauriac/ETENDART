@@ -1,49 +1,62 @@
 <%= turbo_frame_tag "selected_content" do %>
-  <!--<div class="yellow-title">LES ACTIVITÉS</div>-->
-  <div class="container">
+  <div class="container container-big" data-controller="clickable-table">
     <% if @activities.any? %>
-      <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
-        <thead>
-          <tr>
-            <th>Activité</th>
-            <th>Catégorie</th>
-            <th>Lieu</th>
-            <th>Coach Référent</th>
-            <th>Nombre d'élèves inscrits</th>
-            <% if current_user.manager? %>
-              <th>Supprimer</th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% @activities.sort.each do |activity| %>
-            <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_activity_path(activity) %>">
-              <td><%= activity.name %></td>
-              <td><%= activity.category.name %></td>
-              <td><%= activity.location.name %></td>
-              <td><%= activity.coach.try(:full_name) || "" %></td>
-              <td><%= activity.students.count %></td>
-              <% if current_user.manager? %>
-                <% if activity.can_delete? %>
-                  <td>
-                    <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
-                      <i class="fas fa-trash trash"></i>
-                    <% end %>
-                  </td>
-                <% else %>
-                  <td></td>
-                <% end %>
-              <% end %>
-            </tr>
+      <div class="card-row-container">
+        <div class="row pb-2 pt-2 header-row align-items-center">
+          <div class="col flexy-row">Activité</div>
+          <div class="col large-col flexy-row">Catégorie</div>
+          <div class="col flexy-row">Lieu</div>
+          <div class="col large-col flexy-row">Coach Référent</div>
+          <div class="col small-col flexy-row">Age min</div>
+          <div class="col small-col flexy-row">Age max</div>
+          <div class="col small-col flexy-row">Inscrits</div>
+          <% if current_user.manager? %>
+            <div class="col small-col flexy-row">Supp</div>
           <% end %>
-        </tbody>
-      </table>
+        </div>
+        <% @activities.sort_by(&:name).each do |activity| %>
+          <div id="activity-<%= activity.id %>" class="row card-row card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_activity_path(activity) %>">
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= activity.name %></span>
+            </div>
+            <div class="col large-col flexy-row">
+              <span class="ellipsis"><%= activity.category.name %></span>
+            </div>
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= activity.location.name %></span>
+            </div>
+            <div class="col large-col flexy-row">
+              <span class="ellipsis"><%= activity.coach.try(:full_name_short) || "" %></span>
+            </div>
+            <div class="col small-col flexy-row">
+              <span class="ellipsis"><%= activity.age_restricted ? "#{activity.min_age} ans" : "" %></span>
+            </div>
+            <div class="col small-col flexy-row">
+              <span class="ellipsis"><%= activity.age_restricted ? "#{activity.max_age} ans" : "" %></span>
+            </div>
+            <div class="col small-col flexy-row">
+              <span class="ellipsis"><%= activity.students.count %></span>
+            </div>
+            <% if current_user.manager? %>
+              <% if activity.can_delete? %>
+                <div class="col small-col flexy-row">
+                  <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="col small-col flexy-row"></div>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
     <% else %>
       <div class="flexy mb-4 mt-4">Aucune activité pour le moment.</div>
     <% end %>
     <% if current_user.manager? %>
       <div class="flexy">
-        <%= link_to new_managers_activity_path(camp: @camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-1" do %>
+        <%= link_to new_managers_activity_path(camp: @camp), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-3" do %>
           <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE ACTIVITÉ<i class="fa-solid fa-square-plus fa-square-bigger"></i>
         <% end %>
       </div>

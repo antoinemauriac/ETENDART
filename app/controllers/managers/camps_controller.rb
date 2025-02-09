@@ -11,7 +11,6 @@ class Managers::CampsController < ApplicationController
   end
 
   def activities
-    # sleep 200
     @camp = Camp.find(params[:id])
     authorize([:managers, @camp])
     @activities = @camp.activities
@@ -35,7 +34,7 @@ class Managers::CampsController < ApplicationController
     authorize([:managers, camp])
     if camp.valid?
       # creer un produit stripe au nom du camp et de la periode scolaire et de l'academie
-      product = Stripe::Product.create(name: "#{camp.name} - #{camp.school_period.name} - #{camp.school_period.academy.name}")
+      product = Stripe::Product.create(name: "#{camp.name} - #{camp.school_period.name} - #{camp.school_period.year} - #{camp.school_period.academy.name}")
       price = Stripe::Price.create(product: product.id, unit_amount: camp.school_period.price * 100, currency: 'eur')
       camp.stripe_price_id = price.id
     end

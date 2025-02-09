@@ -23,7 +23,7 @@ class CampEnrollment < ApplicationRecord
   # after_create :create_cart_item
   # after_create :create_school_period_enrollment
 
-  after_destroy :destroy_school_period_enrollment
+  # after_destroy :destroy_school_period_enrollment
 
   def camp_starts_at
     camp.starts_at
@@ -76,7 +76,7 @@ class CampEnrollment < ApplicationRecord
   #   end
   # end
 
-  def destroyy_school_period_enrollment
+  def destroy_school_period_enrollment
     camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
     if camp_enrollments.empty?
       student.school_period_enrollments.find_by(school_period: school_period).destroy
