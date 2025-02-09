@@ -29,6 +29,11 @@ class Activity < ApplicationRecord
 
   validates :name, uniqueness: { scope: [:camp_id, :annual_program_id], message: "Une activité avec le même nom existe déjà" }
 
+  validates :age_restricted, inclusion: { in: [true, false] }
+  validates :min_age, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :max_age, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
+  validate :age_range_valid?
+
   before_validation :normalize_name
 
   # before_save :starts_at_before_ends_at
@@ -133,6 +138,22 @@ class Activity < ApplicationRecord
   end
 
   private
+
+  def age_range_valid?
+    return unless age_restricted
+  
+    if min_age.nil?
+      errors.add(:min_age, "doit être renseigné")
+    end
+  
+    if max_age.nil?
+      errors.add(:max_age, "doit être renseigné")
+    end
+  
+    if min_age.present? && max_age.present? && min_age > max_age
+      errors.add(:base, "L'âge minimum ne peut pas être supérieur à l'âge maximum.")
+    end
+  end
 
   def normalize_name
     self.name = name.split.map(&:capitalize).join(' ')

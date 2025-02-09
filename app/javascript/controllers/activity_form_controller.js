@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import TomSelect from "tom-select";
 
 export default class extends Controller {
-  static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach", "subform"]
+  static targets = ["startTime", "endTime", "mondayStartTime", "mondayEndTime", "category", "coach", "subform", "ageRanges"]
 
   static values = { academyId: Number }
 
@@ -50,4 +50,23 @@ export default class extends Controller {
     this.subformTarget.classList.remove("d-none");
     this.loadCoaches();
   }
+
+  addRanges() {
+    if (this.ageRangesTarget.innerHTML.trim() === "") {
+      this.ageRangesTarget.innerHTML = `
+        <div class="mb-3" data-age-fields>
+          <label for="activity_min_age" class="form-label">Age minimum</label>
+          <input type="number" name="activity[min_age]" id="activity_min_age" class="form-control activity-input" min="0" required="required">
+
+          <label for="activity_max_age" class="form-label mt-3">Age maximum</label>
+          <input type="number" name="activity[max_age]" id="activity_max_age" class="form-control activity-input" min="0" required="required">
+        </div>
+      `;
+    }
+  }
+
+  removeRanges() {
+    this.ageRangesTarget.innerHTML = "";
+  }
+    
 }

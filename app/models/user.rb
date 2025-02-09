@@ -116,6 +116,10 @@ class User < ApplicationRecord
     "#{last_name.upcase} #{first_name.capitalize}"
   end
 
+  def full_name_short
+    "#{first_name.capitalize} #{last_name.first.capitalize}."
+  end
+
   def next_activities
     activities.joins(:camp).where('camps.ends_at > ?', Time.current).order('camps.starts_at')
   end

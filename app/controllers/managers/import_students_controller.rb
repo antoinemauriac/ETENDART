@@ -25,7 +25,7 @@ class Managers::ImportStudentsController < ApplicationController
         end
       end
 
-      camp.camp_enrollments.destroy_all
+      camp.camp_enrollments.where(paid: false).destroy_all
       ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id).destroy_all
       CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id).destroy_all
 
@@ -72,7 +72,7 @@ class Managers::ImportStudentsController < ApplicationController
           end
 
           # Step 4: Create camp enrollment for the student
-          CampEnrollment.create(student: student, camp: camp, image_consent: row['droitimage'] == 'oui' ? true : false)
+          CampEnrollment.create(student: student, camp: camp, confirmed: true, image_consent: row['droitimage'] == 'oui' ? true : false)
 
           # Step 5: Assign student to activities
           (1..3).each do |i|
@@ -89,6 +89,8 @@ class Managers::ImportStudentsController < ApplicationController
             end
           end
 
+          student.activity_enrollments.where(activity: camp.activities).update_all(confirmed: true)
+
           # Step 6: Manage membership
           membership = student.memberships.find_by(start_year: start_year)
           if membership.nil?
@@ -100,7 +102,7 @@ class Managers::ImportStudentsController < ApplicationController
             redirect_to managers_camp_path(camp) and return
           end
           if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.paid == false
-            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
+            membership.update(paid: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
         end
       end

@@ -58,6 +58,8 @@ class Managers::ImportAnnualStudentsController < ApplicationController
             end
           end
 
+          student.activity_enrollments.where(activity: annual_program.activities).update_all(confirmed: true)
+
           membership = student.memberships.find_by(start_year: start_year)
           if membership.nil?
             membership = Membership.create(student: student, amount: Membership::PRICE, start_year: start_year, academy: academy)
@@ -68,7 +70,7 @@ class Managers::ImportAnnualStudentsController < ApplicationController
             redirect_to managers_annual_program_path(annual_program) and return
           end
           if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.paid == false
-            membership.update(status: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
+            membership.update(paid: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
           end
         end
       end

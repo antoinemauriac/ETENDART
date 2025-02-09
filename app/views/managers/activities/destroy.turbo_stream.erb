@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<%= turbo_stream.remove "activity-#{@activity.id}" %>

@@ -3,16 +3,24 @@ class Managers::CampEnrollmentsController < ApplicationController
     @camp_enrollment = CampEnrollment.find(params[:id])
     authorize([:managers, @camp_enrollment])
 
+    if @camp_enrollment.paid
+      flash.now[:alert] = "Impossible de supprimer une inscription déjà payée"
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to managers_camp_path(camp) }
+      end
+      return
+    end
+
     student = @camp_enrollment.student
     camp = @camp_enrollment.camp
     school_period = camp.school_period
 
-    student.activity_enrollments.where(activity: camp.activities).destroy_all
-    student.course_enrollments.where(course: camp.courses).destroy_all
-
-    manage_membership(student, camp)
-
+    
     if @camp_enrollment.destroy
+      student.activity_enrollments.where(activity: camp.activities).destroy_all
+      student.course_enrollments.where(course: camp.courses).destroy_all  
+      manage_membership(student, camp)
       camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
       if camp_enrollments.empty?
         student.school_period_enrollments.find_by(school_period: school_period).destroy
@@ -21,7 +29,6 @@ class Managers::CampEnrollmentsController < ApplicationController
     else
       flash.now[:alert] = "Erreur lors de la suppression"
     end
-    # render partial: "managers/camps/students", locals: { students: camp.students, camp: camp, academy: camp.academy, school_period: school_period, start_year: start_year }
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to managers_camp_path(camp) }
