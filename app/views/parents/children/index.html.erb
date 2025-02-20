@@ -8,6 +8,49 @@
   Mes Enfants
 </h1>
 
+<% if @existing_children %>
+  <%= simple_form_for :assign_children, url: assign_children_parents_children_path, method: :post do |f| %>
+
+    <ul class="px-1">
+      <% @existing_children.each do |child| %>
+        <li class="card p-3 border-0 mb-3">
+          <div class="row">
+
+            <div class="col-3 d-flex align-items-center justify-content-center">
+              <% if child.photo.key %>
+                <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle" %>
+              <% else %>
+                <i class="fa-solid fa-circle-user" style="font-size: 4rem"></i>
+              <% end %>
+            </div>
+
+            <div class="col-6 d-flex align-items-center">
+              <div class="card-body">
+                <h5 class="card-title"><%= child.first_name %> <%= child.last_name %></h5>
+                <p class="card-text"><%= l(child.date_of_birth, format: '%d/%m/%Y') %></p>
+              </div>
+            </div>
+
+            <div class="col-3 d-flex align-items-center justify-content-center">
+              <%= check_box_tag "child_ids[]", child.id, false, class: "form-check-input" %>
+            </div>
+
+          </div>
+        </li>
+
+      <% end %>
+    </ul>
+
+    <div class="text-center my-3">
+      <%= f.submit "Associer les enfants", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+
+<% end %>
+
+
+
 <% if @parent.children.any? %>
 
   <ul class="row justify-content-center">

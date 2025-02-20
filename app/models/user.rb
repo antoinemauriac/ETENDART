@@ -156,6 +156,16 @@ class User < ApplicationRecord
     academies_as_coach.order('coach_academies.created_at')
   end
 
+  ##############################################################################
+  # GESTION DU PANIER DE L'UTILISATEUR TYPE == PARENT
+  ##############################################################################
+
+  def pending_cart
+    carts.find_by(status: 'pending')
+  end
+
+  ##############################################################################
+
   private
 
   def normalize_fields

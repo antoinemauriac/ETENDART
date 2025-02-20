@@ -21,6 +21,10 @@ class Parents::StudentPolicy < ApplicationPolicy
     user.present? && user.parent?
   end
 
+  def assign_children?
+    user.present? && user.parent?
+  end
+
   def new?
     user.present? && user.parent?
   end

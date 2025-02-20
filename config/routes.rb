@@ -51,7 +51,11 @@ Rails.application.routes.draw do
   # CONTROLLER LE PROFIL DE L'UTILISATEUR PARENT
   ################################################################################################
   namespace :parents do
-    resources :children, only: %i[index show new create edit update]
+    resources :children, only: %i[index show new create edit update] do
+      collection do
+        post :assign_children
+      end
+    end
     resource :profile, only: %i[new create show edit update]
   end
   ################################################################################################

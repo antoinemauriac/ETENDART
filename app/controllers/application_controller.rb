@@ -19,6 +19,8 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     if resource.first_login
       users_first_login_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
+    elsif !resource.first_login && resource.parent_profile.nil?
+      new_parents_profile_path # Redirige vers la création du profil parent
     else
       super # Utilise le chemin par défaut fourni par Devise ou celui que tu as configuré
     end

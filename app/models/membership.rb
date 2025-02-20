@@ -16,7 +16,7 @@ class Membership < ApplicationRecord
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
 
-  after_update :get_payment_date, if: -> { saved_change_to_paid? && paid }
+  # after_update :get_payment_date, if: -> { saved_change_to_paid? && paid }
 
   # MÉTHODE QUI RENVOIE LES MEMBERSHIPS A PRIORI NON EXIGIBLES
   def self.with_all_course_enrollments_present_false

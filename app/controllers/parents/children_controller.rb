@@ -1,11 +1,27 @@
 class Parents::ChildrenController < ApplicationController
   before_action :set_parent
 
+  # path: parents_children_path
   def index
+    @existing_children = Student.where(id: session[:existing_children]) if session[:existing_children].present?
     @children = policy_scope([:parents, Student])
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     authorize [:parents, :student], :index?
   end
+
+  def assign_children
+    authorize [:parents, :student], :assign_children?
+    children = Student.where(id: params[:child_ids])
+    if children.any?
+      children.update_all(user_id: current_user.id) # Associe les enfants au parent
+      flash[:notice] = "Les enfants ont été ajoutés avec succès."
+    else
+      flash[:alert] = "Aucun enfant sélectionné."
+    end
+    session.delete(:existing_children)
+    redirect_to parents_children_path
+  end
+
 
   def new
     @child = Student.new
@@ -42,6 +58,7 @@ class Parents::ChildrenController < ApplicationController
 
     @child.parent = @parent
     if @child.save
+      @child.must_pay_membership
       redirect_to parents_child_path(@child), notice: notice_message
     else
       render :new, alert: 'Une erreur est survenue lors de la création de l\'élève.'
@@ -51,13 +68,6 @@ class Parents::ChildrenController < ApplicationController
   def show
     @child = Student.find(params[:id])
     authorize [:parents, :student], :show?
-    @academies = @child.academies.uniq
-    @academy1 = @child.academies.first if @child.academies.any?
-    @academy2 = @child.academies.second if @child.academies.second
-    @academy3 = @child.academies.third if @child.academies.third
-    @academy = @child.first_academy
-    @feedback = Feedback.new
-    @feedbacks = @child.feedbacks.order(created_at: :desc)
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     @membership = @child.memberships.find_by(start_year: @start_year)
     @memberships = @child.memberships.includes(:receiver).order(start_year: :desc)

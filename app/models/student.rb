@@ -169,9 +169,10 @@ class Student < ApplicationRecord
     # est ce qu'il y a une adhésion pour l'année en cours ?
     start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     if membership_not_paid? || memberships.find_by(start_year: start_year).nil?
-      membership = self.memberships.find_or_create_by(start_year: Date.current.year - 1, amount: Membership::PRICE, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
-      cart = parent.carts.current_cart_for(parent)
-      cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
+      membership = self.memberships.find_or_create_by(start_year: start_year, amount: Membership::PRICE, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH")
+      cart = self.parent.pending_cart
+      cart_name = "Adhésion #{membership.start_year}/#{membership.start_year + 1} - #{self.first_name} #{self.last_name}"
+      cart_item = cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH", name: cart_name)
     end
   end
 

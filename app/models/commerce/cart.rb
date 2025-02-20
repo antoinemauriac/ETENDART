@@ -23,10 +23,10 @@ class Commerce::Cart < ApplicationRecord
     save!
   end
 
-  def paid!
-    update!(status: 'completed')
-    cart_items.each(&:paid!)
-  end
+  # def paid!
+  #   update!(status: 'completed')
+  #   cart_items.each(&:paid!)
+  # end
 
   def paid?
     status == 'completed'
