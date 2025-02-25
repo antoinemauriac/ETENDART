@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_09_142359) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_25_002959) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -100,7 +100,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_142359) do
     t.datetime "updated_at", null: false
     t.boolean "present", default: false
     t.boolean "confirmed", default: false
+    t.bigint "camp_enrollment_id"
     t.index ["activity_id"], name: "index_activity_enrollments_on_activity_id"
+    t.index ["camp_enrollment_id"], name: "index_activity_enrollments_on_camp_enrollment_id"
     t.index ["student_id"], name: "index_activity_enrollments_on_student_id"
   end
 
@@ -198,8 +200,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_142359) do
     t.string "stripe_price_id"
     t.boolean "on_waitlist", default: false
     t.boolean "confirmed", default: false
+    t.bigint "school_period_enrollment_id"
     t.index ["camp_id"], name: "index_camp_enrollments_on_camp_id"
     t.index ["receiver_id"], name: "index_camp_enrollments_on_receiver_id"
+    t.index ["school_period_enrollment_id"], name: "index_camp_enrollments_on_school_period_enrollment_id"
     t.index ["student_id"], name: "index_camp_enrollments_on_student_id"
   end
 
@@ -585,6 +589,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_142359) do
   add_foreign_key "activity_coaches", "activities"
   add_foreign_key "activity_coaches", "users", column: "coach_id"
   add_foreign_key "activity_enrollments", "activities"
+  add_foreign_key "activity_enrollments", "camp_enrollments"
   add_foreign_key "activity_enrollments", "students"
   add_foreign_key "activity_stats", "activities"
   add_foreign_key "annual_program_enrollments", "annual_programs"
@@ -595,6 +600,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_142359) do
   add_foreign_key "camp_deposits", "users", column: "depositor_id"
   add_foreign_key "camp_deposits", "users", column: "manager_id"
   add_foreign_key "camp_enrollments", "camps"
+  add_foreign_key "camp_enrollments", "school_period_enrollments"
   add_foreign_key "camp_enrollments", "students"
   add_foreign_key "camp_enrollments", "users", column: "receiver_id"
   add_foreign_key "camp_stats", "camps"

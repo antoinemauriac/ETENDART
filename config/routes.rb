@@ -57,6 +57,14 @@ Rails.application.routes.draw do
       end
     end
     resource :profile, only: %i[new create show edit update]
+    resources :academies, only: %i[index show] do
+
+      resources :school_periods, only: %i[show] do
+        resources :school_period_enrollments, only: %i[new create]
+      end
+    end
+
+
   end
   ################################################################################################
 

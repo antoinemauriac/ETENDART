@@ -4,7 +4,9 @@ class ActivityEnrollment < ApplicationRecord
 
   belongs_to :student
   belongs_to :activity
+  belongs_to :camp_enrollment, optional: true
   has_one :camp, through: :activity
+
 
   scope :attended, -> { where(present: true) }
   scope :unattended, -> { where(present: false) }

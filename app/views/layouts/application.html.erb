@@ -32,7 +32,7 @@
 
   </head>
 
-  <body>
+  <body data-controller="adam--test">
     <% if current_user && current_user.no_role? %>
       <%= render "shared/no_role_navbar" %>
     <% elsif current_user && current_user.parent? %>
