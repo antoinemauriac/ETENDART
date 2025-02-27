@@ -27,15 +27,19 @@
             <% academy.school_periods.includes(:camps).where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
               <% expected_revenue = school_period.expected_revenue %>
               <% received_revenue = school_period.received_revenue %>
-              <% total_old_camp_deposits = school_period.total_old_camp_deposits %>
+              <% if !school_period.camps.first.new %>
+                <% total_deposit = school_period.total_old_camp_deposits %>
+              <% else %>
+                <% total_deposit = school_period.total_deposit %>
+              <% end %>
               <% camp_enrollments = school_period.camp_enrollments %>
               <% attended_camp_enrollments = camp_enrollments.attended %>
               <tr class="clickable-tr" onclick="window.location.href='<%=  show_school_period_managers_finance_path(school_period) %>'">
                 <td style="min-width:200px"><%= school_period.full_name %> </td>
                 <td><%= replace_zero_with_dash(expected_revenue) %></td>
                 <td><%= replace_zero_with_dash(received_revenue) %></td>
-                <td><%= replace_zero_with_dash(total_old_camp_deposits) %></td>
-                <td style="<%= (received_revenue - total_old_camp_deposits) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(received_revenue - total_old_camp_deposits) %></td>
+                <td><%= replace_zero_with_dash(total_deposit) %></td>
+                <td style="<%= (received_revenue - total_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(received_revenue - total_deposit) %></td>
                 <td style="<%= expected_revenue - received_revenue != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(expected_revenue - received_revenue) %></td>
                 <td><%= school_period.price %>€</td>
                 <td><%= attended_camp_enrollments.count %></td>
