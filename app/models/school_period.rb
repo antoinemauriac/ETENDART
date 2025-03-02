@@ -9,6 +9,7 @@ class SchoolPeriod < ApplicationRecord
   has_many :students, through: :camp_enrollments
 
   has_many :old_camp_deposits, through: :camps
+  has_many :camp_deposits, through: :camps
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps

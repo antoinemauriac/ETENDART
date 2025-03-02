@@ -61,7 +61,7 @@ class Parents::ChildrenController < ApplicationController
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     @membership = @child.memberships.find_by(start_year: @start_year)
     @memberships = @child.memberships.includes(:receiver).order(start_year: :desc)
-    @camp_enrollments = @child.paid_camp_enrollments_without_free_judo_activity.includes(:camp, :receiver)
+    @camp_enrollments = @child.payable_camp_enrollments.includes(:camp, :receiver)
     @camp_enrollment = @camp_enrollments.last
 
   end
