@@ -7,7 +7,7 @@ class ParentProfile < ApplicationRecord
   validates :address, presence: true
   validates :zipcode, presence: true
   validates :city, presence: true
-  validates :has_valid_rgpd, acceptance: { accept: true }
+  validates :has_valid_rgpd, presence: true
 
   after_create :parent_get_a_cart
 

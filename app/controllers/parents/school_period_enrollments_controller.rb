@@ -6,7 +6,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
 
     @school_period_enrollment = SchoolPeriodEnrollment.new
     @students = current_user.children
-    @selected_student = params[:student_id].present? ? Student.find(params[:student_id]) : @students.first
+    @selected_student = params[:student_id].present? ? Student.find(params[:student_id]) : @students&.first
     # retrouver les camps ou le selected_student n'est pas encore inscrit
     enrolled_camp_ids = @selected_student
                      .camp_enrollments
@@ -18,7 +18,6 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
   end
 
   def create
-
     authorize([:parents, SchoolPeriodEnrollment])
     # Il se peut qu'il y ait déjà un enrollment pour ce school_period et ce student
     # Il faut donc vérifier si un enrollment existe déjà pour ce student et ce school_period

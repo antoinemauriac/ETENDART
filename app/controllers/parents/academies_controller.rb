@@ -1,6 +1,7 @@
 class Parents::AcademiesController < ApplicationController
   def index
     @academies = policy_scope([:parents, Academy])
+    @school_periods = SchoolPeriod.with_future_camps
   end
 
   def show

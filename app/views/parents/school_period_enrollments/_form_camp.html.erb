@@ -8,61 +8,54 @@
       <div class="col-md-8 col-12 my-3">
 
         <%# checkbox des camps de la school_period, avec label personnalisés %>
-        <%= f.label "Sélectionner les stages" %>
+        <p class="mb-0">Sélectionner les stages</p>
 
 
 
-        <% @camps.each do |camp, index| %>
-
+        <% @camps.each do |camp| %>
           <section class="row" id="camp_<%= camp.id %>" data-controller="form--enrollment--camp">
 
-            <div class="form-check mt-3">
+            <div class="form-check mt-2 mb-2" style="padding-left: 0;">
               <%= check_box_tag "camp_ids[]", camp.id, false, data: { action: "change->form--enrollment--camp#toggle" } %>
               <%= label_tag "camp_ids[]", camp.name %>
             </div>
 
-            <div class="row d-none" data-form--enrollment--camp-target="camp">
-
-              <div class="col-6">
-                <%= f.label "Sport", class: "form-label d-block" %>
-
-                <% camp.activities.joins(:category).where(categories: { super_category: "Sport" })
-                  .each do |activity| %>
-
-                  <% if activity.age_restricted && activity.min_age <= @selected_student.age && activity.max_age >= @selected_student.age || !activity.age_restricted %>
-                    <%# si l'activity est age_restricted et que le student.age est entre activity.min_age et activity.max_age ou si l'activity n'est pas age_restricted %>
-                    <%# alors on affiche le check_box %>
-                    <div class="form-check">
-                      <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]", activity.id, false %>
-                      <%= label_tag "camp_id[#{camp.id}][sport_activity_id]", activity.name %>
+            <div class="row d-none" style="padding-left: 0;" data-form--enrollment--camp-target="camp">
+                <div class="col-6" style="padding-left: 0;">
+                  <%= f.label "Activité Sport", class: "form-label d-block mb-2" %>
+                  <% sport_activities =  camp.activities.joins(:category).where(categories: { super_category: "Sport" }) %>
+                  <% selected_sport_activities = sport_activities.select { |activity| !activity.age_restricted || activity.min_age <= @selected_student.age && activity.max_age > @selected_student.age} %>
+                  <% selected_sport_activities.each do |activity| %>
+                    <div class="form-check" style="padding-left: 0;">
+                      <% if selected_sport_activities.count == 1 %>
+                        <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]", activity.id, true %>
+                        <%= label_tag "camp_id[#{camp.id}][sport_activity_id]", activity.name %>
+                      <% else %>
+                        <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]", activity.id, false %>
+                        <%= label_tag "camp_id[#{camp.id}][sport_activity_id]", activity.name %>
+                      <% end %>
                     </div>
-
                   <% end %>
+                </div>
 
-
-                <% end %>
-              </div>
-
-              <div class="col-6">
-                <%= f.label "Éveil", class: "form-label d-block" %>
-                <% activities = camp.activities.joins(:category).where(categories: { super_category: "Eveil" }) %>
-
-                <% activities.each do |activity| %>
-
-                  <% if activity.age_restricted && activity.min_age <= @selected_student.age && activity.max_age >= @selected_student.age || !activity.age_restricted %>
-                  <div class="form-check">
-                    <%= radio_button_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.id, activities.one? %>
-                    <%= label_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.name %>
-                  </div>
-
+                <div class="col-6" style="padding-left: 0;">
+                  <%= f.label "Activité Éveil", class: "form-label d-block mb-2" %>
+                  <% eveil_activities = camp.activities.joins(:category).where(categories: { super_category: "Eveil" }) %>
+                  <% selected_eveil_activities = eveil_activities.select { |activity| !activity.age_restricted || activity.min_age <= @selected_student.age && activity.max_age > @selected_student.age} %>
+                  <% selected_eveil_activities.each do |activity| %>
+                    <div class="form-check" style="padding-left: 0;">
+                    <% if selected_eveil_activities.count == 1 %>
+                      <%= check_box_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.id, true, disabled: true %>
+                      <%= label_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.name %>
+                    <% else %>
+                      <%= check_box_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.id, false %>
+                      <%= label_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.name %>
+                    <% end %>
+                    </div>
                   <% end %>
-                <% end %>
-              </div>
-
+                </div>
             </div>
-
           </section>
-
         <% end %>
 
 

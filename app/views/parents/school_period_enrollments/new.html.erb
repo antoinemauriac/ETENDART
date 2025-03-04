@@ -1,22 +1,20 @@
-<h1 class="text-center my-3 bg-yellow text-black py-3 my-3">
-  <%= @academy.name.upcase %> / <%= @school_period.name %> <%= @school_period.year %>
-</h1>
+<div class="yellow-title">
+  <%= @academy.name.upcase %> - <%= @school_period.name %> <%= @school_period.year %>
+</div>
 
 <main class="container-sm p-3">
   <h2 class="text-center">
-    Inscrire mon enfant
+    INSCRIPTIONS
   </h2>
 
   <section id="student-form" class="row">
     <div class="col-md-8 col-12 my-3">
-      <%= form_with url: filter_camps_parents_academy_school_period_school_period_enrollments_path(@academy, @school_period), method: :get, data: { controller: "form--auto-submit" } do |f| %>
-        <%= f.label "Sélectionner un enfant" %>
-        <%= f.collection_radio_buttons :student_id, @students, :id, :full_name, checked: @selected_student.id do |b| %>
-          <%= b.radio_button data: { action: "change->form--auto-submit#submit" } %>
-          <%= b.label %>
-        <% end %>
+      <%= form_with url: filter_camps_parents_academy_school_period_school_period_enrollments_path(@academy, @school_period), method: :get, data: { controller: "form--auto-submit" }, class: "form-inline" do |f| %>
+      <div class="form-group">
+        <%= f.label :student_id, "Sélectionner un enfant", class: "mr-2" %>
+        <%= f.select :student_id, options_from_collection_for_select(@students, :id, :full_name, @selected_student.id), {}, class: "form-control", data: { action: "change->form--auto-submit#submit" } %>
+      </div>
       <% end %>
-
     </div>
 
   </section>
