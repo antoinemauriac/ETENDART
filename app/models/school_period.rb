@@ -246,6 +246,15 @@ class SchoolPeriod < ApplicationRecord
     camps.sum(&:present_students_with_free_judo_count)
   end
 
+  def self.with_future_camps
+    joins(:camps)
+      .where('camps.starts_at > ?', Date.today)
+      .joins(camps: :activities)
+      .group('school_periods.id')
+      .having('COUNT(activities.id) >= 2')
+      .includes(:academy)
+  end
+
   private
 
   def normalize_name
