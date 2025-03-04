@@ -250,9 +250,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_25_160953) do
     t.bigint "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "stripe_price_id"
     t.string "product_type", null: false
     t.bigint "product_id", null: false
+    t.string "stripe_price_id"
     t.boolean "paid", default: false
     t.string "name", null: false
     t.string "payment_method", default: "Carte bancaire"
