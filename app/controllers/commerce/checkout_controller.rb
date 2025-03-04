@@ -4,7 +4,8 @@ class Commerce::CheckoutController < ApplicationController
     authorize [:commerce, :checkout], :new?
     @parent = current_user
     @parent_profile = @parent.parent_profile
-    @cart = Commerce::Cart.current_cart_for(@parent)
+    @cart = @parent.pending_cart
+    @cart_items = @cart.cart_items.where(payment_method: 'carte bancaire')
     session = Stripe::Checkout::Session.create(
       customer: @parent_profile.stripe_customer_id,
       payment_method_types: ['card'],
@@ -12,7 +13,7 @@ class Commerce::CheckoutController < ApplicationController
       billing_address_collection: 'required',
       success_url: commerce_checkout_success_url,
       cancel_url: commerce_checkout_cancel_url,
-      line_items: @cart.cart_items.map do |cart_item|
+      line_items: @cart_items.map do |cart_item|
         {
           price: cart_item.stripe_price_id,
           quantity: 1
@@ -26,8 +27,26 @@ class Commerce::CheckoutController < ApplicationController
   def success
     authorize [:commerce, :checkout], :success?
     @parent = current_user
-    @cart = Commerce::Cart.current_cart_for(@parent)
+    @cart = @parent.pending_cart
     @cart.paid! unless @cart.paid?
+    # chaque cart_items dont la payment_method est 'Carte bancaire' est marqué comme payé
+    paid_cart_items = @cart.cart_items.where(payment_method: 'carte bancaire')
+    paid_cart_items.each do |item|
+      item.paid!
+      # chaque product_type camp_enrollment de ces cart_items obtient une payment_method = "virement"
+      item.product.update!(payment_method: 'virement') if item.product_type == 'CampEnrollment'
+    end
+
+    # chaque camp_enrollment de ces cart_items passe confirmed à true
+    camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
+    camp_enrollment_cart_items.each do |item|
+      item.product.update!(confirmed: true)
+      item.product.activity_enrollments.each do |activity_enrollment|
+        activity_enrollment.update!(confirmed: true)
+      end
+    end
+
+
     flash[:notice] = 'Votre paiement a bien été effectué.'
   end
 

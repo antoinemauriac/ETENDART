@@ -1,0 +1,132 @@
+<%= simple_form_for @school_period_enrollment, url: parents_academy_school_period_school_period_enrollments_path(@academy, @school_period) do |f| %>
+  <section class="row justify-content-center">
+
+    <%# hidden field contenant le selected_stuend %>
+    <%= f.hidden_field :student_id, value: @selected_student.id %>
+
+    <% if @camps.length != 0 %>
+      <div class="col-md-8 col-12 my-3">
+
+        <%# checkbox des camps de la school_period, avec label personnalisés %>
+        <%= f.label "Sélectionner les stages" %>
+
+
+
+        <% @camps.each do |camp, index| %>
+
+          <section class="row" id="camp_<%= camp.id %>" data-controller="form--enrollment--camp">
+
+            <div class="form-check mt-3">
+              <%= check_box_tag "camp_ids[]", camp.id, false, data: { action: "change->form--enrollment--camp#toggle" } %>
+              <%= label_tag "camp_ids[]", camp.name %>
+            </div>
+
+            <div class="row d-none" data-form--enrollment--camp-target="camp">
+
+              <div class="col-6">
+                <%= f.label "Sport", class: "form-label d-block" %>
+
+                <% camp.activities.joins(:category).where(categories: { super_category: "Sport" })
+                  .each do |activity| %>
+
+                  <% if activity.age_restricted && activity.min_age <= @selected_student.age && activity.max_age >= @selected_student.age || !activity.age_restricted %>
+                    <%# si l'activity est age_restricted et que le student.age est entre activity.min_age et activity.max_age ou si l'activity n'est pas age_restricted %>
+                    <%# alors on affiche le check_box %>
+                    <div class="form-check">
+                      <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]", activity.id, false %>
+                      <%= label_tag "camp_id[#{camp.id}][sport_activity_id]", activity.name %>
+                    </div>
+
+                  <% end %>
+
+
+                <% end %>
+              </div>
+
+              <div class="col-6">
+                <%= f.label "Éveil", class: "form-label d-block" %>
+                <% activities = camp.activities.joins(:category).where(categories: { super_category: "Eveil" }) %>
+
+                <% activities.each do |activity| %>
+
+                  <% if activity.age_restricted && activity.min_age <= @selected_student.age && activity.max_age >= @selected_student.age || !activity.age_restricted %>
+                  <div class="form-check">
+                    <%= radio_button_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.id, activities.one? %>
+                    <%= label_tag "camp_id[#{camp.id}][eveil_activity_id]", activity.name %>
+                  </div>
+
+                  <% end %>
+                <% end %>
+              </div>
+
+            </div>
+
+          </section>
+
+        <% end %>
+
+
+      </div>
+
+      <div class="col-12 text-center">
+        <% if @students.count <= 1 %>
+          <%= f.submit "Inscrire", class: "btn btn-primary", role: "button" %>
+
+        <% else %>
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Inscrire
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Souhaitez-vous inscrire un autre enfant ?</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                  <section class="row g-3">
+                    <div class="col-12">
+                        <%= f.submit "Inscrire un autre enfant",
+                          class: "btn btn-secondary",
+                          name: "another_child",
+                          data_bs_dismiss: "modal" %>
+                    </div>
+
+                    <div class="col-12">
+                      <%= f.submit "Passer au règlement",
+                          class: "btn btn-primary",
+                          name: "another_child",
+                          data_bs_dismiss: "modal" %>
+                    </div>
+                  </section>
+
+
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    <% else %>
+      <div class="col-12 text-center">
+        <p class="text-danger">
+          L'enfant est inscrit à tous les stages de cette période.
+        </p>
+      </div>
+    <% end %>
+
+
+
+
+  </section>
+
+<% end %>

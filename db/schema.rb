@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_25_002959) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_25_160953) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -255,6 +255,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_25_002959) do
     t.bigint "product_id", null: false
     t.boolean "paid", default: false
     t.string "name", null: false
+    t.string "payment_method", default: "Carte bancaire"
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
     t.index ["product_type", "product_id"], name: "index_cart_items_on_product"
     t.index ["student_id"], name: "index_cart_items_on_student_id"

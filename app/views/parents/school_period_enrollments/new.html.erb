@@ -7,36 +7,28 @@
     Inscrire mon enfant
   </h2>
 
-  <section id="form" class="row">
-    <%= simple_form_for @school_period_enrollment, url: parents_academy_school_period_school_period_enrollments_path(@academy, @school_period) do |f| %>
+  <section id="student-form" class="row">
+    <div class="col-md-8 col-12 my-3">
+      <%= form_with url: filter_camps_parents_academy_school_period_school_period_enrollments_path(@academy, @school_period), method: :get, data: { controller: "form--auto-submit" } do |f| %>
+        <%= f.label "Sélectionner un enfant" %>
+        <%= f.collection_radio_buttons :student_id, @students, :id, :full_name, checked: @selected_student.id do |b| %>
+          <%= b.radio_button data: { action: "change->form--auto-submit#submit" } %>
+          <%= b.label %>
+        <% end %>
+      <% end %>
 
-      <div class="col-md-6 col-12">
-        <%# radio button des enfants du current_user, avec label personnalisés %>
-        <%= f.association :student, collection: @students, as: :radio_buttons, label: "Sélectionner un enfant", label_method: :full_name %>
-      </div>
+    </div>
 
-      <div class="col-md-6 col-12">
-        <%# checkbox des camps de la school_period, avec label personnalisés %>
-
-        <%= f.label :camp_enrollments, "Sélectionner les stages" %>
-
-        <%= f.simple_fields_for :camp_enrollments do |camp_f| %>
-            <div class="form-check">
-              <%= camp_f.check_box :camp_id %>
-              <%= camp_f.label :camp_id, camp_f.object.camp.name %>
-            </div>
-
-            <%# si il sélectionne ce camp, on doit lui proposer les activity du camp %>
-            <%# checkbox des activities du camp, avec label personnalisés %>
-            <%# on ne peut choisir qu'une activité type sport %>
-            <%# on ne peut choisir qu'une activité type éveil %>
-            <%# on ne peut choisir que l'activité qui respecte l'age de l'enfant %>
-
-
-
-
-      </div>
-
-    <% end %>
   </section>
+
+  <section id="enrollment_form" class="row">
+    <%= render 'form_camp', locals: {
+      academy: @academy,
+      school_period: @school_period,
+      school_period_enrollment: @school_period_enrollment,
+      student: @selected_student,
+      camps: @camps,
+      students: @students} %>
+  </section>
+
 </main>

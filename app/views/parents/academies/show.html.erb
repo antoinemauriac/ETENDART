@@ -17,11 +17,10 @@
 
           <div class="mb-3">
 
-            <%= link_to academy_school_period_path(@academy, school_period) do %>
-              <h2 class="text-white bg-black p-3 rounded-top-4 text-center">
-                <%= school_period.name %> - <%= school_period.year %>
-              </h2>
-            <% end %>
+            <h2 class="text-white bg-black p-3 rounded-top-4 text-center">
+              <%= school_period.name %> - <%= school_period.year %>
+            </h2>
+
 
             <div class="row">
 
@@ -42,7 +41,7 @@
                     <ul>
                       <% camp.activities.each do |activity| %>
                         <li>
-                          <%= link_to activity.name, academy_school_period_activity_path(@academy, school_period, activity) %>
+                          <%= activity.category.name %>
                         </li>
                       <% end %>
                     </ul>
@@ -59,7 +58,7 @@
 
                 <% end %>
 
-                <div class="col-12">
+                <div class="col-12 text-center">
                   <hr class="mb-3">
                   <%= link_to "Inscrire mon enfant", new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "btn btn-primary" %>
                 </div>
@@ -119,40 +118,6 @@
   <%# on ne peut choisir qu'une activité type éveil %>
   <%# on ne peut choisir que l'activité qui respecte l'age de l'enfant %>
 
-  <div class="row">
-    <div class="col-md-8">
-      <h2 class="header-info">
-        INSCRIPTION
-      </h2>
-
-      <%= simple_form_for CampEnrollment.new, url: parents_camp_enrollments_path, method: :post do |f| %>
-
-        <%# school_period %>
-        <%= f.hidden_field :school_period_id, value: @school_period.id %>
-
-        <%# radio du simple_form pour selectionner un unique enfant parmi mes children %>
-        <%# comment afficher le label: Sélectionner un enfant %>
-
-        <%= f.association :student, collection: current_user.children, as: :radio_buttons, label: "Sélectionner un enfant", label_method: :full_name %>
-
-
-        <%# radio du simple_form pour selectionner un unique camp parmi les camps de la school_period %>
-        <%= f.association :camp, collection: @school_period.camps, as: :radio_buttons, label: "Sélectionner un stage" %>
-
-        <%# checkbox du simple_form pour sélectionner les activités du camp choisi %>
-        <%# on ne peut choisir qu'une activité type sport %>
-        <%# on ne peut choisir qu'une activité type éveil %>
-        <%# on ne peut choisir que l'activité qui respecte l'age de l'enfant %>
-        <%# f.association :activities, collection: @school_period.activities, as: :check_boxes %>
-
-        <div class="text-center">
-          <%= f.submit "Inscrire mon enfant", class: "btn btn-primary" %>
-        </div>
-
-      <% end %>
-
-
-  </div>
 
 
 

@@ -60,7 +60,11 @@ Rails.application.routes.draw do
     resources :academies, only: %i[index show] do
 
       resources :school_periods, only: %i[show] do
-        resources :school_period_enrollments, only: %i[new create]
+        resources :school_period_enrollments, only: %i[new create] do
+          collection do
+            get :filter_camps
+          end
+        end
       end
     end
 
@@ -77,7 +81,7 @@ Rails.application.routes.draw do
     get 'checkout/success', to: 'checkout#success', as: 'checkout_success', controller: 'checkout'
     get 'checkout/cancel', to: 'checkout#cancel', as: 'checkout_cancel', controller: 'checkout'
     resource :cart, only: %i[show create update]
-    resources :cart_items, only: %i[create destroy]
+    resources :cart_items, only: %i[create update destroy]
     resources :orders, only: %i[create show]
   end
   ################################################################################################

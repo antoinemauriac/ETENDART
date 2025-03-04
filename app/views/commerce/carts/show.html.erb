@@ -7,32 +7,69 @@
 <% if @cart.cart_items.any? %>
   <div class="container-md mt-5">
 
+
     <table class="table">
       <thead class="thead-light">
-        <tr>
-          <th>Étudiant</th>
-          <th>Produit</th>
-          <th colspan="2">Prix</th>
-        </tr>
+      <tr>
+        <th>Produit</th>
+        <th>Méthode</th>
+        <th colspan="2">Prix</th>
+      </tr>
       </thead>
       <tbody>
-        <% @cart.cart_items.sort_by { |cart_item| cart_item.student.first_name }.each do |cart_item| %>
-          <tr>
-            <td><%= cart_item.student.first_name %></td>
-            <td><%= cart_item.name %></td>
-            <td class="text-end" colspan="2"><%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €</td>
-          </tr>
-        <% end %>
+      <% @membership_cart_items.each do |cart_item| %>
+        <tr>
+        <td><%= cart_item.name %></td>
+        <td><%= cart_item.payment_method %></td>
+        <td class="text-end" colspan="2">
+          <%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €
+        </td>
+        </tr>
+      <% end %>
+
+      <% @camp_enrollment_cart_items.each do |cart_item| %>
+        <tr>
+        <td><%= cart_item.name %></td>
+        <td>
+          <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item), data: { controller: "form--auto-submit" } do |f| %>
+          <%= f.select :payment_method, options_for_select([['Carte bancaire', 'carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash']], cart_item.payment_method), { class: 'form-select' }, data: { action: "change->form--auto-submit#submit" } %>
+          <% end %>
+        </td>
+        <td class="text-end" colspan="2">
+          <%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €
+          <%= link_to commerce_cart_item_path(cart_item), data: { turbo_method: :delete, turbo_confirm: 'Êtes-vous sûr de vouloir supprimer ce produit de votre panier ?' }, class: "btn btn-outline-danger" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+            </svg>
+          <% end %>
+        </td>
+        </tr>
+      <% end %>
       </tbody>
     </table>
 
+
     <div class="text-end my-4">
+      <h5>
+        A régler par carte bancaire: <%= number_with_precision(@total_cb, precision: 2, delimiter: ',') %> €
+      </h5>
+      <h5>
+        A régler le jour du stage: <%= number_with_precision(@total_other, precision: 2, delimiter: ',') %> €
+      </h5>
       <h3>Total: <%= number_with_precision(@cart.total_price, precision: 2, delimiter: ',') %> €</h3>
 
     </div>
 
     <div class="text-center">
-      <%= link_to 'Procéder au paiement', commerce_new_checkout_path, data: { turbo: "false" }, class: 'btn btn-primary' %>
+
+      <% if @total_cb > 0 %>
+        <%= link_to 'Procéder au paiement', commerce_new_checkout_path, data: { turbo: "false" }, class: 'btn btn-primary' %>
+
+      <% else %>
+        <%= link_to 'Payer le jour du stage', commerce_checkout_success_path, data: { turbo: "false" }, class: 'btn btn-primary' %>
+
+      <% end %>
+
     </div>
   </div>
 
