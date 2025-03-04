@@ -10,20 +10,20 @@ class Commerce::CartItem < ApplicationRecord
 
   after_destroy :update_cart_total_price
 
-  # def paid!
-  #   self.update!(paid: true)
-  #   self.product.paid!
-  # end
-
-  def get_name
-    if self.product_type == 'Membership' # si c'est une adhésion
-      self.name = "Adhésion #{self.product.start_year}/#{self.product.start_year + 1} - #{self.product.student.first_name} #{self.product.student.last_name}"
-    else # si c'est une inscription à un stage
-      self.name = "Inscription #{self.product.school_period.name}/#{self.product.camp.name}/#{self.product.academy.name} - #{self.product.student.first_name} #{self.product.student.last_name}"
-    end
-    byebug
-    self.save
+  def paid!
+    self.update!(paid: true)
+    self.product.paid!
   end
+
+  # def get_name
+  #   if self.product_type == 'Membership' # si c'est une adhésion
+  #     self.name = "Adhésion #{self.product.start_year}/#{self.product.start_year + 1} - #{self.product.student.first_name} #{self.product.student.last_name}"
+  #   else # si c'est une inscription à un stage
+  #     self.name = "Inscription #{self.product.school_period.name}/#{self.product.camp.name}/#{self.product.academy.name} - #{self.product.student.first_name} #{self.product.student.last_name}"
+  #   end
+  #   byebug
+  #   self.save
+  # end
 
   def update_cart_total_price
     cart.update_total_price

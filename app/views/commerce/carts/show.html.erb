@@ -61,7 +61,15 @@
     </div>
 
     <div class="text-center">
-      <%= link_to 'Procéder au paiement', commerce_new_checkout_path, data: { turbo: "false" }, class: 'btn btn-primary' %>
+
+      <% if @total_cb > 0 %>
+        <%= link_to 'Procéder au paiement', commerce_new_checkout_path, data: { turbo: "false" }, class: 'btn btn-primary' %>
+
+      <% else %>
+        <%= link_to 'Payer le jour du stage', commerce_checkout_success_path, data: { turbo: "false" }, class: 'btn btn-primary' %>
+
+      <% end %>
+
     </div>
   </div>
 

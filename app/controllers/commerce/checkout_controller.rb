@@ -30,7 +30,22 @@ class Commerce::CheckoutController < ApplicationController
     @cart = @parent.pending_cart
     @cart.paid! unless @cart.paid?
     # chaque cart_items dont la payment_method est 'Carte bancaire' est marqué comme payé
-    @cart.cart_items.where(payment_method: 'virement').each(&:paid!)
+    paid_cart_items = @cart.cart_items.where(payment_method: 'carte bancaire')
+    paid_cart_items.each do |item|
+      item.paid!
+      # chaque product_type camp_enrollment de ces cart_items obtient une payment_method = "virement"
+      item.product.update!(payment_method: 'virement') if item.product_type == 'CampEnrollment'
+    end
+
+    # chaque camp_enrollment de ces cart_items passe confirmed à true
+    camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
+    camp_enrollment_cart_items.each do |item|
+      item.product.update!(confirmed: true)
+      item.product.activity_enrollments.each do |activity_enrollment|
+        activity_enrollment.update!(confirmed: true)
+      end
+    end
+
 
     flash[:notice] = 'Votre paiement a bien été effectué.'
   end
