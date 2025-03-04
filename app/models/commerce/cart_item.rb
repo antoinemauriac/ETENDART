@@ -5,7 +5,7 @@ class Commerce::CartItem < ApplicationRecord
 
   validates :price, presence: true
 
-  before_create :get_name
+  # before_create :get_name
   after_create :update_cart_total_price
 
   after_destroy :update_cart_total_price
@@ -21,6 +21,7 @@ class Commerce::CartItem < ApplicationRecord
     else # si c'est une inscription à un stage
       self.name = "Inscription #{self.product.school_period.name}/#{self.product.camp.name}/#{self.product.academy.name} - #{self.product.student.first_name} #{self.product.student.last_name}"
     end
+    byebug
     self.save
   end
 

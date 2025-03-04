@@ -1,4 +1,4 @@
-class Parents::SchoolPeriodEnrollmentPolicy < ApplicationPolicy
+class Commerce::CartItemPolicy < ApplicationPolicy
   # NOTE: Up to Pundit v2.3.1, the inheritance was declared as
   # `Scope < Scope` rather than `Scope < ApplicationPolicy::Scope`.
   # In most cases the behavior will be identical, but if updating existing
@@ -12,11 +12,11 @@ class Parents::SchoolPeriodEnrollmentPolicy < ApplicationPolicy
     # end
   end
 
-  def new?
-    true
+  def update?
+    user.present? && user.parent?
   end
 
-  def create?
-    true
+  def destroy?
+    user.present? && user.parent?
   end
 end

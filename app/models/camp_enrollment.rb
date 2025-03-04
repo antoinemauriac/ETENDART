@@ -38,16 +38,14 @@ class CampEnrollment < ApplicationRecord
   end
 
   def create_cart_item
-    if payment_method == "virement"
       cart_item = Commerce::CartItem.new(
-        cart_id: student.parent.carts.current_cart_for(student.parent).id,
+        cart_id: student.parent.pending_cart.id,
         student_id: student.id,
         product: self,
         price: school_period.price,
         stripe_price_id: stripe_price_id)
       raise "Erreur lors de la création du cart_item" unless cart_item.save
       cart_item.save!
-    end
   end
 
   def paid!

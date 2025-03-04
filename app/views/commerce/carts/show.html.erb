@@ -7,20 +7,82 @@
 <% if @cart.cart_items.any? %>
   <div class="container-md mt-5">
 
+    <%# Il faut un tableau avec les cart items dont la payment_method est à "Carte bancaire", trié par cart_item.product_type %>
+
+    <h2>
+      Panier à régler par Carte bancaire
+    </h2>
+
     <table class="table">
       <thead class="thead-light">
         <tr>
-          <th>Étudiant</th>
           <th>Produit</th>
+          <th>Étudiant</th>
+          <th>Méthode</th>
           <th colspan="2">Prix</th>
         </tr>
       </thead>
       <tbody>
-        <% @cart.cart_items.sort_by { |cart_item| cart_item.student.first_name }.each do |cart_item| %>
+        <% @cart.cart_items.select { |cart_item| cart_item.payment_method == 'Carte bancaire' }.sort_by { |cart_item| cart_item.product_type }.each do |cart_item| %>
           <tr>
-            <td><%= cart_item.student.first_name %></td>
             <td><%= cart_item.name %></td>
+            <td><%= cart_item.student.first_name %></td>
+            <td>
+              <% if cart_item.product_type == 'Membership' %>
+                <%= cart_item.payment_method %>
+              <% else %>
+                <%= cart_item.payment_method %>
+                <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item) do |f| %>
+                  <%= f.select :payment_method, options_for_select([['Carte bancaire', 'Carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'especes']], cart_item.payment_method), { class: 'form-select' } %>
+                  <%= f.submit 'Mettre à jour', class: 'btn btn-primary' %>
+                <% end %>
+              <% end %>
+            </td>
             <td class="text-end" colspan="2"><%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €</td>
+          </tr>
+        <% end %>
+      </tbody>
+
+    </table>
+
+
+    <h2 class="mt-5">
+      A régler le jour du stage
+    </h2>
+
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th>Produit</th>
+          <th>Étudiant</th>
+          <th>Méthode</th>
+          <th colspan="2">Prix</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%# Il faut un tableau avec les cart items dont la payment_method est à "AUTRE", trié par cart_item.student.first_name %>
+      <%# il n'y a UNIQUEMENT QUE LES CART ITEMS DONT LA PAYMENT_METHOD EST A "AUTRE" %>
+
+
+        <% @cart.cart_items.select { |cart_item| cart_item.payment_method != 'Carte bancaire' }.sort_by { |cart_item| cart_item.student.first_name }.each do |cart_item| %>
+          <tr>
+            <td><%= cart_item.name %></td>
+            <td><%= cart_item.student.first_name %></td>
+            <td>
+              <% if cart_item.product_type == 'Membership' %>
+                <%= cart_item.payment_method %>
+              <% else %>
+                <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item) do |f| %>
+                  <%= f.select :payment_method, options_for_select([['Carte bancaire', 'Carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'especes']], cart_item.payment_method), { class: 'form-select' } %>
+                  <%= f.submit 'Mettre à jour', class: 'btn btn-primary' %>
+                <% end %>
+              <% end %>
+            </td>
+            <td class="text-end" colspan="2">
+              <%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €
+              <%# link_to pour supprimer le cart_item %>
+              <%= link_to 'Supprimer', commerce_cart_item_path(cart_item), data: { turbo_method: :delete, confirm: 'Êtes-vous sûr de vouloir supprimer ce produit de votre panier ?' } %>
+            </td>
           </tr>
         <% end %>
       </tbody>

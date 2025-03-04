@@ -43,6 +43,9 @@ application.register("filter-membership-deposit", FilterMembershipDepositControl
 import FlashesController from "./flashes_controller"
 application.register("flashes", FlashesController)
 
+import Form__Enrollment__CampController from "./form/enrollment/camp_controller"
+application.register("form--enrollment--camp", Form__Enrollment__CampController)
+
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 
