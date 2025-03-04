@@ -252,6 +252,7 @@ class SchoolPeriod < ApplicationRecord
       .joins(camps: :activities)
       .group('school_periods.id')
       .having('COUNT(activities.id) >= 2')
+      .includes(:academy)
   end
 
   private
