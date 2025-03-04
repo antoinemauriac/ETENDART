@@ -79,7 +79,7 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
   gem "bullet"
-  gem "hotwire-spark"
+  # gem "hotwire-spark"
   # gem "pry-byebug"
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]

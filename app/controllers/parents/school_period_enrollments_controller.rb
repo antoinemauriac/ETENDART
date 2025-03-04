@@ -3,18 +3,18 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
     authorize([:parents, SchoolPeriodEnrollment])
     @academy = Academy.find(params[:academy_id])
     @school_period = SchoolPeriod.find(params[:school_period_id])
-    @camps = @school_period.camps
 
     @school_period_enrollment = SchoolPeriodEnrollment.new
     @students = current_user.children
-    @school_period.camps.each do |camp|
-      camp_enrollment = @school_period_enrollment.camp_enrollments.build(camp: camp)
+    @selected_student = params[:student_id].present? ? Student.find(params[:student_id]) : @students.first
+    # retrouver les camps ou le selected_student n'est pas encore inscrit
+    enrolled_camp_ids = @selected_student
+                     .camp_enrollments
+                     .joins(:school_period_enrollment)
+                     .where(school_period_enrollments: { school_period_id: @school_period.id })
+                     .pluck(:camp_id)
 
-      # Pré-remplir les activity_enrollments pour chaque camp
-      camp.activities.each do |activity|
-        camp_enrollment.activity_enrollments.build(activity: activity)
-      end
-    end
+    @camps = @school_period.camps.where.not(id: enrolled_camp_ids)
   end
 
   def create
@@ -71,8 +71,21 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
   end
 
   def filter_camps
+    authorize([:parents, SchoolPeriodEnrollment])
+    @academy = Academy.find(params[:academy_id])
     @school_period = SchoolPeriod.find(params[:school_period_id])
+    @school_period_enrollment = SchoolPeriodEnrollment.new
     @selected_student = Student.find(params[:student_id])
+    @students = current_user.children
+    # @camps représente les camps ou le selected_student n'est pas encore inscrit
+    enrolled_camp_ids = @selected_student
+                     .camp_enrollments
+                     .joins(:school_period_enrollment)
+                     .where(school_period_enrollments: { school_period_id: @school_period.id })
+                     .pluck(:camp_id)
+
+    @camps = @school_period.camps.where.not(id: enrolled_camp_ids)
+    render :new
   end
 
   private

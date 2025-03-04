@@ -19,4 +19,8 @@ class Parents::SchoolPeriodEnrollmentPolicy < ApplicationPolicy
   def create?
     true
   end
+
+  def filter_camps?
+    true
+  end
 end
