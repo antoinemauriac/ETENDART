@@ -1,15 +1,17 @@
-<div class="yellow-title">LES PROCHAINS STAGES</div>
-
-<div class="dashboard-container">
-  <div class="row justify-content-center align-items-center">
-      <% @school_periods.each do |school_period| %>
-        <% academy = school_period.academy %>
-        <%= link_to new_parents_academy_school_period_school_period_enrollment_path(academy, school_period), class: "col-12 col-lg-5 mt-1" do %>
-          <div class="card-academy" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
+<h1 class="bg-black text-white text-center fs-4 py-3 fw-bold">
+  LES ACADÉMIES
+</h1>
+<div class="mt-5">
+  <% @academies.each do |academy| %>
+    <div class="row justify-content-center align-items-center">
+      <div class="col-11 col-md-8 col-lg-6 mb-5">
+        <h1 class="mb-2"><strong><em><%= academy.city.upcase %></em></strong></h1>
+        <%= link_to parents_academy_path(academy) do %>
+          <div class="card-academy card-academy-parent" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
             <%= academy.name.upcase %><br>
-            <%= "#{school_period.name} - #{school_period.year}" %>
           </div>
         <% end %>
-      <% end %>
-  </div>
+      </div>
+    </div>
+  <% end %>
 </div>
