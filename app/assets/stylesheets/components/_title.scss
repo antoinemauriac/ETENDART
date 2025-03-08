@@ -13,13 +13,13 @@
   font-size: 20px;
 }
 
+.yellow-title-parent {
+  background-color: $yellowbis;
+}
+
 .yellow-title-border-top {
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
-}
-
-.yellow-title-flex {
-  flex-direction: row!important;
 }
 
 .black-title {

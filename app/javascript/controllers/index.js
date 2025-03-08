@@ -49,6 +49,9 @@ application.register("form--auto-submit", Form__AutoSubmitController)
 import Form__Enrollment__CampController from "./form/enrollment/camp_controller"
 application.register("form--enrollment--camp", Form__Enrollment__CampController)
 
+import Form__Enrollment__CampErrorSubmitController from "./form/enrollment/camp_error_submit_controller"
+application.register("form--enrollment--camp-error-submit", Form__Enrollment__CampErrorSubmitController)
+
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 

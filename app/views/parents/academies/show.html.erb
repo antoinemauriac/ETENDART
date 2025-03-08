@@ -1,5 +1,5 @@
-<h1 class="text-center my-3 bg-yellow text-black py-3 my-3">
-  <%= @academy.name.upcase %> - Nos prochains stages
+<h1 class="bg-black text-white text-center fs-4 py-3 fw-bold">
+  <%= @academy.name.upcase %>
 </h1>
 <section class="container-sm p-3">
 
@@ -17,21 +17,19 @@
 
           <div class="mb-3">
 
-            <h2 class="text-white bg-black p-3 rounded-top-4 text-center">
-              <%= school_period.name %> - <%= school_period.year %>
-            </h2>
+            <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center"><%= school_period.name.upcase %> - <%= school_period.year %></h4>
 
-
-            <div class="row">
+            <div class="row bg-white py-3 p-2 justify-content-center rounded-bottom-4">
 
               <% if school_period.camps.any? %>
 
                 <% school_period.camps.each do |camp| %>
 
-                  <div class="col-md-4 col-6">
-                    <h3>
-                      <%= camp.name %>
-                    </h3>
+                  <div class="col-md-6 col-6">
+                    <h5>
+                      <%= camp.name.upcase %>
+                    </h5>
+                    <small class="d-block mb-2">Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %></small>
                     <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>
 
                     <hr class="mb-3">
@@ -39,9 +37,9 @@
 
                   <% if camp.activities.any? %>
                     <ul>
-                      <% camp.activities.each do |activity| %>
+                      <% camp.activities.pluck(:category_id).uniq.each do |category_id| %>
                         <li>
-                          <%= activity.category.name %>
+                          <%= Category.find(category_id).name %>
                         </li>
                       <% end %>
                     </ul>
@@ -49,7 +47,7 @@
                   <% else %>
                     <p class="text-center">
                       <em>
-                        Restez patients ! Les activités seront bientôt disponibles.
+                        Soyez patients ! Les activités seront bientôt disponibles.
                       </em>
                     </p>
                   <% end %>
@@ -60,7 +58,7 @@
 
                 <div class="col-12 text-center">
                   <hr class="mb-3">
-                  <%= link_to "Inscrire mon enfant", new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "btn btn-primary" %>
+                  <%= link_to "Inscrire mon enfant", new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "btn btn-etendart rounded-pill px-3" %>
                 </div>
 
                 <% else %>
@@ -74,8 +72,6 @@
 
           </div>
 
-
-
         <% end %>
 
       <% else %>
@@ -88,18 +84,16 @@
     </div>
 
     <div class="col-md-4">
-      <h2 class="header-info">
+      <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center">
         LIEUX
-      </h2>
+      </h4>
 
-      <ul>
+      <ul class="row bg-white p-3 justify-content-center rounded-bottom-4">
         <% @academy.locations.each do |location| %>
-
-
           <li>
-            <h3>
+            <h5>
               <%= location.name %>
-            </h3>
+            </h5>
             <p>
               <%= location.address %>
             </p>
@@ -109,19 +103,4 @@
     </div>
 
   </div>
-
-  <%# Form pour inscrire mon enfant aux stages de la school_period %>
-  <%# on ne peut s'inscrire qu'aux camps de la prochaine school_period %>
-  <%# Il faut sélectionner un seul enfant à la fois %>
-  <%# long form pour créer le camp enrollment %>
-  <%# on ne peut choisir qu'une activité type sport %>
-  <%# on ne peut choisir qu'une activité type éveil %>
-  <%# on ne peut choisir que l'activité qui respecte l'age de l'enfant %>
-
-
-
-
-
-
-
 </section>
