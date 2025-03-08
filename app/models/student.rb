@@ -280,9 +280,38 @@ class Student < ApplicationRecord
     activities.where(camp: camp).order(name: :desc)
   end
 
-  # def student_activities_without_acc(camp)
-  #   activities.where(camp: camp).where.not(category: Category.find_by(name: "Accompagnement")).order(name: :desc)
-  # end
+  def present_during_activity?(activity, course)
+    course_enrollments.joins(:course)
+                      .where(course: activity.courses)
+                      .where('courses.ends_at < ?', course.ends_at)
+                      .where(present: true)
+                      .any?
+  end
+
+  def present_during_camp?(camp, course)
+    course_enrollments.joins(:course)
+                      .where(course: camp.courses)
+                      .where('courses.ends_at < ?', course.ends_at)
+                      .where(present: true)
+                      .any?
+  end
+
+  def present_during_school_period?(school_period, course)
+    course_enrollments.joins(:course)
+                      .where(course: school_period.courses)
+                      .where('courses.ends_at < ?', course.ends_at)
+                      .where(present: true)
+                      .any?
+  end
+
+  def present_during_annual_program?(annual_program, course)
+    course_enrollments.joins(:course)
+                      .where(course: annual_program.courses)
+                      .where('courses.ends_at < ?', course.ends_at)
+                      .where(present: true)
+                      .any?
+  end
+
   def student_activities_without_acc(camp)
     activities.where(camp: camp)
               .where.not(category: Category.find_by(name: "Accompagnement"))
@@ -308,11 +337,6 @@ class Student < ApplicationRecord
       "No zipcode"
     end
   end
-
-  # def active_camps
-  #   Camp.joins(:camp_enrollments)
-  #       .where(camp_enrollments: { banished: false, student_id: id })
-  # end
 
   def next_courses_by_activity(activity)
     courses.where('starts_at > ?', Time.current)
@@ -366,22 +390,6 @@ class Student < ApplicationRecord
   end
 
   def main_academy
-    # # Collecter tous les cours et leurs académies associées
-    # academy_counts = courses.each_with_object(Hash.new(0)) do |course, counts|
-    #   # Déterminer si le cours appartient à un camp ou à un programme annuel
-    #   academy = if course.activity.camp
-    #               course.activity.camp.school_period.academy
-    #             else
-    #               course.activity.annual_program.academy
-    #             end
-    #   counts[academy] += 1
-    # end
-
-    # # Trouver l'académie avec le nombre maximum de cours
-    # primary_academy = academy_counts.max_by { |_academy, count| count }&.first
-
-    # # Renvoyer la première académie si la principale est nil
-    # primary_academy || academies.first
     courses.order(:starts_at)&.last&.academy || academies.first
   end
 
@@ -407,18 +415,6 @@ class Student < ApplicationRecord
     predominant_sport = counts.max_by { |_, count| count }[0]
     predominant_sport
   end
-
-  # def self.with_at_least_one_course(start_year)
-  #   start_date = Date.new(start_year, 4, 7)
-  #   end_date = Date.current
-
-  #   joins(courses: { activity: :camp })
-  #     .where('courses.starts_at > ? AND courses.starts_at <= ?', start_date, end_date)
-  #     .where(course_enrollments: { present: true })
-  #     .where.not(camps: { id: nil })
-  #     .group('students.id')
-  #     .pluck(:id)
-  # end
 
   def self.with_at_least_one_course(start_year)
     start_date = Date.new(start_year, 4, 7)
@@ -455,49 +451,38 @@ class Student < ApplicationRecord
       .first
   end
 
-  # def paid_camp_enrollments
-  #   camp_enrollments.joins(camp: :school_period)
-  #                   .where(school_periods: { paid: true })
-  #                   .sort_by(&:camp_starts_at).reverse
-  # end
+  def payable_camp_enrollments
+    free_judo_camp_ids = fetch_free_judo_camp_ids
 
-  # def camp_enrollments_with_free_judo_activity
-  #   camp_enrollments.joins(activity: :category)
-  #                   .where(categories: { name: 'Judo' })
-  # end
+    attended_camps = fetch_attended_camps(free_judo_camp_ids)
+    unattended_camps = fetch_unattended_upcoming_camps(free_judo_camp_ids)
 
-  # def paid_camp_enrollments_without_free_judo_activity
-  #   judo_camp_ids = activities.joins(:category, camp: :school_period)
-  #                             .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true })
-  #                             .pluck('camps.id')
-
-  #   camp_enrollments.attended
-  #                   .joins(camp: :school_period)
-  #                   .where.not(camp_id: judo_camp_ids)
-  #                   .where(school_periods: { paid: true })
-  #                   .order('camps.starts_at DESC')
-  # end
-
-  def paid_camp_enrollments_without_free_judo_activity
-    judo_camp_ids = activities.joins(:category, camp: :school_period)
-                              .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true })
-                              .pluck('camps.id')
-
-    camp_enrollments.attended
-                    .joins(camp: :school_period)
-                    .where.not(camp_id: judo_camp_ids)
-                    .where(school_periods: { paid: true })
-                    .includes(camp: [:school_period, :academy])
-                    .or(
-                      camp_enrollments.unattended
-                              .joins(camp: :school_period)
-                              .where(school_periods: { paid: true })
-                              .where('camps.ends_at > ?', Time.current)
-                              .includes(camp: [:school_period, :academy])
-                    ).order('camps.starts_at DESC')
+    attended_camps.or(unattended_camps).order('camps.starts_at DESC')
   end
 
   private
+
+  def fetch_free_judo_camp_ids
+    activities.joins(:category, camp: :school_period)
+              .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true })
+              .pluck('camps.id')
+  end
+
+  def fetch_attended_camps(free_judo_camp_ids)
+    camp_enrollments.attended
+                    .joins(camp: :school_period)
+                    .where.not(camp_id: free_judo_camp_ids)
+                    .where(school_periods: { paid: true })
+                    .includes(camp: [:school_period, :academy])
+  end
+
+  def fetch_unattended_upcoming_camps(free_judo_camp_ids)
+    camp_enrollments.unattended
+                    .joins(camp: :school_period)
+                    .where(school_periods: { paid: true })
+                    .where('camps.ends_at > ?', Time.current)
+                    .includes(camp: [:school_period, :academy])
+  end
 
   def normalize_fields
     self.username = username.strip.downcase.gsub(/\s+/, '') if username.present?

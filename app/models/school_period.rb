@@ -9,6 +9,7 @@ class SchoolPeriod < ApplicationRecord
   has_many :students, through: :camp_enrollments
 
   has_many :old_camp_deposits, through: :camps
+  has_many :camp_deposits, through: :camps
   has_many :students, through: :camp_enrollments
 
   has_many :activities, through: :camps
@@ -228,6 +229,12 @@ class SchoolPeriod < ApplicationRecord
 
   def total_old_camp_deposits
     camps.joins(:old_camp_deposits).sum('old_camp_deposits.amount')
+  end
+
+  def total_deposit
+    camp_deposits.sum(:cash_amount) + 
+    camp_deposits.sum(:cheque_amount) + 
+    camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * price 
   end
 
   def paid_students_count
