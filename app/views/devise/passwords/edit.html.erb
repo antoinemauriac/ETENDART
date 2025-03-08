@@ -1,5 +1,5 @@
 <div id="no-user" class="row">
-  <div class="devise-form">
+  <div class="devise-edit-form col-10 col-sm-8 col-lg-6 col-xl-3">
     <h2 class="header-info mb-3">Changement du mot de passe</h2>
 
     <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
@@ -24,7 +24,7 @@
       </div>
 
       <div class="flexy">
-        <%= f.button :submit, "Valider", class: "btn-etendart btn-connexion-bis mb-4", style:"width:100%"  %>
+        <%= f.button :submit, "Valider", class: "btn-etendart btn-connexion-bis mb-4"  %>
       </div>
     <% end %>
   </div>
