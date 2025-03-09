@@ -32,7 +32,7 @@
         <td><%= cart_item.name %></td>
         <td>
           <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item), data: { controller: "form--auto-submit" } do |f| %>
-          <%= f.select :payment_method, options_for_select([['Carte bancaire', 'carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash']], cart_item.payment_method), { class: 'form-select' }, data: { action: "change->form--auto-submit#submit" } %>
+            <%= f.select :payment_method, options_for_select([['Carte bancaire', 'carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash']], cart_item.payment_method), { }, { class: 'form-select', data: { action: "change->form--auto-submit#submit" } } %>
           <% end %>
         </td>
         <td class="text-end" colspan="2">

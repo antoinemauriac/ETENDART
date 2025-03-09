@@ -43,6 +43,9 @@ class Commerce::CheckoutController < ApplicationController
       item.product.update!(confirmed: true)
       item.product.activity_enrollments.each do |activity_enrollment|
         activity_enrollment.update!(confirmed: true)
+        student = activity_enrollment.student
+        activity = activity_enrollment.activity
+        student.courses << activity.next_courses
       end
     end
 
