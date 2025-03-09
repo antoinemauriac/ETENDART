@@ -55,6 +55,9 @@ application.register("form--enrollment--camp-error-submit", Form__Enrollment__Ca
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 
+import Home__FilterController from "./home/filter_controller"
+application.register("home--filter", Home__FilterController)
+
 import ImportCsvController from "./import_csv_controller"
 application.register("import-csv", ImportCsvController)
 

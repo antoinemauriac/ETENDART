@@ -14,7 +14,7 @@
   <%# section "Notre approche" en parlant des projets et de la philosophie. bg-white avec 6 cards %>
 
   <section class="bg-white py-5 rounded-top-5 mt-n5 z-3 position-relative">
-    <div class="container">
+    <div class="px-3">
       <h2 id="approche">
         <strong>Notre approche</strong>
       </h2>
@@ -22,7 +22,7 @@
         Tous nos projets combinent:
       </p>
 
-      <div class="row row-cols-1 row-cols-md-6 g-3">
+      <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-3">
 
         <div class="col">
           <%= render "pages/components/card",
@@ -74,49 +74,72 @@
   <%# section "Programmation à venir sur l'ensemble des académies" %>
 
   <section class="bg-black text-white py-5 rounded-top-5">
-    <div class="container">
+    <div class="container" data-controller="home--filter">
       <h2 class="mb-3" id="programmation">
         Programmation à venir sur l'ensemble des académies
       </h2>
 
       <ul class="d-flex gap-3 mb-3 flex-wrap">
+
+            <li>
+              <button class="rounded-pill btn text-black bg-white px-4 py-2"
+                data-action="click->home--filter#filter"
+                data-academy-id="all">
+                Toutes les académies
+              </button>
+            </li>
         <% @academies.each do |academy| %>
-          <li class="rounded-pill bg-white text-black px-4 py-2">
-            <%= academy.name %>
+          <li class="">
+            <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-academy-id="<%= academy.id %>">
+              <%= academy.name %>
+            </button>
           </li>
         <% end %>
       </ul>
 
-      <div class="bg-white py-5 rounded-3 text-black">
-        <table class="table bg-white">
-          <tbody class="bg-white">
-            <% @academies.each do |academy| %>
-              <% academy.next_school_periods.each do |school_period|  %>
+      <div class="bg-white text-black p-3 rounded-3">
+        <% @academies.each do |academy| %>
 
-                <%= link_to academy_path(academy) do %>
-                  <tr class="bg-white">
-                      <td class="bg-white">
-                        <strong>
-                          Stage <%= academy.name %> Academy
-                        </strong>
-                      </td>
-                      <td class="bg-white">
-                        <%= school_period.name %> <%= school_period.year %>
-                      </td>
-                      <td class="bg-white">
-                        <%= academy.locations.first.city %>
-                      </td>
-                      <td class="text-end pe-3 bg-white">
-                        S'inscrire <i class="fa-sharp fa-solid fa-arrow-right"></i>
-                      </td>
-                  </tr>
+          <div class="row py-3 border-bottom" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+            <% if academy.next_school_periods.any? %>
+              <div class="d-none d-md-block col-md-6">
+                Stage <%= academy.name %>
+              </div>
+
+              <div class="col-4 col-md-2">
+                  <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+              </div>
+
+              <div class="col-4 col-md-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                  <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                  <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                </svg>
+                <%= academy.city %>
+              </div>
+
+              <div class="col-4 col-md-2 text-center">
+                <%= link_to parents_academy_path(academy), class: "text-black" do %>
+                    <strong>S'inscrire</strong>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                    </svg>
                 <% end %>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
+              </div>
 
+            <% else %>
+
+            <div class="col-12 text-center py-2">
+              Pas de stage à venir pour le moment
+            </div>
+
+            <% end %>
+          </div>
+
+
+        <% end %>
       </div>
+
 
     </div>
 
@@ -135,7 +158,7 @@
         Pour plus d'informations, <%= link_to "téléchargez notre rapport d'impact", "#", class: "text-decoration-underline" %>
       </p>
 
-      <div class="row row-cols-1 row-cols-md-4 g-3 my-5">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 my-5">
         <div class="col">
           <div class="card rounded-5 border-0" style="background-color: #E8FF6E; height: 24rem">
 
@@ -153,7 +176,7 @@
         </div>
 
         <div class="col">
-          <div class="card rounded-5 border-0 bg-dark">
+          <div class="card rounded-5 border-0 bg-dark" style="height: 24rem">
             <%= image_tag "home/impact-img-1.jpg", class: "card-img rounded-5 opacity-50 object-fit-cover", style: "height: 24rem" %>
 
             <div class="card-img-overlay align-content-center text-center text-white">
@@ -172,9 +195,9 @@
         </div>
 
         <div class="col">
-          <div class="card rounded-5 h-100 border-0 bg-black">
+          <div class="card rounded-5 h-100 border-0 bg-black ">
             <div class="card-body text-white  align-content-center text-center">
-              <h3 class="card-title" style= "font-size: 4rem">
+              <h3 class="card-title" style= "font-size: 4rem;">
                 <strong>
                   + DE
                   <br>
@@ -203,8 +226,10 @@
                 </strong>
               </h3>
             </div>
-          </div>  </div>
+          </div>
+        </div>
       </div>
+    </div>
 
   </section>
 
@@ -214,7 +239,7 @@
 
   <%# section "Tu veux participer ?" %>
 
-  <section class="" style="background-color: yellow">
+  <section class="" style="background-color: #E8FF6E">
     <div class="container py-5">
       <h2 class="text-center mb-1">
         <strong>
@@ -239,7 +264,7 @@
         Nous soutenir
       </h2>
 
-      <div class="row space-y-3">
+      <div class="row g-3">
         <div class="col-md-6">
           <div class="card rounded-5 bg-black border-0" style="height: 40rem">
             <%= image_tag "home/soutenir-card-1.jpeg", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
@@ -248,7 +273,7 @@
                 Vous souhaitez soutenir notre association ? En effectuant un don, vous soutenez nos programmes éducatifs et le déploiement de nouvelles actions.
               </p>
               <div class="text-center">
-                <%= link_to "Faire un don", "#", class: "btn btn-warning px-4 rounded-5" %>
+                <%= link_to "Faire un don", "https://www.helloasso.com/associations/etendart/formulaires/1", class: "btn px-4 rounded-4", target:"_blank", style: "background-color: #E8FF6E" %>
               </div>
             </div>
           </div>
@@ -259,10 +284,10 @@
             <%= image_tag "home/benevole.JPG", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
             <div class="card-body">
               <p class="card-text text-white p-3">
-                Vous souhaitez soutenir notre association ? En effectuant un don, vous soutenez nos programmes éducatifs et le déploiement de nouvelles actions.
+                Vous souhaitez vous impliquer à nos côtés en proposant du temps ou vos compétences ? Rejoignez-nous.
               </p>
               <div class="text-center">
-                <%= link_to "Faire un don", "#", class: "btn btn-warning px-4 rounded-5" %>
+                <%= link_to "Devenir bénévole", "https://share.hsforms.com/1xbzYpVRsQFyCIsF8DfGBqQ59bk3", class: "btn px-4 rounded-4", target:"_blank", style: "background-color: #E8FF6E" %>
               </div>
             </div>
           </div>
@@ -281,7 +306,7 @@
         Ils parlent d'Etendart Academy
       </h2>
 
-      <div class="row justify-content-center space-x-3 mb-3">
+      <div class="row justify-content-center g-3 mb-3">
 
         <div class="col-md-5">
           <div class="card rounded-5 bg-white border-0">
@@ -311,7 +336,7 @@
 
       </div>
 
-      <div class="row justify-content-center space-x-3">
+      <div class="row justify-content-center g-3">
 
         <div class="col-md-5">
           <div class="card rounded-5 bg-white border-0">
@@ -350,7 +375,7 @@
 
       <div class="row justify-content-center">
         <div class="col-12 col-md-11">
-          <div class="card p-5 rounded-5" style="background-color: yellow">
+          <div class="card p-5 rounded-5 border-0" style="background-color: #E8FF6E">
             <h2 class="card-title" id="contact">
               <strong>
                 Suivez-nous !
@@ -417,7 +442,7 @@
                 </li>
                 <li>
                   <strong>
-                    <%= link_to "FAIRE UN DON", "#don", class: "text-decoration-underline" %>
+                    <%= link_to "FAIRE UN DON", "https://www.helloasso.com/associations/etendart/formulaires/1", class: "text-decoration-underline", target:"_blank" %>
                   </strong>
                 </li>
                 <li>
