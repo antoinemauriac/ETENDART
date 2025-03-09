@@ -41,6 +41,10 @@ Rails.application.routes.draw do
     end
   end
 
+  authenticated :user, ->(user) { !user.first_login } do
+    root to: redirect('/parents/academies'), as: :user_root
+  end
+
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end

@@ -26,6 +26,12 @@
   padding: 0.7rem 0rem; /* Modifiez la valeur de padding selon vos besoins */
 }
 
+.sticky-header {
+  position: sticky;
+  top: 64px;
+  z-index: 900;
+}
+
 .non-bg {
   color: #fc3535!important;
   font-weight: bold;
