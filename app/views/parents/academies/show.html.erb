@@ -1,4 +1,4 @@
-<h1 class="bg-black text-white text-center fs-4 py-3 fw-bold">
+<h1 class="bg-black text-white text-center fs-4 py-3 px-2 fw-bold">
   <%= @academy.name.upcase %>
 </h1>
 <section class="container-sm p-3">
@@ -58,7 +58,7 @@
 
                 <div class="col-12 text-center">
                   <hr class="mb-3">
-                  <%= link_to "Inscrire mon enfant", new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "btn btn-etendart rounded-pill px-3" %>
+                  <%= link_to "INSCRIPTION", new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "btn btn-etendart rounded-pill px-3" %>
                 </div>
 
                 <% else %>

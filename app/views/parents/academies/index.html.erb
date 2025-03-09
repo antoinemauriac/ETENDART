@@ -1,17 +1,21 @@
 <h1 class="bg-black text-white text-center fs-4 py-3 fw-bold">
-  LES ACADÉMIES
+  PROCHAINS STAGES
 </h1>
 <div class="mt-5">
-  <% @academies.each do |academy| %>
-    <div class="row justify-content-center align-items-center">
-      <div class="col-11 col-md-8 col-lg-6 mb-5">
-        <h1 class="mb-2"><strong><em><%= academy.city.upcase %></em></strong></h1>
-        <%= link_to parents_academy_path(academy) do %>
-          <div class="card-academy card-academy-parent" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
-            <%= academy.name.upcase %><br>
-          </div>
-        <% end %>
+  <% @academies.each do |city, academies| %>
+    <div class="row justify-content-center align-items-center mb-4">
+      <div class="col-12 mb-1">
+        <h1 class="mb-2 text-center"><strong><em><%= city.upcase %></em></strong></h1>
       </div>
+      <% academies.each do |academy| %>
+        <div class="col-10 col-md-8 col-lg-6 col-xl-4">
+          <%= link_to parents_academy_path(academy) do %>
+            <div class="card-academy card-academy-parent" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
+              <%= academy.name.upcase %><br>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 </div>
