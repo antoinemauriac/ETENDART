@@ -1,7 +1,7 @@
 <main id="no-user" class="row">
 
-  <div class="bg-white container p-3 rounded-3 col-10 col-sm-8 col-lg-6 col-xl-3">
-    <h1 class="text-center bg-black text-bg-dark rounded-3 mb-3">Inscription</h1>
+  <div class="rounded-4 bg-white container p-3 rounded-3 col-10 col-sm-8 col-lg-6 col-xl-4">
+    <h1 class="p-2 rounded-4 text-center bg-black text-bg-dark rounded-3 mb-3">Inscription</h1>
 
     <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: :false }) do |f| %>
       <%= f.error_notification %>

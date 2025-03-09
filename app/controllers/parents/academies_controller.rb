@@ -2,7 +2,7 @@ class Parents::AcademiesController < ApplicationController
   def index
     @academies = policy_scope([:parents, Academy])
     @school_periods = SchoolPeriod.with_future_camps
-    @academies = @academies.joins(:school_periods).where(school_periods: { id: @school_periods.pluck(:id) }).distinct
+    @academies = @academies.joins(:school_periods).where(school_periods: { id: @school_periods.pluck(:id) }).distinct.group_by { |academy| academy.city }
   end
 
   def show
