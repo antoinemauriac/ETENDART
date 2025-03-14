@@ -10,6 +10,16 @@
   margin: 1em 1em 0em 1em;
 }
 
+.btn-etendart-disabled {
+  background-color: rgb(150, 150, 150);
+  color: black;
+}
+
+.btn-etendart-disable:hover {
+  background-color: rgb(150, 150, 150);
+  color: black;
+}
+
 .btn-add-student {
   text-align: center;
   padding: 7px;

@@ -3,8 +3,8 @@ class PagesController < ApplicationController
 
   def home
     @academies = Academy.includes(:school_periods)
-
   end
+
 
   # def dashboard
   #   @user = current_user

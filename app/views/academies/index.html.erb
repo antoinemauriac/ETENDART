@@ -5,7 +5,7 @@
 <div class="dashboard-container">
   <div class="row justify-content-center align-items-center">
       <% @academies.each do |academy| %>
-        <%= link_to academy_path(academy), class: "col-12 col-lg-5 mt-1" do %>
+        <%= link_to academy_path(academy), class: "col-12 col-lg-3 col-xl-3 mt-1" do %>
           <div class="card-academy" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
             <%= academy.name.upcase %>
           </div>
