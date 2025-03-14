@@ -34,10 +34,10 @@ Rails.application.routes.draw do
     root to: "coaches/dashboards#index", as: :coach_root
   end
 
-  authenticated :user, ->(user) { user.first_login } do
+  authenticated :user, ->(user) { user.parent? } do
     namespace :users do
       resource :first_login, only: [:show, :update], controller: "first_logins"
-      root to: "first_logins#show", as: :user_root
+      root to: "pages#home", as: :user_root
     end
   end
 

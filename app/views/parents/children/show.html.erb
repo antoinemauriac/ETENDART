@@ -1,47 +1,27 @@
-<h1 class="text-center my-3 bg-yellow text-black py-3 my-3">
+<h1 class="bg-black text-white text-center p-3">
   <%= @child.full_name %>
 </h1>
 
-<section class="row gy-3 justify-content-center">
-
-  <div class="col-lg-5 col-md-8 col-sm-12" data-upload-photo-student-id-value="<%=@child.id%>">
-    <%= render "parents/children/components/information-card", child: @child, start_year: @start_year, membership: @membership %>
-  </div>
-
-  <div class="col-lg-3 col-md-4 col-sm-12">
-    <%= render "parents/children/components/historic-card", child: @child %>
-  </div>
-
-  <div class="col-lg-4 col-md-6 col-12">
-    <div class="bg-black text-white text-center p-3">
-      ACADEMIES
-    </div>
-
-    <div class="content-info content-info-show-student">
-      <ul class="d-flex gap-3">
-        <% if @child.academies.any? %>
-          <% @child.academies.each do |academy| %>
-            <%= link_to academy_path(academy) do %>
-              <li class="rounded-pill bg-secondary py-2 px-3"><%= academy.name %></li>
-            <% end %>
-          <% end %>
-        <% else %>
-          <li>Aucune académie attribuée, en attente d'inscription aux stages</li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-
+<section class="container bg-white rounded-4 shadow p-3 mt-3">
+  <%= render "parents/children/components/information-card", child: @child, start_year: @start_year, membership: @membership %>
 </section>
 
-<section class="row justify-content-center">
-  <div class="col-lg-11 col-sm-12 mt-3">
+<section class="container my-3 shadow p-0 rounded-4 bg-white">
+  <h2 class=" text-center py-3 bg-black text-white rounded-top-4">
+    Adhésion
+  </h2>
+
+  <div class="bg-white rounded-bottom-4 p-3">
     <%= render "parents/children/components/memberships-card", memberships: @memberships %>
   </div>
 </section>
 
-<section class="row justify-content-center">
-  <div class="col-lg-11 col-sm-12 mt-3">
-    <%= render "parents/children/components/camp-enrollments-card", camp_enrollments: @camp_enrollments %>
-  </div>
+<section class="container my-3 shadow p-0 rounded-4 bg-white">
+    <h2 class=" text-center py-3 bg-black text-white rounded-top-4">
+      Paiement des stages
+    </h2>
+
+    <div class="bg-white rounded-bottom-4 p-3">
+      <%= render "parents/children/components/camp-enrollments-card", camp_enrollments: @camp_enrollments %>
+    </div>
 </section>

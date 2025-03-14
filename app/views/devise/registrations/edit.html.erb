@@ -1,24 +1,69 @@
-<div class="yellow-title mb-0">MON PROFIL</div>
+<h1 class="bg-black text-white text-center p-3">
+  Mon Profil
+</h1>
 
-<div class="flexy">
-  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-    <%= f.error_notification %>
+<section class="container bg-white rounded-4 shadow p-3 my-3">
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= f.error_notification %>
 
-    <div class="edit-container row">
-      <div class="col-sm-6 col-lg-6">
-          <%= f.input :email, required: true, autofocus: true %>
-          <%= f.input :last_name,
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <%= f.input :first_name,
+                    label: "Prénom" %>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <%= f.input :last_name,
                       label: "Nom" %>
-          <%= f.input :first_name,
-                      label: "Prénom" %>
-          <%= f.input :phone_number,
-                      label: "Téléphone" %>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <%= f.input :email, required: true, autofocus: true %>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <%= f.input :phone_number,
+                    label: "Téléphone" %>
+      </div>
 
           <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
             <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
         <% end %>
       </div>
-      <div class="col-sm-6 col-lg-6">
+
+    <% if current_user.parent? && current_user.parent_profile.present? %>
+      <div class="row" id="edit-parent-profile">
+          <%= f.simple_fields_for :parent_profile do |parent_profile| %>
+            <div class="col-12 col-md-6">
+              <%= parent_profile.input :gender, label: "Genre", collection: ["Homme", "Femme", "Autre"], include_blank: false %>
+            </div>
+
+            <div class="col-md-6 col-12">
+              <%= parent_profile.input :relationship_to_child, label: "Relation avec
+              l'enfant", collection: ["Père", "Mère", "Tuteur", "Autre"], include_blank: false, as: :select %>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <%= parent_profile.input :address, label: "Adresse", placeholder: "12 rue de la Paix" %>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <%= parent_profile.input :zipcode, label: "Code postal", placeholder: "75000" %>
+            </div>
+
+            <div class="col-12">
+              <%= parent_profile.input :city, label: "Ville", placeholder: "Paris" %>
+            </div>
+
+            <div class="col-12">
+              <%= parent_profile.input :has_newsletter, label: "Je souhaite recevoir la newsletter", as: :boolean %>
+            </div>
+          <% end %>
+      </div>
+    <% end %>
+
+    <div class="row" id="edit-password">
+      <div class="col-12">
         <%= f.input :password,
                     required: false,
                     label: "Nouveau mot de passe",
@@ -32,12 +77,18 @@
                     required: true,
                     input_html: { autocomplete: "current-password" } %>
       </div>
+    </div>
 
+    <div class="row my-3 g-3">
+      <div class="col-6 text-center">
+        <%= f.button :submit, "Valider", class: "btn btn-dark rounded-pill px-4 py-2" %>
+      </div>
 
-      <div class="flex-btn">
-        <%= f.button :submit, "Valider", class: "btn-etendart btn-smaller" %>
-        <%= link_to "Annuler", :back, class: "btn-etendart-black btn-smaller" %>
+      <div class="col-6 text-center">
+          <%= link_to "Annuler", :back, class: "btn btn-outline-secondary rounded-pill px-4 py-2" %>
       </div>
     </div>
+
+
   <% end %>
-</div>
+</section>

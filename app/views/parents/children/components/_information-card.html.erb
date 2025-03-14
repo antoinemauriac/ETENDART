@@ -1,174 +1,200 @@
-<div class="bg-black text-white text-center p-3">
-  INFORMATIONS
-  <%= link_to edit_parents_child_path(child), style: "margin-left:1rem" do %>
-    <i class="fa-solid fa-user-pen"></i>
-  <% end %>
-</div>
-
-<div class="content-info content-info-show-student">
-  <div class="student-info">
-    <p>NOM : <strong><%= child.last_name.try(:upcase) %></strong></p>
-    <p>PRÉNOM : <strong><%= child.first_name %></strong></p>
-    <strong>
-      <p class="d-flex gap-2">
-      COTISANT <%= start_year %>-<%= start_year + 1 %> :
-      <% if membership&.paid %>
-        <i class="fa-solid fa-circle-check text-success fa-small"></i>
+<section class="row g-3">
+  <div class="col-12 col-md-4">
+    <div class="ratio ratio-1x1">
+      <% if child.photo.key %>
+        <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
       <% else %>
-        <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+        <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
       <% end %>
-      </p>
-    </strong>
+    </div>
+  </div>
+  <div class="col-8">
+    <section class="row" id="infos-card">
+      <div class="col-md-6 col-12">
+        <ul class="card-text">
+          <li class="p-1">
+            COTISANT <%= @start_year %>-<%= @start_year + 1 %>
+            <% if child.current_membership.paid %>
+              <i class="fa-solid fa-circle-check text-success fa-small"></i>
+            <% else %>
+              <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+            <% end %>
+          </li>
+          <li class="p-1">
+            <%= child.age %> ans
+          </li>
+          <li class="p-1">
+            <% if child.gender.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Genre non renseigné
+              </p>
+            <% else %>
+              <p>
+                GENRE : <%= child.gender %>
+              </p>
+            <% end %>
+          </li>
+          <li class="p-1">
+            <% if child.date_of_birth.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Date de naissance non renseignée
+              </p>
+            <% else %>
+              <p>
+                DATE DE NAISSANCE : <%= child.date_of_birth %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.gender.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Genre non renseigné
-      </p>
-    <% else %>
-      <p>
-        GENRE : <%= child.gender %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.email.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Email non renseigné
+              </p>
+            <% else %>
+              <p>
+                EMAIL : <%= child.email %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.date_of_birth.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Date de naissance non renseignée
-      </p>
-    <% else %>
-      <p>
-        DATE DE NAISSANCE : <%= child.date_of_birth %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.phone_number.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Numéro de téléphone non renseigné
+              </p>
+            <% else %>
+              <p>
+                TEL : <%= child.phone_number %>
+              </p>
+            <% end %>
+          </li>
+        </ul>
+      </div>
 
-    <% if child.email.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Email non renseigné
-      </p>
-    <% else %>
-      <p>
-        EMAIL : <%= child.email %>
-      </p>
-    <% end %>
+      <div class="col-md-6 col-12">
+        <ul class="card-text">
 
-    <% if child.phone_number.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Numéro de téléphone non renseigné
-      </p>
-    <% else %>
-      <p>
-        TEL : <%= child.phone_number %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.address.blank? || child.zipcode.blank? || child.city.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Adresse non renseignée
+              </p>
+            <% else %>
+              <p>
+                ADRESSE : <%= child.address %>, <%= child.zipcode %> <%= child.city %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.address.blank? || child.zipcode.blank? || child.city.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Adresse non renseignée
-      </p>
-    <% else %>
-      <p>
-        ADRESSE : <%= child.address %>, <%= child.zipcode %> <%= child.city %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.school.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Etablissement scolaire non renseigné
+              </p>
+            <% else %>
+              <p>
+                ETABLISSEMENT SCOLAIRE : <%= child.school %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.school.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Etablissement scolaire non renseigné
-      </p>
-    <% else %>
-      <p>
-        ETABLISSEMENT SCOLAIRE : <%= child.school %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.siblings_count.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Nombre de frères et soeurs non renseigné
+              </p>
+            <% else %>
+              <p>
+                NOMBRE DE FRERES ET SOEURS : <%= child.siblings_count %>
+              </p>
+            <% end %>
+          </li>
+          <li class="p-1">
+            <% if child.has_consent_for_photos.nil? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Consentement pour les photos non renseigné
+              </p>
+            <% else %>
+              <p>
+                CONSENTEMENT POUR LES PHOTOS : <%= child.has_consent_for_photos ? "Oui" : "Non" %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.siblings_count.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Nombre de frères et soeurs non renseigné
-      </p>
-    <% else %>
-      <p>
-        NOMBRE DE FRERES ET SOEURS : <%= child.siblings_count %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.allergy.blank? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Allergie non renseignée
+              </p>
+            <% elsif child.allergy.present? %>
+              <p>
+                ALLERGIE : <%= child.allergy %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.has_consent_for_photos.nil? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Consentement pour les photos non renseigné
-      </p>
-    <% else %>
-      <p>
-        CONSENTEMENT POUR LES PHOTOS : <%= child.has_consent_for_photos ? "Oui" : "Non" %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.has_medical_treatment.nil? %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Traitement médical non renseigné
+              </p>
+            <% else %>
+              <p>
+                TRAITEMENT MEDICAL : <%= child.has_medical_treatment ? "Oui" : "Non" %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.allergy.blank? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Allergie non renseignée
-      </p>
-    <% elsif child.allergy.present? %>
-      <p>
-        ALLERGIE : <%= child.allergy %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.medical_treatment_description.blank? && child.has_medical_treatment %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Description du traitement médical non renseignée
+              </p>
+            <% elsif child.has_medical_treatment %>
+              <p>
+                DESCRIPTION DU TRAITEMENT MEDICAL : <%= child.medical_treatment_description %>
+              </p>
+            <% end %>
+          </li>
 
-    <% if child.has_medical_treatment.nil? %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Traitement médical non renseigné
-      </p>
-    <% else %>
-      <p>
-        TRAITEMENT MEDICAL : <%= child.has_medical_treatment ? "Oui" : "Non" %>
-      </p>
-    <% end %>
+          <li class="p-1">
+            <% if child.rules_signed.nil? || child.rules_signed == false %>
+              <p class="text-danger">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                Règlement non signé
+              </p>
+            <% end %>
+          </li>
+        </ul>
+      </div>
 
-    <% if child.medical_treatment_description.blank? && child.has_medical_treatment %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Description du traitement médical non renseignée
-      </p>
-    <% elsif child.has_medical_treatment %>
-      <p>
-        DESCRIPTION DU TRAITEMENT MEDICAL : <%= child.medical_treatment_description %>
-      </p>
-    <% end %>
+    </section>
+    <ul class="card-text">
 
-    <% if child.rules_signed.nil? || child.rules_signed == false %>
-      <p class="text-danger">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        Règlement non signé
-      </p>
-    <% end %>
+
+
+    </ul>
 
   </div>
-
-
-  <div class="student-photo">
-    <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
-    <% if child.photo.key? %>
-      <%= cl_image_tag child.photo_or_default,
-              data: { upload_photo_target: "photo" },
-              class: "avatar-medium",
-              crop: "thumb",
-              gravity: "face",
-              width: 300,
-              height: 300 %>
-    <% else %>
-      <i class="fa-solid fa-circle-user" style="font-size: 7.5rem"></i>
-    <% end %>
-  </div>
-
   <div class="text-center">
-    <%= link_to "Modifier", edit_parents_child_path(child), class: "btn btn-secondary" %>
+    <%= link_to edit_parents_child_path(child), class: "btn btn-dark rounded-4 px-4 py-2" do %>
+      Modifier
+    <% end %>
   </div>
-</div>
+
+</section>
+
 
 <%# render "parents/children/components/information_card", locals: { child: child, start_year: start_year, membership: membership } %>

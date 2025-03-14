@@ -1,7 +1,8 @@
-<section class="bg-white container-sm p-3 rounded-3">
-  <h1 class="header-info mb-3 rounded-top-4">
-    Modifier les informations de mon enfant
-  </h1>
+<h1 class="bg-black text-white text-center p-3">
+  Modifier les informations de mon enfant
+</h1>
+
+<section class="container bg-white rounded-4 shadow p-3 my-3">
 
   <%= simple_form_for @child, url: parents_child_path(@child) do |f| %>
 
@@ -77,12 +78,6 @@
           </div>
         </div>
 
-        <div class="row mb-2">
-          <div class="col-12">
-            <%= f.association :academies, label: "Sélectionnez les Académies", as: :check_boxes %>
-          </div>
-        </div>
-
 
 
       </div>
@@ -131,7 +126,7 @@
       </div>
 
       <div class="text-center">
-        <%= f.button :submit, "Modifier", class: "btn btn-primary" %>
+        <%= f.button :submit, "Modifier", class: "btn btn-dark rounded-pill px-4 py-2" %>
       </div>
 
     </div>

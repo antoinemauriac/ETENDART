@@ -158,6 +158,12 @@ class Student < ApplicationRecord
     return memberships.find_by(start_year: start_year).present?
   end
 
+  # return la cotisation de cette année, payée ou non.
+  def current_membership
+    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
+    return memberships.find_by(start_year: start_year)
+  end
+
   # la cotisation n'est pas payée
   def membership_not_paid?
     start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1

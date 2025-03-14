@@ -13,7 +13,8 @@ class Parents::ChildrenController < ApplicationController
     authorize [:parents, :student], :assign_children?
     children = Student.where(id: params[:child_ids])
     if children.any?
-      children.update_all(user_id: current_user.id) # Associe les enfants au parent
+      children.update_all(user_id: current_user.id, email: current_user.email, address: current_user.parent_profile.address, zipcode: current_user.parent_profile.zipcode, city: current_user.parent_profile.city ) # Associe les enfants au parent avec email et adresse
+
       flash[:notice] = "Les enfants ont été ajoutés avec succès."
     else
       flash[:alert] = "Aucun enfant sélectionné."
@@ -25,6 +26,7 @@ class Parents::ChildrenController < ApplicationController
 
   def new
     @child = Student.new
+    @parent = current_user
     authorize [:parents, :student], :new?
   end
 
