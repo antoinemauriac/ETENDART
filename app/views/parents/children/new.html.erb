@@ -1,13 +1,14 @@
-<section class="bg-white container-sm p-3 rounded-3">
-  <h1 class="header-info mb-3 rounded-top-4">
-    Ajouter un enfant
-  </h1>
+<h1 class="bg-black text-white text-center p-3">
+  Ajouter un enfant
+</h1>
+
+<section class="container bg-white rounded-4 shadow p-3 my-3">
 
   <%= simple_form_for @child, url: parents_children_path do |f| %>
 
     <div class="form-inputs">
 
-      <div class="container-sm p-3 my-3">
+      <div class="p-3 my-3">
         <h2 class="mb-3">
           Identité de l'enfant
         </h2>
@@ -30,9 +31,9 @@
 
         <div class="row mb-2">
 
-          <div class="col-md-6">
-            <%= f.input :gender, label: "Genre", collection: ["Garçon", "Fille", "Autre"], include_blank: false %>
-          </div>
+            <div class="col-md-6">
+            <%= f.input :gender, label: "Genre", collection: ["Garçon", "Fille", "Autre"], include_blank: "Sélectionner un genre" %>
+            </div>
 
         </div>
 
@@ -49,25 +50,25 @@
 
        <div class="row mb-2">
           <div class="col-md-6">
-            <%= f.input :email, label: "Email (si l'enfant en a un)" %>
+            <%= f.input :email, label: "Email (si l'enfant en a un)", input_html: { value: @parent.email } %>
           </div>
 
           <div class="col-md-6">
-            <%= f.input :phone_number, label: "Numéro de téléphone (si l'enfant en a un)", as: :tel %>
+            <%= f.input :phone_number, label: "Numéro de téléphone (si l'enfant en a un)", as: :tel, input_html: { value: @parent.phone_number } %>
           </div>
         </div>
 
         <div class="row mb-2">
           <div class="col-12">
-            <%= f.input :address, label: "Adresse" %>
+            <%= f.input :address, label: "Adresse", input_html: { value: @parent.parent_profile.address } %>
           </div>
 
           <div class="col-md-6">
-            <%= f.input :zipcode, label: "Code Postal" %>
+            <%= f.input :zipcode, label: "Code Postal", input_html: { value: @parent.parent_profile.zipcode } %>
           </div>
 
           <div class="col-md-6">
-            <%= f.input :city, label: "Ville" %>
+            <%= f.input :city, label: "Ville", input_html: { value: @parent.parent_profile.city } %>
           </div>
         </div>
 
@@ -77,16 +78,10 @@
           </div>
         </div>
 
-        <div class="row mb-2">
-          <div class="col-12">
-            <%= f.association :academies, label: "Sélectionnez les Académies", as: :check_boxes %>
-          </div>
-        </div>
-
       </div>
 
 
-      <div class="container-sm p-3 my-3">
+      <div class="p-3 my-3">
         <h2 class="mb-3">
           Administratif
         </h2>
@@ -125,7 +120,7 @@
       </div>
 
       <div class="text-center">
-        <%= f.button :submit, "Ajouter", class: "btn btn-primary" %>
+        <%= f.button :submit, "Ajouter", class: "btn btn-dark rounded-pill px-4 py-2" %>
       </div>
 
     </div>

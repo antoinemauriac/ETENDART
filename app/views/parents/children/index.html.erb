@@ -4,7 +4,7 @@
   Les parents peuvent ajouter de nouveaux enfants et accéder aux informations détaillées de chaque enfant.
 %>
 
-<h1 class="text-center py-1 my-3 bg-yellow">
+<h1 class="text-center py-3 my-5 bg-black text-white">
   Mes Enfants
 </h1>
 
@@ -50,109 +50,73 @@
 <% end %>
 
 
+<section class="container">
+  <% if @parent.children.any? %>
 
-<% if @parent.children.any? %>
-
-  <ul class="row justify-content-center">
-    <% @parent.children.each do |child| %>
-
-        <li class="col-lg-6 col-md-6 col-12" data-upload-photo-student-id-value="<%=child.id%>">
+    <ul class="row g-3">
+      <% @parent.children.each do |child| %>
+        <li class="p-3 mb-3 col-12 col-md-6 col-lg-4">
           <%= link_to parents_child_path(child) do %>
-
-            <div class="header-info">
-              <%= child.first_name %> <%= child.last_name.upcase %>
-            </div>
-
-            <div class="content-info content-info-show-student">
-              <div class="student-info">
-                <strong>
-                  <p class="d-flex gap-2">
-                  COTISANT <%= @start_year %>-<%= @start_year + 1 %> :
-                  <% if child.memberships.find_by(start_year: @start_year)&.paid %>
-                    <i class="fa-solid fa-circle-check text-success fa-small"></i>
-                  <% else %>
-                    <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
-                  <% end %>
-                  </p>
-                </strong>
-                <p><%= child.gender %> - <%= child.age %> ans </p>
-
-                <% if child.email.blank? %>
-                  <p class="text-danger">
-                    <i class="fa-solid fa-exclamation-triangle"></i>
-                    Email non renseigné
-                  </p>
-                <% else %>
-                  <p>
-                    EMAIL : <%= child.email %>
-                  </p>
-                <% end %>
-
-                <% if child.phone_number.blank? %>
-                  <p class="text-danger">
-                    <i class="fa-solid fa-exclamation-triangle"></i>
-                    Numéro de téléphone non renseigné
-                  </p>
-                <% else %>
-                  <p>
-                    TEL : <%= child.phone_number %>
-                  </p>
-                <% end %>
-
-                <% if child.address.blank? || child.zipcode.blank? || child.city.blank? %>
-                  <p class="text-danger">
-                    <i class="fa-solid fa-exclamation-triangle"></i>
-                    Adresse non renseignée
-                  </p>
-                <% else %>
-                  <p>
-                    ADRESSE : <%= child.address %>, <%= child.zipcode %> <%= child.city %>
-                  </p>
-                <% end %>
-
-              </div>
-              <div class="student-photo">
-                <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
-                <% if child.photo.key? %>
-                  <%= cl_image_tag child.photo_or_default,
-                          data: { upload_photo_target: "photo" },
-                          class: "avatar-medium",
-                          crop: "thumb",
-                          gravity: "face",
-                          width: 300,
-                          height: 300 %>
-                <% else %>
-                  <i class="fa-solid fa-circle-user" style="font-size: 7.5rem"></i>
-                <% end %>
-              </div>
-              <% if child.any_lack_of_infos? %>
-
-                <div class="text-center mt-5">
-                  <p class="text-danger">
-                    <i class="fa-solid fa-exclamation-triangle"></i>
-                    <strong>Attention</strong> : des informations sont manquantes pour cet enfant.
-                  </p>
+            <section class="card rounded-4 bg-white p-3 h-100 border-0">
+              <section class="row g-3">
+                <div class="col-4">
+                  <div class="ratio ratio-1x1">
+                    <% if child.photo.key %>
+                      <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
+                    <% else %>
+                      <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
+                    <% end %>
+                  </div>
                 </div>
-                <div class="text-center">
-                  <%= link_to "Modifier", edit_parents_child_path(child), class: "btn btn-secondary" %>
+                <div class="col-8">
+                  <h2 class="card-title fs-6 p-2 bg-black text-white text-center rounded-4">
+                    <%= child.first_name %> <%= child.last_name.upcase %>
+                  </h2>
+                  <ul class="card-text">
+                    <li class="p-1">
+                      <%= child.age %> ans
+                    </li>
+                    <li class="p-1">
+                      <%= child.gender %>
+                    </li>
+                    <li class="p-1">
+                      COTISANT <%= @start_year %>-<%= @start_year + 1 %>
+                      <% if child.current_membership.paid %>
+                        <i class="fa-solid fa-circle-check text-success fa-small"></i>
+                      <% else %>
+                        <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+                      <% end %>
+                    </li>
+                    <li class="p-1">
+                      <% if child.any_lack_of_infos? %>
+                        <p class="text-danger">
+                          <i class="fa-solid fa-exclamation-triangle"></i>
+                          Il manque des informations
+                        </p>
+
+                      <% end %>
+                    </li>
+                  </ul>
                 </div>
-              <% end %>
 
-            </div>
-
+              </section>
+            </section>
           <% end %>
         </li>
+      <% end %>
 
-    <% end %>
-  </ul>
+        <li class="p-3 mb-3 col-12 col-md-6 col-lg-4 d-flex align-items-center justify-content-center">
+          <%= link_to 'Ajouter un enfant ➕', new_parents_child_path, class: "btn btn-dark rounded-4 px-4 py-2" %>
+        </li>
+    </ul>
 
-<% else %>
-  <p class="text-center">
-    Vous n'avez pas encore d'enfants enregistrés.
-  </p>
-<% end %>
+  <% else %>
+    <p class="text-center">
+      Vous n'avez pas encore d'enfants enregistrés.
+    </p>
 
-<div class="text-center">
-  <%= link_to 'Ajouter un enfant', new_parents_child_path, class: "btn btn-primary" %>
-
-</div>
+    <div class="text-center my-3">
+      <%= link_to 'Ajouter un enfant ➕', new_parents_child_path, class: "btn btn-dark rounded-4 px-4 py-2" %>
+    </div>
+  <% end %>
+</section>

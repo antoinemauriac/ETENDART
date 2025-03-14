@@ -1,57 +1,56 @@
-<div class="bg-black text-white text-center p-3"> PAIEMENT STAGES </div>
-    <div class="content-info content-info-show-student">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Académie</th>
-            <th>Stage</th>
-            <th>Semaine</th>
-            <th>Montant</th>
-            <th class="d-none d-md-table-cell">Date du paiement</th>
-            <th>Mode de paiement</th>
-            <th>Reçu par</th>
-            <th class="text-center">Payé ?</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% camp_enrollments.each do |camp_enrollment| %>
-          <%# permet d'afficher les stages payés ou en attente de paiement par l'enfant %>
-          <tr>
-            <td><%= camp_enrollment.camp.academy.name %></td>
-            <td><%= camp_enrollment.school_period.name %> <%= camp_enrollment.school_period.year %> </td>
-            <td><%= camp_enrollment.camp.name %></td>
-            <td><%= "#{camp_enrollment.school_period.price} €" %></td>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Académie</th>
+      <th>Stage</th>
+      <th>Semaine</th>
+      <th>Montant</th>
+      <th class="d-none d-md-table-cell">Date du paiement</th>
+      <th class="d-none d-md-table-cell">Mode de paiement</th>
+      <th class="d-none d-md-table-cell">Reçu par</th>
+      <th class="text-center">Payé ?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% camp_enrollments.each do |camp_enrollment| %>
+    <%# permet d'afficher les stages payés ou en attente de paiement par l'enfant %>
+    <tr>
+      <td><%= camp_enrollment.camp.academy.name %></td>
+      <td><%= camp_enrollment.school_period.name %> <%= camp_enrollment.school_period.year %> </td>
+      <td><%= camp_enrollment.camp.name %></td>
+      <td><%= "#{camp_enrollment.school_period.price} €" %></td>
 
-            <% if camp_enrollment.paid? %>
-              <td class="d-none d-md-table-cell"><%= camp_enrollment.payment_date.strftime("%d/%m/%Y") %></td>
-              <td><%= camp_enrollment.payment_method %></td>
-              <td><%= camp_enrollment.receiver.full_name if camp_enrollment.receiver %></td>
-            <% else %>
-              <td colspan="3" class="text-center d-none d-md-table-cell">
-                <% if camp_enrollment.cart_item %>
-                  <%= link_to "Payer", commerce_cart_path, class: "btn btn-primary" %>
-                <% else %>
-                  En attente de paiement
-                <% end %>
-              </td>
-              <td colspan="2" class="text-center d-md-none">
-                <% if camp_enrollment.cart_item %>
-                  <%= link_to "Payer", commerce_cart_path, class: "btn btn-primary" %>
-                <% else %>
-                  En attente de paiement
-                <% end %>
-              </td>
-            <% end %>
-            <td class="text-center">
-              <% if camp_enrollment.paid %>
-                <i class="fa-solid fa-circle-check text-success fa-small"></i>
-              <% else %>
-                <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
-              <% end %>
-            </td>
+      <% if camp_enrollment.paid? %>
+        <td class="d-none d-md-table-cell"><%= camp_enrollment.payment_date.strftime("%d/%m/%Y") %></td>
+        <td class="d-none d-md-table-cell"><%= camp_enrollment.payment_method %></td>
+        <td class="d-none d-md-table-cell"><%= camp_enrollment.receiver.full_name if camp_enrollment.receiver %></td>
+      <% else %>
+        <td colspan="3" class="text-center d-none d-md-table-cell">
+          <% if camp_enrollment.cart_item %>
+            <%= link_to "Payer", commerce_cart_path, class: "btn btn-dark rounded-pill" %>
+          <% else %>
+            En attente de paiement
           <% end %>
-        </tbody>
-      </table>
-    </div>
+        </td>
+        <td colspan="2" class="text-center d-md-none">
+          <% if camp_enrollment.cart_item %>
+            <%= link_to "Payer", commerce_cart_path, class: "btn btn-dark rounded-pill" %>
+          <% else %>
+            En attente de paiement
+          <% end %>
+        </td>
+      <% end %>
+      <td class="text-center">
+        <% if camp_enrollment.paid %>
+          <i class="fa-solid fa-circle-check text-success fa-small"></i>
+        <% else %>
+          <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+        <% end %>
+      </td>
+    <% end %>
+  </tbody>
+</table>
+
+
 
 <%# render "parents/children/components/camp-enrollments-card", camp_enrollments: @camp_enrollments %>

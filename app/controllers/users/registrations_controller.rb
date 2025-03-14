@@ -11,9 +11,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+    if resource.persisted?
+      resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
+      resource.first_login = true
+      resource.save
+    end
+  end
 
   # GET /resource/edit
   # def edit
@@ -47,7 +52,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone_number])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone_number, parent_profile_attributes: [:id, :gender, :relationship_to_child, :address, :city, :zipcode, :has_newsletter]])
   end
 
   # If you have extra params to permit, append them to the sanitizer.

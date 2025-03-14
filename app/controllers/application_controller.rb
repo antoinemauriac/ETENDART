@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
+  before_action :ensure_parent_profile
   include Pundit::Authorization
   include Pagy::Backend
 
@@ -17,10 +18,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_sign_in_path_for(resource)
-    if resource.first_login
-      users_first_login_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
-    elsif !resource.first_login && resource.parent_profile.nil?
-      new_parents_profile_path # Redirige vers la création du profil parent
+    if resource.first_login || (resource.parent_profile.nil? && resource.parent?)
+      resource.first_login = false
+      resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
+      resource.save
+      new_parents_profile_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
     else
       super # Utilise le chemin par défaut fourni par Devise ou celui que tu as configuré
     end
@@ -30,5 +32,20 @@ class ApplicationController < ActionController::Base
 
   def skip_pundit?
     devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)/
+  end
+
+  def ensure_parent_profile
+    return unless user_signed_in?
+    return unless current_user.parent?
+    return if current_user.parent_profile.present?
+    allowed_paths = [
+      new_parents_profile_path,    # Formulaire de création du profil
+      destroy_user_session_path   # Permettre la déconnexion
+    ]
+
+    unless allowed_paths.include?(request.path)
+      flash[:alert] = "Vous devez compléter votre profil pour continuer."
+      redirect_to new_parents_profile_path
+    end
   end
 end
