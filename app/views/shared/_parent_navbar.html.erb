@@ -1,92 +1,85 @@
 <nav class="navbar navbar-dark sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">Etendart</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler navbar-toggler-parent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon navbar-toggler-icon-parent"></span>
     </button>
 
+    <div class="offcanvas offcanvas-end bg-black" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
 
-    <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-
-      <div class="offcanvas-header">
+      <div class="offcanvas-header p-4">
         <h5 class="offcanvas-title text-white" id="offcanvasNavbarLabel">Etendart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white me-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
 
-      <div class="offcanvas-body">
-        <ul class="">
+      <div class="offcanvas-body p-5">
+        <div class="nav-links d-flex flex-column align-items-start">
 
-          <li class="nav-item">
+          <div class="nav-item nav-item-parent">
             <%= link_to root_path, class: "nav-link active" do %>
               <span>
                 Accueil
               </span>
-              <i class="fa-solid fa-home"></i>
+              <i class="fa-solid fa-home ms-2"></i>
             <% end %>
-          </li>
+          </div>
 
           <hr>
 
-          <li class="nav-item">
+          <div class="nav-item nav-item-parent">
             <%= link_to parents_academies_path, class: "nav-link active" do %>
               <span>
                 Inscription aux stages
               </span>
-              <i class="fa-solid fa-school"></i>
+              <i class="fa-solid fa-school ms-2"></i>
             <% end %>
-          </li>
+          </div>
 
           <hr>
 
-
-          <li class="nav-item">
+          <div class="nav-item nav-item-parent">
             <%= link_to commerce_cart_path, class: "nav-link active" do %>
-              Mon Panier <i class="fa-solid fa-shopping-cart"></i>
+              Mon Panier <i class="fa-solid fa-shopping-cart ms-2"></i>
               <span class="">
                 <%= current_user.carts.current_cart_for(current_user).cart_items.length if current_user.carts.current_cart_for(current_user).cart_items.any? %>
               </span>
             <% end %>
-          </li>
+          </div>
 
           <hr>
 
-          <li class="nav-item">
+          <div class="nav-item nav-item-parent">
             <%= link_to parents_children_path, class: "nav-link active" do %>
-
               <span>
                 Mes Enfants
               </span>
-              <i class="fa-solid fa-children"></i>
+              <i class="fa-solid fa-children ms-2"></i>
             <% end %>
-          </li>
+          </div>
 
           <hr>
 
-          <li class="nav-item">
+          <div class="nav-item nav-item-parent">
             <%= link_to edit_user_registration_path, class: "nav-link active" do %>
               <span>
                 Mon Compte
               </span>
-              <i class="fa-solid fa-user-edit"></i>
+              <i class="fa-solid fa-user-edit ms-2"></i>
             <% end %>
-          </li>
+          </div>
 
           <hr>
 
-          <li class="nav-item">
+          <div class="nav-item nav-item-parent">
             <%= link_to destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link active" do %>
               <span>
                 Déconnexion
               </span>
-              <i class="fa-solid fa-sign-out"></i>
+              <i class="fa-solid fa-sign-out ms-2"></i>
             <% end %>
-          </li>
-          <%# <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li> %>
+          </div>
 
-        </ul>
-
+        </div>
       </div>
     </div>
   </div>

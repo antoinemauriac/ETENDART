@@ -21,7 +21,7 @@
           </div>
           <div class="modal-body">
             <p>
-              Nous avons trouvé des enfants déjà enregistrés dans notre base de données qui peuvent correspondre à vos enfants. Veuillez les sélectionner pour les associer à votre compte.
+              Nous avons trouvé des enfants déjà enregistrés dans notre base de données qui peuvent correspondre à vos enfants. Veuillez les sélectionner (en cliquant sur la carte) pour les associer à votre compte.
             </p>
             <p>
               <i class="fa-solid fa-triangle-exclamation text-danger"></i> Attention, si vous trouvez plusieurs enfants avec le même nom, veuillez vérifier la date de naissance pour vous assurer que vous sélectionnez le bon enfant.
@@ -38,40 +38,40 @@
       <ul class="px-1 row g-3 justify-content-center flex-column align-items-center" data-controller="form--children--select-check">
         <% @existing_children.each do |child| %>
 
-              <li class="row g-3 col-12 col-md-6 col-lg-4 bg-white rounded-4" data-action="click->form--children--select-check#toggle" data-form--children--select-check-target="card">
-                <div class="col-4 p-3">
-                  <div class="ratio ratio-1x1">
-                    <% if child.photo.key %>
-                      <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
-                    <% else %>
-                      <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
-                    <% end %>
-                  </div>
-                </div>
+              <li class="row g-3 col-12 col-md-6 col-lg-4 bg-white rounded-4" style="cursor:pointer" data-action="click->form--children--select-check#toggle" data-form--children--select-check-target="card">
+                      <div class="col-4 p-3">
+                        <div class="ratio ratio-1x1">
+                        <% if child.photo.key %>
+                          <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
+                        <% else %>
+                          <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
+                        <% end %>
+                        </div>
+                      </div>
 
-                <div class="col-8">
-                  <h2 class="card-title fs-6 rounded-4">
-                    <%= child.first_name %> <%= child.last_name.upcase %>
-                  </h2>
-                  <ul class="card-text">
-                    <li class="p-1">
-                      <%= child.age %> ans
-                    </li>
-                    <li class="p-1">
-                      <%= child.gender %>
-                    </li>
-                    <li class="p-1">
-                      <%= l(child.date_of_birth, format: '%d/%m/%Y') %>
-                    </li>
+                      <div class="col-8">
+                        <h2 class="card-title fs-6 rounded-4">
+                        <%= child.first_name %> <%= child.last_name.upcase %>
+                        </h2>
+                        <ul class="card-text">
+                        <li class="p-1">
+                          <%= child.age %> ans
+                        </li>
+                        <li class="p-1">
+                          <%= child.gender %>
+                        </li>
+                        <li class="p-1">
+                          <%= l(child.date_of_birth, format: '%d/%m/%Y') %>
+                        </li>
 
-                  </ul>
-                </div>
+                        </ul>
+                      </div>
 
-                <div class="d-none">
-                  <%= check_box_tag "child_ids[]", child.id, false, class: "form-check-input", data: { form__children__select_check_target: "checkbox" } %>
-                </div>
+                      <div class="d-none">
+                        <%= check_box_tag "child_ids[]", child.id, false, class: "form-check-input", data: { form__children__select_check_target: "checkbox" } %>
+                      </div>
 
-              </li>
+                      </li>
 
         <% end %>
       </ul>
@@ -92,11 +92,11 @@
 
     <ul class="row g-3">
       <% @parent.children.each do |child| %>
-        <li class="p-3 mb-3 col-12 col-md-6 col-lg-4">
+        <li class="p-2 col-12 col-md-6 col-lg-4">
           <%= link_to parents_child_path(child) do %>
             <section class="card rounded-4 bg-white p-3 h-100 border-0">
               <section class="row g-3">
-                <div class="col-4">
+                <div class="col-3">
                   <div class="ratio ratio-1x1">
                     <% if child.photo.key %>
                       <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
@@ -105,7 +105,7 @@
                     <% end %>
                   </div>
                 </div>
-                <div class="col-8">
+                <div class="col-9">
                   <h2 class="card-title fs-6 p-2 bg-black text-white text-center rounded-4">
                     <%= child.first_name %> <%= child.last_name.upcase %>
                   </h2>
@@ -116,12 +116,12 @@
                     <li class="p-1">
                       <%= child.gender %>
                     </li>
-                    <li class="p-1">
+                    <li class="p-1 d-flex align-items-center">
                       COTISANT <%= @start_year %>-<%= @start_year + 1 %>
                       <% if child.current_membership.paid %>
-                        <i class="fa-solid fa-circle-check text-success fa-small"></i>
+                        <i class="fa-solid fa-circle-check text-success fa-small ms-2"></i>
                       <% else %>
-                        <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+                        <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small ms-2"></i>
                       <% end %>
                     </li>
                     <li class="p-1">

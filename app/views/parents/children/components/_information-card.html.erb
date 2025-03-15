@@ -8,16 +8,16 @@
       <% end %>
     </div>
   </div>
-  <div class="col-8">
+  <div class="col-12 col-md-8">
     <section class="row" id="infos-card">
       <div class="col-md-6 col-12">
         <ul class="card-text">
-          <li class="p-1">
+          <li class="d-flex align-items-center p-1">
             COTISANT <%= @start_year %>-<%= @start_year + 1 %>
             <% if child.current_membership.paid %>
-              <i class="fa-solid fa-circle-check text-success fa-small"></i>
+              <i class="fa-solid fa-circle-check text-success fa-smal ms-2"></i>
             <% else %>
-              <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+              <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small ms-2"></i>
             <% end %>
           </li>
           <li class="p-1">
