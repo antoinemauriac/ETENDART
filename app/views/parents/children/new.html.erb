@@ -22,10 +22,8 @@
             <%= f.input :last_name, label: "Nom" %>
           </div>
 
-          <div class="col-md-6">
-            <%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
-            end_year: 2025 %>
-          </div>
+<%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
+            end_year: 2025, include_blank: true %>
 
         </div>
 

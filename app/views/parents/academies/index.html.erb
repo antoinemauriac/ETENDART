@@ -11,7 +11,7 @@
         <div class="col-10 col-md-8 col-lg-6 col-xl-4">
           <%= link_to parents_academy_path(academy) do %>
             <div class="card-academy card-academy-parent" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
-              <%= academy.name.upcase %><br>
+              <h6 class="mb-0"><%= academy.name.upcase %></h6>
             </div>
           <% end %>
         </div>
