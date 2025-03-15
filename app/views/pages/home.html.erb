@@ -3,10 +3,10 @@
 <%# Section avec titre et background avec image opaque avec class bootstrap %>
   <section id="hero-section" class="text-white d-flex align-content-center py-5">
     <div class="container d-flex align-content-center flex-wrap">
-      <h1 class="text-center my-3 fs">
-        <strong>
+      <h1 class="text-center my-3 fs-3">
+
           Etendart Academy, l'association qui favorise le développement personnel des jeunes grâce à l'initiation au sport et aux arts.
-        </strong>
+
       </h1>
     </div>
   </section>
@@ -83,14 +83,14 @@
 
             <li>
               <button class="rounded-pill btn text-black bg-white px-4 py-2"
-                data-action="click->home--filter#filter"
+                data-action="click->home--filter#filter" data-home--filter-target="button"
                 data-academy-id="all">
                 Toutes les académies
               </button>
             </li>
         <% @academies.each do |academy| %>
           <li class="">
-            <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-academy-id="<%= academy.id %>">
+            <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
               <%= academy.name %>
             </button>
           </li>

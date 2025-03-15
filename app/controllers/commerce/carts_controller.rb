@@ -8,8 +8,8 @@ class Commerce::CartsController < ApplicationController
     authorize @cart
     @membership_cart_items = @cart.cart_items.where(product_type: 'Membership')
     @camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
-    @total_cb = @cart.cart_items.where(payment_method: 'carte bancaire').sum(:price)
-    @total_other = @cart.cart_items.where.not(payment_method: 'carte bancaire').sum(:price)
+    @total_cb = @cart.cart_items.where(payment_method: 'Carte bancaire').sum(:price)
+    @total_other = @cart.cart_items.where.not(payment_method: 'Carte bancaire').sum(:price)
   end
 
 end

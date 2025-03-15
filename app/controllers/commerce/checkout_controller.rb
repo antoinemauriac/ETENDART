@@ -5,7 +5,7 @@ class Commerce::CheckoutController < ApplicationController
     @parent = current_user
     @parent_profile = @parent.parent_profile
     @cart = @parent.pending_cart
-    @cart_items = @cart.cart_items.where(payment_method: 'carte bancaire')
+    @cart_items = @cart.cart_items.where(payment_method: 'Carte bancaire')
     session = Stripe::Checkout::Session.create(
       customer: @parent_profile.stripe_customer_id,
       payment_method_types: ['card'],
@@ -30,7 +30,7 @@ class Commerce::CheckoutController < ApplicationController
     @cart = @parent.pending_cart
     @cart.paid! unless @cart.paid?
     # chaque cart_items dont la payment_method est 'Carte bancaire' est marqué comme payé
-    paid_cart_items = @cart.cart_items.where(payment_method: 'carte bancaire')
+    paid_cart_items = @cart.cart_items.where(payment_method: 'Carte bancaire')
     paid_cart_items.each do |item|
       item.paid!
       # chaque product_type camp_enrollment de ces cart_items obtient une payment_method = "virement"
