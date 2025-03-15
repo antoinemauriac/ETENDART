@@ -6,6 +6,10 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
 
     @school_period_enrollment = SchoolPeriodEnrollment.new
     @students = current_user.children
+    if @students.empty?
+      redirect_to parents_children_path, alert: "Vous devez ajouter un enfant avant de pouvoir inscrire un enfant à un stage"
+      return
+    end
     @selected_student = params[:student_id].present? ? Student.find(params[:student_id]) : @students&.first
     # retrouver les camps ou le selected_student n'est pas encore inscrit
     enrolled_camp_ids = @selected_student

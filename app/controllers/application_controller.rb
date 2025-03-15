@@ -35,14 +35,15 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_parent_profile
+    # si l'utilisateur n'est pas connecté, ou n'est pas un parent ou a déjà complété son profil, on ne fait rien
     return unless user_signed_in?
-    return unless current_user.parent?
-    return if current_user.parent_profile.present?
+    return if !current_user.parent? || current_user.parent_profile.present?
+    # seul les parents doivent compléter leur profil
     allowed_paths = [
       new_parents_profile_path,    # Formulaire de création du profil
-      destroy_user_session_path   # Permettre la déconnexion
+      destroy_user_session_path,   # Permettre la déconnexion
+      parents_profile_path      # Permettre la création du profil
     ]
-
     unless allowed_paths.include?(request.path)
       flash[:alert] = "Vous devez compléter votre profil pour continuer."
       redirect_to new_parents_profile_path
