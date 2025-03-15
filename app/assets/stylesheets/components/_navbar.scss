@@ -172,6 +172,13 @@
   }
 }
 
+.nav-item > h6 > a {
+  font-size: 13px!important;
+}
+
+.nav-item > .nav-link {
+  font-size: 13px!important;
+}
 
 @media (min-width: 850px) {
   .navbar {
@@ -276,6 +283,7 @@
 .fa-caret-down {
   color: black;
   margin-left: 5px;
+  margin-bottom: 5px;
 }
 
 .dropdown span:hover {

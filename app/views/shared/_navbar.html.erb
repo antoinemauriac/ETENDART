@@ -12,14 +12,14 @@
       <% if user_signed_in? %>
         <% if current_user.coach? || current_user.manager? || current_user.coordinator? || current_user.admin? %>      
           <li class="nav-item nav-item-manager active">
-            <%= link_to "ACCUEIL", "/", class: "nav-link" %>
+            <h6 class="mb-0"><%= link_to "ACCUEIL", "/", class: "nav-link pt-3 pb-2" %></h6>
           </li>
           <% if current_user.coach? %>
             <li class="nav-item nav-item-manager nav-item-small">
-              <%= link_to "LES COURS", coaches_courses_path, class: "nav-link nav-link-small" %>
+              <h6 class="mb-0"><%= link_to "LES COURS", coaches_courses_path, class: "nav-link nav-link-small pt-3 pb-2" %></h6>
             </li>
             <li class="nav-item nav-item-manager nav-item-small">
-              <%= link_to "LES ÉLÈVES", coaches_student_profiles_path, class: "nav-link nav-link-small" %>
+              <h6 class="mb-0"><%= link_to "LES ÉLÈVES", coaches_student_profiles_path, class: "nav-link nav-link-small pt-3 pb-2" %></h6>
             </li>
           <% end %>
           <% if current_user.admin? %>
@@ -61,9 +61,9 @@
             <% elsif current_user.coordinator? %>
               <% academies = current_user.academies_as_coordinator %>
             <% end %>
-            <div class="dropdown" style="margin-left: -1px;">
+            <div class="dropdown" style="margin-left: -1px;padding-top: 6px">
               <li class="nav-item nav-item-manager d-flex align-items-center justify-content-center">
-                <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
+                <h6 class="nav-link nav-link-small mb-0" style="cursor:pointer">ACADEMIES</h6>
                 <i class="fa fa-caret-down"></i>
               </li>
               <div class="dropdown-content">
@@ -86,9 +86,9 @@
                 <% end %>
               </div>
             </div>
-            <div class="dropdown" style="margin-left: -1px;">
+            <div class="dropdown" style="margin-left: -1px;padding-top: 6px">
               <li class="nav-item nav-item-manager d-flex align-items-center justify-content-center">
-                <div class="nav-link nav-link-small" style="cursor:pointer">FINANCE</div>
+                <h6 class="nav-link nav-link-small mb-0" style="cursor:pointer">FINANCE</h6>
                 <i class="fa fa-caret-down"></i>
               </li>
               <div class="dropdown-content">
@@ -106,68 +106,80 @@
             </div>
           <% end %>
           <li class="nav-item nav-item-manager">
-            <%= link_to "MON PROFIL",  edit_user_registration_path, class: "nav-link" %>
+            <h6 class="mb-0"><%= link_to "MON PROFIL", edit_user_registration_path, class: "nav-link pt-3 pb-2" %></h6>
           </li>
           <li class="nav-item nav-item-manager" id="deconnection">
-            <%= link_to "SE DÉCONNECTER", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link"%>
+            <h6 class="mb-0"><%= link_to "SE DÉCONNECTER", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link pt-3 pb-2" %></h6>
           </li>
         <% elsif current_user.parent? %>
           <li class="nav-item">
-            <%= link_to root_path, class: "nav-link" do %>
-              ACCUEIL <i class="fa-solid fa-home ms-2"></i>
-            <% end %>
-          </li>
-          <li class="nav-item">
-            <%= link_to parents_academies_path, class: "nav-link" do %>
-              STAGES <i class="fa-solid fa-school ms-2"></i>
-            <% end %>
-          </li>
-          <li class="nav-item">
-            <%= link_to commerce_cart_path, class: "nav-link" do %>
-              PANIER <i class="fa-solid fa-shopping-cart ms-2"></i>
-              <% if current_user.carts.current_cart_for(current_user).cart_items.any? %>
-                <span><%= current_user.carts.current_cart_for(current_user).cart_items.length %></span>
+            <h6 class="mb-0">
+              <%= link_to root_path, class: "nav-link pt-3 pb-2" do %>
+                ACCUEIL <i class="fa-solid fa-home ms-2"></i>
               <% end %>
-            <% end %>
+            </h6>
           </li>
           <li class="nav-item">
-            <%= link_to parents_children_path, class: "nav-link" do %>
-              MES ENFANTS <i class="fa-solid fa-children ms-2"></i>
-            <% end %>
+            <h6 class="mb-0">
+              <%= link_to parents_academies_path, class: "nav-link pt-3 pb-2" do %>
+                STAGES <i class="fa-solid fa-school ms-2"></i>
+              <% end %>
+            </h6>
           </li>
           <li class="nav-item">
-            <%= link_to edit_user_registration_path, class: "nav-link" do %>
-              MON COMPTE <i class="fa-solid fa-user-edit ms-2"></i>
-            <% end %>
+            <h6 class="mb-0">
+              <%= link_to commerce_cart_path, class: "nav-link pt-3 pb-2" do %>
+                PANIER <i class="fa-solid fa-shopping-cart ms-2"></i>
+                <% if current_user.carts.current_cart_for(current_user).cart_items.any? %>
+                  <span><%= current_user.carts.current_cart_for(current_user).cart_items.length %></span>
+                <% end %>
+              <% end %>
+            </h6>
+          </li>
+          <li class="nav-item">
+            <h6 class="mb-0">
+              <%= link_to parents_children_path, class: "nav-link pt-3 pb-2" do %>
+                MES ENFANTS <i class="fa-solid fa-children ms-2"></i>
+              <% end %>
+            </h6>
+          </li>
+          <li class="nav-item">
+            <h6 class="mb-0">
+              <%= link_to edit_user_registration_path, class: "nav-link pt-3 pb-2" do %>
+                MON COMPTE <i class="fa-solid fa-user-edit ms-2"></i>
+              <% end %>
+            </h6>
           </li>
           <li class="nav-item" id="deconnection">
-            <%= link_to destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link" do %>
-              SE DÉCONNECTER <i class="fa-solid fa-sign-out ms-2"></i>
-            <% end %>
+            <h6 class="mb-0">
+              <%= link_to destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link pt-3 pb-2" do %>
+                SE DÉCONNECTER <i class="fa-solid fa-sign-out ms-2"></i>
+              <% end %>
+            </h6>
           </li>
         <% elsif current_user.no_role? %>
         <% end %>
       <% else %>
         <li class="nav-item">
-          <%= link_to "APPROCHE", "/#approche", class: "nav-link" %>
+          <h6 class="mb-0"><%= link_to "APPROCHE", "/#approche", class: "nav-link pt-3 pb-2" %></h6>
         </li>
         <li class="nav-item">
-          <%= link_to "PROGRAMMATION", "/#programmation", class: "nav-link" %>
+          <h6 class="mb-0"><%= link_to "PROGRAMMATION", "/#programmation", class: "nav-link pt-3 pb-2" %></h6>
         </li>
         <li class="nav-item">
-          <%= link_to "IMPACT", "/#impact", class: "nav-link" %>
+          <h6 class="mb-0"><%= link_to "IMPACT", "/#impact", class: "nav-link pt-3 pb-2" %></h6>
         </li>
         <li class="nav-item">
-          <%= link_to "ADHÉRER", "/#adherer", class: "nav-link" %>
+          <h6 class="mb-0"><%= link_to "ADHÉRER", "/#adherer", class: "nav-link pt-3 pb-2" %></h6>
         </li>
         <li class="nav-item">
-          <%= link_to "NOUS SOUTENIR", "/#soutenir", class: "nav-link" %>
+          <h6 class="mb-0"><%= link_to "NOUS SOUTENIR", "/#soutenir", class: "nav-link pt-3 pb-2" %></h6>
         </li>
         <li class="nav-item">
-          <%= link_to "CONTACT", "/#contact", class: "nav-link" %>
+          <h6 class="mb-0"><%= link_to "CONTACT", "/#contact", class: "nav-link pt-3 pb-2" %></h6>
         </li>
         <li class="nav-item no-border">
-          <%= link_to "CONNEXION", new_user_session_path, class: "nav-link", id: "connexion" %>
+          <h6 class="mb-0"><%= link_to "CONNEXION", new_user_session_path, class: "nav-link pt-3 pb-2", id: "connexion" %></h6>
         </li>
       <% end %>
     </ul>
