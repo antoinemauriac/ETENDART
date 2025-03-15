@@ -1,10 +1,10 @@
 <% if current_user.admin? %>
-  <div class="header" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= display_academy_image(@academy) %>')">
+  <div class="header text-center" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= display_academy_image(@academy) %>')">
     <%= @academy.name.upcase %>
   </div>
 <% else %>
   <%= link_to managers_academy_path(@academy) do %>
-    <div class="header" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= display_academy_image(@academy) %>')">
+    <div class="header text-center" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= display_academy_image(@academy) %>')">
       <%= @academy.name.upcase %>
     </div>
   <% end %>

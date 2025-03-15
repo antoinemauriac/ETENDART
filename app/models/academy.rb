@@ -93,4 +93,8 @@ class Academy < ApplicationRecord
   def next_school_periods
     school_periods.select { |school_period| !school_period.ended? }
   end
+
+  def short_name
+    name.split(' ').first(2).join(' ').upcase
+  end
 end

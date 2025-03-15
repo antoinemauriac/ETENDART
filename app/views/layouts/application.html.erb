@@ -35,12 +35,8 @@
   <body data-controller="adam--test">
     <% if current_user && current_user.no_role? %>
       <%= render "shared/no_role_navbar" %>
-    <% elsif current_user && current_user.parent? %>
-      <%= render "shared/parent_navbar" %>
-    <% elsif current_user %>
-      <%= render "shared/navbar" %>
     <% else %>
-      <%= render "shared/not-signed-navbar" %>
+      <%= render "shared/navbar" %>
     <% end %>
     <div id="flash-messages">
       <%= render "shared/flashes" %>
