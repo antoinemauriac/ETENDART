@@ -1,5 +1,7 @@
 <nav class="navbar" data-controller="navbar" data-navbar-target="navbar">
-  <%= link_to "Etendart", "/", class: "navbar-brand" %>
+    <%= link_to root_path, class:"navbar-brand" do %>
+      <%= image_tag "navbar/logo_ea_noir.png", alt: "Logo Etendart Academy", width: "100" %>
+    <% end %>
   <button class="navbar-tog" data-navbar-target="navbarToggle" data-action="click->navbar#displayMenu">
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
@@ -8,111 +10,164 @@
   <div class="navbar-collapse" data-navbar-target="navbarCollapse">
     <ul class="nav navbar-nav">
       <% if user_signed_in? %>
-        <li class="nav-item active">
-          <%= link_to "ACCUEIL", "/", class: "nav-link" %>
-        </li>
-        <% if current_user.coach? %>
-          <ul class="dashboard-details">
-            <li class="nav-item nav-item-small">
+        <% if current_user.coach? || current_user.manager? || current_user.coordinator? || current_user.admin? %>      
+          <li class="nav-item nav-item-manager active">
+            <%= link_to "ACCUEIL", "/", class: "nav-link" %>
+          </li>
+          <% if current_user.coach? %>
+            <li class="nav-item nav-item-manager nav-item-small">
               <%= link_to "LES COURS", coaches_courses_path, class: "nav-link nav-link-small" %>
             </li>
-            <li class="nav-item nav-item-small">
+            <li class="nav-item nav-item-manager nav-item-small">
               <%= link_to "LES ÉLÈVES", coaches_student_profiles_path, class: "nav-link nav-link-small" %>
             </li>
-          </ul>
-        <% end %>
-        <% if current_user.admin? %>
-          <div class="dropdown" style="margin-left: -1px">
-            <li class="nav-item d-flex align-items-center justify-content-center">
-              <div class="nav-link nav-link-small" style="cursor:pointer">ADMIN</div>
-              <i class="fa fa-caret-down"></i>
-            </li>
-            <div class="dropdown-content">
-                <div class="dropdown-sub">
-                  <span class="full-width-link">
-                    <%= link_to "ÉLÈVES", index_for_admin_managers_students_path, class: "nav-link nav-link-small nav-academy" %>
-                  </span>
-                </div>
-                <div class="dropdown-sub">
-                  <span class="full-width-link">
-                    <div class="nav-link nav-link-small nav-academy">FINANCE</div>
-                  </span>
-                  <div class="sub-content">
-                    <%= link_to "COTISATION", membership_finances_overview_managers_finances_path %>
-                    <%= link_to "STAGES", managers_finances_path %>
-                  </div>
-                </div>
-                <div class="dropdown-sub">
-                  <span class="full-width-link">
-                    <div class="nav-link nav-link-small nav-academy">BILAN</div>
-                  </span>
-                  <div class="sub-content">
-                    <%= link_to "STAGES", index_for_admin_managers_school_periods_path %>
-                    <%= link_to "PROGRAMMES", index_for_admin_managers_annual_programs_path %>
-                  </div>
-                </div>
-            </div>
-          </div>
-        <% end %>
-        <% if current_user.manager? || current_user.coordinator? %>
-          <% if current_user.manager? %>
-            <% academies = current_user.academies_as_manager %>
-          <% elsif current_user.coordinator? %>
-            <% academies = current_user.academies_as_coordinator %>
           <% end %>
-          <div class="dropdown" style="margin-left: -1px;">
-            <li class="nav-item d-flex align-items-center justify-content-center">
-              <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
-              <i class="fa fa-caret-down"></i>
-            </li>
-            <div class="dropdown-content">
-              <% academies.order(:created_at).each do |academy| %>
-                <div class="dropdown-sub">
-                  <span class="full-width-link">
-                    <%= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small nav-academy" %>
-                  </span>
-                  <div class="sub-content">
-                    <%= link_to "STAGES", managers_school_periods_path(academy: academy) %>
-                    <% if academy.annual %>
-                      <%= link_to "PROGRAMME ANNUEL", managers_annual_programs_path(academy: academy) %>
-                    <% end %>
-                    <%= link_to "ÉLÈVES", managers_students_path(academy: academy) %>
-                    <%= link_to "COACHS", managers_coaches_path(academy: academy) %>
-                    <%= link_to "CATEGORIES", managers_categories_path(academy: academy) %>
-                    <%= link_to "ADRESSES", managers_locations_path(academy: academy) %>
+          <% if current_user.admin? %>
+            <div class="dropdown" style="margin-left: -1px">
+              <li class="nav-item  nav-item-manager d-flex align-items-center justify-content-center">
+                <div class="nav-link nav-link-small" style="cursor:pointer">ADMIN</div>
+                <i class="fa fa-caret-down"></i>
+              </li>
+              <div class="dropdown-content">
+                  <div class="dropdown-sub">
+                    <span class="full-width-link">
+                      <%= link_to "ÉLÈVES", index_for_admin_managers_students_path, class: "nav-link nav-link-small nav-academy" %>
+                    </span>
                   </div>
-                </div>
+                  <div class="dropdown-sub">
+                    <span class="full-width-link">
+                      <div class="nav-link nav-link-small nav-academy">FINANCE</div>
+                    </span>
+                    <div class="sub-content">
+                      <%= link_to "COTISATION", membership_finances_overview_managers_finances_path %>
+                      <%= link_to "STAGES", managers_finances_path %>
+                    </div>
+                  </div>
+                  <div class="dropdown-sub">
+                    <span class="full-width-link">
+                      <div class="nav-link nav-link-small nav-academy">BILAN</div>
+                    </span>
+                    <div class="sub-content">
+                      <%= link_to "STAGES", index_for_admin_managers_school_periods_path %>
+                      <%= link_to "PROGRAMMES", index_for_admin_managers_annual_programs_path %>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          <% end %>
+          <% if current_user.manager? || current_user.coordinator? %>
+            <% if current_user.manager? %>
+              <% academies = current_user.academies_as_manager %>
+            <% elsif current_user.coordinator? %>
+              <% academies = current_user.academies_as_coordinator %>
+            <% end %>
+            <div class="dropdown" style="margin-left: -1px;">
+              <li class="nav-item nav-item-manager d-flex align-items-center justify-content-center">
+                <div class="nav-link nav-link-small" style="cursor:pointer">ACADEMIES</div>
+                <i class="fa fa-caret-down"></i>
+              </li>
+              <div class="dropdown-content">
+                <% academies.order(:created_at).each do |academy| %>
+                  <div class="dropdown-sub">
+                    <span class="full-width-link">
+                      <%= link_to academy.name.upcase, managers_academy_path(academy), class: "nav-link nav-link-small nav-academy" %>
+                    </span>
+                    <div class="sub-content">
+                      <%= link_to "STAGES", managers_school_periods_path(academy: academy) %>
+                      <% if academy.annual %>
+                        <%= link_to "PROGRAMME ANNUEL", managers_annual_programs_path(academy: academy) %>
+                      <% end %>
+                      <%= link_to "ÉLÈVES", managers_students_path(academy: academy) %>
+                      <%= link_to "COACHS", managers_coaches_path(academy: academy) %>
+                      <%= link_to "CATEGORIES", managers_categories_path(academy: academy) %>
+                      <%= link_to "ADRESSES", managers_locations_path(academy: academy) %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="dropdown" style="margin-left: -1px;">
+              <li class="nav-item nav-item-manager d-flex align-items-center justify-content-center">
+                <div class="nav-link nav-link-small" style="cursor:pointer">FINANCE</div>
+                <i class="fa fa-caret-down"></i>
+              </li>
+              <div class="dropdown-content">
+                  <div class="dropdown-sub">
+                    <span class="full-width-link">
+                      <%= link_to "COTISATION", membership_finances_overview_managers_finances_path, class: "nav-link nav-link-small nav-academy" %>
+                    </span>
+                  </div>
+                  <div class="dropdown-sub">
+                    <span class="full-width-link">
+                      <%= link_to "STAGES", managers_finances_path, class: "nav-link nav-link-small nav-academy" %>
+                    </span>
+                  </div>
+              </div>
+            </div>
+          <% end %>
+          <li class="nav-item nav-item-manager">
+            <%= link_to "MON PROFIL",  edit_user_registration_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item nav-item-manager" id="deconnection">
+            <%= link_to "SE DÉCONNECTER", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link"%>
+          </li>
+        <% elsif current_user.parent? %>
+          <li class="nav-item">
+            <%= link_to root_path, class: "nav-link" do %>
+              ACCUEIL <i class="fa-solid fa-home ms-2"></i>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to parents_academies_path, class: "nav-link" do %>
+              STAGES <i class="fa-solid fa-school ms-2"></i>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to commerce_cart_path, class: "nav-link" do %>
+              PANIER <i class="fa-solid fa-shopping-cart ms-2"></i>
+              <% if current_user.carts.current_cart_for(current_user).cart_items.any? %>
+                <span><%= current_user.carts.current_cart_for(current_user).cart_items.length %></span>
               <% end %>
-            </div>
-          </div>
-          <div class="dropdown" style="margin-left: -1px;">
-            <li class="nav-item d-flex align-items-center justify-content-center">
-              <div class="nav-link nav-link-small" style="cursor:pointer">FINANCE</div>
-              <i class="fa fa-caret-down"></i>
-            </li>
-            <div class="dropdown-content">
-                <div class="dropdown-sub">
-                  <span class="full-width-link">
-                    <%= link_to "COTISATION", membership_finances_overview_managers_finances_path, class: "nav-link nav-link-small nav-academy" %>
-                  </span>
-                </div>
-                <div class="dropdown-sub">
-                  <span class="full-width-link">
-                    <%= link_to "STAGES", managers_finances_path, class: "nav-link nav-link-small nav-academy" %>
-                  </span>
-                </div>
-            </div>
-          </div>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to parents_children_path, class: "nav-link" do %>
+              MES ENFANTS <i class="fa-solid fa-children ms-2"></i>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to edit_user_registration_path, class: "nav-link" do %>
+              MON COMPTE <i class="fa-solid fa-user-edit ms-2"></i>
+            <% end %>
+          </li>
+          <li class="nav-item" id="deconnection">
+            <%= link_to destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link" do %>
+              SE DÉCONNECTER <i class="fa-solid fa-sign-out ms-2"></i>
+            <% end %>
+          </li>
+        <% elsif current_user.no_role? %>
         <% end %>
-        <li class="nav-item">
-          <%= link_to "MON PROFIL",  edit_user_registration_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item" id="deconnection">
-          <%= link_to "SE DÉCONNECTER", destroy_user_session_path, data: {turbo_method: :delete}, class: "nav-link"%>
-        </li>
       <% else %>
+        <li class="nav-item">
+          <%= link_to "APPROCHE", "/#approche", class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "PROGRAMMATION", "/#programmation", class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "IMPACT", "/#impact", class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "ADHÉRER", "/#adherer", class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "NOUS SOUTENIR", "/#soutenir", class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "CONTACT", "/#contact", class: "nav-link" %>
+        </li>
         <li class="nav-item no-border">
-          <%= link_to "SE CONNECTER", new_user_session_path, class: "nav-link"%>
+          <%= link_to "CONNEXION", new_user_session_path, class: "nav-link", id: "connexion" %>
         </li>
       <% end %>
     </ul>

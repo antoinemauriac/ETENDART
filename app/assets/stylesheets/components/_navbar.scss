@@ -1,6 +1,6 @@
 .navbar {
   padding: 10px 20px;
-  background-color: $black;
+  background-color: white;
   position: fixed;
   top: 0;
   width: 100%;
@@ -13,12 +13,12 @@
 
 
 .navbar-brand {
-  color: $yellow;
+  color: $yellowbis;
   font-size: 24px;
   font-weight: 900;
 }
 .navbar-brand:hover {
-  color: $yellow;
+  color: $yellowbis;
 }
 
 .navbar-tog {
@@ -35,7 +35,7 @@
 /* Hamburger Icon */
 
 .icon-bar {
-  background-color: $yellow;
+  background-color: black;
   display: block;
   height: 3px;
   margin-bottom: 5px;
@@ -107,7 +107,7 @@
 }
 
 .nav-link {
-  color: $yellow;
+  color: black;
   text-decoration: none;
   text-transform: uppercase;
   font-size: 22px;
@@ -116,10 +116,10 @@
   font-size: 14px!important;
 }
 
-.nav-link:hover {
-  color: $yellow;
-  transition: 0.3s;
-}
+// .nav-link:hover {
+//   color: $yellowbis;
+//   transition: 0.3s;
+// }
 
 .navbar-collapse {
   display: none;
@@ -132,7 +132,13 @@
   margin-top: 0;
   display: flex;
   height: 100vh;
-  padding-bottom: 20vh;
+  padding-bottom: 10rem;
+
+  ul {
+    padding: 3rem;
+    display: flex;
+    align-items: self-end;
+  }
 }
 
 
@@ -147,12 +153,30 @@
 
 .nav-item {
   padding: 0px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background-color: black;
+    transition: width 0.7s ease;
+    transform: translateX(-50%);
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
 }
 
 
 @media (min-width: 850px) {
   .navbar {
     flex-wrap: nowrap;
+    border-bottom: 1px solid black;
   }
 
   .navbar-tog {
@@ -160,9 +184,13 @@
   }
 
   .nav-item {
-    padding: 0 2rem;
+    padding: 0 1rem;
     text-align: center;
-    border-right: 1px solid $yellow;
+    // border-right: 1px solid black;
+  }
+
+  .nav-item-manager {
+    padding: 0 2rem;
   }
 
 
@@ -184,7 +212,7 @@
 
   .nav-link {
     font-size: 14px;
-    color: white;
+    color: black;
   }
 
   .dashboard-details {
@@ -200,16 +228,16 @@
 .dropdown-content, .sub-content {
   display: none;
   position: absolute;
-  background-color: black;
-  color: white;
-  border-right: 1px solid $yellow;
-  border-left: 1px solid $yellow;
+  background-color: white;
+  color: black;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 4;
 }
 
 .dropdown-content > div, .dropdown-content > a, .sub-content a {
-  color: white;
+  color: black;
   padding: 0.5rem 2rem;
   text-decoration: none;
   display: block;
@@ -246,7 +274,7 @@
 
 
 .fa-caret-down {
-  color: $yellow;
+  color: black;
   margin-left: 5px;
 }
 
@@ -265,8 +293,8 @@
 .sub-content {
   display: none;
   position: absolute;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   top: 40%;
