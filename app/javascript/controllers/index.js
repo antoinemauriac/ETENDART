@@ -46,6 +46,12 @@ application.register("flashes", FlashesController)
 import Form__AutoSubmitController from "./form/auto_submit_controller"
 application.register("form--auto-submit", Form__AutoSubmitController)
 
+import Form__Children__ModalController from "./form/children/modal_controller"
+application.register("form--children--modal", Form__Children__ModalController)
+
+import Form__Children__SelectCheckController from "./form/children/select_check_controller"
+application.register("form--children--select-check", Form__Children__SelectCheckController)
+
 import Form__Enrollment__CampController from "./form/enrollment/camp_controller"
 application.register("form--enrollment--camp", Form__Enrollment__CampController)
 
