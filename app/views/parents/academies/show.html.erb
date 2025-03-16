@@ -1,19 +1,15 @@
 <h1 class="bg-black text-white text-center fs-4 py-3 px-2 fw-bold">
   <%= @academy.name.upcase %>
 </h1>
-<section class="container-sm p-3">
 
   <%# Il faut les school_periods avec l'année sur la row %>
   <%# les stages qui prennent une portion de row %>
   <%# il faut les lieux de l'academie %>
 
-  <div class="row">
+  <div class="row justify-content-center mt-3">
 
-    <div class="col-md-8">
-
-      <% if @academy.next_school_periods.any? %>
-
-        <% @academy.next_school_periods.each do |school_period| %>
+    <div class="col-12 col-lg-6">
+        <% @school_periods.each do |school_period| %>
 
           <div class="mb-3">
 
@@ -24,66 +20,54 @@
               <% if school_period.camps.any? %>
 
                 <% school_period.camps.each do |camp| %>
-
-                  <div class="col-md-6 col-6">
+                    <div class="col-12 col-sm-6 border-bottom mb-3 mb-sm-0">
                     <h5>
                       <%= camp.name.upcase %>
                     </h5>
-                    <small class="d-block mb-2">Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %></small>
+                    <p class="d-block mb-2">Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %></p>
                     <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>
 
-                    <hr class="mb-3">
 
-
-                  <% if camp.activities.any? %>
-                    <ul>
+                    <% if camp.activities.any? %>
+                      <ul class="mt-3">
                       <% camp.activities.pluck(:category_id).uniq.each do |category_id| %>
-                        <li>
-                          <%= Category.find(category_id).name %>
-                        </li>
+                        <h6>
+                        <%= Category.find(category_id).name %>
+                        </h6>
                       <% end %>
-                    </ul>
+                      </ul>
 
-                  <% else %>
-                    <p class="text-center">
+                    <% else %>
+                      <p class="text-center">
                       <em>
                         Soyez patients ! Les activités seront bientôt disponibles.
                       </em>
-                    </p>
-                  <% end %>
+                      </p>
+                    <% end %>
 
-                  </div>
+                    </div>
 
                 <% end %>
 
-                <div class="col-12 text-center">
-                  <hr class="mb-3">
-                  <%= link_to "INSCRIPTION", new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "btn btn-etendart rounded-pill px-3" %>
+                <div class="col-12 text-center mt-3">
+                  <%= link_to "INSCRIPTION", new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "btn btn-dark rounded-pill px-3" %>
                 </div>
 
                 <% else %>
-                <p class="text-center">
-                  <em>
-                    Restez patients ! Les stages seront bientôt disponibles.
-                  </em>
-                </p>
+                  <p class="text-center">
+                    <em>
+                      Restez patients ! Les stages seront bientôt disponibles.
+                    </em>
+                  </p>
               <% end %>
             </div>
 
           </div>
 
         <% end %>
-
-      <% else %>
-        <p class="text-center">
-          <em>
-            Restez patients ! Les stages seront bientôt disponibles.
-          </em>
-        </p>
-      <% end %>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-12 col-lg-4">
       <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center">
         LIEUX
       </h4>
@@ -103,4 +87,3 @@
     </div>
 
   </div>
-</section>

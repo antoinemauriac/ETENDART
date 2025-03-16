@@ -3,21 +3,36 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="form--children--select-check"
 export default class extends Controller {
 
-  static targets = [ "card, checkbox" ]
+  static targets = [ "card", "checkbox", "submitButton", "helperMessage", "buttonOverlay" ]
 
   connect() {
-    console.log("ceci est pour le formulaire");
+    this.updateSubmitButton()
   }
 
   toggle(event) {
-    console.log(event.currentTarget);
+    const card = event.currentTarget
+    const checkbox = card.querySelector('input[type="checkbox"]')
 
-    const card = event.currentTarget;
-    const checkbox = card.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked
+    card.classList.toggle('border')
+    card.classList.toggle('border-black')
+    card.classList.toggle('shadow')
+    
+    this.updateSubmitButton()
+    this.helperMessageTarget.classList.add('d-none')
+  }
 
-    checkbox.checked = !checkbox.checked;
-    card.classList.toggle('border');
-    card.classList.toggle('border-black');
-    card.classList.toggle('shadow');
+  updateSubmitButton() {
+    const checkedBoxes = this.checkboxTargets.filter(checkbox => checkbox.checked)
+    if (checkedBoxes.length === 0) {
+      this.buttonOverlayTarget.classList.remove('d-none')
+    } else {
+      this.buttonOverlayTarget.classList.add('d-none')
+    }
+  }
+
+  showHelper(event) {
+    event.preventDefault()
+    this.helperMessageTarget.classList.remove('d-none')
   }
 }

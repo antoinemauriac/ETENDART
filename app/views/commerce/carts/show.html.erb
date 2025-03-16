@@ -1,11 +1,11 @@
 <%# permet d'afficher tous les stages achetés et les cotisations en attente de paiement %>
 
-<h1 class="bg-black text-white text-center fs-4 py-3 fw-bold">
+<h1 class="bg-black text-white text-center fs-4 py-3 fw-bold mb-0">
   MON PANIER
 </h1>
 
 <% if @cart.cart_items.any? %>
-  <section class="container my-5 bg-white rounded-4 p-4">
+  <section class="container my-0 my-md-5 bg-white rounded-4 p-4">
 
     <div class="row">
       <div class="col-6 col-md-4">
@@ -126,6 +126,6 @@
 
 <% else %>
   <div class="container mt-5">
-    <p class="text-center">Votre panier est actuellement vide.</p>
+    <h6 class="text-center">Votre panier est actuellement vide.</h6>
   </div>
 <% end %>

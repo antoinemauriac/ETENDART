@@ -8,6 +8,6 @@ class Parents::AcademiesController < ApplicationController
   def show
     authorize([:parents, Academy])
     @academy = Academy.includes(:school_periods, :locations, :camps, :activities_through_camps).find(params[:id])
-    @school_period = @academy.next_school_periods.first
+    @school_periods = SchoolPeriod.with_future_camps.where(academy_id: @academy.id)
   end
 end

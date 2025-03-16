@@ -7,7 +7,6 @@
       <th>Montant</th>
       <th class="d-none d-md-table-cell">Date du paiement</th>
       <th class="d-none d-md-table-cell">Mode de paiement</th>
-      <th class="d-none d-md-table-cell">Reçu par</th>
       <th class="text-center">Payé ?</th>
     </tr>
   </thead>
@@ -23,21 +22,9 @@
       <% if camp_enrollment.paid? %>
         <td class="d-none d-md-table-cell"><%= camp_enrollment.payment_date.strftime("%d/%m/%Y") %></td>
         <td class="d-none d-md-table-cell"><%= camp_enrollment.payment_method %></td>
-        <td class="d-none d-md-table-cell"><%= camp_enrollment.receiver.full_name if camp_enrollment.receiver %></td>
       <% else %>
-        <td colspan="3" class="text-center d-none d-md-table-cell">
-          <% if camp_enrollment.cart_item %>
-            <%= link_to "Payer", commerce_cart_path, class: "btn btn-dark rounded-pill" %>
-          <% else %>
+        <td colspan="2" class="text-center d-none d-md-table-cell">
             En attente de paiement
-          <% end %>
-        </td>
-        <td colspan="2" class="text-center d-md-none">
-          <% if camp_enrollment.cart_item %>
-            <%= link_to "Payer", commerce_cart_path, class: "btn btn-dark rounded-pill" %>
-          <% else %>
-            En attente de paiement
-          <% end %>
         </td>
       <% end %>
       <td class="text-center">

@@ -11,49 +11,42 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
       return
     end
     @selected_student = params[:student_id].present? ? Student.find(params[:student_id]) : @students&.first
-    # retrouver les camps ou le selected_student n'est pas encore inscrit
-    enrolled_camp_ids = @selected_student
-                     .camp_enrollments
-                     .joins(:school_period_enrollment)
-                     .where(school_period_enrollments: { school_period_id: @school_period.id })
-                     .pluck(:camp_id)
-
-    @camps = @school_period.camps.where.not(id: enrolled_camp_ids)
+    enrolled_camps = @selected_student.camp_enrollments.where(camp: @school_period.camps)
+    @camps = @school_period.camps.where.not(id: enrolled_camps.pluck(:camp_id))
   end
 
   def create
     authorize([:parents, SchoolPeriodEnrollment])
-    # Il se peut qu'il y ait déjà un enrollment pour ce school_period et ce student
-    # Il faut donc vérifier si un enrollment existe déjà pour ce student et ce school_period
-    # il faut le retrouver ou l'initialiser
-    @academy = Academy.find(params[:academy_id])
-    @school_period = SchoolPeriod.find(params[:school_period_id])
-    @school_period_enrollment = SchoolPeriodEnrollment.find_or_initialize_by(
-      school_period_id: @school_period.id,
-      student_id: school_period_enrollment_params[:student_id]
+    academy = Academy.find(params[:academy_id])
+    school_period = SchoolPeriod.find(params[:school_period_id])
+    student = Student.find(school_period_enrollment_params[:student_id])
+    student.school_periods << school_period unless student.school_periods.include?(school_period)
+    student.academies << academy unless student.academies.include?(academy)
+    school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period)
+    camp_enrollments = []
+
+    params[:camp_ids].each do |camp_id|
+      camp = Camp.find(camp_id)
+      camp_enrollment = CampEnrollment.create!(
+        camp: camp,
+        student: student,
+        image_consent: student.photo_authorization || false,
+        stripe_price_id: camp.stripe_price_id
       )
 
-      # j'initialise camp_enrollments grâce à params[:camp_ids]
-      params[:camp_ids].each do |camp_id|
-        camp = Camp.find(camp_id)
-        camp_enrollment = @school_period_enrollment.camp_enrollments.build(camp: camp)
-        camp_enrollment.student = Student.find(school_period_enrollment_params[:student_id])
-        camp_enrollment.image_consent = camp_enrollment.student.photo_authorization || false
-        camp_enrollment.stripe_price_id = camp.stripe_price_id
+      camp_enrollments << camp_enrollment
 
-        # faire correspondre les activities avec les activités choisies et le bon camp
-        activity_params = params[:camp_id][camp_id]
-        next unless activity_params.present?
-        sport_activity_id  = activity_params[:sport_activity_id]
-        eveil_activity_id  = activity_params[:eveil_activity_id]
-        camp_enrollment.activity_enrollments.build(activity_id: sport_activity_id, student_id: camp_enrollment.student.id)
-        camp_enrollment.activity_enrollments.build(activity_id: eveil_activity_id, student_id: camp_enrollment.student.id)
-      end
+      activity_params = params[:camp_id][camp_id]
+      next unless activity_params.present?
+      sport_activity = Activity.find(activity_params[:sport_activity_id])
+      eveil_activity = Activity.find(activity_params[:eveil_activity_id])
+      student.activities << sport_activity unless student.activities.include?(sport_activity)
+      student.activities << eveil_activity unless student.activities.include?(eveil_activity)
+    end
 
-    if @school_period_enrollment.save
-
-      @school_period_enrollment.camp_enrollments.each do |camp_enrollment|
-        cart_item = Commerce::CartItem.create!(
+    if school_period_enrollment.save
+      camp_enrollments.each do |camp_enrollment|
+        Commerce::CartItem.create!(
           cart_id: current_user.pending_cart.id,
           student_id: camp_enrollment.student.id,
           product: camp_enrollment,
@@ -63,8 +56,39 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
         )
       end
 
+      start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
+      membership = student.memberships.find_by(start_year: start_year)
+      unless membership
+        membership = Membership.create!(
+          student: student,
+          start_year: start_year,
+          academy: academy,
+          amount: Membership::PRICE,
+          stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH"
+        )
+      end
+
+      unless membership.paid
+        existing_cart_item = Commerce::CartItem.find_by(
+          cart_id: current_user.pending_cart.id,
+          student_id: student.id,
+          product_type: "Membership"
+        )
+
+        unless existing_cart_item
+          Commerce::CartItem.create!(
+            cart_id: current_user.pending_cart.id,
+            student_id: student.id,
+            product: membership,
+            price: Membership::PRICE,
+            stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH",
+            name: "Adhésion #{start_year} - #{student.first_name} #{student.last_name}"
+          )
+        end
+      end
+
       if params[:another_child] == "Inscrire un autre enfant"
-        redirect_to new_parents_academy_school_period_school_period_enrollment_path(@academy, @school_period), notice: "L'inscription de votre enfant a bien été pré-enregistrée, veuillez inscrire un autre enfant"
+        redirect_to new_parents_academy_school_period_school_period_enrollment_path(academy, school_period), notice: "L'inscription de votre enfant a bien été pré-enregistrée, veuillez inscrire un autre enfant"
       else
         redirect_to commerce_cart_path, notice: "L'inscription de votre enfant a bien été pré-enregistrée"
       end
@@ -80,14 +104,9 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
     @school_period_enrollment = SchoolPeriodEnrollment.new
     @selected_student = Student.find(params[:student_id])
     @students = current_user.children
-    # @camps représente les camps ou le selected_student n'est pas encore inscrit
-    enrolled_camp_ids = @selected_student
-                     .camp_enrollments
-                     .joins(:school_period_enrollment)
-                     .where(school_period_enrollments: { school_period_id: @school_period.id })
-                     .pluck(:camp_id)
 
-    @camps = @school_period.camps.where.not(id: enrolled_camp_ids)
+    enrolled_camps = @selected_student.camp_enrollments.where(camp: @school_period.camps)
+    @camps = @school_period.camps.where.not(id: enrolled_camps.pluck(:camp_id))
     render :new
   end
 

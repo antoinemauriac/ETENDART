@@ -41,7 +41,8 @@ class Commerce::CheckoutController < ApplicationController
     camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
     camp_enrollment_cart_items.each do |item|
       item.product.update!(confirmed: true)
-      item.product.activity_enrollments.each do |activity_enrollment|
+      activity_enrollments = item.product.student.activity_enrollments.where(activity: item.product.camp.activities)
+      activity_enrollments.each do |activity_enrollment|
         activity_enrollment.update!(confirmed: true)
         student = activity_enrollment.student
         activity = activity_enrollment.activity

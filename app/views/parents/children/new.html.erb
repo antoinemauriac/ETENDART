@@ -22,8 +22,8 @@
             <%= f.input :last_name, label: "Nom" %>
           </div>
 
-<%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
-            end_year: 2025, include_blank: true %>
+        <%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
+                    end_year: 2025, include_blank: true %>
 
         </div>
 
@@ -38,7 +38,7 @@
         <div class="row mb-2">
 
           <div class="col-12">
-            <%= f.input :photo, as: :file %>
+            <%= f.input :photo, label: "Photo (optionnel)", as: :file %>
           </div>
 
           <div class="col-md-6">

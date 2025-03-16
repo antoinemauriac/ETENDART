@@ -60,8 +60,8 @@ class Parents::ChildrenController < ApplicationController
 
     @child.parent = @parent
     if @child.save
-      @child.must_pay_membership
-      redirect_to parents_child_path(@child), notice: notice_message
+      # @child.must_pay_membership
+      redirect_to parents_children_path, notice: notice_message
     else
       render :new, alert: 'Une erreur est survenue lors de la création de l\'élève.'
     end
