@@ -5,13 +5,6 @@ class CampEnrollment < ApplicationRecord
   has_one :academy, through: :school_period
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id, optional: true
 
-  # a l'aide d'un unique form, inscrire son enfant à une school_period + aux camps associés + activités associées
-  has_many :activity_enrollments, dependent: :destroy
-  has_many :activities, through: :activity_enrollments
-  accepts_nested_attributes_for :activity_enrollments, allow_destroy: true
-
-  belongs_to :school_period_enrollment, optional: true
-
 
   has_one :cart_item, as: :product, class_name: 'Commerce::CartItem', dependent: :destroy
 

@@ -14,7 +14,7 @@
         <ul class="card-text">
           <li class="d-flex align-items-center p-1">
             COTISANT <%= @start_year %>-<%= @start_year + 1 %>
-            <% if child.current_membership.paid %>
+            <% if child&.current_membership&.paid %>
               <i class="fa-solid fa-circle-check text-success fa-smal ms-2"></i>
             <% else %>
               <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small ms-2"></i>
