@@ -15,6 +15,8 @@ class CampEnrollment < ApplicationRecord
   scope :attended, -> { where(present: true) }
   scope :unattended, -> { where(present: false) }
 
+  scope :confirmed, -> { where(confirmed: true) }
+
   scope :banished, -> { where(banished: true) }
 
   scope :paid, -> { where(paid: true) }

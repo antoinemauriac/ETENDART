@@ -72,8 +72,8 @@ class Parents::ChildrenController < ApplicationController
     authorize [:parents, :student], :show?
     @start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     @membership = @child.memberships.find_by(start_year: @start_year)
-    @memberships = @child.memberships.includes(:receiver).order(start_year: :desc)
-    @camp_enrollments = @child.payable_camp_enrollments.includes(:camp, :receiver)
+    @memberships = @child.memberships.order(start_year: :desc)
+    @camp_enrollments = @child.payable_camp_enrollments.includes(:camp).order('camps.starts_at DESC')
     @camp_enrollment = @camp_enrollments.last
 
   end

@@ -293,6 +293,9 @@
 .dropdown-sub:hover > span > a {
   color: $yellow;
 }
+.dropdown-sub:hover > span > .nav-academy {
+  color: $yellow;
+}
 
 .dropdown-sub {
   position: relative;

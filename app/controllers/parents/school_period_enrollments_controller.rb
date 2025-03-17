@@ -32,7 +32,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
         student: student,
         image_consent: student.photo_authorization || false,
         stripe_price_id: camp.stripe_price_id
-      )
+      ) unless student.camp_enrollments.find_by(camp: camp)
 
       camp_enrollments << camp_enrollment
 
@@ -88,9 +88,9 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
       end
 
       if params[:another_child] == "Inscrire un autre enfant"
-        redirect_to new_parents_academy_school_period_school_period_enrollment_path(academy, school_period), notice: "L'inscription de votre enfant a bien été pré-enregistrée, veuillez inscrire un autre enfant"
+        redirect_to new_parents_academy_school_period_school_period_enrollment_path(academy, school_period), notice: "Inscription ajoutée au panier"
       else
-        redirect_to commerce_cart_path, notice: "L'inscription de votre enfant a bien été pré-enregistrée"
+        redirect_to commerce_cart_path, notice: "Inscription ajoutée au panier"
       end
     else
       redirect_to new_parents_academy_school_period_school_period_enrollment_path, alert: "Erreur lors de l'inscription de votre enfant"

@@ -1,53 +1,28 @@
-<!--<div class="flexy-admin">
-  <div class="grid-container container">
-    <%#= link_to index_for_admin_managers_students_path, class: "grid-item" do %>-->
-<!--      <div class="card-academy card-admin card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%#= asset_path 'camps.jpeg' %>')">
-        LES ÉLÈVES
-      </div>
-    <%# end %>-->
-    <%#= link_to index_for_admin_managers_school_periods_path, class: "grid-item" do %>
-<!--      <div class="card-academy card-admin card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%#= asset_path 'locations.jpeg' %>')">
-        BILAN DES STAGES
-      </div>
-    <%# end %>-->
-    <%#= link_to membership_finances_overview_managers_finances_path, class: "grid-item" do %>
-<!--      <div class="card-academy card-admin card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%#= asset_path 'coachs.jpeg' %>')">
-        SUIVI COTISATIONS
-      </div>
-    <%# end %>-->
-    <%#= link_to camp_finances_overview_managers_finances_path, class: "grid-item" do %>
-<!--      <div class="card-academy card-admin card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%#= asset_path 'categories.jpeg' %>')">
-        SUIVI STAGES
-      </div>
-    <%# end %>-->
-<!--  </div>
-</div>-->
-
 <div class="dashboard-container">
   <div class="row justify-content-center align-items-center mt-2">
     <%= link_to membership_finances_overview_managers_finances_path, class: "col-12 col-lg-5 mt-1" do %>
       <div class="card-academy card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path 'coachs.jpeg' %>')">
-        FINANCE - COTISATIONS
+        <h4 class="mb-0">FINANCE - COTISATIONS</h4>
       </div>
     <% end %>
     <%= link_to managers_finances_path, class: "col-12 col-lg-5 mt-1" do %>
       <div class="card-academy card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path 'categories.jpeg' %>')">
-        FINANCE - STAGES
+        <h4 class="mb-0">FINANCE - STAGES</h4>
       </div>
     <% end %>
     <%= link_to index_for_admin_managers_school_periods_path, class: "col-12 col-lg-5 mt-1" do %>
       <div class="card-academy card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path 'locations.jpeg' %>')">
-        BILAN - STAGES
+        <h4 class="mb-0">BILAN - STAGES</h4>
       </div>
     <% end %>
     <%= link_to index_for_admin_managers_annual_programs_path, class: "col-12 col-lg-5 mt-1" do %>
       <div class="card-academy card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path 'annual.jpeg' %>')">
-        BILAN - PROGRAMMES ANNUELS
+        <h4 class="mb-0">BILAN - PROGRAMMES ANNUELS</h4>
       </div>
     <% end %>
     <%= link_to index_for_admin_managers_students_path, class: "col-12 col-lg-5 mt-1" do %>
       <div class="card-academy card-admin" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path 'camps.jpeg' %>')">
-        LES ÉLÈVES
+        <h4 class="mb-0">LES ÉLÈVES</h4>
       </div>
     <% end %>
   </div>
