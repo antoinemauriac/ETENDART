@@ -37,10 +37,6 @@ Rails.application.routes.draw do
   authenticate :user, ->(user) { user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
-  
-  authenticated :user, ->(user) { user.parent? } do
-    root to: "parents/children#index", as: :parent_root
-  end
 
   root to: "pages#home"
 
