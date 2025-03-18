@@ -23,9 +23,9 @@
             </li>
           <% end %>
           <% if current_user.admin? %>
-            <div class="dropdown" style="margin-left: -1px">
-              <li class="nav-item  nav-item-manager d-flex align-items-center justify-content-center">
-                <div class="nav-link nav-link-small" style="cursor:pointer">ADMIN</div>
+            <div class="dropdown" style="margin-left: -1px;padding-top: 6px">
+              <li class="nav-item nav-item-manager d-flex align-items-center justify-content-center">
+                <h6 class="nav-link nav-link-small mb-0" style="cursor:pointer">ADMIN</h6>
                 <i class="fa fa-caret-down"></i>
               </li>
               <div class="dropdown-content">
@@ -161,22 +161,22 @@
         <% end %>
       <% else %>
         <li class="nav-item">
-          <h6 class="mb-0"><%= link_to "APPROCHE", "/#approche", class: "nav-link pt-3 pb-2" %></h6>
+          <h6 class="mb-0"><%= link_to "APPROCHE", "/#approche", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
-          <h6 class="mb-0"><%= link_to "PROGRAMMATION", "/#programmation", class: "nav-link pt-3 pb-2" %></h6>
+          <h6 class="mb-0"><%= link_to "PROGRAMMATION", "/#programmation", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
-          <h6 class="mb-0"><%= link_to "IMPACT", "/#impact", class: "nav-link pt-3 pb-2" %></h6>
+          <h6 class="mb-0"><%= link_to "IMPACT", "/#impact", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
-          <h6 class="mb-0"><%= link_to "ADHÉRER", "/#adherer", class: "nav-link pt-3 pb-2" %></h6>
+          <h6 class="mb-0"><%= link_to "ADHÉRER", "/#adherer", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
-          <h6 class="mb-0"><%= link_to "NOUS SOUTENIR", "/#soutenir", class: "nav-link pt-3 pb-2" %></h6>
+          <h6 class="mb-0"><%= link_to "NOUS SOUTENIR", "/#soutenir", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
-          <h6 class="mb-0"><%= link_to "CONTACT", "/#contact", class: "nav-link pt-3 pb-2" %></h6>
+          <h6 class="mb-0"><%= link_to "CONTACT", "/#contact", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item no-border">
           <h6 class="mb-0"><%= link_to "CONNEXION", new_user_session_path, class: "nav-link pt-3 pb-2", id: "connexion" %></h6>

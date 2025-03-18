@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
       resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
       resource.save
       new_parents_profile_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
+    elsif resource.parent? && resource.parent_profile
+      parents_children_path # Redirige vers la page d'accueil des parents
     else
       super # Utilise le chemin par défaut fourni par Devise ou celui que tu as configuré
     end
