@@ -1,10 +1,10 @@
-<h4 class="text-center bg-black text-white py-3 fw-bold">
+<h4 class="text-center bg-black text-white py-3 fw-bold mb-0">
   Ajouter un enfant
 </h4>
 
-<section class="container bg-white rounded-4 shadow p-3 my-3">
+<section class="row  justify-content-center bg-white rounded-4 shadow p-3 mb-3">
 
-  <%= simple_form_for @child, url: parents_children_path do |f| %>
+  <%= simple_form_for @child, url: parents_children_path, html: { class: "col-12 col-sm-10 col-md-8 col-lg-6" } do |f| %>
 
     <div class="form-inputs">
 
@@ -15,21 +15,22 @@
 
         <div class="row mb-2">
 
-          <div class="col-md-6">
+          <div class="col-12 col-md-6 justify-content-center">
             <%= f.input :first_name, label: "Prénom" %>
           </div>
-          <div class="col-md-6">
+           <div class="col-12 col-md-6 justify-content-center">
             <%= f.input :last_name, label: "Nom" %>
           </div>
-
-        <%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
+<!--          <div class="col-12 col-sm-10 col-lg-8 col-xl-6 justify-content-center">-->
+            <%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
                     end_year: 2025, include_blank: true %>
+          <!--</div>-->
 
         </div>
 
         <div class="row mb-2">
 
-            <div class="col-md-6">
+            <div class="col-12 col-sm-10 col-md-6 justify-content-center">
             <%= f.input :gender, label: "Genre", collection: ["Garçon", "Fille", "Autre"], include_blank: "Sélectionner un genre" %>
             </div>
 
