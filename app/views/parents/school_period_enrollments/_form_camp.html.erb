@@ -23,13 +23,13 @@
                   form__enrollment__camp_error_submit_target: "campCheckbox"
                   }, 
                   class: "me-2", style: "transform: scale(1.2);" %>
-                <h6 class="mb-0" style="font-size:0.8rem"><%= label_tag "camp_ids[]", "#{camp.name.upcase} (#{l(camp.starts_at, format: :birthday)} au #{l(camp.ends_at, format: :birthday)})" %></h6>
+                <h5 class="mb-0" style="font-size:0.8rem"><%= label_tag "camp_ids[]", "#{camp.name.upcase} (#{l(camp.starts_at, format: :birthday)} au #{l(camp.ends_at, format: :birthday)})" %></h5>
                 </div>
 
               <div class="row d-none" style="padding-left: 0;" data-form--enrollment--camp-target="camp">
                   <p style="padding-left: 0;">CHOISIR UNE ACTIVITÉ SPORT ET UNE ACTIVITÉ ÉVEIL</p>
                   <div class="col-8 col-sm-6" style="padding-left: 0;">
-                    <h6 class="form-label d-block mb-2 fw-bold mt-0">SPORT</h6>
+                    <h6 style="font-size: 0.9rem" class="form-label d-block mb-2 fw-bold mt-0">SPORT</h6>
                     <% sport_activities =  camp.activities.joins(:category).where(categories: { super_category: "Sport" }) %>
                     <% selected_sport_activities = sport_activities.select { |activity| !activity.age_restricted || activity.min_age <= @selected_student.age && activity.max_age > @selected_student.age} %>
                     <% selected_sport_activities.each do |activity| %>
@@ -81,6 +81,7 @@
                   </div>
               </div>
             </section>
+            <hr class="w-100">
           <% end %>
 
 
