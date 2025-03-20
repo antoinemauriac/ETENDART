@@ -1,4 +1,7 @@
-<div class="dashboard-container">
+<h1 class="bg-black parent-title text-center fs-4 py-3 fw-bold mb-0">
+  MES ACADÉMIES
+</h1>
+<div class="dashboard-container dashboard-container-manager">
   <div class="row justify-content-center align-items-center">
       <% @academies.each do |academy| %>
         <%= link_to managers_academy_path(academy), class: "col-12 col-lg-5 mt-1" do %>

@@ -4,14 +4,14 @@ require 'sidekiq/cron/web'
 Rails.application.routes.draw do
 
   # Pas besoin d'être authentifié pour accéder aux pages suivantes
-  resources :academies, only: %i[index show] do
-    resources :school_periods, only: %i[show] do
-      resources :activities, only: %i[show] do
-        resources :activity_enrollments, only: %i[create]
-      end
-    end
-  end
-  resources :activity_enrollments, only: %i[destroy]
+  # resources :academies, only: %i[index show] do
+  #   resources :school_periods, only: %i[show] do
+  #     resources :activities, only: %i[show] do
+  #       resources :activity_enrollments, only: %i[create]
+  #     end
+  #   end
+  # end
+  # resources :activity_enrollments, only: %i[destroy]
 
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
