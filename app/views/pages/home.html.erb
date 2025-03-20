@@ -22,44 +22,44 @@
         Tous nos projets combinent:
       </p>
 
-      <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 g-3">
+      <div class="row <!--row-cols-1 row-cols-md-3 row-cols-lg-6--> g-3">
 
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-2">
           <%= render "pages/components/card",
           src: "home/card-1.jpg",
           h3: "L'inspiration",
           p: "Par une infrastructure, un parrain, des expériences pédagogiques" %>
         </div>
 
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-2">
           <%= render "pages/components/card",
           src: "home/card-2.jpg",
           h3: "Un sport",
           p: "pilier de nos projets comme vecteur de développement et de transmission" %>
         </div>
 
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-2">
           <%= render "pages/components/card",
           src: "home/card-3.jpg",
           h3: "Des activités artistiques",
           p: "par une infrastructure, un parrain, des expériences pédagogiques" %>
         </div>
 
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-2">
           <%= render "pages/components/card",
           src: "home/card-4.jpg",
           h3: "Un format d'expérience",
           p: "stages, programmes annuels ou événements" %>
         </div>
 
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-2">
           <%= render "pages/components/card",
           src: "home/card-5.JPG",
           h3: "Un projet éducatif",
           p: "chaque activité permet de travailler des axes de développement personnel" %>
         </div>
 
-        <div class="col">
+        <div class="col-12 col-sm-6 col-lg-2">
           <%= render "pages/components/card",
           src: "home/card-6.jpg",
           h3: "Des valeurs",
@@ -81,13 +81,13 @@
 
       <ul class="d-flex gap-3 mb-3 flex-wrap">
 
-            <li>
-              <button class="rounded-pill btn text-black bg-white px-4 py-2"
-                data-action="click->home--filter#filter" data-home--filter-target="allButton"
-                data-academy-id="all">
-                Toutes les académies
-              </button>
-            </li>
+        <li>
+          <button class="rounded-pill btn text-black bg-white px-4 py-2"
+            data-action="click->home--filter#filter" data-home--filter-target="allButton"
+            data-academy-id="all">
+            Toutes les académies
+          </button>
+        </li>
         <% @academies.each do |academy| %>
           <li class="">
             <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
@@ -482,39 +482,3 @@
 
       </div>
   </footer>
-
-
-  <!--
-    <% @academies.each do |academy| %>
-      <div class="academy">
-        <%= link_to academy_path(academy) do %>
-
-          <h2 class="my-3">
-            <%= academy.name %>
-          </h2>
-
-          <div class="row">
-            <% academy.next_school_periods.each do |school_period|  %>
-              <div class="col-md-4 border p-3">
-                <h3><%= school_period.name %> <%= school_period.year %></h3>
-
-                <div class="row">
-
-                  <% school_period.activities.each do |activity| %>
-                    <div class="col-md-6">
-                      <h4><%= activity.name %></h4>
-                    </div>
-                  <% end %>
-
-                </div>
-
-
-              </div>
-
-            <% end %>
-          </div>
-
-        <% end %>
-      </div>
-    <% end %>
-  -->

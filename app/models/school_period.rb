@@ -262,6 +262,13 @@ class SchoolPeriod < ApplicationRecord
       .includes(:academy)
   end
 
+  def camps_with_activities
+    camps.joins(:activities)
+         .where('camps.starts_at > ?', Date.current)
+         .group('camps.id')
+         .having('COUNT(activities.id) >= 2')
+  end
+
   private
 
   def normalize_name

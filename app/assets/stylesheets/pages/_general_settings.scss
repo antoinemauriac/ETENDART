@@ -65,6 +65,10 @@ ul {
   justify-content: center;
 }
 
+.dashboard-container-manager {
+  min-height: calc(100vh - 128px);
+}
+
 .blur-effect {
   filter: blur(2px);
   transition: filter 0.1s ease; /* Transition fluide */

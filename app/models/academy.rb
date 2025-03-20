@@ -91,7 +91,13 @@ class Academy < ApplicationRecord
   end
 
   def next_school_periods
-    school_periods.select { |school_period| !school_period.ended? }
+    school_periods
+      .joins(:camps)
+      .joins('INNER JOIN activities ON activities.camp_id = camps.id')
+      .where('camps.starts_at > ?', Date.today)
+      .group('school_periods.id')
+      .having('COUNT(activities.id) >= 2')
+      .distinct
   end
 
   def short_name
