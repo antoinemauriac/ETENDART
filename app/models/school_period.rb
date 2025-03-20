@@ -33,6 +33,10 @@ class SchoolPeriod < ApplicationRecord
     "#{name} - #{year}"
   end
 
+  def full_name_short
+    "#{name}#{year.to_s.last(2)}"
+  end
+
   def students_count
     students.count
   end
