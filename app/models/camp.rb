@@ -120,6 +120,10 @@ class Camp < ApplicationRecord
 
   ###################################################################################
 
+  def short_name
+    name.split("").first + name.split("").last
+  end
+
   def current?
     ends_at >= Time.current - 7.days
   end

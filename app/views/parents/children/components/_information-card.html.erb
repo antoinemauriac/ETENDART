@@ -1,15 +1,15 @@
 <section class="row g-3">
-  <div class="col-12 col-md-4">
+  <div class="col-12 col-md-3">
     <div class="ratio ratio-1x1">
       <% if child.photo.key %>
-        <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
+      <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
       <% else %>
-        <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
+      <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
       <% end %>
     </div>
   </div>
-  <div class="col-12 col-md-8">
-    <section class="row" id="infos-card">
+  <div class="col-12 col-md-9">
+    <section class="row justify-content-center" id="infos-card">
       <div class="col-md-6 col-12">
         <ul class="card-text">
           <li class="d-flex align-items-center p-1">
@@ -25,7 +25,7 @@
           </li>
           <li class="p-1">
             <% if child.gender.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Genre non renseigné
               </p>
@@ -37,7 +37,7 @@
           </li>
           <li class="p-1">
             <% if child.date_of_birth.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Date de naissance non renseignée
               </p>
@@ -50,7 +50,7 @@
 
           <li class="p-1">
             <% if child.email.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Email non renseigné
               </p>
@@ -63,7 +63,7 @@
 
           <li class="p-1">
             <% if child.phone_number.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Numéro de téléphone non renseigné
               </p>
@@ -81,7 +81,7 @@
 
           <li class="p-1">
             <% if child.address.blank? || child.zipcode.blank? || child.city.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Adresse non renseignée
               </p>
@@ -94,7 +94,7 @@
 
           <li class="p-1">
             <% if child.school.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Etablissement scolaire non renseigné
               </p>
@@ -107,7 +107,7 @@
 
           <li class="p-1">
             <% if child.siblings_count.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Nombre de frères et soeurs non renseigné
               </p>
@@ -119,7 +119,7 @@
           </li>
           <li class="p-1">
             <% if child.has_consent_for_photos.nil? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Consentement pour les photos non renseigné
               </p>
@@ -132,7 +132,7 @@
 
           <li class="p-1">
             <% if child.allergy.blank? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Allergie non renseignée
               </p>
@@ -145,7 +145,7 @@
 
           <li class="p-1">
             <% if child.has_medical_treatment.nil? %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Traitement médical non renseigné
               </p>
@@ -158,7 +158,7 @@
 
           <li class="p-1">
             <% if child.medical_treatment_description.blank? && child.has_medical_treatment %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Description du traitement médical non renseignée
               </p>
@@ -171,7 +171,7 @@
 
           <li class="p-1">
             <% if child.rules_signed.nil? || child.rules_signed == false %>
-              <p class="text-danger">
+              <p class="text-warning">
                 <i class="fa-solid fa-exclamation-triangle"></i>
                 Règlement non signé
               </p>

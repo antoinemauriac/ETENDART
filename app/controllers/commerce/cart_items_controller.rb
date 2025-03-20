@@ -45,7 +45,7 @@ class Commerce::CartItemsController < ApplicationController
       end
     end
 
-    redirect_to commerce_cart_path, notice: "L'article a bien été supprimé. L'inscription au stage a également été annulée"
+    redirect_to commerce_cart_path, alert: "L'article a bien été supprimé. L'inscription au stage a également été annulée"
   end
 
   private

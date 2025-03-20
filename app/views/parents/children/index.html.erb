@@ -42,11 +42,11 @@
               <li class="row g-3 col-12 col-md-6 col-lg-4 bg-white rounded-4" style="cursor:pointer" data-action="click->form--children--select-check#toggle" data-form--children--select-check-target="card">
                       <div class="col-4 p-3">
                         <div class="ratio ratio-1x1">
-                        <% if child.photo.key %>
-                          <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
-                        <% else %>
-                          <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
-                        <% end %>
+                          <% if child.photo.key %>
+                            <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
+                          <% else %>
+                            <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
+                          <% end %>
                         </div>
                       </div>
 
@@ -144,7 +144,7 @@
               </li>
               <li class="p-1">
                 <% if child.any_lack_of_infos? %>
-                <p class="text-danger">
+                <p class="text-warning">
                   <i class="fa-solid fa-exclamation-triangle"></i>
                   Il manque des informations
                 </p>

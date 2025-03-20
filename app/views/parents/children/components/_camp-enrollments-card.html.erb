@@ -1,33 +1,34 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Académie</th>
-      <th>Stage</th>
-      <th>Semaine</th>
-      <th>Montant</th>
-      <th class="d-none d-md-table-cell">Date du paiement</th>
-      <th class="d-none d-md-table-cell">Mode de paiement</th>
-      <th class="text-center">Payé ?</th>
+      <th class="align-middle">Académie</th>
+      <th class="align-middle">Stage</th>
+      <th class="align-middle d-none d-md-table-cell">Semaine</th>
+      <th class="align-middle">Montant</th>
+      <th class="align-middle d-none d-md-table-cell">Date du paiement</th>
+      <th class="align-middle d-none d-md-table-cell">Mode de paiement</th>
+      <th class="align-middle text-center">Payé ?</th>
     </tr>
   </thead>
   <tbody>
     <% camp_enrollments.each do |camp_enrollment| %>
     <%# permet d'afficher les stages payés ou en attente de paiement par l'enfant %>
     <tr>
-      <td><%= camp_enrollment.camp.academy.name %></td>
-      <td><%= camp_enrollment.school_period.name %> <%= camp_enrollment.school_period.year %> </td>
-      <td><%= camp_enrollment.camp.name %></td>
-      <td><%= "#{camp_enrollment.school_period.price} €" %></td>
+      <td class="align-middle"><%= camp_enrollment.camp.academy.name %></td>
+      <td class="align-middle d-table-cell d-md-none"><%= camp_enrollment.school_period.full_name_short %>-<%= camp_enrollment.camp.short_name %></td>
+      <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.school_period.name %> <%= camp_enrollment.school_period.year %> </td>
+      <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.camp.name %></td>
+      <td class="align-middle"><%= "#{camp_enrollment.school_period.price} €" %></td>
 
       <% if camp_enrollment.paid? %>
-        <td class="d-none d-md-table-cell"><%= camp_enrollment.payment_date.strftime("%d/%m/%Y") %></td>
-        <td class="d-none d-md-table-cell"><%= camp_enrollment.payment_method %></td>
+        <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.payment_date.strftime("%d/%m/%Y") %></td>
+        <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.payment_method %></td>
       <% else %>
-        <td colspan="2" class="text-center d-none d-md-table-cell">
+        <td colspan="2" class="align-middle text-center d-none d-md-table-cell">
             En attente de paiement
         </td>
       <% end %>
-      <td class="text-center">
+      <td class="align-middle text-center">
         <% if camp_enrollment.paid %>
           <i class="fa-solid fa-circle-check text-success fa-small"></i>
         <% else %>
@@ -37,7 +38,3 @@
     <% end %>
   </tbody>
 </table>
-
-
-
-<%# render "parents/children/components/camp-enrollments-card", camp_enrollments: @camp_enrollments %>

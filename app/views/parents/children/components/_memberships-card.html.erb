@@ -4,7 +4,7 @@
     <tr>
       <th>Année</th>
       <th>Montant</th>
-      <th>Date du paiement</th>
+      <th class="d-none d-md-table-cell">Date du paiement</th>
       <th class="text-center">Payé ?</th>
     </tr>
   </thead>
@@ -17,9 +17,9 @@
       <td><%= "#{membership.amount} €" %></td>
 
       <% if membership.paid? %>
-        <td><%= membership.payment_date.strftime("%d/%m/%Y") %></td>
+        <td class="d-none d-md-table-cell"><%= membership.payment_date.strftime("%d/%m/%Y") %></td>
       <% else %>
-        <td></td>
+        <td class="d-none d-md-table-cell"></td>
       <% end %>
       <td class="text-center">
         <% if membership.paid? %>
