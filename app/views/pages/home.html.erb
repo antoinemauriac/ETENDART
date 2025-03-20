@@ -1,484 +1,485 @@
 
+<div class="pages-home">
+  <%# Section avec titre et background avec image opaque avec class bootstrap %>
+    <section id="hero-section" class="text-white d-flex align-content-center py-5">
+      <div class="container d-flex align-content-center flex-wrap">
+        <h1 class="text-center my-3 fs-3">
 
-<%# Section avec titre et background avec image opaque avec class bootstrap %>
-  <section id="hero-section" class="text-white d-flex align-content-center py-5">
-    <div class="container d-flex align-content-center flex-wrap">
-      <h1 class="text-center my-3 fs-3">
+            Etendart Academy, l'association qui favorise le développement personnel des jeunes grâce à l'initiation au sport et aux arts.
 
-          Etendart Academy, l'association qui favorise le développement personnel des jeunes grâce à l'initiation au sport et aux arts.
-
-      </h1>
-    </div>
-  </section>
-
-  <%# section "Notre approche" en parlant des projets et de la philosophie. bg-white avec 6 cards %>
-
-  <section class="bg-white py-5 px-3 rounded-top-5 mt-n4 z-3 position-relative">
-    <div class="">
-      <h2 id="approche">
-        <strong>Notre approche</strong>
-      </h2>
-      <p>
-        Tous nos projets combinent:
-      </p>
-
-      <div class="row <!--row-cols-1 row-cols-md-3 row-cols-lg-6--> g-3">
-
-        <div class="col-12 col-sm-6 col-lg-2">
-          <%= render "pages/components/card",
-          src: "home/card-1.jpg",
-          h3: "L'inspiration",
-          p: "Par une infrastructure, un parrain, des expériences pédagogiques" %>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-2">
-          <%= render "pages/components/card",
-          src: "home/card-2.jpg",
-          h3: "Un sport",
-          p: "pilier de nos projets comme vecteur de développement et de transmission" %>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-2">
-          <%= render "pages/components/card",
-          src: "home/card-3.jpg",
-          h3: "Des activités artistiques",
-          p: "par une infrastructure, un parrain, des expériences pédagogiques" %>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-2">
-          <%= render "pages/components/card",
-          src: "home/card-4.jpg",
-          h3: "Un format d'expérience",
-          p: "stages, programmes annuels ou événements" %>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-2">
-          <%= render "pages/components/card",
-          src: "home/card-5.JPG",
-          h3: "Un projet éducatif",
-          p: "chaque activité permet de travailler des axes de développement personnel" %>
-        </div>
-
-        <div class="col-12 col-sm-6 col-lg-2">
-          <%= render "pages/components/card",
-          src: "home/card-6.jpg",
-          h3: "Des valeurs",
-          p: "mixité sociale, parité, fair-play et partage" %>
-        </div>
-
+        </h1>
       </div>
-    </div>
+    </section>
 
-  </section>
+    <%# section "Notre approche" en parlant des projets et de la philosophie. bg-white avec 6 cards %>
 
-  <%# section "Programmation à venir sur l'ensemble des académies" %>
+    <section class="bg-white py-5 px-3 rounded-top-5 mt-n4 z-3 position-relative">
+      <div class="">
+        <h2 id="approche">
+          <strong>Notre approche</strong>
+        </h2>
+        <p>
+          Tous nos projets combinent:
+        </p>
 
-  <section class="bg-black text-white py-5 rounded-top-5">
-    <div class="container" data-controller="home--filter">
-      <h2 class="mb-3" id="programmation">
-        Programmation à venir sur l'ensemble des académies
-      </h2>
+        <div class="row <!--row-cols-1 row-cols-md-3 row-cols-lg-6--> g-3">
 
-      <ul class="d-flex gap-3 mb-3 flex-wrap">
+          <div class="col-12 col-sm-6 col-lg-2">
+            <%= render "pages/components/card",
+            src: "home/card-1.jpg",
+            h3: "L'inspiration",
+            p: "Par une infrastructure, un parrain, des expériences pédagogiques" %>
+          </div>
 
-        <li>
-          <button class="rounded-pill btn text-black bg-white px-4 py-2"
-            data-action="click->home--filter#filter" data-home--filter-target="allButton"
-            data-academy-id="all">
-            Toutes les académies
-          </button>
-        </li>
-        <% @academies.each do |academy| %>
-          <li class="">
-            <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
-              <%= academy.name %>
+          <div class="col-12 col-sm-6 col-lg-2">
+            <%= render "pages/components/card",
+            src: "home/card-2.jpg",
+            h3: "Un sport",
+            p: "pilier de nos projets comme vecteur de développement et de transmission" %>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-2">
+            <%= render "pages/components/card",
+            src: "home/card-3.jpg",
+            h3: "Des activités artistiques",
+            p: "par une infrastructure, un parrain, des expériences pédagogiques" %>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-2">
+            <%= render "pages/components/card",
+            src: "home/card-4.jpg",
+            h3: "Un format d'expérience",
+            p: "stages, programmes annuels ou événements" %>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-2">
+            <%= render "pages/components/card",
+            src: "home/card-5.JPG",
+            h3: "Un projet éducatif",
+            p: "chaque activité permet de travailler des axes de développement personnel" %>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-2">
+            <%= render "pages/components/card",
+            src: "home/card-6.jpg",
+            h3: "Des valeurs",
+            p: "mixité sociale, parité, fair-play et partage" %>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <%# section "Programmation à venir sur l'ensemble des académies" %>
+
+    <section class="bg-black text-white py-5 rounded-top-5">
+      <div class="container" data-controller="home--filter">
+        <h2 class="mb-3" id="programmation">
+          Programmation à venir sur l'ensemble des académies
+        </h2>
+
+        <ul class="d-flex gap-3 mb-3 flex-wrap">
+
+          <li>
+            <button class="rounded-pill btn text-black bg-white px-4 py-2"
+              data-action="click->home--filter#filter" data-home--filter-target="allButton"
+              data-academy-id="all">
+              Toutes les académies
             </button>
           </li>
-        <% end %>
-      </ul>
-      <div class="bg-white row text-black p-3 rounded-3">
-        <% @academies.each do |academy| %>
-          <% if academy.next_school_periods.any? %>
-            <%= link_to parents_academy_path(academy), class: "text-black text-decoration-none" do %>
+          <% @academies.each do |academy| %>
+            <li class="">
+              <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
+                <%= academy.name %>
+              </button>
+            </li>
+          <% end %>
+        </ul>
+        <div class="bg-white row text-black p-3 rounded-3">
+          <% @academies.each do |academy| %>
+            <% if academy.next_school_periods.any? %>
+              <%= link_to parents_academy_path(academy), class: "text-black text-decoration-none" do %>
+                <div class="row py-3 align-items-center border-bottom" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                  <div class="col-4 col-md-4">
+                    <%= academy.name %>
+                  </div>
+                  <div class="col-4 col-md-2">
+                    <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+                  </div>
+                  <div class="d-none d-md-block col-md-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                      <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                      <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                    </svg>
+                    <%= academy.city %>
+                  </div>
+                  <div class="col-4 col-md-2 text-center">
+                    <strong>S'inscrire</strong>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                    </svg>
+                  </div>
+                </div>
+              <% end %>
+            <% else %>
               <div class="row py-3 align-items-center border-bottom" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
                 <div class="col-4 col-md-4">
                   <%= academy.name %>
                 </div>
-                <div class="col-4 col-md-2">
-                  <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
-                </div>
-                <div class="d-none d-md-block col-md-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                  </svg>
-                  <%= academy.city %>
-                </div>
-                <div class="col-4 col-md-2 text-center">
-                  <strong>S'inscrire</strong>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                  </svg>
+                <div class="col-8 text-start">
+                  <em>Pas de stage à venir pour le moment</em>
                 </div>
               </div>
             <% end %>
-          <% else %>
-            <div class="row py-3 align-items-center border-bottom" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
-              <div class="col-4 col-md-4">
-                <%= academy.name %>
-              </div>
-              <div class="col-8 text-start">
-                <em>Pas de stage à venir pour le moment</em>
-              </div>
-            </div>
           <% end %>
-        <% end %>
+        </div>
+
+
       </div>
 
+    </section>
 
-    </div>
+    <%# section "Notre impact" %>
 
-  </section>
+    <section class="bg-white py-5 rounded-top-5">
+      <div class="container">
+        <h2 id="impact">
+          <strong>
+            Notre impact
+          </strong>
+        </h2>
+        <p>
+          Pour plus d'informations, <%= link_to "téléchargez notre rapport d'impact", "#", class: "text-decoration-underline" %>
+        </p>
 
-  <%# section "Notre impact" %>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 my-5">
+          <div class="col">
+            <div class="card rounded-5 border-0" style="background-color: #E8FF6E; height: 24rem">
 
-  <section class="bg-white py-5 rounded-top-5">
-    <div class="container">
-      <h2 id="impact">
-        <strong>
-          Notre impact
-        </strong>
-      </h2>
-      <p>
-        Pour plus d'informations, <%= link_to "téléchargez notre rapport d'impact", "#", class: "text-decoration-underline" %>
-      </p>
-
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 my-5">
-        <div class="col">
-          <div class="card rounded-5 border-0" style="background-color: #E8FF6E; height: 24rem">
-
-            <div class="card-body align-content-center text-center">
-              <h3 class="card-title text-center" style= "font-size: 6rem">
-                <strong>
-                  11
-                </strong>
-              </h3>
-              <p class="card-text">
-                Académies Etendart dans 9 villes à travers la France
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card rounded-5 border-0 bg-dark" style="height: 24rem">
-            <%= image_tag "home/impact-img-1.jpg", class: "card-img rounded-5 opacity-50 object-fit-cover", style: "height: 24rem" %>
-
-            <div class="card-img-overlay align-content-center text-center text-white">
-              <h3 class="card-title" style= "font-size: 4rem">
-                <strong>
-                  + DE
-                  <br>
-                  5000
-                </strong>
-              </h3>
-              <p class="card-text">
-                jeunes accompagnés depuis notre lancement
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card rounded-5 h-100 border-0 bg-black ">
-            <div class="card-body text-white  align-content-center text-center">
-              <h3 class="card-title" style= "font-size: 4rem;">
-                <strong>
-                  + DE
-                  <br>
-                  30
-                </strong>
-              </h3>
-              <p class="card-text">
-                activités artistiques, académiques ou citoyennes proposées
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="card rounded-5 border-0 bg-dark">
-            <%= image_tag "home/rudy-court-90deg.jpg", class: "card-img rounded-5 opacity-50 object-fit-cover", style: "height: 24rem;" %>
-
-            <div class="card-img-overlay align-content-center text-center text-white">
-              <h3 class="card-title">
-                <strong style="font-size: 4rem">
-                  5
-                </strong>
-                <br>
-                <strong style="font-size: 3rem">
-                  SPORTS
-                </strong>
-              </h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <section class="bg-white rounded-top-5" id="adherer">
-    <%= image_tag "home/bg-section-experience.jpg", class: "w-100 object-fit-cover rounded-top-5" %>
-  </section>
-
-  <%# section "Tu veux participer ?" %>
-
-  <section class="" style="background-color: #E8FF6E">
-    <div class="container py-5">
-      <h2 class="text-center mb-1">
-        <strong>
-          Tu veux participer à une de nos expériences ?
-        </strong>
-      </h2>
-      <p class="text-center mb-3">
-        Si tu as entre 8 et 17 ans, tu peux adhérer à Etendart Academy et avoir accès à nos programmes pédagogiques près de chez toi.
-      </p>
-
-      <div class="text-center">
-        <%= link_to "Adhérer", new_user_registration_path, class: "btn btn-dark rounded-4 px-4" %>
-      </div>
-    </div>
-  </section>
-
-  <%# section "Nous soutenir" %>
-
-  <section class="bg-white rounded-top-5">
-    <div class="container py-5">
-      <h2 id="soutenir">
-        Nous soutenir
-      </h2>
-
-      <div class="row g-3">
-        <div class="col-md-6">
-          <div class="card rounded-5 bg-black border-0" style="height: 40rem">
-            <%= image_tag "home/soutenir-card-1.jpeg", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
-            <div class="card-body">
-              <p class="card-text text-white p-3">
-                Vous souhaitez soutenir notre association ? En effectuant un don, vous soutenez nos programmes éducatifs et le déploiement de nouvelles actions.
-              </p>
-              <div class="text-center">
-                <%= link_to "Faire un don", "https://www.helloasso.com/associations/etendart/formulaires/1", class: "btn px-4 rounded-4", target:"_blank", style: "background-color: #E8FF6E" %>
+              <div class="card-body align-content-center text-center">
+                <h3 class="card-title text-center" style= "font-size: 6rem">
+                  <strong>
+                    11
+                  </strong>
+                </h3>
+                <p class="card-text">
+                  Académies Etendart dans 9 villes à travers la France
+                </p>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-6">
-          <div class="card rounded-5 bg-black border-0" style="height: 40rem">
-            <%= image_tag "home/benevole.JPG", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
-            <div class="card-body">
-              <p class="card-text text-white p-3">
-                Vous souhaitez vous impliquer à nos côtés en proposant du temps ou vos compétences ? Rejoignez-nous.
-              </p>
-              <div class="text-center">
-                <%= link_to "Devenir bénévole", "https://share.hsforms.com/1xbzYpVRsQFyCIsF8DfGBqQ59bk3", class: "btn px-4 rounded-4", target:"_blank", style: "background-color: #E8FF6E" %>
+          <div class="col">
+            <div class="card rounded-5 border-0 bg-dark" style="height: 24rem">
+              <%= image_tag "home/impact-img-1.jpg", class: "card-img rounded-5 opacity-50 object-fit-cover", style: "height: 24rem" %>
+
+              <div class="card-img-overlay align-content-center text-center text-white">
+                <h3 class="card-title" style= "font-size: 4rem">
+                  <strong>
+                    + DE
+                    <br>
+                    5000
+                  </strong>
+                </h3>
+                <p class="card-text">
+                  jeunes accompagnés depuis notre lancement
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card rounded-5 h-100 border-0 bg-black ">
+              <div class="card-body text-white  align-content-center text-center">
+                <h3 class="card-title" style= "font-size: 4rem;">
+                  <strong>
+                    + DE
+                    <br>
+                    30
+                  </strong>
+                </h3>
+                <p class="card-text">
+                  activités artistiques, académiques ou citoyennes proposées
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card rounded-5 border-0 bg-dark">
+              <%= image_tag "home/rudy-court-90deg.jpg", class: "card-img rounded-5 opacity-50 object-fit-cover", style: "height: 24rem;" %>
+
+              <div class="card-img-overlay align-content-center text-center text-white">
+                <h3 class="card-title">
+                  <strong style="font-size: 4rem">
+                    5
+                  </strong>
+                  <br>
+                  <strong style="font-size: 3rem">
+                    SPORTS
+                  </strong>
+                </h3>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-  </section>
+    </section>
 
-  <%# section "Ils parlent d'Etendart Academy" %>
+    <section class="bg-white rounded-top-5" id="adherer">
+      <%= image_tag "home/bg-section-experience.jpg", class: "w-100 object-fit-cover rounded-top-5" %>
+    </section>
 
-  <section class="bg-black rounded-top-5">
-    <div class="container py-5">
+    <%# section "Tu veux participer ?" %>
 
-      <h2 class="text-white mb-5">
-        Ils parlent d'Etendart Academy
-      </h2>
+    <section class="" style="background-color: #E8FF6E">
+      <div class="container py-5">
+        <h2 class="text-center mb-1">
+          <strong>
+            Tu veux participer à une de nos expériences ?
+          </strong>
+        </h2>
+        <p class="text-center mb-3">
+          Si tu as entre 8 et 17 ans, tu peux adhérer à Etendart Academy et avoir accès à nos programmes pédagogiques près de chez toi.
+        </p>
 
-      <div class="row justify-content-center g-3 mb-3">
-
-        <div class="col-md-5">
-          <div class="card rounded-5 bg-white border-0">
-            <div class="card-body p-4">
-              <p class="card-text">
-                "Mes filles Jamelia et Shaina ont adoré sortir et découvrir un autre univers, loin de leur département. Je ne les ai jamais vues autant motivées à se lever le matin !"
-              </p>
-              <p class="">
-                <strong>Grégory</strong>
-              </p>
-            </div>
-          </div>
+        <div class="text-center">
+          <%= link_to "Adhérer", new_user_registration_path, class: "btn btn-dark rounded-4 px-4" %>
         </div>
-
-        <div class="col-md-5">
-          <div class="card rounded-5 bg-white border-0">
-            <div class="card-body p-4">
-              <p class="card-text">
-                "2ème session pour mon fils Melvin. A chaque fois il est super motivé et rentre plus que ravi. Bravo et merci pour ces stages qui apportent beaucoup aux jeunes."
-              </p>
-              <p class="">
-                <strong>Krystel</strong>
-              </p>
-            </div>
-          </div>
-        </div>
-
       </div>
+    </section>
 
-      <div class="row justify-content-center g-3">
+    <%# section "Nous soutenir" %>
 
-        <div class="col-md-5">
-          <div class="card rounded-5 bg-white border-0">
-            <div class="card-body p-4">
-              <p class="card-text">
-                "Les stages sont biens, good vibes, il y a une bonne ambiance. On s'entend tous bien, petits et grands, on joue tous ensemble. Il n'y a pas de jugement."
-              </p>
-              <p class="">
-                <strong></strong>
-              </p>
+    <section class="bg-white rounded-top-5">
+      <div class="container py-5">
+        <h2 id="soutenir">
+          Nous soutenir
+        </h2>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="card rounded-5 bg-black border-0" style="height: 40rem">
+              <%= image_tag "home/soutenir-card-1.jpeg", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
+              <div class="card-body">
+                <p class="card-text text-white p-3">
+                  Vous souhaitez soutenir notre association ? En effectuant un don, vous soutenez nos programmes éducatifs et le déploiement de nouvelles actions.
+                </p>
+                <div class="text-center">
+                  <%= link_to "Faire un don", "https://www.helloasso.com/associations/etendart/formulaires/1", class: "btn px-4 rounded-4", target:"_blank", style: "background-color: #E8FF6E" %>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-5">
-          <div class="card rounded-5 bg-white border-0">
-            <div class="card-body p-4">
-              <p class="card-text">
-                "Merci, mes enfants ont beaucoup aimé le stage et ils sont motivés pour les prochaines vacances. Merci aux animateurs !"
-              </p>
-              <p class="">
-                <strong></strong>
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <section style="background: linear-gradient(to bottom, black 50%, white 50%)">
-    <div class="container">
-
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-11">
-          <div class="card p-5 rounded-5 border-0" style="background-color: #E8FF6E">
-            <h2 class="card-title" id="contact">
-              <strong>
-                Suivez-nous !
-              </strong>
-            </h2>
-
-            <p class="card-text">
-              Restez informés de toutes nos actualités en nous suivant sur les réseaux sociaux.
-            </p>
-
-            <div id="social-media" class="d-flex justify-content-start gap-3">
-                <%= link_to "https://www.instagram.com/etendartacademy/", target: "_blank" do %>
-                  <i class="fab fa-instagram fa-2xl"></i>
-                <% end %>
-                <%= link_to "https://www.linkedin.com/company/etendart-academy/", target: "_blank" do %>
-                  <i class="fa-brands fa-linkedin-in fa-2xl"></i>
-                <% end %>
+          <div class="col-md-6">
+            <div class="card rounded-5 bg-black border-0" style="height: 40rem">
+              <%= image_tag "home/benevole.JPG", class: "card-img-top rounded-top-5 h-50 object-fit-cover" %>
+              <div class="card-body">
+                <p class="card-text text-white p-3">
+                  Vous souhaitez vous impliquer à nos côtés en proposant du temps ou vos compétences ? Rejoignez-nous.
+                </p>
+                <div class="text-center">
+                  <%= link_to "Devenir bénévole", "https://share.hsforms.com/1xbzYpVRsQFyCIsF8DfGBqQ59bk3", class: "btn px-4 rounded-4", target:"_blank", style: "background-color: #E8FF6E" %>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-    </div>
-  </section>
+    </section>
 
-  <%# section "Suivez-Nous" %>
+    <%# section "Ils parlent d'Etendart Academy" %>
 
-  <footer class="bg-white py-5">
-      <div class="row justify-content-center gap-5 gap-md-0">
+    <section class="bg-black rounded-top-5">
+      <div class="container py-5">
 
-        <div class="col-md-2 col-6 text-center">
-          <%= image_tag "home/logos/LOGO_EA_MINI_NOIR.png", class: "w-50" %>
+        <h2 class="text-white mb-5">
+          Ils parlent d'Etendart Academy
+        </h2>
+
+        <div class="row justify-content-center g-3 mb-3">
+
+          <div class="col-md-5">
+            <div class="card rounded-5 bg-white border-0">
+              <div class="card-body p-4">
+                <p class="card-text">
+                  "Mes filles Jamelia et Shaina ont adoré sortir et découvrir un autre univers, loin de leur département. Je ne les ai jamais vues autant motivées à se lever le matin !"
+                </p>
+                <p class="">
+                  <strong>Grégory</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5">
+            <div class="card rounded-5 bg-white border-0">
+              <div class="card-body p-4">
+                <p class="card-text">
+                  "2ème session pour mon fils Melvin. A chaque fois il est super motivé et rentre plus que ravi. Bravo et merci pour ces stages qui apportent beaucoup aux jeunes."
+                </p>
+                <p class="">
+                  <strong>Krystel</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="col-md-10">
-          <div class="row gap-3 gap-md-0">
+        <div class="row justify-content-center g-3">
 
-            <div class="col-md-3">
-              <ul>
-                <li>
-                  <strong>
-                    <%= link_to "APPROCHE", "#notre-approche", class: "text-decoration-underline" %>
-                  </strong>
-                </li>
-                <li>
-                  <strong>
-                    <%= link_to "PROGRAMMATION", "#programmation", class: "text-decoration-underline" %>
-                  </strong>
-                </li>
-                <li>
-                  <strong>
-                    <%= link_to "IMPACT", "#impact", class: "text-decoration-underline" %>
-                  </strong>
-                </li>
-              </ul>
+          <div class="col-md-5">
+            <div class="card rounded-5 bg-white border-0">
+              <div class="card-body p-4">
+                <p class="card-text">
+                  "Les stages sont biens, good vibes, il y a une bonne ambiance. On s'entend tous bien, petits et grands, on joue tous ensemble. Il n'y a pas de jugement."
+                </p>
+                <p class="">
+                  <strong></strong>
+                </p>
+              </div>
             </div>
+          </div>
 
-            <div class="col-md-3">
-              <ul>
-                <li>
-                  <strong>
-                    <%= link_to "ADHERER", "#adherer", class: "text-decoration-underline" %>
-                  </strong>
-                </li>
-                <li>
-                  <strong>
-                    <%= link_to "FAIRE UN DON", "https://www.helloasso.com/associations/etendart/formulaires/1", class: "text-decoration-underline", target:"_blank" %>
-                  </strong>
-                </li>
-                <li>
-                  <strong>
-                    <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
-                  </strong>
-                </li>
-              </ul>
+          <div class="col-md-5">
+            <div class="card rounded-5 bg-white border-0">
+              <div class="card-body p-4">
+                <p class="card-text">
+                  "Merci, mes enfants ont beaucoup aimé le stage et ils sont motivés pour les prochaines vacances. Merci aux animateurs !"
+                </p>
+                <p class="">
+                  <strong></strong>
+                </p>
+              </div>
             </div>
+          </div>
 
-            <div class="col-md-3">
-              <ul>
-                <li>
-                  <strong>
-                    <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
-                  </strong>
-                </li>
-                <li>
-                  <p>
-                    <%= mail_to "contact@weareetendart.org" %>
-                    <br>
-                    <%= link_to "6 rue des Bateliers", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
-                    <br>
-                    <%= link_to "92110 Clichy", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
-                  </p>
-                </li>
-              </ul>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section style="background: linear-gradient(to bottom, black 50%, white 50%)">
+      <div class="container">
+
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-11">
+            <div class="card p-5 rounded-5 border-0" style="background-color: #E8FF6E">
+              <h2 class="card-title" id="contact">
+                <strong>
+                  Suivez-nous !
+                </strong>
+              </h2>
+
+              <p class="card-text">
+                Restez informés de toutes nos actualités en nous suivant sur les réseaux sociaux.
+              </p>
+
+              <div id="social-media" class="d-flex justify-content-start gap-3">
+                  <%= link_to "https://www.instagram.com/etendartacademy/", target: "_blank" do %>
+                    <i class="fab fa-instagram fa-2xl"></i>
+                  <% end %>
+                  <%= link_to "https://www.linkedin.com/company/etendart-academy/", target: "_blank" do %>
+                    <i class="fa-brands fa-linkedin-in fa-2xl"></i>
+                  <% end %>
+              </div>
             </div>
-
-            <div class="col-md-3">
-              <ul>
-                <li>
-                  <strong>
-                    <%= link_to "ILS NOUS SOUTIENNENT", "#soutien", class: "text-decoration-underline" %>
-                  </strong>
-                </li>
-              </ul>
-            </div>
-
           </div>
         </div>
 
       </div>
-  </footer>
+    </section>
+
+    <%# section "Suivez-Nous" %>
+
+    <footer class="bg-white py-5">
+        <div class="row justify-content-center gap-5 gap-md-0">
+
+          <div class="col-md-2 col-6 text-center">
+            <%= image_tag "home/logos/LOGO_EA_MINI_NOIR.png", class: "w-50" %>
+          </div>
+
+          <div class="col-md-10">
+            <div class="row gap-3 gap-md-0">
+
+              <div class="col-md-3">
+                <ul>
+                  <li>
+                    <strong>
+                      <%= link_to "APPROCHE", "#notre-approche", class: "text-decoration-underline" %>
+                    </strong>
+                  </li>
+                  <li>
+                    <strong>
+                      <%= link_to "PROGRAMMATION", "#programmation", class: "text-decoration-underline" %>
+                    </strong>
+                  </li>
+                  <li>
+                    <strong>
+                      <%= link_to "IMPACT", "#impact", class: "text-decoration-underline" %>
+                    </strong>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col-md-3">
+                <ul>
+                  <li>
+                    <strong>
+                      <%= link_to "ADHERER", "#adherer", class: "text-decoration-underline" %>
+                    </strong>
+                  </li>
+                  <li>
+                    <strong>
+                      <%= link_to "FAIRE UN DON", "https://www.helloasso.com/associations/etendart/formulaires/1", class: "text-decoration-underline", target:"_blank" %>
+                    </strong>
+                  </li>
+                  <li>
+                    <strong>
+                      <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
+                    </strong>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col-md-3">
+                <ul>
+                  <li>
+                    <strong>
+                      <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
+                    </strong>
+                  </li>
+                  <li>
+                    <p>
+                      <%= mail_to "contact@weareetendart.org" %>
+                      <br>
+                      <%= link_to "6 rue des Bateliers", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
+                      <br>
+                      <%= link_to "92110 Clichy", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col-md-3">
+                <ul>
+                  <li>
+                    <strong>
+                      <%= link_to "ILS NOUS SOUTIENNENT", "#soutien", class: "text-decoration-underline" %>
+                    </strong>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+    </footer>
+</div>
