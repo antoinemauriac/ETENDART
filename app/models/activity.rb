@@ -46,6 +46,27 @@ class Activity < ApplicationRecord
     ends_at >= Time.current - 7.days if ends_at
   end
 
+  # def starts_time
+  #   if courses.any?
+  #     start_time = courses.first.starts_at
+  #     start_time.min.zero? ? start_time.strftime("%Hh") : start_time.strftime("%Hh%M")
+  #   else
+  #     "00:00"
+  #   end
+  # end
+
+  def hour_range
+    if courses.any?
+      start_time = courses.first.starts_at
+      end_time = courses.first.ends_at
+      start_time_str = start_time.min.zero? ? start_time.strftime("%Hh") : start_time.strftime("%Hh%M")
+      end_time_str = end_time.min.zero? ? end_time.strftime("%Hh") : end_time.strftime("%Hh%M")
+      "#{start_time_str} - #{end_time_str}"
+    else
+      "00:00 - 00:00"
+    end
+  end
+
   def academy
     return camp.academy if camp
     return annual_program.academy if annual_program

@@ -2,13 +2,13 @@
   <%= @academy.name.upcase %> - <%= @school_period.name.upcase %> <%= @school_period.year %>
 </h1>
 
-<main class="row p-3 mx-auto justify-content-center ">
+<main class="row p-0 p-sm-3 mx-auto justify-content-center ">
   <section class="col-12 col-sm-10 col-md-8 col-xl-6 bg-white p-3 rounded-4">
     <section id="student-form" class="row">
       <div class="">
         <%= form_with url: filter_camps_parents_academy_school_period_school_period_enrollments_path(@academy, @school_period), method: :get, data: { controller: "form--auto-submit" }, class: "form-inline" do |f| %>
         <div class="form-group">
-          <%= f.label :student_id, "SÉLECTIONNER UN ENFANT", class: "mb-2" %>
+            <%= f.label :student_id, "Sélectionner un enfant", class: "mb-3 fst-italic" %>
           <%= f.select :student_id, options_from_collection_for_select(@students, :id, :full_name, @selected_student.id), {}, class: "form-control", data: { action: "change->form--auto-submit#submit" } %>
         </div>
         <% end %>
