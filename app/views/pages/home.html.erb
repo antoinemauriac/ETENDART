@@ -96,43 +96,49 @@
             </li>
           <% end %>
         </ul>
-        <div class="bg-white row text-black p-3 rounded-3">
+
+        <hr style="color:white; opacity: 1" class="w-100 d-block">
+        <div class="text-black">
+          <div class="row">
+
           <% @academies.each do |academy| %>
             <% if academy.next_school_periods.any? %>
-              <%= link_to parents_academy_path(academy), class: "text-black text-decoration-none" do %>
-                <div class="row py-3 align-items-center border-bottom" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
-                  <div class="col-4 col-md-4">
+              <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none h-100" do %>
+                <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                  <div class="col-5">
                     <%= academy.name %>
                   </div>
-                  <div class="col-4 col-md-2">
-                    <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
-                  </div>
-                  <div class="d-none d-md-block col-md-2">
+                  <div class="col-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
                       <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
                       <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                     </svg>
                     <%= academy.city %>
                   </div>
-                  <div class="col-4 col-md-2 text-center">
-                    <strong>S'inscrire</strong>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                    </svg>
+                  <div class="col-4">
+                    <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
                   </div>
                 </div>
               <% end %>
             <% else %>
-              <div class="row py-3 align-items-center border-bottom" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
-                <div class="col-4 col-md-4">
+              <div class="col-12 row py-2 align-items-center justify-content-space-beteween bg-light my-1 rounded-4 h-100" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                <div class="col-5">
                   <%= academy.name %>
                 </div>
-                <div class="col-8 text-start">
+                <div class="col-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                  </svg>
+                  <%= academy.city %>
+                </div>
+                <div class="col-4 text-start">
                   <em>Pas de stage à venir pour le moment</em>
                 </div>
               </div>
             <% end %>
           <% end %>
+          </div>
         </div>
 
 

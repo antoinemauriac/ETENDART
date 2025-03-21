@@ -1,14 +1,14 @@
-<h1 class="bg-black text-white text-center p-3">
-  Modifier les informations de mon enfant
-</h1>
+<h4 class="bg-black text-white text-center p-3">
+  Modifier les informations
+</h4>
 
-<section class="container bg-white rounded-4 shadow p-3 my-3">
+<section class="row justify-content-center p-3">
 
-  <%= simple_form_for @child, url: parents_child_path(@child) do |f| %>
+    <div class="form-inputs rounded-4 shadow bg-white col-12 col-lg-10 col-xl-8 pb-3">
+      <%= simple_form_for @child, url: parents_child_path(@child) do |f| %>
 
-    <div class="form-inputs">
 
-      <div class="container-sm p-3 my-3">
+      <div class="container-sm p-3 mt-3">
         <h2 class="mb-3">
           Informations
         </h2>
@@ -83,7 +83,7 @@
       </div>
 
 
-      <div class="container-sm p-3 my-3">
+      <div class="container-sm p-3 mt-3">
         <h2 class="mb-3">
           Administratif
         </h2>
@@ -129,8 +129,8 @@
         <%= f.button :submit, "Modifier", class: "btn btn-dark rounded-pill px-4 py-2" %>
       </div>
 
-    </div>
 
-  <% end %>
+      <% end %>
+    </div>
 
 </section>

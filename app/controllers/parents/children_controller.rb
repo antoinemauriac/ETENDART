@@ -55,7 +55,7 @@ class Parents::ChildrenController < ApplicationController
       @child.username = username
 
       # Définir un message spécifique pour un nouvel enfant créé
-      notice_message = "L'élève a bien été créé."
+      notice_message = "L'enfant a bien été ajouté."
     end
 
     @child.parent = @parent
