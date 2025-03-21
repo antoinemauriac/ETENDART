@@ -18,6 +18,11 @@
   color: $yellowbis;
 }
 
+.white-hover {
+  &:hover {
+    color: white!important;
+  }
+}
 .yellow-title-border-top {
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
