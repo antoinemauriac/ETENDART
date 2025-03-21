@@ -33,16 +33,8 @@
   </head>
 
   <body data-controller="adam--test">
-    <%# if current_user && current_user.no_role? %>
-      <%#= render "shared/no_role_navbar" %>
-    <%# else %>
-    <turbo-frame id="navbar">
-      <%= render "shared/navbar" %>
-    </turbo-frame>
-    <%# end %>
-    <div id="flash-messages">
-      <%= render "shared/flashes" %>
-    </div>
+    <%= render "shared/navbar" %>
+    <%= render "shared/flashes" %>
     <div id="content">
       <%= yield %>
     </div>
