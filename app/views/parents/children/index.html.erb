@@ -8,101 +8,97 @@
   Mes Enfants
 </h4>
 
-<section class="container my-5">
-  <% if @existing_children %>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" data-controller="form--children--modal" data-form--children--modal-target="modal">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="modal-title fs-5" id="exampleModalLabel">Sélectionner les enfants</h2>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <p>
-              Nous avons trouvé des enfants déjà enregistrés dans notre base de données qui peuvent correspondre à vos enfants. 
-            </p>
-            <p>Cliquez sur les cartes correspondant à vos enfants pour les associer à votre compte.</p>
-            <p>
-              <i class="fa-solid fa-triangle-exclamation text-danger"></i> Attention, si vous trouvez plusieurs enfants avec le même nom, veuillez vérifier la date de naissance pour vous assurer que vous sélectionnez le bon enfant.
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-dark rounded-4 px-4 py-2" data-bs-dismiss="modal">J'ai bien lu</button>
+<% if @existing_children %>
+  <section class="container my-5">
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" data-controller="form--children--modal" data-form--children--modal-target="modal">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title fs-5" id="exampleModalLabel">Sélectionner les enfants</h2>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>
+                Nous avons trouvé des enfants déjà enregistrés dans notre base de données qui peuvent correspondre à vos enfants. 
+              </p>
+              <p>Cliquez sur les cartes correspondant à vos enfants pour les associer à votre compte.</p>
+              <p>
+                <i class="fa-solid fa-triangle-exclamation text-danger"></i> Attention, si vous trouvez plusieurs enfants avec le même nom, veuillez vérifier la date de naissance pour vous assurer que vous sélectionnez le bon enfant.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-dark rounded-4 px-4 py-2" data-bs-dismiss="modal">J'ai bien lu</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <%= simple_form_for :assign_children, url: assign_children_parents_children_path, method: :post, html: { data: { controller: "form--children--select-check" } } do |f| %>
+      <%= simple_form_for :assign_children, url: assign_children_parents_children_path, method: :post, html: { data: { controller: "form--children--select-check" } } do |f| %>
 
-      <ul class="px-1 row g-3 justify-content-center flex-column align-items-center">
-        <% @existing_children.each do |child| %>
+        <ul class="px-1 row g-3 justify-content-center flex-column align-items-center">
+          <% @existing_children.each do |child| %>
 
-              <li class="row g-3 col-12 col-md-6 col-lg-4 bg-white rounded-4" style="cursor:pointer" data-action="click->form--children--select-check#toggle" data-form--children--select-check-target="card">
-                      <div class="col-4 p-3">
-                        <div class="ratio ratio-1x1">
-                          <% if child.photo.key %>
-                            <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
-                          <% else %>
-                            <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
-                          <% end %>
+                <li class="row g-3 col-12 col-md-6 col-lg-4 bg-white rounded-4" style="cursor:pointer" data-action="click->form--children--select-check#toggle" data-form--children--select-check-target="card">
+                        <div class="col-4 p-3">
+                          <div class="ratio ratio-1x1">
+                            <% if child.photo.key %>
+                              <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
+                            <% else %>
+                              <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
+                            <% end %>
+                          </div>
                         </div>
-                      </div>
 
-                      <div class="col-8">
-                        <h2 class="card-title fs-6 rounded-4">
-                        <%= child.first_name %> <%= child.last_name.upcase %>
-                        </h2>
-                        <ul class="card-text">
-                        <li class="p-1">
-                          <%= child.age %> ans
-                        </li>
-                        <li class="p-1">
-                          <%= child.gender %>
-                        </li>
-                        <li class="p-1">
-                          <%= l(child.date_of_birth, format: '%d/%m/%Y') %>
-                        </li>
+                        <div class="col-8">
+                          <h2 class="card-title fs-6 rounded-4">
+                          <%= child.first_name %> <%= child.last_name.upcase %>
+                          </h2>
+                          <ul class="card-text">
+                          <li class="p-1">
+                            <%= child.age %> ans
+                          </li>
+                          <li class="p-1">
+                            <%= child.gender %>
+                          </li>
+                          <li class="p-1">
+                            <%= l(child.date_of_birth, format: '%d/%m/%Y') %>
+                          </li>
 
-                        </ul>
-                      </div>
+                          </ul>
+                        </div>
 
-                      <div class="d-none">
-                        <%= check_box_tag "child_ids[]", child.id, false, class: "form-check-input", data: { form__children__select_check_target: "checkbox" } %>
-                      </div>
+                        <div class="d-none">
+                          <%= check_box_tag "child_ids[]", child.id, false, class: "form-check-input", data: { form__children__select_check_target: "checkbox" } %>
+                        </div>
 
-              </li>
+                </li>
 
-        <% end %>
-      </ul>
+          <% end %>
+        </ul>
 
-      <div class="d-flex justify-content-center gap-1 flex-column align-items-center">
-        <div class="text-center my-3 position-relative">
-          <%= f.submit "Associer les enfants", 
-              class: "btn btn-dark rounded-4 px-4 py-2", 
-              data: { 
-                form__children__select_check_target: "submitButton"
-              } %>
-          <div class="position-absolute top-0 start-0 w-100 h-100" 
-               data-form--children--select-check-target="buttonOverlay"
-               data-action="click->form--children--select-check#showHelper"
-               style="cursor: not-allowed">
+        <div class="d-flex justify-content-center gap-1 flex-column align-items-center">
+          <div class="text-center my-3 position-relative">
+            <%= f.submit "Associer les enfants", 
+                class: "btn btn-dark rounded-4 px-4 py-2", 
+                data: { 
+                  form__children__select_check_target: "submitButton"
+                } %>
+            <div class="position-absolute top-0 start-0 w-100 h-100" 
+                data-form--children--select-check-target="buttonOverlay"
+                data-action="click->form--children--select-check#showHelper"
+                style="cursor: not-allowed">
+            </div>
+          </div>
+          <p class="text-danger text-center d-none" data-form--children--select-check-target="helperMessage">
+            Vous devez d'abord sélectionner un ou plusieurs enfants
+          </p>
+          <div class="text-center my-3">
+            <%= f.submit "Ne pas associer", class: "btn btn-danger rounded-4 px-4 py-2" %>
           </div>
         </div>
-        <p class="text-danger text-center d-none" data-form--children--select-check-target="helperMessage">
-          Vous devez d'abord sélectionner un ou plusieurs enfants
-        </p>
-        <div class="text-center my-3">
-          <%= f.submit "Ne pas associer", class: "btn btn-danger rounded-4 px-4 py-2" %>
-        </div>
-      </div>
-    <% end %>
-
-
-
-  <% end %>
-</section>
+      <% end %>
+  </section>
+<% end %>
 
 
 <section class="container">
@@ -169,10 +165,7 @@
     </div>
 
   <% elsif !@existing_children %>
-    <p class="text-center">
-      Vous n'avez pas encore d'enfants enregistrés.
-    </p>
-    <p class="text-center">
+    <p class="text-center my-4">
       Pour inscrire un enfant à un stage, vous devez d'abord compléter son profil
     </p>
 
