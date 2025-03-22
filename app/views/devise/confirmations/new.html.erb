@@ -1,7 +1,7 @@
 <div id="no-user" class="row">
-  <div class="devise-edit-form col-10 col-sm-8 col-lg-6 col-xl-3">
-    <h2 class="header-info mb-3">Renvoyer le lien de confirmation</h2>
-
+  <div class="bg-white p-4 rounded-4 col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3">
+    <h4 class="bg-black p-2 rounded-4 text-white text-center mb-4">Renvoyer le lien de confirmation</h4>
+    <p class="text-center mb-4">Veuillez renseigner votre email pour recevoir le lien de confrimation</p>
     <%= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
       <%= f.error_notification %>
       <%= f.full_error :confirmation_token %>
@@ -10,12 +10,14 @@
         <%= f.input :email,
                     required: true,
                     autofocus: true,
+                    label: false,
+                    placeholder: "Email",
                     value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),
                     input_html: { autocomplete: "email" } %>
       </div>
 
       <div class="flexy">
-        <%= f.button :submit, "Valider", class: "btn-etendart btn-connexion-bis mb-4"  %>
+        <%= f.button :submit, "VALIDER", class: "btn btn-dark rounded-4 px-4 py-2 my-2" %>
       </div>
     <% end %>
   </div>

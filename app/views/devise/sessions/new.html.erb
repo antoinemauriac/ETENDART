@@ -22,7 +22,7 @@
       </div>
 
       <div class="flexy">
-        <%= f.button :submit, "Valider", class: "btn btn btn-dark rounded-4 px-4 py-2 mb-4" %>
+        <h6 class="mb-0"><%= f.button :submit, "VALIDER", class: "btn btn-dark rounded-4 px-4 py-2 mb-4" %></h6>
       </div>
       <div class="d-flex flex-column">
         <%= render "devise/shared/links" %>
@@ -32,7 +32,7 @@
     <hr>
     <div class="flexy">
       <h6 class="mb-4" style="font-size:0.75rem">Vous n'avez pas de compte ?</h6>
-      <h6><%= link_to "Inscription", new_user_registration_path, class: "bg-black parent-title white-hover px-4 py-3 rounded-4" %></h6>
+      <h6><%= link_to "Inscription", new_user_registration_path, class: "btn btn-dark parent-title white-hover px-3 py-3 rounded-4" %></h6>
     </div>
   </div>
 

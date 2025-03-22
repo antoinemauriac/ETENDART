@@ -1,7 +1,7 @@
 <h1 class="bg-black parent-title text-center fs-4 py-3 fw-bold mb-3">
   PROCHAINS STAGES
 </h1>
-<div class="container">
+<div class="container mt-5 mb-5">
   <% @academies.each do |city, academies| %>
     <div class="row align-items-center">
       <div class="col-12 col-md-4 text-center d-flex justify-content-center">
@@ -9,7 +9,7 @@
         <i class="fa-solid fa-location-dot ms-3 fs-2"></i>
       </div>
 
-      <div class="col-12 col-md-6 d-flex flex-column align-items-center row">
+      <div class="col-12 col-md-8 col-lg-6 d-flex flex-column align-items-center row">
         <% academies.each do |academy| %>
           <div class="">
             <%= link_to parents_academy_path(academy) do %>
