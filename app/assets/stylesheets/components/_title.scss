@@ -18,6 +18,24 @@
   color: $yellowbis;
 }
 
+.btn-parent {
+  background-color: $yellowbis;
+  color: black;
+  border: 1px solid $yellowbis!important;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgb(222, 255, 36);
+    border: 1px solid rgb(222, 255, 36)!important;
+    transition: all 0.3s ease;
+  }
+}
+
+.white-hover {
+  &:hover {
+    color: white!important;
+  }
+}
 .yellow-title-border-top {
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;

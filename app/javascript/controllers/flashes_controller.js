@@ -11,7 +11,7 @@ export default class extends Controller {
         setTimeout(() => {
           alert.classList.add("d-none")
         }, 500)
-      }, 8000)
+      }, 5000)
     })
   }
 }
