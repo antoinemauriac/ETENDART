@@ -89,11 +89,45 @@
             </button>
           </li>
           <% @academies.each do |academy| %>
-            <li class="">
-              <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
-                <%= academy.name %>
-              </button>
-            </li>
+
+            <% if academy.id == 38 %>
+            <%# Si c'est l'academie Djokovic %>
+            <%# Afficher Djokovic et Clarrisse mais renvoyer vers la meme academie djokovic %>
+              <li>
+                <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
+                  Novak Djokovic
+                </button>
+              </li>
+
+              <li>
+                <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
+                  Clarisse Agbegnenou
+                </button>
+              </li>
+
+            <% elsif academy.id == 43 %>
+            <%# Si c'est l'academie Daniel Narcisse %>
+            <%# Afficher Daniel Narcisse et Rai mais renvoyer vers la meme academie Daniel Narcisse %>
+              <li>
+                <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
+                  Daniel Narcisse
+                </button>
+              </li>
+
+              <li>
+                <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
+                  Rai
+                </button>
+              </li>
+
+            <% else %>
+              <li class="">
+                <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
+                  <%= academy.name %>
+                </button>
+              </li>
+            <% end %>
+
           <% end %>
         </ul>
 
@@ -103,23 +137,101 @@
 
           <% @academies.each do |academy| %>
             <% if academy.next_school_periods.any? %>
-              <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
-                <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
-                  <div class="col-5">
-                    <%= academy.name %>
+              <% if academy.id == 38 %>
+                <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
+                  <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                    <div class="col-5">
+                      Novak Djokovic
+                    </div>
+                    <div class="col-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt d-none d-md-inline-block" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                      </svg>
+                      <%= academy.city %>
+                    </div>
+                    <div class="col-4">
+                      <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+                    </div>
                   </div>
-                  <div class="col-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt d-none d-md-inline-block" viewBox="0 0 16 16">
-                      <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-                      <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                    </svg>
-                    <%= academy.city %>
+                <% end %>
+
+                <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
+                  <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                    <div class="col-5">
+                      Clarisse Agbegnenou
+                    </div>
+                    <div class="col-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt d-none d-md-inline-block" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                      </svg>
+                      <%= academy.city %>
+                    </div>
+                    <div class="col-4">
+                      <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+                    </div>
                   </div>
-                  <div class="col-4">
-                    <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+                <% end %>
+
+              <% elsif academy.id == 43 %>
+                <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
+                  <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                    <div class="col-5">
+                      Daniel Narcisse
+                    </div>
+                    <div class="col-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt d-none d-md-inline-block" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                      </svg>
+                      <%= academy.city %>
+                    </div>
+                    <div class="col-4">
+                      <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+                    </div>
                   </div>
-                </div>
+                <% end %>
+
+                <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
+                  <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                    <div class="col-5">
+                      Rai
+                    </div>
+                    <div class="col-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt d-none d-md-inline-block" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                      </svg>
+                      <%= academy.city %>
+                    </div>
+                    <div class="col-4">
+                      <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+                    </div>
+                  </div>
+                <% end %>
+
+              <% else %>
+                <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
+                  <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                    <div class="col-5">
+                      <%= academy.name %>
+                    </div>
+                    <div class="col-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt d-none d-md-inline-block" viewBox="0 0 16 16">
+                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                      </svg>
+                      <%= academy.city %>
+                    </div>
+                    <div class="col-4">
+                      <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
+                    </div>
+                  </div>
+                <% end %>
+
               <% end %>
+
             <% else %>
               <div class="col-12 row py-2 align-items-center justify-content-space-beteween bg-light my-1 rounded-4" style="min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
                 <div class="col-5">
