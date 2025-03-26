@@ -11,12 +11,12 @@
         <% @camps.each do |camp| %>
           <section class="row" id="camp_<%= camp.id %>" data-controller="form--enrollment--camp">
             <div class="col-12 d-flex align-items-center form-check mt-3 mb-3" style="padding-left: 0;">
-              <%= check_box_tag "camp_ids[]", camp.id, false, 
+              <%= check_box_tag "camp_ids[]", camp.id, false,
                 id: "camp_#{camp.id}_checkbox", # ID unique pour chaque checkbox
-                data: { 
+                data: {
                   action: "change->form--enrollment--camp#toggle change->form--enrollment--camp-error-submit#validateForm",
                   form__enrollment__camp_error_submit_target: "campCheckbox"
-                }, 
+                },
                 class: "me-2", style: "transform: scale(1.2);" %>
               <p class="mb-0" class="d-flex d-sm-block">
                 <%= label_tag "camp_#{camp.id}_checkbox", camp.name.upcase, class: "mb-1 mb-sm-0" %>
@@ -29,20 +29,20 @@
               <div class="col-12 col-sm-6" style="padding-left: 0;">
                 <h6 style="font-size: 0.9rem" class="form-label d-block mb-2 fw-bold mt-0">SPORT</h6>
                 <% sport_activities = camp.activities.joins(:category).where(categories: { super_category: "Sport" }) %>
-                <% selected_sport_activities = sport_activities.select { |activity| !activity.age_restricted || activity.min_age <= @selected_student.age && activity.max_age > @selected_student.age } %>
+                <% selected_sport_activities = sport_activities.select { |activity| !activity.age_restricted || activity.min_age <= @selected_student.age && activity.max_age >= @selected_student.age } %>
                 <% selected_sport_activities.each do |activity| %>
                   <div class="form-check" style="padding-left: 0;">
                     <% if selected_sport_activities.count == 1 %>
-                      <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]", 
+                      <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]",
                           activity.id,
                           true,
                           data: { form__enrollment__camp_target: "sportActivities" } %>
                       <%= label_tag "camp_id[#{camp.id}][sport_activity_id]", "#{activity.name} (#{activity.hour_range})" %>
                     <% else %>
-                      <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]", 
-                          activity.id, 
-                          false, 
-                          data: { 
+                      <%= check_box_tag "camp_id[#{camp.id}][sport_activity_id]",
+                          activity.id,
+                          false,
+                          data: {
                             form__enrollment__camp_target: "sportActivities",
                             action: "change->form--enrollment--camp-error-submit#validateForm"
                           } %>
@@ -55,20 +55,20 @@
               <div class="col-12 col-md-6" style="padding-left: 0;">
                 <h6 class="form-label d-block mb-2 fw-bold mt-md-0 mt-3">ÉVEIL</h6>
                 <% eveil_activities = camp.activities.joins(:category).where(categories: { super_category: ["Eveil", "Cuisine"] }) %>
-                <% selected_eveil_activities = eveil_activities.select { |activity| !activity.age_restricted || activity.min_age <= @selected_student.age && activity.max_age > @selected_student.age } %>
+                <% selected_eveil_activities = eveil_activities.select { |activity| !activity.age_restricted || activity.min_age <= @selected_student.age && activity.max_age >= @selected_student.age } %>
                 <% selected_eveil_activities.each do |activity| %>
                   <div class="form-check" style="padding-left: 0;">
                     <% if selected_eveil_activities.count == 1 %>
-                      <%= check_box_tag "camp_id[#{camp.id}][eveil_activity_id]", 
+                      <%= check_box_tag "camp_id[#{camp.id}][eveil_activity_id]",
                           activity.id,
                           true,
                           data: { form__enrollment__camp_target: "eveilActivities" } %>
                       <%= label_tag "camp_id[#{camp.id}][eveil_activity_id]", "#{activity.name} (#{activity.hour_range})" %>
                     <% else %>
-                      <%= check_box_tag "camp_id[#{camp.id}][eveil_activity_id]", 
-                          activity.id, 
+                      <%= check_box_tag "camp_id[#{camp.id}][eveil_activity_id]",
+                          activity.id,
                           false,
-                          data: { 
+                          data: {
                             form__enrollment__camp_target: "eveilActivities",
                             action: "change->form--enrollment--camp-error-submit#validateForm"
                           } %>
@@ -88,14 +88,14 @@
           Veuillez sélectionner au moins une semaine et une activité sport et éveil pour chaque semaine sélectionnée
         </div>
         <% if @students.count <= 1 %>
-          <%= f.submit "VALIDER", 
-              class: "btn btn-primary", 
+          <%= f.submit "VALIDER",
+              class: "btn btn-primary",
               role: "button",
               data: { form__enrollment__camp_error_submit_target: "submitButton" } %>
         <% else %>
-          <button type="button" 
-                  class="btn btn-primary" 
-                  data-bs-toggle="modal" 
+          <button type="button"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
                   data-bs-target="#staticBackdrop"
                   data-form--enrollment--camp-error-submit-target="submitButton"
                   disabled>
