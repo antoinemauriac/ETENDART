@@ -11,9 +11,10 @@
 
       <div class="col-12 col-md-8 col-lg-6 d-flex flex-column align-items-center row">
         <% academies.each do |academy| %>
+
           <div class="">
             <%= link_to parents_academy_path(academy) do %>
-              <div class="card-academy card-academy-parent" 
+              <div class="card-academy card-academy-parent"
                    style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
                 <h6 class="mb-0"><%= academy.name.upcase %></h6>
               </div>
