@@ -64,7 +64,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
           start_year: start_year,
           academy: academy,
           amount: Membership::PRICE,
-          stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH"
+          stripe_price_id: "price_1R7fTuFQepXQSK7Ty0jfdwvI"
         )
       end
 
@@ -81,7 +81,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
             student_id: student.id,
             product: membership,
             price: Membership::PRICE,
-            stripe_price_id: "price_1Qge21AIwJB98t7nzUx7mFiH",
+            stripe_price_id: "price_1R7fTuFQepXQSK7Ty0jfdwvI",
             name: "Adhésion #{start_year} - #{student.first_name} #{student.last_name}"
           )
         end
