@@ -24,6 +24,15 @@
         <%= form.input :academy1_id, label: "Académie 1", collection: @academies, label_method: :name, value_method: :id, required: true %>
         <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true %>
       </div>
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <%= form.input :has_consent_for_photos, 
+                      label: "Droit à l'image", 
+                      as: :radio_buttons, 
+                      collection: [["Oui", true], ["Non", false]], 
+                      checked: true %>
+        </div>
+      </div>
       <div class="flexy">
         <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>
       </div>
