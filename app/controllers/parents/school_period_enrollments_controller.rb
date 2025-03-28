@@ -1,9 +1,9 @@
 class Parents::SchoolPeriodEnrollmentsController < ApplicationController
   def new
-    authorize([:parents, SchoolPeriodEnrollment])
     @academy = Academy.find(params[:academy_id])
     @school_period = SchoolPeriod.find(params[:school_period_id])
-
+    authorize([:parents, SchoolPeriodEnrollment])
+    
     @school_period_enrollment = SchoolPeriodEnrollment.new
     @students = current_user.children
     if @students.empty?
