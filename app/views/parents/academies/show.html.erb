@@ -14,7 +14,7 @@
 
             <% if school_period.camps.any? %>
               <div class="row row-cols-1 row-cols-sm-2 g-3">
-              <% school_period.camps_with_activities.each do |camp| %>
+              <% school_period.camps_with_activities.order(:starts_at).each do |camp| %>
                 <div class="col">
                 <div class="h-100 d-flex flex-column">
                   <h5 class="text-center text-sm-start">
@@ -22,6 +22,9 @@
                   </h5>
                   <p class="d-block mb-2 text-center text-sm-start">
                   Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %>
+                  </p>
+                  <p class="d-block mb-2 text-center text-sm-start">
+                    <%= camp.school_period.format_price %>
                   </p>
                   <div class="text-center text-sm-start">
                   <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>

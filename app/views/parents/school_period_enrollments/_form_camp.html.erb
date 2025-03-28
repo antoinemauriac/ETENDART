@@ -19,8 +19,9 @@
                 },
                 class: "me-2", style: "transform: scale(1.2);" %>
               <p class="mb-0" class="d-flex d-sm-block">
-                <%= label_tag "camp_#{camp.id}_checkbox", camp.name.upcase, class: "mb-1 mb-sm-0" %>
-                <%= label_tag "camp_#{camp.id}_checkbox", "(du #{l(camp.starts_at, format: :birthday)} au #{l(camp.ends_at, format: :birthday)})" %>
+                <%= label_tag "camp_#{camp.id}_checkbox", camp.name.upcase, class: "mb-0" %>
+                <%= label_tag "camp_#{camp.id}_checkbox", "(#{l(camp.starts_at, format: :birthday)}-#{l(camp.ends_at, format: :birthday)})" %>
+                <%= label_tag "camp_#{camp.id}_checkbox", "#{@school_period.format_price}" %>
               </p>
             </div>
 
