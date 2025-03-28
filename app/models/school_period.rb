@@ -37,6 +37,18 @@ class SchoolPeriod < ApplicationRecord
     "#{name}#{year.to_s.last(2)}"
   end
 
+  def format_price
+    if paid
+      if price == 0
+        "Gratuit"
+      else
+        "#{price}€"
+      end
+    else
+      "Gratuit"
+    end
+  end
+
   def students_count
     students.count
   end

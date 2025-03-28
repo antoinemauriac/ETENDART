@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_08_104249) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_28_161851) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_08_104249) do
     t.boolean "banished", default: false
     t.bigint "coordinator_id"
     t.string "city"
+    t.boolean "new_format", default: false, null: false
     t.index ["coordinator_id"], name: "index_academies_on_coordinator_id"
     t.index ["manager_id"], name: "index_academies_on_manager_id"
   end
@@ -251,9 +252,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_08_104249) do
     t.bigint "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "stripe_price_id"
     t.string "product_type", null: false
     t.bigint "product_id", null: false
+    t.string "stripe_price_id"
     t.boolean "paid", default: false
     t.string "name", null: false
     t.string "payment_method", default: "Carte bancaire"

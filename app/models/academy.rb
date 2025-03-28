@@ -22,6 +22,8 @@ class Academy < ApplicationRecord
   has_many :academy_enrollments
   has_many :students, through: :academy_enrollments
 
+  scope :new_format, -> { where(new_format: true) }
+
   def today_camp_courses
     Course.joins(activity: :camp)
           .where(camps: { id: camps.ids })

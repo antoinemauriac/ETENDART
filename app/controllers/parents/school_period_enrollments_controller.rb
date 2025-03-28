@@ -12,7 +12,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
     end
     @selected_student = params[:student_id].present? ? Student.find(params[:student_id]) : @students&.first
     enrolled_camps = @selected_student.camp_enrollments.where(camp: @school_period.camps)
-    @camps = @school_period.camps_with_activities.where.not(id: enrolled_camps.pluck(:camp_id))
+    @camps = @school_period.camps_with_activities.where.not(id: enrolled_camps.pluck(:camp_id)).order(:starts_at)
   end
 
   def create
@@ -106,7 +106,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
     @students = current_user.children
 
     enrolled_camps = @selected_student.camp_enrollments.where(camp: @school_period.camps)
-    @camps = @school_period.camps.where.not(id: enrolled_camps.pluck(:camp_id))
+    @camps = @school_period.camps_with_activities.where.not(id: enrolled_camps.pluck(:camp_id)).order(:starts_at)
     render :new
   end
 
