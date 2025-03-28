@@ -99,7 +99,11 @@
 
         <div class="row mb-2">
           <div class="col-md-6">
-            <%= f.input :has_consent_for_photos, label: "J'autorise la prise de photos de mon enfant", as: :radio_buttons, collection: [["J'autorise", true], ["Je n'autorise pas", false]] %>
+            <%= f.input :has_consent_for_photos, 
+                        label: "J'autorise la prise de photos de mon enfant", 
+                        as: :radio_buttons, 
+                        collection: [["J'autorise", true], ["Je n'autorise pas", false]], 
+                        checked: true %>
           </div>
         </div>
 

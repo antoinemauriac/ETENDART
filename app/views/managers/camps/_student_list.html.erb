@@ -19,7 +19,7 @@
     <% end %>
 
     <div class="col flexy-row small-col <%= camp_enrollment&.image_consent ? '' : 'non-bg' %>">
-      <span class="ellipsis"><%= camp_enrollment&.image_consent ? "" : "Non" %></span>
+      <span class="ellipsis"><%= student.has_consent_for_photos ? "" : "Non" %></span>
     </div>
 
     <% if school_period.paid %>
