@@ -31,6 +31,10 @@ fr:
           attributes:
             password_confirmation:
               confirmation: "La confirmation du mot de passe ne correspond pas"
+            email:
+              blank: "L'email ne peut pas être vide"
+              invalid: "L'email n'est pas valide"
+              taken: "Cet email est déjà utilisé"
     models:
       user: Utilisateur
   devise:

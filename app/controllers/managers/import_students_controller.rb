@@ -56,6 +56,10 @@ class Managers::ImportStudentsController < ApplicationController
             student.update(student_params_upload(row))
           end
 
+          if row['droitimage'] == 'oui'
+            student.update(has_consent_for_photos: true)
+          end
+
           student.academies << academy unless student.academies.include?(academy)
           student.school_periods << school_period unless student.school_periods.include?(school_period)
 
@@ -72,7 +76,7 @@ class Managers::ImportStudentsController < ApplicationController
           end
 
           # Step 4: Create camp enrollment for the student
-          CampEnrollment.create(student: student, camp: camp, confirmed: true, image_consent: row['droitimage'] == 'oui' ? true : false)
+          CampEnrollment.create(student: student, camp: camp, confirmed: true)
 
           # Step 5: Assign student to activities
           (1..3).each do |i|
@@ -103,6 +107,9 @@ class Managers::ImportStudentsController < ApplicationController
           end
           if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.paid == false
             membership.update(paid: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
+            if membership.payment_method == 'virement'
+              membership.update(receiver_id: nil)
+            end
           end
         end
       end

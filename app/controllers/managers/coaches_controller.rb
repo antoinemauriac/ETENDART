@@ -58,6 +58,7 @@ class Managers::CoachesController < ApplicationController
       coach.send_reset_password_instructions
 
       coach.update(status: "")
+      coach.confirm
 
       flash[:notice] = "Coach ajouté avec succès."
       redirect_to managers_coaches_path(academy: academy)
