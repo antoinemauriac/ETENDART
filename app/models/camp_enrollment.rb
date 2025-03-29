@@ -88,7 +88,7 @@ class CampEnrollment < ApplicationRecord
   private
 
   def receiver_presence_for_specific_payment_methods
-    if ["cash", "cheque", "offert"].include?(payment_method) && receiver_id.blank?
+    if ["cash", "cheque"].include?(payment_method) && receiver_id.blank?
       errors.add(:base, "Pour le paiement en espèces, chèque ou offert, vous devez préciser la personne ayant reçu le paiement.")
     end
   end

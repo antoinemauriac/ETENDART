@@ -30,7 +30,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
       camp_enrollment = CampEnrollment.create!(
         camp: camp,
         student: student,
-        image_consent: student.photo_authorization || false,
+        image_consent: student.has_consent_for_photos || false,
         stripe_price_id: camp.stripe_price_id
       ) unless student.camp_enrollments.find_by(camp: camp)
 

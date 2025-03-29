@@ -11,6 +11,7 @@ class Parents::ProfilesController < ApplicationController
     @parent_profile = ParentProfile.new(parent_profile_params)
 
     @parent_profile.user = @parent
+    @parent.update(phone_number: @parent_profile.phone_number)
     email = @parent.email
     existing_children = Student.where(email: email)
 

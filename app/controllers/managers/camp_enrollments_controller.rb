@@ -3,7 +3,7 @@ class Managers::CampEnrollmentsController < ApplicationController
     @camp_enrollment = CampEnrollment.find(params[:id])
     authorize([:managers, @camp_enrollment])
 
-    if @camp_enrollment.paid
+    if @camp_enrollment.paid && @camp_enrollment.camp.school_period.price > 0
       flash.now[:alert] = "Impossible de supprimer une inscription déjà payée"
       respond_to do |format|
         format.turbo_stream

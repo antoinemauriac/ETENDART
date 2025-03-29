@@ -118,3 +118,25 @@
 #     end
 #   end
 # end
+
+
+# starts_year = 2024
+# Camp.where('starts_at > ?', Date.today).each do |camp|
+#   camp_enrollments = camp.camp_enrollments
+#   unconfirmed = camp_enrollments.where(confirmed: false)
+#   unconfirmed.each do |enrollment|
+#     student = enrollment.student
+#     membership = student.memberships.find_by(start_year: 2024)
+#     cotisant = membership.paid ? "cotisant" : "non cotisant"
+#     puts "#{camp.academy.name} - #{camp.school_period.name} - #{camp.name} - #{student.full_name} - #{cotisant} - #{student.parent.email} - #{student.parent.parent_profile.phone_number}"    
+#   end
+# end
+
+# Camp.where('starts_at > ?', Date.today).each do |camp|
+#   puts "#{camp.academy.name} - #{camp.school_period.name} - #{camp.name}"
+#   camp_enrollments = camp.camp_enrollments
+#   puts "Nombre d'inscription validées : #{camp_enrollments.confirmed.count}"
+#   puts "Donc nombre d'inscription payées en ligne : #{camp_enrollments.confirmed.paid.count}"
+# end
+
+# Membership.where('created_at > ?', Date.today - 1.week, paid: true).count
