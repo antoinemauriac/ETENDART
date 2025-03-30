@@ -37,7 +37,7 @@ class Managers::CampEnrollmentsController < ApplicationController
 
   def index
     @camp = Camp.find(params[:camp_id])
-    @camp_enrollments = @camp.camp_enrollments
+    @camp_enrollments = @camp.camp_enrollments.confirmed
                             .includes(:student, :camp, :receiver)
                             .order('students.last_name ASC')
     @all_students_with_free_judo = @camp.all_students_with_free_judo

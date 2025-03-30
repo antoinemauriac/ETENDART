@@ -50,7 +50,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def students_count
-    students.count
+    students.joins(:camp_enrollments).where(camp_enrollments: { confirmed: true }).count
   end
 
   def show_students_ids

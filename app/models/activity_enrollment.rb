@@ -11,6 +11,9 @@ class ActivityEnrollment < ApplicationRecord
   scope :attended, -> { where(present: true) }
   scope :unattended, -> { where(present: false) }
 
+
+  scope :confirmed, -> { where(confirmed: true) }
+
   # after_create -> { create_camp_enrollment(self.student) }
 
   # after_destroy -> { destroy_camp_enrollment(self.student) }

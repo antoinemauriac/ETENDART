@@ -46,14 +46,12 @@ class Activity < ApplicationRecord
     ends_at >= Time.current - 7.days if ends_at
   end
 
-  # def starts_time
-  #   if courses.any?
-  #     start_time = courses.first.starts_at
-  #     start_time.min.zero? ? start_time.strftime("%Hh") : start_time.strftime("%Hh%M")
-  #   else
-  #     "00:00"
-  #   end
-  # end
+  def confirmed_students
+    students.joins(:activity_enrollments)
+            .where(activity_enrollments: { confirmed: true, activity_id: id })
+            .distinct
+            .order('students.last_name ASC')
+  end
 
   def hour_range
     if courses.any?
@@ -137,6 +135,10 @@ class Activity < ApplicationRecord
 
   def students_count
     show_students.count
+  end
+
+  def confirmed_students_count
+    activity_enrollments.confirmed.count
   end
 
   def enrolled_students_count
