@@ -132,8 +132,12 @@ class Camp < ApplicationRecord
     students.joins(:camp_enrollments).where(camp_enrollments: { banished: true }).uniq
   end
 
+  def confirmed_students
+    students.joins(:camp_enrollments).where(camp_enrollments: { confirmed: true })
+  end
+
   def students_count
-    students.count
+    camp_enrollments.confirmed.count
   end
 
   def show_students

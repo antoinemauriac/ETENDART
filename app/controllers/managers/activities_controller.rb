@@ -91,7 +91,7 @@ class Managers::ActivitiesController < ApplicationController
     @camp = @activity.camp
     @school_period = @camp.school_period
     # @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
-    @students = @activity.students.sort_by(&:last_name)
+    @students = @activity.confirmed_students
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
     category = @activity.category

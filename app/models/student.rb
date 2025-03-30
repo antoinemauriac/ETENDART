@@ -275,7 +275,7 @@ class Student < ApplicationRecord
   end
 
   def camps_count
-    camps.count
+    camp_enrollments.confirmed.count
   end
 
   def annual_programs_count
@@ -351,7 +351,8 @@ class Student < ApplicationRecord
   end
 
   def next_camp_activities
-    activities.joins(:camp)
+    activities.joins(:camp, :activity_enrollments)
+              .where(activity_enrollments: { confirmed: true })
               .where('camps.ends_at >= ?', Date.current)
               .order('camps.starts_at ASC')
   end
@@ -469,13 +470,14 @@ class Student < ApplicationRecord
   private
 
   def fetch_free_judo_camp_ids
-    activities.joins(:category, camp: :school_period)
-              .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true })
+    activities.joins(:category, camp: :school_period, activity_enrollments: :student)
+              .where(categories: { name: 'Judo' }, school_periods: { paid: true, free_judo: true }, activity_enrollments: { confirmed: true })
               .pluck('camps.id')
   end
 
   def fetch_attended_camps(free_judo_camp_ids)
-    camp_enrollments.attended
+    camp_enrollments.confirmed
+                    .attended
                     .joins(camp: :school_period)
                     .where.not(camp_id: free_judo_camp_ids)
                     .where(school_periods: { paid: true })
@@ -483,7 +485,8 @@ class Student < ApplicationRecord
   end
 
   def fetch_unattended_upcoming_camps(free_judo_camp_ids)
-    camp_enrollments.unattended
+    camp_enrollments.confirmed
+                    .unattended
                     .joins(camp: :school_period)
                     .where(school_periods: { paid: true })
                     .where('camps.ends_at > ?', Time.current)

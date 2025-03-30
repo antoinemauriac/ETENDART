@@ -127,9 +127,6 @@
               <li class="p-1">
                 <%= child.age %> ans
               </li>
-<!--              <li class="p-1">-->
-                <%#= child.gender %>
-<!--              </li>-->
               <li class="p-1 d-flex align-items-center">
                 COTISANT <%= @start_year %>-<%= @start_year + 1 %>
                 <% if child&.current_membership&.paid %>
@@ -138,14 +135,6 @@
                 <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small ms-2"></i>
                 <% end %>
               </li>
-<!--              <li class="p-1">-->
-                <%# if child.any_lack_of_infos? %>
-<!--                <p class="text-warning">
-                  <i class="fa-solid fa-exclamation-triangle"></i>
-                  Il manque des informations
-                </p>
-                <%# end %>-->
-<!--              </li>-->
               </ul>
             </div>
             </section>
@@ -165,12 +154,16 @@
     </div>
 
   <% elsif !@existing_children %>
-    <p class="text-center my-4">
-      Pour inscrire un enfant à un stage, vous devez d'abord compléter son profil
-    </p>
+    <div class="row justify-content-center align-items-center flex-column">
+      <div class="col-12 col-md-6 mt-3 mt-md-0">
+        <p class="text-center my-4">
+          Pour inscrire un enfant à un stage, vous devez d'abord compléter son profil
+        </p>
 
-    <div class="text-center my-3">
-      <%= link_to 'Ajouter un enfant ➕', new_parents_child_path, class: "btn btn-dark rounded-4 px-4 py-2" %>
+        <h6 class="text-center mb-0">
+          <%= link_to 'Ajouter un enfant', new_parents_child_path, class: "col-12 col-lg-6 btn btn-dark rounded-4 px-4 py-3" %>
+        </h6>
+      </div>
     </div>
   <% end %>
 </section>
