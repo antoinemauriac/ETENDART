@@ -3,121 +3,135 @@
 <head>
   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #333333;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      font-size: 16px;
-    }
-    h3, h4 {
-      color: #000; /* Titres en noir */
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 10px; /* Espacement entre les éléments */
-    }
-
-    .highlight {
-      color: #d9534f; /* Rouge pour les montants impayés */
-      font-weight: bold;
-    }
-    .total {
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-    .camp-name {
-      margin-bottom: 15px; /* Espacement spécifique pour les noms des camps */
-      display: block; /* Assure que le margin-bottom s'applique correctement */
-    }
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 24px;
-      background-color: #ffffff;
-      height: 100%;
-    }
-    .header {
-      background-size: cover;
-      background-position: center;
+    .banner-image {
+      height: 120px;
+      object-fit: cover;
       width: 100%;
-      height: 96px;
-      margin-bottom: 20px;
+    }
+    .payment-notice {
+      color: #dc3545;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-<div class="container">
-      <div class="header" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('<%= cl_image_path @academy.image.key, quality: :auto %>')">
-      </div>
+<div dir="ltr" class="es-wrapper-color" lang="fr" style="background-color:#FAFAFA">
+  <table width="100%" cellspacing="0" cellpadding="0" class="es-wrapper" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top;background-color:#FAFAFA">
+    <tr>
+      <td valign="top" style="padding:0;Margin:0">
+        <!-- Logo Header -->
+        <table cellpadding="0" cellspacing="0" align="center" class="l" style="width:100%">
+          <tr>
+            <td align="center">
+              <table bgcolor="#ffffff" align="center" cellpadding="0" cellspacing="0" class="bd" style="width:600px">
+                <tr>
+                  <td align="center" style="padding:20px">
+                    <img src="https://ekbuvhl.stripocdn.email/content/guids/CABINET_1c62885b1fcb6c700a417b07d9f419df3fcc4e200a048572d82af6c0e53d3b55/images/image_RT5.png" alt="Logo" width="200" style="display:block" height="48">
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
 
-    <h3>Bonjour <%= @parent.first_name %>,</h3>
+        <!-- Main Content -->
+        <table cellpadding="0" cellspacing="0" align="center" style="width:100%">
+          <tr>
+            <td align="center">
+              <table bgcolor="#ffffff" align="center" cellpadding="0" cellspacing="0" style="width:600px">
+                <tr>
+                  <td align="left" style="padding:30px">
+                    <!-- Banner Image -->
+                    <div style="margin-bottom:20px">
+                      <img src="<%= cl_image_path(@academy.image.key) %>" alt="Academy Banner" class="banner-image" style="display:block;max-width:560px">
+                    </div>
 
-    <p>Merci pour votre achat sur Etendart Academy !</p>
+                    <!-- Separator -->
+                    <div style="border-bottom:1px solid #cccccc;margin:20px 0"></div>
 
-    <p>Voici un récapitulatif des adhésions et inscriptions aux prochains stages :</p>
+                    <!-- Title -->
+                    <h1 style="font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:24px;font-weight:bold;text-align:center;color:#000000;margin-bottom:20px">
+                      Confirmation de votre commande
+                    </h1>
 
-    <% if @membership_cart_items.any? %>
-        <h4>COTISATION ETENDART ACADEMY</h4>
-        <ul>
-            <% @membership_cart_items.each do |item| %>
-                <li>
-                    <strong><%= item.name %></strong> - <%= item.price.to_i %> €
-                </li>
-            <% end %>
-        </ul>
-    <% end %>
+                    <!-- Content -->
+                    <div style="font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;color:#333333;line-height:1.5">
+                      <h3>Bonjour <%= @parent.first_name %>,</h3>
 
-    <% if @enrollments.any? %>
-        <h4>INSCRIPTIONS AUX STAGES</h4>
-        <% @enrollments.each do |student_name, camps| %>
-            <strong><p>Inscriptions pour <%= student_name %> :</p></strong>
-            <ul>
-                <% camps.each do |camp| %>
-                    <li>
-                        <span class="camp-name">
-                            <strong><%= camp[:camp_name] %></strong> - <%= camp[:camp_dates] %> - <%= camp[:camp_price].to_i %> €
-                            <% unless camp[:paid] %>
-                                <span class="highlight">(À payer au premier jour du stage)</span>
-                            <% end %>
-                        </span>
-                        <ul>
-                            <% camp[:activities].each do |activity| %>
-                                <li>
-                                    Activité <%= activity[:category] %> : <%= activity[:name] %> (<%= activity[:hour_range] %>) - <%= activity[:location] %>
-                                </li>
-                            <% end %>
-                        </ul>
-                    </li>
-                <% end %>
-            </ul>
-        <% end %>
-    <% end %>
+                      <p>Merci pour votre achat sur Etendart Academy !</p>
 
-    <%# Résumé des montants à payer %>
-    <% unpaid_camps = @enrollments.flat_map { |student_name, camps| camps.select { |camp| !camp[:paid] }.map { |camp| camp.merge(student_name: student_name) } } %>
-    <% if unpaid_camps.any? %>
-        <h4>MONTANT RESTANT A PAYER EN CHEQUE OU ESPECE</h4>
-        <ul>
-            <% unpaid_camps.each do |camp| %>
-                <li>
-                    <%= camp[:student_name] %> - <%= camp[:camp_name] %> - 
-                    <%= camp[:camp_price].to_i %> €
-                </li>
-            <% end %>
-        </ul>
-        <p class="total">Total restant à payer : <%= unpaid_camps.sum { |camp| camp[:camp_price].to_i } %> €</p>
-    <% end %>
+                      <p>Voici un récapitulatif des adhésions et inscriptions aux prochains stages :</p>
 
-    <p>Si vous avez des questions, n'hésitez pas à nous contacter en envoyant un mail à <a href="mailto:etendart@weareetendart.org">etendart@weareetendart.org</a>.</p>
+                      <% if @membership_cart_items.any? %>
+                          <h4>COTISATION ETENDART ACADEMY</h4>
+                          <ul>
+                              <% @membership_cart_items.each do |item| %>
+                                  <li>
+                                      <strong><%= item.name %></strong> - <%= item.price.to_i %> €
+                                  </li>
+                              <% end %>
+                          </ul>
+                      <% end %>
 
-    <p>A très bientôt !</p>
-    <p>L'équipe Etendart Academy</p>
+                      <% if @enrollments.any? %>
+                          <h4>INSCRIPTIONS AUX STAGES</h4>
+                          <% @enrollments.each do |student_name, camps| %>
+                              <strong><p>Inscriptions pour <%= student_name %> :</p></strong>
+                              <ul>
+                                  <% camps.each do |camp| %>
+                                      <li>
+                                          <span class="camp-name">
+                                              <strong><%= camp[:camp_name] %></strong> - <%= camp[:camp_dates] %> - <%= camp[:camp_price].to_i %> €
+                                              <% unless camp[:paid] %>
+                                                  <span class="payment-notice">(À payer au premier jour du stage)</span>
+                                              <% end %>
+                                          </span>
+                                          <ul>
+                                              <% camp[:activities].each do |activity| %>
+                                                  <li>
+                                                      Activité <%= activity[:category] %> : <%= activity[:name] %> (<%= activity[:hour_range] %>) - <%= activity[:location] %>
+                                                  </li>
+                                              <% end %>
+                                          </ul>
+                                      </li>
+                                  <% end %>
+                              </ul>
+                          <% end %>
+                      <% end %>
+
+                      <%# Résumé des montants à payer %>
+                      <% unpaid_camps = @enrollments.flat_map { |student_name, camps| camps.select { |camp| !camp[:paid] }.map { |camp| camp.merge(student_name: student_name) } } %>
+                      <% if unpaid_camps.any? %>
+                          <h4>MONTANT RESTANT A PAYER EN CHEQUE OU ESPECE</h4>
+                          <ul>
+                              <% unpaid_camps.each do |camp| %>
+                                  <li>
+                                      <%= camp[:student_name] %> - <%= camp[:camp_name] %> - 
+                                      <%= camp[:camp_price].to_i %> €
+                                  </li>
+                              <% end %>
+                          </ul>
+                          <p class="total">Total restant à payer : <%= unpaid_camps.sum { |camp| camp[:camp_price].to_i } %> €</p>
+                      <% end %>
+                    </div>
+
+                    <!-- Footer Separator -->
+                    <div style="border-bottom:1px solid #cccccc;margin:20px 0"></div>
+
+                    <!-- Footer -->
+                    <div style="text-align:center;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;color:#333333;line-height:1.5">
+                      <p>Si vous avez des questions, n'hésitez pas à nous contacter à <a href="mailto:etendart@weareetendart.org" style="color:#000000">etendart@weareetendart.org</a></p>
+                      <p>L'équipe Etendart Academy</p>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </div>
 </body>
 </html>
