@@ -82,7 +82,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
             product: membership,
             price: Membership::PRICE,
             stripe_price_id: "price_1R7fTuFQepXQSK7Ty0jfdwvI",
-            name: "Adhésion #{start_year} - #{student.first_name} #{student.last_name}"
+            name: "Adhésion #{start_year}/#{start_year + 1} - #{student.first_name} #{student.last_name}"
           )
         end
       end
