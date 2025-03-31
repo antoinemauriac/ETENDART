@@ -31,9 +31,22 @@ class Camp < ApplicationRecord
   ###############################################################################
   # Pour la waitlist d'un camp
   ###############################################################################
+  #
+  
+  def format_starts_at_ends_at
+    if starts_at && ends_at
+      "Du #{starts_at.strftime('%d/%m/%Y')} au #{ends_at.strftime('%d/%m/%Y')}"
+    else
+      "Dates non définies"
+    end
+  end
 
   def full?
     camp_enrollments.count >= capacity
+  end
+
+  def full_name
+    "#{academy.name}-#{school_period.full_name_short}-#{name}"
   end
 
   def waitlist_full?

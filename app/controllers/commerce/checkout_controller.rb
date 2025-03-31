@@ -38,8 +38,8 @@ class Commerce::CheckoutController < ApplicationController
     end
 
     # chaque camp_enrollment de ces cart_items passe confirmed à true
-    camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
-    camp_enrollment_cart_items.each do |item|
+    @camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
+    @camp_enrollment_cart_items.each do |item|
       item.product.update!(confirmed: true)
       activity_enrollments = item.product.student.activity_enrollments.where(activity: item.product.camp.activities)
       activity_enrollments.each do |activity_enrollment|
@@ -50,6 +50,11 @@ class Commerce::CheckoutController < ApplicationController
       end
     end
 
+    @academy = @camp_enrollment_cart_items.first.product.camp.academy
+
+    @enrollments = Commerce::CartItem.group_by_student(@camp_enrollment_cart_items)
+    @membership_cart_items = @cart.cart_items.where(product_type: 'Membership')
+    CheckoutMailer.payment_summary(@parent, @enrollments, @membership_cart_items, @academy).deliver_now
 
     flash[:notice] = 'Votre paiement a bien été effectué.'
   end
