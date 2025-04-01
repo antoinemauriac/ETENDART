@@ -21,6 +21,7 @@ class Managers::CoursesController < ApplicationController
     @annual_program = @activity.annual_program if @activity.annual_program
     @category = course.category
     @activity = course.activity
+    @start_year = course.starts_at.month >= 9 ? course.starts_at.year : course.starts_at.year - 1
     @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id)).order(last_name: :asc)
     @present_students_count = @course.present_students_count
     @missing_students_count = @course.missing_students_count
@@ -75,6 +76,7 @@ class Managers::CoursesController < ApplicationController
                          .includes(student: [:photo_attachment, :camp_enrollments])
                          .joins(:student)
                          .order('students.last_name ASC')
+    @start_year = @course.starts_at.month >= 9 ? @course.starts_at.year : @course.starts_at.year - 1
 
     @present_students_count = @course.course_enrollments.where(present: true).count
     @missing_students_count = @course.course_enrollments.where(present: false).count

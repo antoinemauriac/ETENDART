@@ -4,7 +4,7 @@ class Commerce::CartItemsController < ApplicationController
     @cart_item = Commerce::CartItem.new(cart_item_params)
     @cart_item.cart = Commerce::Cart.find(params[:cart_id])
     if @cart_item.save
-      redirect_to commerce_cart_path, notice: "L'article a bien été ajouté au panier"
+      redirect_to commerce_cart_path
     else
       redirect_back fallback_location: commerce_cart_path, alert: "Erreur lors de l'ajout de l'article au panier"
     end

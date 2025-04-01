@@ -16,6 +16,7 @@
           <% if academy.banished %>
             <p>EXCLUS : <strong><%= banished_students.count %></strong></p>
           <% end %>
+            <p><i class="fa-solid fa-circle-xmark fa-pink me-2 fa-smaller"></i><em>élève non cotisant</em></p>         
         </div>
         <div class="course-status">
           <% if course.status %>
@@ -46,11 +47,12 @@
           <tbody>
             <% enrollments.each do |enrollment| %>
               <% student = enrollment.student %>
+              <% membership = student.memberships.find_by(start_year: @start_year) %>
               <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
               <% name_style = school_period && school_period.paid && !camp_enrollment&.paid ? "color: #FF5656;font-weight:bold" : "" %>
 
               <tr class="equal-height-row">
-                <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: course }%>
+                <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: course, membership: membership }%>
                 <td class="align-middle" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
                   <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id), class: "full-width-course" do %>
                     <span class="student-mr" style="<%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
