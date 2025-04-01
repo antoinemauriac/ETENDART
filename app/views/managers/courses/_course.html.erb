@@ -19,6 +19,7 @@
           <% if academy.banished %>
             <p>NB ÉLÈVES EXCLUS : <strong><%= banished_students.count %></strong></p>
           <% end %>
+        <p><i class="fa-solid fa-circle-xmark fa-pink me-2 fa-smaller"></i><em>élève non cotisant</em></p>   
         </div>
         <div class="course-status">
           <% if course.status %>
@@ -49,10 +50,11 @@
           <tbody>
             <% enrollments.each do |enrollment| %>
               <% student = enrollment.student %>
+              <% membership = student.memberships.find_by(start_year: @start_year) %>
               <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
               <% name_style = school_period && school_period.paid && !camp_enrollment&.paid ? "color: #fc3535;font-weight:bold" : "" %>
               <tr class="equal-height-row">
-                <td class="align-middle flexy" style="width: 30%">
+                <td class="align-middle flexy" style="width: 30%;position:relative">
                   <%= link_to managers_student_path(student), class: "flexy" do %>
                     <% if student.photo.key? %>
                       <%= cl_image_tag student.photo.key,
@@ -63,10 +65,10 @@
                         height: 300 %>
                     <% else %>
                       <i class="fa-solid fa-circle-user" style="font-size:80px"></i>
-  <!--                    <div class="student-photo-profile student-photo-profile-small">-->
-                        <%#= image_tag('camera-yellow.svg', style: "width:40px", alt: 'description de l\'image') %>
-<!--                      </div>-->
                     <% end %>
+                  <% end %>
+                  <% if !membership || !membership.paid  %>
+                    <i class="fa-solid fa-circle-xmark fa-pink no-membership-flag"></i>
                   <% end %>
                 </td>
                 <td class="align-middle" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis;">

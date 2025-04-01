@@ -1,4 +1,4 @@
-<td class="align-middle flexy" style="width: 30%;text-align:center"
+<td class="align-middle flexy" style="width: 30%;text-align:center;position:relative"
   data-controller="update-photo-from-course"
   data-update-photo-from-course-target="studentPhoto"
   data-update-photo-from-course-course-id-value="<%= course.id %>"
@@ -12,23 +12,29 @@
               width: 300,
               height: 300 %>
     <% end %>
+    <% if !membership || !membership.paid  %>
+      <i class="fa-solid fa-circle-xmark fa-pink no-membership-flag"></i>
+    <% end %>
   <% else %>
-  <div>
-    <input type="file" id="photo_<%= student.id %>"
+    <div>
+      <input type="file" id="photo_<%= student.id %>"
         data-action="change->update-photo-from-course#submit"
         data-update-photo-from-course-target="input"
         accept="image/*" capture="environment"
         data-origin="course"
         style="display:none;cursor:pointer;">
-    <label for="photo_<%= student.id %>"
+      <label for="photo_<%= student.id %>"
         data-update-photo-from-course-target="label">
       <div class="student-photo-profile student-photo-profile-small">
-      <%= image_tag('camera-yellow.svg', style: "width:40px", alt: 'description de l\'image') %>
+        <%= image_tag('camera-yellow.svg', style: "width:40px", alt: 'description de l\'image') %>
       </div>
-    </label>
-    <div class="loader-container">
+      </label>
+      <div class="loader-container">
       <div class="loader-small d-none" data-update-photo-from-course-target="spinner"></div>
+      </div>
     </div>
-  </div>
+    <% if !membership || !membership.paid  %>
+      <i class="fa-solid fa-circle-xmark fa-pink no-membership-flag"></i>
+    <% end %>
   <% end %>
 </td>

@@ -21,6 +21,7 @@ class Coaches::CoursesController < ApplicationController
     @school_period = course.school_period
     @category = course.category
     @activity = course.activity
+    @start_year = course.starts_at.month >= 9 ? course.starts_at.year : course.starts_at.year - 1
     @banished_students = @activity.banished_students.where.not(id: @enrollments.pluck(:student_id)).order(last_name: :asc)
     @present_students_count = @course.present_students_count
     @missing_students_count = @course.missing_students_count
