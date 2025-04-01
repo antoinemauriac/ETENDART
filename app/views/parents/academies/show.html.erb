@@ -2,88 +2,88 @@
   <%= @academy.name.upcase %>
 </h1>
 
-  <div class="row justify-content-center mt-3">
+<div class="row justify-content-center mt-3">
 
-    <div class="col-12 col-lg-6">
-        <% @school_periods.each do |school_period| %>
-          <div class="mb-3">
-          <%= link_to new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "text-decoration-none text-dark" do %>
-            <h4 class="fw-bold mb-0 p-3 bg-black rounded-top-4 text-center text-white"><%= school_period.name.upcase %> - <%= school_period.year %></h4>
+  <div class="col-12 col-lg-6">
+    <% @school_periods.each do |school_period| %>
+      <div class="mb-3">
+        <h4 class="fw-bold mb-0 p-3 bg-black rounded-top-4 text-center text-white"><%= school_period.name.upcase %> - <%= school_period.year %></h4>
 
-            <div class="row bg-white py-3 p-2 justify-content-center align-items-stretch rounded-bottom-4">
+        <div class="row bg-white py-3 p-2 justify-content-center align-items-stretch rounded-bottom-4">
 
-            <% if school_period.camps.any? %>
-              <div class="row row-cols-1 row-cols-sm-2 g-3">
+          <% if school_period.camps.any? %>
+            <div class="row row-cols-1 row-cols-sm-2 justify-content-center gap-3">
               <% school_period.camps_with_activities.order(:starts_at).each do |camp| %>
-                <div class="col">
-                <div class="h-100 d-flex flex-column">
-                  <h5 class="text-center text-sm-start">
-                  <%= camp.name.upcase %>
-                  </h5>
-                  <p class="d-block mb-2 text-center text-sm-start">
-                  Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %>
-                  </p>
-                  <p class="d-block mb-2 text-center text-sm-start">
-                    <%= camp.school_period.format_price %>
-                  </p>
-                  <div class="text-center text-sm-start">
-                  <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>
-                  </div>
+                <div class="col-12 col-sm-5 p-4 rounded-4 parent-bg shadow-sm">
+                  <%= link_to new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "text-decoration-none text-dark" do %>
+                    <div class="h-100 d-flex flex-column">
+                      <h5 class="text-center text-sm-start">
+                        <%= camp.name.upcase %>
+                      </h5>
+                      <p class="d-block mb-2 text-center text-sm-start">
+                        Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %>
+                      </p>
+                      <p class="d-block mb-2 text-center text-sm-start">
+                        <%= camp.school_period.format_price %>
+                      </p>
+                      <div class="text-center text-sm-start">
+                        <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>
+                      </div>
 
-                  <% if camp.activities.any? %>
-                  <ul class="mt-3 text-center text-sm-start flex-grow-1">
-                    <% camp.activities.pluck(:category_id).uniq.each do |category_id| %>
-                    <h6 style="font-size: 0.9rem;">
-                      <%= Category.find(category_id).name %>
-                    </h6>
-                    <% end %>
-                  </ul>
-                  <% else %>
-                  <p class="text-center flex-grow-1">
-                    <em>Soyez patients ! Les activités seront bientôt disponibles.</em>
-                  </p>
+                      <% if camp.activities.any? %>
+                        <ul class="mt-3 text-center text-sm-start flex-grow-1">
+                          <% camp.activities.pluck(:category_id).uniq.each do |category_id| %>
+                            <h6 style="font-size: 0.9rem;">
+                              <%= Category.find(category_id).name %>
+                            </h6>
+                          <% end %>
+                        </ul>
+                      <% else %>
+                        <p class="text-center flex-grow-1">
+                          <em>Soyez patients ! Les activités seront bientôt disponibles.</em>
+                        </p>
+                      <% end %>
+                    </div>
                   <% end %>
-                  <hr class="w-100 mt-auto">
-                </div>
                 </div>
               <% end %>
-              </div>
+            </div>
 
-              <div class="col-12 text-center mt-3">
-              <span class="btn btn-dark rounded-pill px-3">INSCRIPTION</span>
-              </div>
+            <div class="col-12 text-center mt-3">
+              <h6 class="text-center mb-0 mt-3">
+                <%= link_to 'INSCRITPION', new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "col-12 col-lg-6 btn btn-dark rounded-4 px-4 py-3  mb-3 border" %>
+              </h6>
+            </div>
 
-            <% else %>
-              <p class="text-center">
+          <% else %>
+            <p class="text-center">
               <em>
                 Restez patients ! Les stages seront bientôt disponibles.
               </em>
-              </p>
-            <% end %>
-            </div>
-          <% end %>
-          </div>
-
-        <% end %>
-    </div>
-
-    <div class="col-12 col-lg-4">
-      <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center">
-        LIEUX
-      </h4>
-
-      <ul class="row bg-white p-3 justify-content-center rounded-bottom-4">
-        <% @academy.locations.each do |location| %>
-          <li>
-            <h6>
-              <%= location.name %>
-            </h6>
-            <p>
-              <%= location.address %>
             </p>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
+
+  <div class="col-12 col-lg-4">
+    <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center">
+      LIEUX
+    </h4>
+
+    <ul class="row bg-white p-3 justify-content-center rounded-bottom-4">
+      <% @academy.locations.each do |location| %>
+        <li>
+          <h6>
+            <%= location.name %>
+          </h6>
+          <p>
+            <%= location.address %>
+          </p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+</div>

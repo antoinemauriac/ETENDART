@@ -14,8 +14,8 @@ export default class extends Controller {
     const checkbox = card.querySelector('input[type="checkbox"]')
 
     checkbox.checked = !checkbox.checked
-    card.classList.toggle('border')
-    card.classList.toggle('border-black')
+    card.classList.toggle('parent-bg')
+    // card.classList.toggle('border-black')
     card.classList.toggle('shadow')
     
     this.updateSubmitButton()

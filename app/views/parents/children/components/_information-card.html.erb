@@ -1,12 +1,16 @@
-<section class="row g-3">
-  <div class="col-12 col-md-3">
-    <div class="ratio ratio-1x1">
-      <% if child.photo.key %>
-      <%= cl_image_tag child.photo.key, class: "img-fluid rounded-circle object-fit-cover" %>
-      <% else %>
-      <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
-      <% end %>
-    </div>
+<section class="row">
+  <div class="col-12 col-md-3 text-center mb-3 d-flex justify-content-center align-items-center">
+    <% if child.photo.key? %>
+      <%= cl_image_tag child.photo_or_default,
+              data: { upload_photo_target: "photo" },
+              crop: "thumb",
+              class: "avatar-parent",
+              gravity: "face",
+              width: 300,
+              height: 300 %>
+    <% else %>
+      <i class="fa-solid fa-circle-user" style="font-size: 10rem"></i>
+    <% end %>
   </div>
   <div class="col-12 col-md-9">
     <section class="row justify-content-center" id="infos-card">
