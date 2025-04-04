@@ -13,11 +13,31 @@
       <%= f.input :address, label: "Adresse", placeholder: "12 rue de la Paix" %>
       <%= f.input :zipcode, label: "Code postal", placeholder: "75000" %>
       <%= f.input :city, label: "Ville", placeholder: "Paris" %>
-      <%= f.input :has_valid_rgpd, label: "J'accepte les conditions d'utilisation", as: :boolean, input_html: { required: true } %>
       <%= f.input :has_newsletter, label: "Je souhaite recevoir la newsletter", as: :boolean %>
+      <%= f.input :has_valid_rgpd,
+          label: "J'ai pris connaissance de la <a href='#' class='text-primary' data-bs-toggle='modal' data-bs-target='#rgpdModal'>Charte de Confidentialité</a>".html_safe,
+          as: :boolean,
+          input_html: { required: true } %>
+      <%= render 'parents/profiles/components/rgpd_modal' %>
+      <div class="text-muted fw-light fst-italic small px-3">
+        <p class="">
+          Conformément au RGPD, vous disposez des droits suivants :
+        </p>
+        <ul>
+          <li>
+            Le droit d'accès à vos données personnelles : vous pouvez demander une copie de toutes les informations que nous détenons vous concernant.
+          </li>
+          <li>
+            Le droit à l'effacement : vous pouvez demander la suppression de vos données personnelles de nos systèmes.
+          </li>
+        </ul>
+        <p>
+          Pour exercer l'un de ces droits, veuillez contacter notre délégué à la protection des données via <%= mail_to "etendart@weareetendart.org", class: "text-primary" %>
+        </p>
+      </div>
     </div>
 
-    <div class="form-actions text-center">
+    <div class="form-actions text-center mt-5">
       <%= f.button :submit, "Enregistrer", class: "btn btn-dark rounded-4 py-2 px-4" %>
     </div>
   <% end %>
