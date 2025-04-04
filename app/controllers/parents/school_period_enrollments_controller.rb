@@ -1,4 +1,4 @@
-class Parents::SchoolPeriodEnrollmentsController < ApplicationController
+class Parents::SchoolPeriodEnrollmentsController < Parents::BaseController
   def new
     @academy = Academy.find(params[:academy_id])
     @school_period = SchoolPeriod.find(params[:school_period_id])
@@ -52,6 +52,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
           product: camp_enrollment,
           price: camp_enrollment.school_period.price,
           stripe_price_id: camp_enrollment.stripe_price_id,
+          payment_method: camp_enrollment.school_period.price == 0 ? "offert" : "Carte bancaire",
           name: "Inscription #{camp_enrollment.school_period.name}/#{camp_enrollment.camp.name}/#{camp_enrollment.camp.academy.name} - #{camp_enrollment.student.first_name} #{camp_enrollment.student.last_name}"
         )
       end

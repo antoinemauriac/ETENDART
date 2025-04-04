@@ -1,4 +1,4 @@
-class Parents::ChildrenController < ApplicationController
+class Parents::ChildrenController < Parents::BaseController
   before_action :set_parent
 
   # path: parents_children_path
