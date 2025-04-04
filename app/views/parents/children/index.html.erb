@@ -20,7 +20,7 @@
             </div>
             <div class="modal-body">
               <p>
-                Nous avons trouvé des enfants déjà enregistrés dans notre base de données qui peuvent correspondre à vos enfants. 
+                Nous avons trouvé des enfants déjà enregistrés dans notre base de données qui peuvent correspondre à vos enfants.
               </p>
               <p>Cliquez sur les cartes correspondant à vos enfants pour les associer à votre compte.</p>
               <p>
@@ -83,12 +83,12 @@
 
         <div class="row d-flex justify-content-center gap-1 flex-column align-items-center">
           <div class="text-center my-3 position-relative">
-            <%= f.submit "Associer à mon compte", 
-                class: "col-12 col-sm-8 col-md-4 btn btn-dark rounded-4 px-4 py-2", 
-                data: { 
+            <%= f.submit "Associer à mon compte",
+                class: "col-12 col-sm-8 col-md-4 btn btn-dark rounded-4 px-4 py-2",
+                data: {
                   form__children__select_check_target: "submitButton"
                 } %>
-            <div class="position-absolute top-0 start-0 w-100 h-100" 
+            <div class="position-absolute top-0 start-0 w-100 h-100"
                 data-form--children--select-check-target="buttonOverlay"
                 data-action="click->form--children--select-check#showHelper"
                 style="cursor: not-allowed">
@@ -178,3 +178,7 @@
     </div>
   <% end %>
 </section>
+
+<%# Modal cart_warning %>
+<% session[:cart_warning] %>
+<%= render "parents/components/cart_warning_modal" %>

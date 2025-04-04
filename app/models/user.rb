@@ -164,6 +164,16 @@ class User < ApplicationRecord
     carts.find_by(status: 'pending')
   end
 
+  # est-ce que le panier contient des items à valider ?
+  def has_items_to_valid?
+    pending_cart && pending_cart.cart_items.any?
+  end
+
+  # est-ce que le panier contient un membership a payer ?
+  def has_membership_to_pay?
+    pending_cart && pending_cart.cart_items.any? { |item| item.product_type == 'Membership' }
+  end
+
   ##############################################################################
 
   private

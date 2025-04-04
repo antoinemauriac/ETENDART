@@ -1,0 +1,148 @@
+<%# app/views/parents/profiles/components/_rgpd-modal.html.erb %>
+
+<!-- Modal -->
+<div class="modal fade" id="rgpdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Charte de Confidentialité - Etendart Academy
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3 class="mt-3 mb-2 fs-5">
+          1. Introduction
+        </h3>
+        <p>
+          Etendart academy s'engage à protéger la vie privée de ses membres, bénévoles, donateurs et partenaires. Cette charte de confidentialité explique comment nous collectons, utilisons, stockons et protégeons vos données personnelles, conformément au Règlement Général sur la Protection des Données (RGPD).
+        </p>
+
+        <h3 class="mt-3 mb-2 fs-5">
+          2. Données collectées
+        </h3>
+        <p>
+          Nous collectons uniquement les données nécessaires à la gestion et au bon fonctionnement de l'association, notamment :
+
+          <ul>
+            <li>
+              Nom, prénom
+            </li>
+            <li>
+              Adresse e-mail
+            </li>
+            <li>
+              Adresse postale
+            </li>
+            <li>
+              Numéro de téléphone
+            </li>
+            <li>
+              Informations bancaires (uniquement pour les adhésions, inscriptions, et dons)
+            </li>
+            <li>
+              Toute autre information pertinente pour les activités de l'association
+            </li>
+          </ul>
+        </p>
+
+        <h3 class="mt-3 mb-2 fs-5">
+          3. Finalités du traitement
+        </h3>
+        <p>
+          Les données collectées sont utilisées pour :
+          <ul>
+            <li>
+              La gestion des adhésions, des inscriptions, et des dons
+            </li>
+            <li>
+              L'organisation des stages, programmes annuels, et évènements
+            </li>
+            <li>
+              La communication avec les membres
+            </li>
+            <li>
+              Le respect des obligations légales et réglementaires
+            </li>
+          </ul>
+        </p>
+
+        <h3 class="mt-3 mb-2 fs-5">
+          4. Base légale du traitement
+        </h3>
+        <p>
+          Nous collectons et traitons vos données sur les bases légales suivantes :
+
+          <ul>
+            <li>
+              Consentement explicite
+            </li>
+            <li>
+              Exécution d'un contrat (adhésion, participation à un événement)
+            </li>
+            <li>
+              Obligations légales
+            </li>
+            <li>
+              Intérêts légitimes de l'association
+            </li>
+          </ul>
+
+        </p>
+
+        <h3 class="mt-3 mb-2 fs-5">
+          5. Durée de conservation des données
+        </h3>
+        <p>
+          Vos données sont conservées pendant la durée strictement nécessaire à la réalisation des finalités mentionnées ci-dessus. À l'expiration de cette période, elles sont supprimées ou anonymisées.
+        </p>
+
+        <h3 class="mt-3 mb-2 fs-5">
+          6. Partage et protection des données
+        </h3>
+        <p>
+         Vos données ne sont jamais vendues ni cédées à des tiers. Elles peuvent être partagées uniquement avec :
+
+         <ul>
+          <li>
+            Nos prestataires de service sous contrat (ex. : plateforme de paiement)
+          </li>
+          <li>
+            Les autorités compétentes en cas d'obligation légale. Nous mettons en place des mesures de sécurité appropriées pour protéger vos informations.
+          </li>
+         </ul>
+        </p>
+
+        <h3 class="mt-3 mb-2 fs-5">
+          7. Vos droits
+        </h3>
+        <p>
+         Conformément au RGPD, vous disposez des droits suivants :
+
+         <ul>
+          <li>
+            Accès à vos données personnelles
+          </li>
+          <li>
+            Rectification des données inexactes
+          </li>
+          <li>
+            Suppression de vos données (droit à l'oubli)
+          </li>
+          <li>
+            Opposition ou limitation du traitement
+          </li>
+          <li>
+            Portabilité de vos données
+          </li>
+         </ul>
+            Pour exercer vos droits, contactez-nous à : <%= mail_to "etendart@weareetendart.org", class: "text-primary" %>.
+        </p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

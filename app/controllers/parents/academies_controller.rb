@@ -1,4 +1,4 @@
-class Parents::AcademiesController < ApplicationController
+class Parents::AcademiesController < Parents::BaseController
   def index
     @academies = policy_scope([:parents, Academy])
     @school_periods = SchoolPeriod.with_future_camps
