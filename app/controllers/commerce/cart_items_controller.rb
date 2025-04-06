@@ -14,7 +14,7 @@ class Commerce::CartItemsController < ApplicationController
     authorize Commerce::CartItem
     @cart_item = Commerce::CartItem.find(params[:id])
     if @cart_item.update(cart_item_params)
-      redirect_to commerce_cart_path, notice: "L'article a bien été modifié"
+      redirect_to commerce_cart_path
     else
       redirect_back fallback_location: commerce_cart_path, alert: "Erreur lors de la modification de l'article"
     end

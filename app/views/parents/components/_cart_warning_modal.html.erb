@@ -1,0 +1,39 @@
+<%# app/views/parents/components/_cart_warning_modal.html.erb %>
+
+<!-- Modal -->
+<% if current_user.has_items_to_valid? %>
+  <div class="modal fade" id="cartWarningModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-controller="cart--warning-modal" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title fs-6 text-center" id="exampleModalLabel">
+            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+            L'inscription n'est pas terminée
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p class="text-center">
+            Vous avez des inscriptions dans votre panier qui n'ont pas encore été finalisées.
+            </p>
+
+            <p class="text-center">
+              Pour finaliser ces inscriptions, veuillez les valider dans votre panier.
+            </p>
+            <%# if current_user.has_membership_to_pay? %>
+<!--              <p class="text-center">
+                Si vous n'avez pas réglé la cotisation annuelle de votre enfant, vous ne pourrez pas valider ces inscriptions.
+              </p>
+            <%# end %>-->
+        </div>
+        <div class="modal-footer">
+          <%= link_to 'Valider les inscriptions', commerce_cart_path, class: "btn btn-dark", data: { turbo: false } %>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+<%# Render du modal d'avertissement du panier %>
+<%#= render "parents/components/cart_warning_modal" %>

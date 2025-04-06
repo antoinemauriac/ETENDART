@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
       resource.save
       new_parents_profile_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
     elsif resource.parent? && resource.parent_profile
+      render_cart_warning_for(resource)
       parents_children_path # Redirige vers la page d'accueil des parents
     else
       super # Utilise le chemin par défaut fourni par Devise ou celui que tu as configuré
@@ -57,6 +58,12 @@ class ApplicationController < ActionController::Base
     if user_signed_in? && current_user.parent?
       pending_cart = current_user.pending_cart
       @pending_cart_items_count = pending_cart.cart_items.count
+    end
+  end
+  
+  def render_cart_warning_for(resource)
+    if resource.has_items_to_valid?
+      session[:cart_warning] = true
     end
   end
 end

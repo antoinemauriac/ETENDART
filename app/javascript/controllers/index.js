@@ -19,6 +19,9 @@ application.register("annual-enrollments-form", AnnualEnrollmentsFormController)
 import CampCoursesController from "./camp_courses_controller"
 application.register("camp-courses", CampCoursesController)
 
+import Cart__WarningModalController from "./cart/warning_modal_controller"
+application.register("cart--warning-modal", Cart__WarningModalController)
+
 import ClickableTableController from "./clickable_table_controller"
 application.register("clickable-table", ClickableTableController)
 

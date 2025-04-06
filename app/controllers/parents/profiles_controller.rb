@@ -1,4 +1,4 @@
-class Parents::ProfilesController < ApplicationController
+class Parents::ProfilesController < Parents::BaseController
   def new
     @parent = current_user
     authorize [:parents, :profiles], :new?
