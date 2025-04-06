@@ -56,6 +56,8 @@ class Commerce::CheckoutController < ApplicationController
     @membership_cart_items = @cart.cart_items.where(product_type: 'Membership')
     CheckoutMailer.payment_summary(@parent, @enrollments, @membership_cart_items, @academy).deliver_now
 
+    Cart.create!(parent: @parent, status: 'pending', total_price: 0)
+
     flash[:notice] = 'Votre inscription a bien été effectuée.'
   end
 
