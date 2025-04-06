@@ -53,7 +53,7 @@ class Parents::SchoolPeriodEnrollmentsController < Parents::BaseController
           price: camp_enrollment.school_period.price,
           stripe_price_id: camp_enrollment.stripe_price_id,
           payment_method: camp_enrollment.school_period.price == 0 ? "offert" : "Carte bancaire",
-          name: "Inscription #{camp_enrollment.school_period.name}/#{camp_enrollment.camp.name}/#{camp_enrollment.camp.academy.name} - #{camp_enrollment.student.first_name} #{camp_enrollment.student.last_name}"
+          name: "Inscription #{camp_enrollment.camp.academy.name} - #{camp_enrollment.school_period.name} - #{camp_enrollment.camp.name} - #{camp_enrollment.student.full_name}"
         )
       end
 
