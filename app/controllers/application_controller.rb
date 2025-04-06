@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :ensure_parent_profile
+  before_action :set_cart_notification
   include Pundit::Authorization
   include Pagy::Backend
 
@@ -53,6 +54,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_cart_notification
+    if user_signed_in? && current_user.parent?
+      pending_cart = current_user.pending_cart
+      @pending_cart_items_count = pending_cart.cart_items.count
+    end
+  end
+  
   def render_cart_warning_for(resource)
     if resource.has_items_to_valid?
       session[:cart_warning] = true
