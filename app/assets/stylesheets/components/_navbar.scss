@@ -74,7 +74,40 @@
   transition: all 0.2s ease-in-out;
 }
 
+.navbar-tog-container {
+  position: relative;
+}
 
+.cart-badge {
+  position: absolute;
+  top: -12px;
+  left: -16px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  // font-size: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-weight: bold;
+  z-index: 2;
+  text-align: center;
+}
+
+.cart-badge-no-position {
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  text-align: center;
+  width: 1.5rem;
+  height: 1.5rem
+}
+
+@media (min-width: 1160px) {
+  .cart-badge {
+    display: none;
+  }
+}
 
 .nav-item {
   padding: 0.5rem;
