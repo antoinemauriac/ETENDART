@@ -56,8 +56,7 @@ class ApplicationController < ActionController::Base
 
   def set_cart_notification
     if user_signed_in? && current_user.parent?
-      pending_cart = current_user.pending_cart
-      @pending_cart_items_count = pending_cart&.cart_items&.count || 0
+      @pending_cart_items_count = current_user.carts.current_cart_for(current_user).cart_items.length
     end
   end
   
