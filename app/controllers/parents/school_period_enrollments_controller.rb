@@ -1,9 +1,9 @@
-class Parents::SchoolPeriodEnrollmentsController < ApplicationController
+class Parents::SchoolPeriodEnrollmentsController < Parents::BaseController
   def new
     @academy = Academy.find(params[:academy_id])
     @school_period = SchoolPeriod.find(params[:school_period_id])
     authorize([:parents, SchoolPeriodEnrollment])
-    
+
     @school_period_enrollment = SchoolPeriodEnrollment.new
     @students = current_user.children
     if @students.empty?
@@ -52,7 +52,8 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
           product: camp_enrollment,
           price: camp_enrollment.school_period.price,
           stripe_price_id: camp_enrollment.stripe_price_id,
-          name: "Inscription #{camp_enrollment.school_period.name}/#{camp_enrollment.camp.name}/#{camp_enrollment.camp.academy.name} - #{camp_enrollment.student.first_name} #{camp_enrollment.student.last_name}"
+          payment_method: camp_enrollment.school_period.price == 0 ? "offert" : "Carte bancaire",
+          name: "Inscription #{camp_enrollment.camp.academy.name} - #{camp_enrollment.school_period.name} - #{camp_enrollment.camp.name} - #{camp_enrollment.student.full_name}"
         )
       end
 
@@ -64,7 +65,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
           start_year: start_year,
           academy: academy,
           amount: Membership::PRICE,
-          stripe_price_id: "price_1R7fTuFQepXQSK7Ty0jfdwvI"
+          stripe_price_id: ENV["STRIPE_MEMBERSHIP_ID"]
         )
       end
 
@@ -81,7 +82,7 @@ class Parents::SchoolPeriodEnrollmentsController < ApplicationController
             student_id: student.id,
             product: membership,
             price: Membership::PRICE,
-            stripe_price_id: "price_1R7fTuFQepXQSK7Ty0jfdwvI",
+            stripe_price_id: ENV["STRIPE_MEMBERSHIP_ID"],
             name: "Adhésion #{start_year}/#{start_year + 1} - #{student.first_name} #{student.last_name}"
           )
         end
