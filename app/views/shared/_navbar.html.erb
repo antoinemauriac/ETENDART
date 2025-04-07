@@ -3,8 +3,11 @@
     <%= image_tag "navbar/logo_ea_noir.png", alt: "Logo Etendart Academy", width: "100" %>
   <% end %>
   <div class="navbar-tog-container">
-    <% if user_signed_in? && current_user.parent? && @pending_cart_items_count > 0 %>
-      <span data-navbar-target="badge" class="cart-badge"><%= @pending_cart_items_count %></span>
+    <% if user_signed_in? && current_user.parent? %>
+      <% pending_cart_items = current_user.carts.current_cart_for(current_user).cart_items %>
+      <% if pending_cart_items.length > 0 %>
+        <span data-navbar-target="badge" class="cart-badge"><%= pending_cart_items.length %></span>
+      <% end %>
     <% end %>
     <button class="navbar-tog" data-navbar-target="navbarToggle" data-action="click->navbar#displayMenu">
       <span class="icon-bar"></span>
@@ -135,12 +138,11 @@
             <h6 class="mb-0">
               <%= link_to commerce_cart_path, class: "nav-link pt-3 pb-2" do %>
                 PANIER <i class="fa-solid fa-shopping-cart ms-2"></i>
+                <% if pending_cart_items.any? %>
+                  <span class="cart-badge-no-position ms-2 mt-1"><%= pending_cart_items.length %></span>
+                <% end %>
               <% end %>
             </h6>
-            <% if @pending_cart_items_count > 0 %>
-              <span class="cart-badge-no-position ms-2 mt-1"><%= @pending_cart_items_count %></span>
-                <!--<span style="color: #dc3545;"><%#= current_user.carts.current_cart_for(current_user).cart_items.length %></span>-->
-            <% end %>
           </li>
           <li class="nav-item">
             <h6 class="mb-0">
