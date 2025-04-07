@@ -11,7 +11,7 @@ class Commerce::CartsController < ApplicationController
       session.delete(:cart_warning)
     end
     @membership_cart_items = @cart.cart_items.where(product_type: 'Membership')
-    @camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
+    @camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment').order(:created_at)
     @total_cb = @cart.cart_items.where(payment_method: 'Carte bancaire').sum(:price)
     @total_other = @cart.cart_items.where.not(payment_method: 'Carte bancaire').sum(:price)
   end

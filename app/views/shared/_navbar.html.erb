@@ -1,12 +1,20 @@
 <nav class="navbar" data-controller="navbar" data-navbar-target="navbar">
-    <%= link_to root_path, class:"navbar-brand" do %>
-      <%= image_tag "navbar/logo_ea_noir.png", alt: "Logo Etendart Academy", width: "100" %>
+  <%= link_to root_path, class:"navbar-brand" do %>
+    <%= image_tag "navbar/logo_ea_noir.png", alt: "Logo Etendart Academy", width: "100" %>
+  <% end %>
+  <div class="navbar-tog-container">
+    <% if user_signed_in? && current_user.parent? %>
+      <% pending_cart_items = current_user.carts.current_cart_for(current_user).cart_items %>
+      <% if pending_cart_items.length > 0 %>
+        <span data-navbar-target="badge" class="cart-badge"><%= pending_cart_items.length %></span>
+      <% end %>
     <% end %>
-  <button class="navbar-tog" data-navbar-target="navbarToggle" data-action="click->navbar#displayMenu">
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-  </button>
+    <button class="navbar-tog" data-navbar-target="navbarToggle" data-action="click->navbar#displayMenu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
   <div class="navbar-collapse" data-navbar-target="navbarCollapse">
     <ul class="nav navbar-nav">
       <% if user_signed_in? %>
@@ -126,12 +134,12 @@
               <% end %>
             </h6>
           </li>
-          <li class="nav-item">
+          <li class="nav-item d-flex align-items-center">
             <h6 class="mb-0">
               <%= link_to commerce_cart_path, class: "nav-link pt-3 pb-2" do %>
                 PANIER <i class="fa-solid fa-shopping-cart ms-2"></i>
-                <% if current_user.carts.current_cart_for(current_user).cart_items.any? %>
-                  <span><%= current_user.carts.current_cart_for(current_user).cart_items.length %></span>
+                <% if pending_cart_items.any? %>
+                  <span class="cart-badge-no-position ms-2 mt-1"><%= pending_cart_items.length %></span>
                 <% end %>
               <% end %>
             </h6>

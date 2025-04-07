@@ -7,7 +7,7 @@
 <% if @cart.cart_items.any? %>
   <section class="container my-0 my-md-5 bg-white rounded-4 p-4">
 
-    <div class="row">
+    <div class="row align-items-center">
       <div class="col-6 col-md-4">
         <h2 class="fs-5 fw-bold">
           Produits
@@ -36,7 +36,7 @@
     <hr class="border-secondary">
 
     <% @membership_cart_items.each do |cart_item| %>
-      <div class="row">
+      <div class="row align-items-center">
         <div class="col-8 col-md-4 align-items-center d-flex d-md-block justify-content-start justify-content-md-center p-2">
           <%= cart_item.name %>
         </div>
@@ -45,7 +45,7 @@
           <%= cart_item.payment_method %>
         </div>
 
-        <div class="col-12 col-md-3 justify-content-end align-items-center d-flex">
+        <div class="col-4 col-md-3 align-items-center justify-content-end d-flex">
           <%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €
         </div>
       </div>
@@ -56,30 +56,28 @@
     <% end %>
 
     <% @camp_enrollment_cart_items.each do |cart_item| %>
-      <div class="row">
-      <div class="col-8 col-md-4 align-items-center d-flex d-md-block justify-content-start justify-content-md-center p-2">
+      <div class="row align-items-center">
+      <div class="col-9 col-md-4 align-items-center d-flex d-md-block justify-content-start justify-content-md-center p-2 order-1">
         <%= cart_item.name %>
       </div>
 
-      <div class="col-8 col-md-3 align-items-center d-flex d-md-block justify-content-start justify-content-md-center p-2">
+      <div class="col-8 col-md-3 align-items-center d-flex d-md-block justify-content-md-center p-2 order-3 order-md-2">
         <% if cart_item.payment_method == 'offert' %>
-           Offert<%# == cart_item.payment_method %>
+           Offert
         <% else %>
           <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item), data: { controller: "form--auto-submit" } do |f| %>
-          <%= f.select :payment_method, options_for_select([['Carte bancaire', 'Carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash']], cart_item.payment_method), { }, { class: 'form-select', data: { action: "change->form--auto-submit#submit" } } %>
+          <%= f.select :payment_method, options_for_select([['Carte Bancaire', 'Carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash']], cart_item.payment_method), { }, { class: 'form-select', data: { action: "change->form--auto-submit#submit" } } %>
           <% end %>
         <% end %>
       </div>
 
-      <div class="col-12 col-md-3 justify-content-end justify-content-md-end align-items-center d-flex p-2">
+      <div class="col-3 col-md-3 justify-content-md-end align-items-center d-flex p-2 order-2 order-md-3">
         <%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €
       </div>
 
-      <div class="col-12 col-md-2 justify-content-end align-items-center d-flex p-2">
-        <%= link_to commerce_cart_item_path(cart_item), data: { turbo_method: :delete, turbo_confirm: 'Êtes-vous sûr de vouloir supprimer ce produit de votre panier ?' }, class: "btn btn-outline-dark border-0" do %>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
-        </svg>
+      <div class="col-4 col-md-2 justify-content-end justify-content-md-end align-items-center d-flex p-2 order-4">
+        <%= link_to commerce_cart_item_path(cart_item), data: { turbo_method: :delete, turbo_confirm: 'Êtes-vous sûr de vouloir supprimer ce produit de votre panier ?' } do %>
+         <i class="fa-solid fa-circle-xmark fa-black fa-small"></i>
         <% end %>
       </div>
 
@@ -99,6 +97,7 @@
       <div class="col-4 col-md-2 text-end">
         <%= number_with_precision(@total_cb, precision: 2, delimiter: ',') %> €
       </div>
+      <hr class="border-secondary mt-4 mb-4">
 
       <div class="col-8 col-md-10 text-md-end">
         A régler le jour du stage:
@@ -106,22 +105,22 @@
       <div class="col-4 col-md-2 text-end">
         <%= number_with_precision(@total_other, precision: 2, delimiter: ',') %> €
       </div>
-
+      <hr class="border-secondary mt-4 mb-4">
       <div class="col-8 col-md-10 text-md-end">
-        Total:
+        <strong>Total:</strong>
       </div>
       <div class="col-4 col-md-2 text-end">
-        <%= number_with_precision(@cart.total_price, precision: 2, delimiter: ',') %> €
+       <strong><%= number_with_precision(@cart.total_price, precision: 2, delimiter: ',') %> €</strong>
       </div>
     </div>
 
-    <div class="text-center my-3">
+    <div class="text-center my-3 mt-4">
 
       <% if @total_cb > 0 %>
-        <%= link_to 'Procéder au paiement et valider les inscriptions', commerce_new_checkout_path, data: { turbo: "false" }, class: 'btn btn-dark rounded-3 px-4 py-2' %>
+        <%= link_to 'Valider les inscriptions', commerce_new_checkout_path, data: { turbo: "false" }, class: 'btn btn-dark rounded-3 px-4 py-2' %>
 
       <% elsif @total_other > 0 && @total_cb == 0 %>
-        <%= link_to 'Payer le jour du stage et valider les inscriptions', commerce_checkout_success_path, data: { turbo: "false" }, class: 'btn btn-dark rounded-3 px-4 py-2' %>
+        <%= link_to 'Valider les inscriptions', commerce_checkout_success_path, data: { turbo: "false" }, class: 'btn btn-dark rounded-3 px-4 py-2' %>
 
       <% else # que des inscriptions gratuites %>
         <%= link_to 'Valider les inscriptions', commerce_checkout_success_path, data: { turbo: "false" }, class: 'btn btn-dark rounded-3 px-4 py-2' %>
