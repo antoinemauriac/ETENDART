@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :ensure_parent_profile
-  before_action :set_cart_notification
   include Pundit::Authorization
   include Pagy::Backend
 
@@ -51,12 +50,6 @@ class ApplicationController < ActionController::Base
     unless allowed_paths.include?(request.path)
       flash[:alert] = "Vous devez compléter votre profil pour pouvoir continuer."
       redirect_to new_parents_profile_path
-    end
-  end
-
-  def set_cart_notification
-    if user_signed_in? && current_user.parent?
-      @pending_cart_items_count = current_user.carts.current_cart_for(current_user).cart_items.length
     end
   end
   
