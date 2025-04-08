@@ -92,7 +92,7 @@ class Managers::CampsController < ApplicationController
 
             student_data = [
               student.last_name, student.first_name, student.gender, student.date_of_birth,
-              student.age, student.phone_number, student.email, image_consent
+              student.age, student.parent ? student.parent&.phone_number : student&.phone_number, student.parent ? student&.parent&.email : student&.email, image_consent
             ]
 
             student_data << banished if academy.banished
