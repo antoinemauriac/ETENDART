@@ -121,14 +121,28 @@
 
 
 # starts_year = 2024
-# Camp.where('starts_at > ?', Date.today).each do |camp|
-#   camp_enrollments = camp.camp_enrollments
-#   unconfirmed = camp_enrollments.where(confirmed: false)
-#   unconfirmed.each do |enrollment|
+# Camp
+#   .where('starts_at > ?', Date.today)
+#   .includes(:academy, :school_period, camp_enrollments: { student: [:memberships, :parent => :parent_profile] })
+#   .sort_by { |camp| [camp.academy.name.downcase, camp.name.downcase] }
+#   .each do |camp|
+
+#   camp.camp_enrollments.where(confirmed: false).each do |enrollment|
 #     student = enrollment.student
 #     membership = student.memberships.find_by(start_year: 2024)
+#     next unless membership # skip si pas de membership
+
 #     cotisant = membership.paid ? "cotisant" : "non cotisant"
-#     puts "#{camp.academy.name} - #{camp.school_period.name} - #{camp.name} - #{student.full_name} - #{cotisant} - #{student.parent.email} - #{student.parent.parent_profile.phone_number}"    
+
+#     puts [
+#       camp.academy.name,
+#       camp.school_period.name,
+#       camp.name,
+#       student.full_name,
+#       cotisant,
+#       student.parent.email,
+#       student.parent.parent_profile.phone_number
+#     ].join(" - ")
 #   end
 # end
 

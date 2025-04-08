@@ -35,14 +35,11 @@ class Managers::EnrollmentsController < ApplicationController
 
       # inscription au camp
       camp = Camp.find(params[:camp])
-      @student.camps << camp unless @student.camps.include?(camp)
       image_consent = params[:image_consent]
-      camp_enrollment = @student.camp_enrollments.find_by(camp: camp)
-      camp_enrollment.update(confirmed: true, image_consent: image_consent)
+      CampEnrollment.create!(student: @student, camp: camp, confirmed: true, image_consent: image_consent) unless @student.camp_enrollments.exists?(camp: camp)
 
       # inscription à l'activité
-      @student.activities << activity
-      @student.activity_enrollments.find_by(activity: activity).update(confirmed: true)
+      ActivityEnrollment.create(student: @student, activity: activity, confirmed: true)
 
       # inscription aux cours de l'activité
       @student.courses << activity.next_courses

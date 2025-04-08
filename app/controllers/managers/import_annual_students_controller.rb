@@ -49,7 +49,7 @@ class Managers::ImportAnnualStudentsController < ApplicationController
             if activity_name.present?
               activity = annual_program.activities.where("unaccent(lower(name)) = unaccent(lower(?))", activity_name).first
               if activity.present?
-                student.activities << activity
+                ActivityEnrollment.create(student: student, activity: activity, confirmed: true)
                 student.courses << activity.courses
               else
                 flash[:alert] = "Une erreur est survenue. L'activité '#{activity_name}' ne correspond pas à une activité créée sur l'application"

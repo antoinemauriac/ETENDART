@@ -10,6 +10,8 @@ end
 
 
 # DESTROY ALL
+Commerce::CartItem.destroy_all
+Commerce::Cart.destroy_all
 Feedback.destroy_all
 ActivityStat.destroy_all
 CampStat.destroy_all
@@ -67,19 +69,19 @@ end
 
 
 # CREATE 6 USERS, DONT 1 ADMIN, 1 MANAGER, 1 COORDINATOR AND 3 COACHES (ROLES)
-manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
 manager.confirm
-manager1 = User.create!(email: 'manager1@gmail.com', password: 123456, first_name: "Leon", last_name: "Marchand", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+manager1 = User.create!(email: 'manager1@gmail.com', password: 123456, first_name: "Leon", last_name: "Marchand", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
 manager1.confirm
-coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
 coordinator.confirm
-admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
 admin.confirm
-coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
+coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", gender: 'Fille', first_login: false)
 coach1.confirm
-coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Leila", last_name: "El Amrani", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
+coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Leila", last_name: "El Amrani", phone_number: "06 12 34 56 78", status: "", gender: 'Fille', first_login: false)
 coach2.confirm
-coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "John", last_name: "Doe", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
+coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "John", last_name: "Doe", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
 coach3.confirm
 
 
@@ -180,7 +182,7 @@ camp_names = ["semaine1", "semaine2"]
       ends_at: Date.new(2024, 10, 11) + 7*i.days
       )
     # INSCRIPTION DES STUDENTS AUX CAMPS
-    Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
+    Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9, confirmed: true) }
     # MISE À JOUR DE LA PAIEMENT DES CAMPS
     camp_enrollments = CampEnrollment.where(camp: camp)
     camp_enrollments.each { |camp_enrollment| camp_enrollment.update(paid: rand < 0.95) if camp_enrollment.camp.school_period.paid }
@@ -201,10 +203,11 @@ camp_names = ["semaine1", "semaine2"]
         coach: coach,
         camp: camp,
         category: category,
-        location: camp.academy.locations.sample
+        location: camp.academy.locations.sample,
+        age_restricted: false
         )
       # INSCRIPTION DES STUDENTS AUX ACTIVITÉS
-      Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
+      Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity, confirmed: true) }
       coach.academies_as_coach << camp.academy unless coach.academies_as_coach.include?(camp.academy)
       coach.categories << category unless coach.categories.include?(category)
       coach.camps << camp unless coach.camps.include?(camp)
@@ -251,7 +254,7 @@ starts_at = Date.current.beginning_of_week
     ends_at: starts_at + 4.day + 7 * i.days
   )
   # INSCRIPTION DES STUDENTS AUX CAMPS
-  Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9) }
+  Student.all.each { |student| CampEnrollment.create!(student: student, camp: camp, image_consent: rand < 0.9, confirmed: true) }
   camp_enrollments = CampEnrollment.where(camp: camp)
   if camp.starts_at <= Date.current
     camp_enrollments.each do |camp_enrollment|
@@ -284,10 +287,11 @@ starts_at = Date.current.beginning_of_week
       coach: coach,
       camp: camp,
       category: category,
-      location: camp.academy.locations.sample
+      location: camp.academy.locations.sample,
+      age_restricted: false
     )
     # INSCRIPTION DES STUDENTS AUX ACTIVITÉS
-    Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
+    Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity, confirmed: true) }
     coach.academies_as_coach << camp.academy unless coach.academies_as_coach.include?(camp.academy)
     coach.categories << category unless coach.categories.include?(category)
     coach.camps << camp unless activity.coach.camps.include?(camp)
@@ -388,7 +392,8 @@ end
     coach: coach,
     annual_program: annual_program,
     category: category,
-    location: zidane.locations.sample
+    location: zidane.locations.sample,
+    age_restricted: false
   )
   coach.academies_as_coach << zidane unless coach.academies_as_coach.include?(zidane)
   coach.categories << category unless coach.categories.include?(category)
@@ -396,7 +401,7 @@ end
   activity.coaches << coach unless activity.coaches.include?(coach)
 
   # INSCRIPTION DES STUDENTS AUX ACTIVITÉS
-  Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity) }
+  Student.all.each { |student| ActivityEnrollment.create!(student: student, activity: activity, confirmed: true) }
 
   # CREATE 1 COURSE PER WEEK FOR EACH ACTIVITY
   start_hour = rand(16..19)

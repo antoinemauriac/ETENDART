@@ -18,7 +18,7 @@
       </div>
     <% end %>
 
-    <div class="col flexy-row small-col <%= camp_enrollment&.image_consent ? '' : 'non-bg' %>">
+    <div class="col flexy-row small-col <%= student&.has_consent_for_photos ? '' : 'non-bg' %>">
       <span class="ellipsis"><%= student.has_consent_for_photos ? "" : "Non" %></span>
     </div>
 
