@@ -67,7 +67,7 @@ class Managers::CampsController < ApplicationController
     academy = camp.academy
     school_period = camp.school_period
     authorize([:managers, camp])
-    students = camp.students.sort_by(&:last_name)
+    students = camp.students.joins(:camp_enrollments).where(camp_enrollments: { confirmed: true }).distinct.sort_by(&:last_name)
 
     column_headers = ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Droit à l'image ?"]
     column_headers << "Exclu ?" if academy.banished
