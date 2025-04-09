@@ -4,8 +4,8 @@
   <% end %>
   <div class="navbar-tog-container">
     <% if user_signed_in? && current_user.parent? %>
-      <% pending_cart_items = current_user.carts.current_cart_for(current_user).cart_items %>
-      <% if pending_cart_items.length > 0 %>
+      <% pending_cart_items = current_user&.pending_cart&.cart_items %>
+      <% if pending_cart_items&.length > 0 %>
         <span data-navbar-target="badge" class="cart-badge"><%= pending_cart_items.length %></span>
       <% end %>
     <% end %>

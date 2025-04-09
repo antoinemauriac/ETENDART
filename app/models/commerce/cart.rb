@@ -9,13 +9,6 @@ class Commerce::Cart < ApplicationRecord
 
   # apres l'ajout ou la suppression d'un article dans le panier, on met à jour le prix total du panier
 
-  def self.current_cart_for(parent)
-    current_cart = find_by(parent: parent, status: 'pending')
-    unless current_cart
-      current_cart = create!(parent: parent, status: 'pending', total_price: 0)
-    end
-    return current_cart
-  end
 
   # Quand un panier est payé avec succès, son statut devient 'completed', les articles du panier sont marqués comme payés.
   def update_total_price
@@ -31,13 +24,3 @@ class Commerce::Cart < ApplicationRecord
     status == 'completed'
   end
 end
-
-# create_table "carts", force: :cascade do |t|
-#   t.string "status"
-#   t.decimal "total_price"
-#   t.string "stripe_payment_intent_id"
-#   t.bigint "user_id", null: false
-#   t.datetime "created_at", null: false
-#   t.datetime "updated_at", null: false
-#   t.index ["user_id"], name: "index_carts_on_user_id"
-# end

@@ -6,7 +6,7 @@ class Parents::ProfilesPolicy < ApplicationPolicy
   # https://gist.github.com/Burgestrand/4b4bc22f31c8a95c425fc0e30d7ef1f5
 
   def new?
-    user.present? && user.parent?
+    user.present? && user.parent? && !user.parent_profile.present?
   end
 
   def create?
