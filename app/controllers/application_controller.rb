@@ -19,9 +19,6 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if resource.first_login || (resource.parent_profile.nil? && resource.parent?)
-      resource.first_login = false
-      resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
-      resource.save
       new_parents_profile_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
     elsif resource.parent? && resource.parent_profile
       render_cart_warning_for(resource)

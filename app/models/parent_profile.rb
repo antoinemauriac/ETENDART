@@ -9,14 +9,8 @@ class ParentProfile < ApplicationRecord
   validates :city, presence: true
   validates :has_valid_rgpd, presence: true
 
-  after_create :parent_get_a_cart
-
   after_create :create_stripe_customer
   after_update :update_stripe_customer
-
-  def parent_get_a_cart
-    self.user.carts.create(status: 'pending', total_price: 0)
-  end
 
   def create_stripe_customer
     stripe_customer = Stripe::Customer.create(
@@ -48,14 +42,5 @@ class ParentProfile < ApplicationRecord
       phone: self.phone_number
     )
   end
-
-  # gender: string, select only one, options: ["homme", "femme", "autre"]
-  # relationship_to_child: string
-  # phone_number: string, only numeric characters for phone
-  # address: string
-  # zipcode: string
-  # city: string, default: "", not null
-  # has_valid_rgpd: boolean, default: false, checkbox
-  # has_newsletter: boolean, default: false, checkbox
 
 end

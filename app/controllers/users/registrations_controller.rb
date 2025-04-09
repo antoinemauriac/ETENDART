@@ -16,6 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if resource.persisted?
       resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
       resource.first_login = true
+      Commerce::Cart.create!(parent: resource, status: 'pending', total_price: 0)
       resource.save
     end
   end
