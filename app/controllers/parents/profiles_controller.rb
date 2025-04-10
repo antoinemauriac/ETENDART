@@ -18,7 +18,6 @@ class Parents::ProfilesController < Parents::BaseController
     # si ya des enfants on redirige vers une page avec les enfants retrouvés
     # sinon on conserve la redirection vers new_parents_profile_path,
     if @parent_profile.save
-      @parent.update!(first_login: false)
       session[:existing_children] = existing_children.map(&:id) if existing_children.present?
       redirect_to parents_children_path, notice: 'Votre profil a bien été créé.'
     else
