@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def after_sign_in_path_for(resource)
-    if resource.first_login || (resource.parent_profile.nil? && resource.parent?)
+    if (resource.parent_profile.nil? && resource.parent?)
       new_parents_profile_path # Redirige vers une page spéciale pour les utilisateurs qui se connectent pour la première fois
     elsif resource.parent? && resource.parent_profile
       render_cart_warning_for(resource)
@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
       redirect_to new_parents_profile_path
     end
   end
-  
+
   def render_cart_warning_for(resource)
     if resource.has_items_to_valid?
       session[:cart_warning] = true

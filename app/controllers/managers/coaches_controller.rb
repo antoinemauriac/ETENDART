@@ -49,7 +49,6 @@ class Managers::CoachesController < ApplicationController
     authorize([:managers, coach], policy_class: Managers::CoachPolicy)
     coach.password = Devise.friendly_token[0, 8]
     if coach.save
-      coach.update(first_login: false)
       coach.roles << Role.find_by(name: "coach")
       update_academies(coach, params)
       update_categories(coach, params)

@@ -69,19 +69,19 @@ end
 
 
 # CREATE 6 USERS, DONT 1 ADMIN, 1 MANAGER, 1 COORDINATOR AND 3 COACHES (ROLES)
-manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
+manager = User.create!(email: 'manager@gmail.com', password: 123456, first_name: "Titi", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 manager.confirm
-manager1 = User.create!(email: 'manager1@gmail.com', password: 123456, first_name: "Leon", last_name: "Marchand", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
+manager1 = User.create!(email: 'manager1@gmail.com', password: 123456, first_name: "Leon", last_name: "Marchand", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 manager1.confirm
-coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
+coordinator = User.create!(email: 'coordinator@gmail.com', password: 123456, first_name: "Toto", last_name: "Dupont", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 coordinator.confirm
-admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
+admin = User.create!(email: 'admin@gmail.com', password: 123456, first_name: "Ibrahim", last_name: "Ba", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 admin.confirm
-coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", gender: 'Fille', first_login: false)
+coach1 = User.create!(email: 'coach1@gmail.com', password: 123456, first_name: "Lea", last_name: "Martin", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
 coach1.confirm
-coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Leila", last_name: "El Amrani", phone_number: "06 12 34 56 78", status: "", gender: 'Fille', first_login: false)
+coach2 = User.create!(email: 'coach2@gmail.com', password: 123456, first_name: "Leila", last_name: "El Amrani", phone_number: "06 12 34 56 78", status: "", gender: 'Fille')
 coach2.confirm
-coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "John", last_name: "Doe", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon', first_login: false)
+coach3 = User.create!(email: 'coach3@gmail.com', password: 123456, first_name: "John", last_name: "Doe", phone_number: "06 12 34 56 78", status: "", gender: 'Garçon')
 coach3.confirm
 
 
@@ -516,6 +516,3 @@ UpdateAnnualProgramStatsJob.perform_now
 # rudy_image = URI.open('https://res.cloudinary.com/dushuxqmj/image/upload/v1681745643/etendart/b5cmmg95x1kuvmtm9ysu.jpg')
 # rudy.image.attach(io: rudy_image, filename: 'rudy-court.jpg', content_type: 'image/jpg')
 # rudy.save
-
-
-# tous les users sauf ceux qui ont un role parent, doivent avoir first_login à false
