@@ -12,8 +12,11 @@ gem "rails_admin", "3.0"
 gem 'text'
 gem "sidekiq", "< 7"
 gem "sidekiq-failures", "~> 1.0"
+
+# basculer vers kaminari pour fonctioner avec administrate après update
 gem 'will_paginate', '~> 4.0'
 gem 'pagy'
+
 gem 'sidekiq-cron'
 gem 'faker'
 gem 'pg_search'
@@ -99,3 +102,7 @@ end
 
 # payment system
 gem 'stripe', '~> 13.3', '>= 13.3.0'
+
+# super_admin la base de données
+gem "administrate"
+gem "kaminari" # pour la pagination, uniquement pour super_admin dashboard

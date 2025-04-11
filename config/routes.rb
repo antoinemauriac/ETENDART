@@ -2,6 +2,47 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
+  namespace :super_admin do
+      resources :academies
+      resources :academy_enrollments
+      resources :activities
+      resources :activity_coaches
+      resources :activity_enrollments
+      resources :activity_stats
+      resources :annual_programs
+      resources :annual_program_enrollments
+      resources :annual_program_stats
+      resources :camps
+      resources :camp_deposits
+      resources :camp_enrollments
+      resources :camp_stats
+      resources :categories
+      resources :coach_academies
+      resources :coach_camps
+      resources :coach_categories
+      resources :coach_feedbacks
+      resources :courses
+      resources :course_enrollments
+      resources :days
+      resources :enrollments
+      resources :feedbacks
+      resources :locations
+      resources :memberships
+      resources :membership_deposits
+      resources :old_camp_deposits
+      resources :parent_profiles
+      resources :program_periods
+      resources :roles
+      resources :school_periods
+      resources :school_period_enrollments
+      resources :school_period_stats
+      resources :students
+      resources :users
+      resources :user_roles
+
+      root to: "academies#index"
+    end
+
 
   # Pas besoin d'être authentifié pour accéder aux pages suivantes
   # resources :academies, only: %i[index show] do
@@ -39,7 +80,7 @@ Rails.application.routes.draw do
   end
 
   root to: "pages#home"
-  
+
   devise_scope :user do
     get '/users/confirmation_pending', to: 'users/registrations#confirmation_pending', as: :confirmation_pending
   end
