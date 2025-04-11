@@ -80,6 +80,13 @@ class User < ApplicationRecord
     end
   end
 
+  ##############################################################################
+  # GESTION DES ROLES
+  ##############################################################################
+  def super_admin?
+    roles.any? { |role| role.name == 'super_admin' }
+  end
+
   def admin?
     roles.any? { |role| role.name == 'admin' }
   end
@@ -107,6 +114,8 @@ class User < ApplicationRecord
   def no_role?
     roles.empty?
   end
+  ##############################################################################
+
 
   def full_name
     "#{first_name.capitalize} #{last_name.capitalize}"
