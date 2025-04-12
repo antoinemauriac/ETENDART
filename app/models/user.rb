@@ -34,7 +34,7 @@ class User < ApplicationRecord
   has_many :camp_deposits_as_manager, class_name: 'CampDeposit', foreign_key: :manager_id
   has_many :camp_deposits_as_depositor, class_name: 'CampDeposit', foreign_key: :depositor_id
 
-  has_many :old_camp_deposits
+  has_many :old_camp_deposits, foreign_key: :manager_id
 
   has_many :coach_academies, foreign_key: :coach_id, dependent: :destroy
   has_many :academies_as_coach, through: :coach_academies, source: :academy

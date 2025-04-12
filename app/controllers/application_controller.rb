@@ -1,12 +1,21 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :ensure_parent_profile
+  before_action :set_locale
   include Pundit::Authorization
   include Pagy::Backend
 
   # Pundit: allow-list approach
   after_action :verify_authorized, except: :index, unless: :skip_pundit?
   after_action :verify_policy_scoped, only: :index, unless: :skip_pundit?
+
+  def set_locale
+    if self.class.module_parent == RailsAdmin
+      I18n.locale = :en
+    else
+      I18n.locale = I18n.default_locale
+    end
+  end
 
   # Uncomment when you *really understand* Pundit!
   # rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized

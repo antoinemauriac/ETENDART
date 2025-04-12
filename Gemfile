@@ -12,11 +12,12 @@ gem "rails_admin", "3.0"
 gem 'text'
 gem "sidekiq", "< 7"
 gem "sidekiq-failures", "~> 1.0"
-gem 'will_paginate', '~> 4.0'
+# gem 'will_paginate', '~> 4.0'
 gem 'pagy'
 gem 'sidekiq-cron'
 gem 'faker'
 gem 'pg_search'
+gem 'kaminari'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4", ">= 7.0.4.2"

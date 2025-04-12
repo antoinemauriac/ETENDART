@@ -76,7 +76,7 @@ class Managers::ImportStudentsController < ApplicationController
           end
 
           # Step 4: Create camp enrollment for the student
-          CampEnrollment.create(student: student, camp: camp, confirmed: true)
+          CampEnrollment.create!(student: student, camp: camp, confirmed: true) unless student.confirmed_camp_enrollments.exists?(camp: camp)
 
           # Step 5: Assign student to activities
           (1..3).each do |i|
@@ -85,7 +85,7 @@ class Managers::ImportStudentsController < ApplicationController
 
             activity = camp.activities.where("unaccent(lower(name)) = unaccent(lower(?))", activity_name).first
             if activity.present?
-              ActivityEnrollment.create(student: student, activity: activity, confirmed: true)
+              ActivityEnrollment.create(student: student, activity: activity, confirmed: true) unless student.activity_enrollments.exists?(activity: activity)
               student.courses << activity.courses
             else
               flash[:alert] = "Une erreur est survenue. L'activité '#{activity_name}' ne correspond pas à une activité créée sur l'application"
