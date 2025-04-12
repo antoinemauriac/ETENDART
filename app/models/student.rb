@@ -192,6 +192,14 @@ class Student < ApplicationRecord
     "#{last_name.upcase} - #{first_name}"
   end
 
+  def confirmed_camp_enrollments
+    camp_enrollments.confirmed
+  end
+
+  def confirmed_activity_enrollments
+    activity_enrollments.confirmed
+  end
+
   def courses_sorted
     courses.order(starts_at: :asc)
   end

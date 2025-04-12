@@ -12,29 +12,33 @@
   </thead>
   <tbody>
     <% camp_enrollments.each do |camp_enrollment| %>
-    <%# permet d'afficher les stages payés ou en attente de paiement par l'enfant %>
+    <% school_period = camp_enrollment.school_period %>
     <tr>
       <td class="align-middle"><%= camp_enrollment.camp.academy.name %></td>
-      <td class="align-middle d-table-cell d-md-none"><%= camp_enrollment.school_period.full_name_short %>-<%= camp_enrollment.camp.short_name %></td>
-      <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.school_period.name %> <%= camp_enrollment.school_period.year %> </td>
+      <td class="align-middle d-table-cell d-md-none"><%= school_period.full_name_short %>-<%= camp_enrollment.camp.short_name %></td>
+      <td class="align-middle d-none d-md-table-cell"><%= school_period.name %> <%= school_period.year %> </td>
       <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.camp.name %></td>
-      <td class="align-middle"><%= "#{camp_enrollment.school_period.price} €" %></td>
+      <td class="align-middle"><%= "#{school_period.price} €" %></td>
 
-      <% if camp_enrollment.paid? %>
-        <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.payment_date.strftime("%d/%m/%Y") %></td>
-        <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.payment_method %></td>
-      <% else %>
-        <td colspan="2" class="align-middle text-center d-none d-md-table-cell">
-            A payer pendant le stage
-        </td>
-      <% end %>
-      <td class="align-middle text-center">
-        <% if camp_enrollment.paid %>
-          <i class="fa-solid fa-circle-check text-success fa-small"></i>
+      <% if school_period.paid %>
+        <% if camp_enrollment.paid? %>
+          <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.payment_date.strftime("%d/%m/%Y") %></td>
+          <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.payment_method %></td>
         <% else %>
-          <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+          <td colspan="2" class="align-middle text-center d-none d-md-table-cell">
+              A payer pendant le stage
+          </td>
         <% end %>
-      </td>
+        <td class="align-middle text-center">
+          <% if camp_enrollment.paid %>
+            <i class="fa-solid fa-circle-check text-success fa-small"></i>
+          <% else %>
+            <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+          <% end %>
+        </td>
+      <% else %>
+          <td colspan="3" class="align-middle text-center d-none d-md-table-cell"></td>
+      <% end %>
     <% end %>
   </tbody>
 </table>

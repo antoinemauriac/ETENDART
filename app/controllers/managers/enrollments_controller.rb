@@ -5,7 +5,7 @@ class Managers::EnrollmentsController < ApplicationController
     authorize([:managers, @student], policy_class: Managers::EnrollmentPolicy)
     activity = Activity.find(params[:activity])
 
-    if @student.activities.include?(activity)
+    if @student.confirmed_activity_enrollments.exists?(activity: activity)
       flash.now[:alert] = "L'élève est déjà inscrit à cette activité"
 
       respond_to do |format|
@@ -36,7 +36,7 @@ class Managers::EnrollmentsController < ApplicationController
       # inscription au camp
       camp = Camp.find(params[:camp])
       image_consent = params[:image_consent]
-      CampEnrollment.create!(student: @student, camp: camp, confirmed: true, image_consent: image_consent) unless @student.camp_enrollments.exists?(camp: camp)
+      CampEnrollment.create!(student: @student, camp: camp, confirmed: true, image_consent: image_consent) unless @student.confirmed_camp_enrollments.exists?(camp: camp)
 
       # inscription à l'activité
       ActivityEnrollment.create(student: @student, activity: activity, confirmed: true)
