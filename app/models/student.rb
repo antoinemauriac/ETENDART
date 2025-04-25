@@ -6,32 +6,7 @@ class Student < ApplicationRecord
       tsearch: { prefix: true }
     }
 
-    # t.string "username"
-    # t.string "first_name"
-    # t.string "last_name"
-    # t.date "date_of_birth"
-    # t.string "gender"
-    # t.string "email"
-    # t.string "address"
-    # t.datetime "created_at", null: false
-    # t.datetime "updated_at", null: false
-    # t.string "phone_number"
-    # t.string "city"
-    # t.integer "zipcode"
-    # t.string "allergy"
-    # t.integer "number_of_tshirts", default: 0
-    # t.bigint "user_id"
-    # t.integer "siblings_count", default: 0, null: false
-    # t.string "school"
-    # t.boolean "rules_signed", default: false, null: false
-    # t.boolean "has_medical_treatment", default: false, null: false
-    # t.text "medical_treatment_description"
-    # t.boolean "has_consent_for_photos", default: false
-    # t.index ["user_id"], name: "index_students_on_user_id"
-
   validates :username, :first_name, :last_name, :date_of_birth, :gender, presence: true
-
-
 
   DEFAULT_AVATAR = "xkhgd88iqzlk5ctay2hu.png"
 
@@ -67,9 +42,6 @@ class Student < ApplicationRecord
 
   before_validation :normalize_fields, :normalize_phone_number
 
-  # after_create :must_pay_membership
-
-  # after_update :must_pay_membership, if: :saved_change_to_user_id?
 
   ##############################################################################
   # GESTION DES INFORMATION DE L'ENFANT
@@ -78,8 +50,6 @@ class Student < ApplicationRecord
   def any_lack_of_infos?
     address.blank? || zipcode.blank? || city.blank? || has_medical_treatment.nil? || has_consent_for_photos.nil? || rules_signed.nil? || (has_medical_treatment && medical_treatment_description.blank?) || school.blank?
   end
-
-
 
 
   ##############################################################################
@@ -194,6 +164,12 @@ class Student < ApplicationRecord
 
   def confirmed_camp_enrollments
     camp_enrollments.confirmed
+  end
+
+  def confirmed_camps
+    camps.joins(:camp_enrollments)
+         .where(camp_enrollments: { confirmed: true })
+         .distinct
   end
 
   def confirmed_activity_enrollments

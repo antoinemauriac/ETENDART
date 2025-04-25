@@ -138,7 +138,7 @@ class Camp < ApplicationRecord
   end
 
   def current?
-    ends_at >= Time.current - 7.days
+    ends_at >= Time.current - 14.days
   end
 
   def banished_students
@@ -154,7 +154,7 @@ class Camp < ApplicationRecord
   end
 
   def show_students
-    students.joins(:camp_enrollments).where(camp_enrollments: { present: true }).distinct
+    students.joins(:camp_enrollments).where(camp_enrollments: { present: true, confirmed: true, camp_id: id }).distinct
   end
 
   def show_count
@@ -162,7 +162,7 @@ class Camp < ApplicationRecord
   end
 
   def no_show_students
-    students - show_students
+    students.joins(:camp_enrollments).where(camp_enrollments: { confirmed: true }).distinct - show_students
   end
 
   def no_show_count
@@ -266,7 +266,7 @@ class Camp < ApplicationRecord
   end
 
   def new_students_count
-    show_students.select { |student| student.camps.where('starts_at < ?', starts_at).empty? }.count
+    show_students.select { |student| student.confirmed_camps.where('starts_at < ?', starts_at).empty? }.count
   end
 
   def new_students_rate

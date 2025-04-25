@@ -43,7 +43,7 @@ class Activity < ApplicationRecord
   end
 
   def current?
-    ends_at >= Time.current - 7.days if ends_at
+    ends_at >= Time.current - 14.days if ends_at
   end
 
   def confirmed_students
@@ -122,11 +122,11 @@ class Activity < ApplicationRecord
   end
 
   def show_students
-    students.joins(:activity_enrollments).where(activity_enrollments: { present: true }).distinct
+    students.joins(:activity_enrollments).where(activity_enrollments: { present: true, confirmed: true }).distinct
   end
 
   def no_show_students
-    students - show_students
+    students.joins(:activity_enrollments).where(activity_enrollments: { confirmed: true }).distinct - show_students
   end
 
   def number_of_students_by_genre(genre)
