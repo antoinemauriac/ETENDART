@@ -131,7 +131,7 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def current?
-    ends_at >= Date.current - 7.days if ends_at
+    ends_at >= Date.current - 14.days if ends_at
   end
 
   def absenteeism_rate
@@ -157,20 +157,23 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def number_of_students_by_category(category)
-    activity_enrollments.joins(:activity)
+    activity_enrollments.confirmed
+                        .joins(:activity)
                         .where(activities: { category: category })
                         .count
   end
 
   def number_of_present_students_by_category(category)
-    activity_enrollments.joins(:activity)
+    activity_enrollments.confirmed
+                        .joins(:activity)
                         .where(present: true)
                         .where(activities: { category: category })
                         .count
   end
 
   def number_of_students_by_category_and_gender(category, gender)
-    activity_enrollments.joins(:student, activity: :category)
+    activity_enrollments.confirmed
+                        .joins(:student, activity: :category)
                         .where(present: true)
                         .where(activities: { category: category }, students: { gender: gender })
                         .count

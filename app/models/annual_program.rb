@@ -59,7 +59,7 @@ class AnnualProgram < ApplicationRecord
   end
 
   def current?
-    ends_at >= Date.current - 7.days if ends_at
+    ends_at >= Date.current - 14.days if ends_at
   end
 
   def today_courses

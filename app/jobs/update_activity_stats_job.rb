@@ -10,7 +10,7 @@ class UpdateActivityStatsJob < ApplicationJob
         else
           activity_stat = activity.activity_stat
         end
-        activity_stat.enrolled_students_count = activity.enrolled_students_count
+        activity_stat.enrolled_students_count = activity.confirmed_students_count
         activity_stat.students_count = activity.students_count
         activity_stat.coaches_count = activity.coaches.count
         activity_stat.number_of_boy = activity.number_of_students_by_genre("Garçon")
