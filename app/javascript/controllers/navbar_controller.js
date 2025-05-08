@@ -13,7 +13,7 @@ export default class extends Controller {
   }
 
   closeMenu() {
-    this.navbarCollapseTarget.classList.toggle('show')
+    this.navbarCollapseTarget.classList.remove('show')
     this.navbarToggleTarget.classList.toggle('active')
     this.badgeTarget.classList.toggle('d-none')
   }

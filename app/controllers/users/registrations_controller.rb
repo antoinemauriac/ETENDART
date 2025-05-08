@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'net/http'
+require 'uri'
+require 'json'
+
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
@@ -12,12 +16,26 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
-    super
-    if resource.persisted?
-      resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
-      Commerce::Cart.create!(parent: resource, status: 'pending', total_price: 0)
-      resource.save
+    recaptcha_token = params[:recaptcha_token]
+    recaptcha_response = verify_recaptcha_v3(recaptcha_token)
+
+    if recaptcha_response && recaptcha_response['success'] && recaptcha_response['score'] > 0.5
+      super
+      if resource.persisted?
+        resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
+        Commerce::Cart.create!(parent: resource, status: 'pending', total_price: 0)
+        resource.save
+      end
+    else
+      flash[:alert] = "Échec de la vérification reCAPTCHA. Veuillez réessayer."
+      clean_up_passwords(resource)
+      set_minimum_password_length
+      redirect_to new_user_registration_path and return
     end
+  rescue ArgumentError => e
+    Rails.logger.error("Registration error: \\#{e.message}")
+    flash[:alert] = "Une erreur inattendue s'est produite. Veuillez réessayer."
+    redirect_to new_user_registration_path
   end
 
   def confirmation_pending
@@ -77,4 +95,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
+  private
+
+  def verify_recaptcha_v3(token)
+    secret_key = ENV['RECAPTCHA_SECRET_KEY']
+    uri = URI.parse("https://www.google.com/recaptcha/api/siteverify")
+    response = Net::HTTP.post_form(uri, { 'secret' => secret_key, 'response' => token })
+    JSON.parse(response.body)
+  end
 end
