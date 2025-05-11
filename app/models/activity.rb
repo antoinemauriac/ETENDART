@@ -152,7 +152,7 @@ class Activity < ApplicationRecord
   def can_delete?
     return true unless camp || annual_program
     if camp && camp.starts_at
-      camp.starts_at > Date.today
+      camp.starts_at > Date.today && activity_enrollments.confirmed.empty?
     elsif annual_program && annual_program.program_periods.first
       annual_program.program_periods.first.start_date > Date.today
     else

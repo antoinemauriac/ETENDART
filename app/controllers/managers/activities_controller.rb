@@ -187,16 +187,29 @@ class Managers::ActivitiesController < ApplicationController
   def destroy
     @activity = Activity.find(params[:id])
     authorize([:managers, @activity])
-    @activity.destroy
-    flash.now[:notice] = "Activité supprimée"
+
     if @activity.camp
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to managers_camp_path(@activity.camp) }
+      school_period = @activity.school_period
+      if school_period.paid && @activity.activity_enrollments.confirmed.any?
+        @cannot_remove = true
+        flash.now[:alert] = "Impossible de supprimer l'activité car elle a des élèves inscrits."
+      else
+        @activity.destroy
+        flash.now[:notice] = "Activité supprimée"
       end
     else
-      redirect_to managers_annual_program_path(activity.annual_program)
-      flash[:notice] = "Activité supprimée"
+      @activity.destroy
+    end
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html do
+        if @activity.annual_program
+          redirect_to managers_annual_program_path(@activity.annual_program), notice: "Activité supprimée"
+        else
+          redirect_to managers_camp_path(@activity.camp) if @activity.camp
+        end
+      end
     end
   end
 

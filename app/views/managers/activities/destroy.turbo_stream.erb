@@ -2,4 +2,6 @@
   <%= render "shared/flashes" %>
 <% end %>
 
-<%= turbo_stream.remove "activity-#{@activity.id}" %>
+<% unless @cannot_remove %>
+  <%= turbo_stream.remove "activity-#{@activity.id}" %>
+<% end %>
