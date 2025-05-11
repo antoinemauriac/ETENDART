@@ -2,6 +2,6 @@
   <%= render "shared/flashes" %>
 <% end %>
 
-<% unless @camp_enrollment.paid %>
+<% unless @cannot_remove %>
   <%= turbo_stream.remove "camp-enrollment-#{@camp_enrollment.id}" %>
 <% end %>

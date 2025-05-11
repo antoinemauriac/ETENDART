@@ -6,7 +6,7 @@
   </div>
 
   <% if students.any? %>
-    <div class="container container-big" data-controller="clickable-table">
+    <div class="container container-big mb-4" data-controller="clickable-table">
       <div class="card-row-container">
         <div class="row pb-2 pt-2 header-row sticky-header align-items-center">
           <div class="col flexy-row">Nom</div>
@@ -23,9 +23,7 @@
           <% end %>
           <div class="col flexy-row small-col">Age</div>
           <div class="col flexy-row">Activité 1</div>
-          <div class="col flexy-row small-col">Taux abs</div>
           <div class="col flexy-row">Activité 2</div>
-          <div class="col flexy-row small-col">Taux abs</div>
           <div class="col flexy-row small-col">Suppr</div>
         </div>
         <% all_students_with_free_judo = camp.all_students_with_free_judo %>
@@ -34,7 +32,6 @@
               camp: camp,
               school_period: school_period,
               academy: academy,
-              camp_enrollments: camp_enrollments,
               all_students_with_free_judo: all_students_with_free_judo %>
       </div>
     </div>

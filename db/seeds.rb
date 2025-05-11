@@ -36,6 +36,7 @@ CoachAcademy.destroy_all
 Academy.destroy_all
 UserRole.destroy_all
 Role.destroy_all
+ParentProfile.destroy_all
 User.destroy_all
 Category.destroy_all
 
