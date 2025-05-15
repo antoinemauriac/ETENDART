@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     recaptcha_token = params[:recaptcha_token]
     recaptcha_response = verify_recaptcha_v3(recaptcha_token)
 
-    if recaptcha_response && recaptcha_response['success'] && recaptcha_response['score'] > 0.5
+    if recaptcha_response && recaptcha_response['success'] && recaptcha_response['score'] > 0.2
       super
       if resource.persisted?
         resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
