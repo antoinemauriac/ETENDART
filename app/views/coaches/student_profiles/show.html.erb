@@ -9,6 +9,10 @@
       <p><%= @student.gender %> - <%= @student.age %> ans </p>
       <p class="text-break">EMAIL : <%= @student.email %></p>
       <p class="text-break">TEL : <%= @student.phone_number %></p>
+      <p class="text-break">DROIT À L'IMAGE : <%= @student.has_consent_for_photos ? "oui" : "non" %></p>
+      <% if @student.medical_treatment_description %>
+        <p class="text-break">TRAITEMENT MEDICAL : <%= @student.medical_treatment_description %></p>
+      <% end %>
       <% if params[:precedent] %>
         <%= link_to params[:precedent], class:"menu__item" do %>
           <i class="fa-solid fa-arrow-rotate-left icones"></i>
@@ -39,24 +43,24 @@
 <% end %>
 
 
-<div class="black-title mt-0">FEEDBACKS</div>
+<!--<div class="black-title mt-0">FEEDBACKS</div>
 
 <div data-controller="hidden-forms">
   <div class="flexy">
     <button class="btn-etendart-small btn-small-square mt-3" data-action="click->hidden-forms#displayFeedbackForm">Ajouter un feedback</button>
-    <%= form_with(model: @feedback, url: coaches_feedbacks_path, method: :post, class: "hidden-form feedback-coach-container", data: { hidden_forms_target: "feedbackForm" }, local: true) do |form| %>
-      <%= form.hidden_field :student_id, value: @student.id %>
-      <%= form.text_area :content, class: "form-control", id:"feedback-content", placeholder: "Ecrivez votre commentaire ici...", required: true %>
-      <div class="flex-btn mt-3">
-        <%= form.submit "Valider", class: "btn-etendart-small btn-smaller mt-2" %>
-        <button class="btn-etendart-small btn-smaller btn-grey mt-2" data-action="click->hidden-forms#displayFeedbackForm" type="button">Annuler</button>
+    <%#= form_with(model: @feedback, url: coaches_feedbacks_path, method: :post, class: "hidden-form feedback-coach-container", data: { hidden_forms_target: "feedbackForm" }, local: true) do |form| %>-->
+      <%#= form.hidden_field :student_id, value: @student.id %>
+      <%#= form.text_area :content, class: "form-control", id:"feedback-content", placeholder: "Ecrivez votre commentaire ici...", required: true %>
+<!--      <div class="flex-btn mt-3">-->
+        <%#= form.submit "Valider", class: "btn-etendart-small btn-smaller mt-2" %>
+<!--        <button class="btn-etendart-small btn-smaller btn-grey mt-2" data-action="click->hidden-forms#displayFeedbackForm" type="button">Annuler</button>
       </div>
-    <% end %>
-  </div>
+    <%# end %>-->
+<!--  </div>
 </div>
 
-<% if @feedbacks.any? %>
-  <table class="container table table-striped table-responsive coach-container special-container">
+<%# if @feedbacks.any? %>-->
+<!--  <table class="container table table-striped table-responsive coach-container special-container">
     <thead>
       <tr>
         <th class="coach-font">Date</th>
@@ -64,12 +68,12 @@
       </tr>
     </thead>
     <tbody>
-      <% @feedbacks.each do |feedback| %>
-      <tr>
-        <td class="align-middle coach-font"><%= l(feedback.created_at, format: :date_short) %></td>
-        <td class="align-middle coach-font"><%= feedback.content %></td>
+      <%# @feedbacks.each do |feedback| %>-->
+<!--      <tr>
+        <td class="align-middle coach-font"><%#= l(feedback.created_at, format: :date_short) %></td>
+        <td class="align-middle coach-font"><%#= feedback.content %></td>
       </tr>
-      <% end %>
-    </tbody>
+      <%# end %>-->
+<!--    </tbody>
   </table>
-<% end %>
+<%# end %>-->

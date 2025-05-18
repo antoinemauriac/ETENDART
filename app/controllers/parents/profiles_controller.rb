@@ -11,7 +11,7 @@ class Parents::ProfilesController < Parents::BaseController
     @parent_profile = ParentProfile.new(parent_profile_params)
 
     @parent_profile.user = @parent
-    @parent.update(phone_number: @parent_profile.phone_number)
+    @parent.update(phone_number: @parent_profile.phone_number, gender: @parent_profile.gender, address: @parent_profile.address, zipcode: @parent_profile.zipcode, city: @parent_profile.city)
     email = @parent.email
     existing_children = Student.where(email: email)
 

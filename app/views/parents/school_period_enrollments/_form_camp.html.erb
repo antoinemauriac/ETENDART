@@ -89,7 +89,7 @@
           Veuillez sélectionner au moins une semaine et une activité sport et éveil pour chaque semaine sélectionnée
         </div>
         <% if @students.count <= 1 %>
-          <%= f.submit "Ajouter au panier",
+          <%= f.submit "Valider",
               class: "col-12 col-lg-6 btn btn-dark rounded-4 px-4 py-3  mt-3 mb-3 border",
               role: "button",
               data: { form__enrollment__camp_error_submit_target: "submitButton" } %>
@@ -100,7 +100,7 @@
                   data-bs-target="#staticBackdrop"
                   data-form--enrollment--camp-error-submit-target="submitButton"
                   disabled>
-            Ajouter au panier
+            Valider
           </button>
 
           <!-- Modal -->

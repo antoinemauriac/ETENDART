@@ -12,9 +12,6 @@
               width: 300,
               height: 300 %>
     <% end %>
-    <% if !membership || !membership.paid  %>
-      <i class="fa-solid fa-circle-xmark fa-pink no-membership-flag"></i>
-    <% end %>
   <% else %>
     <div>
       <input type="file" id="photo_<%= student.id %>"
@@ -33,8 +30,5 @@
       <div class="loader-small d-none" data-update-photo-from-course-target="spinner"></div>
       </div>
     </div>
-    <% if !membership || !membership.paid  %>
-      <i class="fa-solid fa-circle-xmark fa-pink no-membership-flag"></i>
-    <% end %>
   <% end %>
 </td>

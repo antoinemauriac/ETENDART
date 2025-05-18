@@ -2,44 +2,49 @@
   Configuration du profil
 </h1>
 
-<section class="bg-white container p-3 rounded-4 shadow my-3">
+<section class="container my-3">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8 bg-white p-3 rounded-4 shadow">
 
-  <%= simple_form_for @parent_profile, url: parents_profile_path do |f| %>
-    <div class="form-inputs">
-      <%= f.input :gender, label: "Genre", collection: ["Homme", "Femme", "Autre"], include_blank: "Sélectionnez" %>
-      <%= f.input :relationship_to_child, label: "Relation avec l'enfant", collection: ["Père", "Mère", "Tuteur", "Autre"], include_blank: "Sélectionnez", as: :select %>
+      <%= simple_form_for @parent_profile, url: parents_profile_path do |f| %>
+        <div class="form-inputs">
+          <%= f.input :gender, label: "Genre", collection: ["Homme", "Femme", "Autre"], include_blank: "Sélectionnez" %>
+          <%= f.input :relationship_to_child, label: "Relation avec l'enfant", collection: ["Père", "Mère", "Tuteur", "Autre"], include_blank: "Sélectionnez", as: :select %>
 
-      <%= f.input :phone_number, label: "Numéro de téléphone", placeholder: "06 12 34 56 78" %>
-      <%= f.input :address, label: "Adresse", placeholder: "12 rue de la Paix" %>
-      <%= f.input :zipcode, label: "Code postal", placeholder: "75000" %>
-      <%= f.input :city, label: "Ville", placeholder: "Paris" %>
-      <%= f.input :has_newsletter, label: "Je souhaite recevoir la newsletter", as: :boolean %>
-      <%= f.input :has_valid_rgpd,
-          label: "J'ai pris connaissance de la <a href='#' class='text-primary' data-bs-toggle='modal' data-bs-target='#rgpdModal'>Charte de Confidentialité</a>".html_safe,
-          as: :boolean,
-          input_html: { required: true } %>
-      <%= render 'parents/profiles/components/rgpd_modal' %>
-      <div class="text-muted fw-light fst-italic small px-3">
-        <p class="">
-          Conformément au RGPD, vous disposez des droits suivants :
-        </p>
-        <ul>
-          <li>
-            Le droit d'accès à vos données personnelles : vous pouvez demander une copie de toutes les informations que nous détenons vous concernant.
-          </li>
-          <li>
-            Le droit à l'effacement : vous pouvez demander la suppression de vos données personnelles de nos systèmes.
-          </li>
-        </ul>
-        <p>
-          Pour exercer l'un de ces droits, veuillez contacter notre délégué à la protection des données via <%= mail_to "etendart@weareetendart.org", class: "text-primary" %>
-        </p>
-      </div>
+          <%= f.input :phone_number, label: "Numéro de téléphone"%>
+          <%= f.input :address, label: "Adresse", placeholder: "10 chemin vert" %>
+          <%= f.input :zipcode, label: "Code postal", placeholder: "75001" %>
+          <%= f.input :city, label: "Ville", placeholder: "Paris" %>
+          <%= f.input :has_newsletter, label: "Je souhaite recevoir la newsletter", as: :boolean %>
+          <%= f.input :has_valid_rgpd,
+              label: "J'ai pris connaissance de la <a href='#' class='text-primary' data-bs-toggle='modal' data-bs-target='#rgpdModal'>Charte de Confidentialité</a>".html_safe,
+              as: :boolean,
+              input_html: { required: true } %>
+          <%= render 'parents/profiles/components/rgpd_modal' %>
+
+          <div class="form-actions text-center mt-2 mb-3">
+            <%= f.button :submit, "Enregistrer", class: "btn btn-dark rounded-4 py-2 px-4" %>
+          </div>
+
+          <div class="text-muted fw-light fst-italic small px-3">
+            <p class="">
+              Conformément au RGPD, vous disposez des droits suivants :
+            </p>
+            <ul>
+              <li>
+                Le droit d'accès à vos données personnelles : vous pouvez demander une copie de toutes les informations que nous détenons vous concernant.
+              </li>
+              <li>
+                Le droit à l'effacement : vous pouvez demander la suppression de vos données personnelles de nos systèmes.
+              </li>
+            </ul>
+            <p>
+              Pour exercer l'un de ces droits, veuillez contacter notre délégué à la protection des données via <%= mail_to "etendart@weareetendart.org", class: "text-primary" %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+
     </div>
-
-    <div class="form-actions text-center mt-5">
-      <%= f.button :submit, "Enregistrer", class: "btn btn-dark rounded-4 py-2 px-4" %>
-    </div>
-  <% end %>
-
+  </div>
 </section>

@@ -1,0 +1,15 @@
+<div class="col-12 col-xxl-11 mb-4">
+  <div class="header-info header-info-academy">TRAITEMENTS MEDICAUX</div>
+    <div class="card-row-container">
+    <div class="row pb-2 pt-2 header-row align-items-center">
+      <div class="col-4 flexy-row">Élève</div>
+      <div class="col-8 flexy-row justify-content-start">Traitement Médical</div>
+    </div>
+      <% students_with_medical_treatment.each do |student| %>
+        <%= link_to managers_student_path(student), class: "row card-row" do %>
+          <div class="col-4 flexy-row"><%= student.full_name %></div>
+          <div class="col-8 flexy-row justify-content-start"><%= student.medical_treatment_description %></div>
+        <% end %>
+      <% end %>
+    </div>
+</div>

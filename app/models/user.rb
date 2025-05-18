@@ -9,11 +9,14 @@ class User < ApplicationRecord
   using: {
     tsearch: { prefix: true }
   }
+  attr_accessor :email_confirmation
+
+  validates :email, confirmation: true
 
   attr_accessor :academy_1_id, :academy_2_id, :academy_3_id, :category_1_id, :category_2_id, :category_3_id, :category_4_id, :category_5_id
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
+         :recoverable, :rememberable, :validatable
 
   validates :first_name, presence: { message: 'Le prénom est obligatoire' }
   validates :last_name, presence: { message: 'Le nom est obligatoire' }

@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     recaptcha_token = params[:recaptcha_token]
     recaptcha_response = verify_recaptcha_v3(recaptcha_token)
 
-    if recaptcha_response && recaptcha_response['success'] && recaptcha_response['score'] > 0.5
+    if recaptcha_response && recaptcha_response['success'] && recaptcha_response['score'] > 0.2
       super
       if resource.persisted?
         resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
@@ -38,9 +38,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     redirect_to new_user_registration_path
   end
 
-  def confirmation_pending
-    # Cette action peut rester vide si vous n'avez pas besoin de logique spécifique
-  end
+  # def confirmation_pending
+  #   # Cette action peut rester vide si vous n'avez pas besoin de logique spécifique
+  # end
 
   # GET /resource/edit
   # def edit
@@ -70,16 +70,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :first_name, :last_name, :phone_number])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :first_name, :last_name, :phone_number, :email_confirmation])
   end
 
   def configure_account_update_params
     devise_parameter_sanitizer.permit(:account_update, keys: [:email, :password, :password_confirmation, :current_password, :first_name, :last_name, :phone_number, parent_profile_attributes: [:id, :gender, :relationship_to_child, :address, :city, :zipcode, :has_newsletter]])
   end
 
-  def after_inactive_sign_up_path_for(resource)
-    confirmation_pending_path
-  end
+  # def after_inactive_sign_up_path_for(resource)
+  #   confirmation_pending_path
+  # end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_account_update_params

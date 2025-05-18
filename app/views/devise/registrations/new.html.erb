@@ -12,7 +12,7 @@
       });
     </script>
 
-    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: :false }) do |f| %>
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false, controller: "email-confirmation" }) do |f| %>
       <%= f.error_notification %>
       <%= render "devise/shared/error_messages", resource: @user %>
 
@@ -29,11 +29,29 @@
           <div class="col-12">
             <%= f.input :email,
                         required: true,
-                        input_html: { autocomplete: "email" }%>
+                        input_html: { autocomplete: "email", data: { email_confirmation_target: "email" } }%>
           </div>
 
           <div class="col-12">
+            <%= f.input :email_confirmation,
+            label: "Confirmer l'email",
+            required: true,
+            input_html: {
+              autocomplete: "email",
+              data: {
+                email_confirmation_target: "emailConfirmation",
+                action: "blur->email-confirmation#checkConfirmation"
+              }
+            } %>
+          </div>
+
+          <div class="col-12">
+            <span id="email-confirmation-message" data-email-confirmation-target="message"></span>
+          </div>
+
+          <div class="col-12 mt-3">
             <%= f.input :password,
+                        label: "Mot de passe",
                         required: true,
                         hint: ("#{@minimum_password_length} caractères minimum" if @minimum_password_length),
                         input_html: { autocomplete: "new-password" } %>
@@ -44,6 +62,7 @@
                         required: true,
                         input_html: { autocomplete: "new-password" } %>
           </div>
+
 
         </div>
       </div>
@@ -60,7 +79,7 @@
       Vous avez déjà un compte ? <%= link_to "Connexion", new_user_session_path, class: "text-primary" %>
     </p>
     <p class="text-center">
-      ou
+      Si vous rencontrez un problème, contactez-nous à <a href="mailto:etendart@weareetendart.org" class="text-primary">etendart@weareetendart.org</a>
     </p>
 
     <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>

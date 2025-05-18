@@ -6,15 +6,19 @@
 </div>
 <div class="yellow-title">AJOUTER UN ÉLÈVE</div>
 <div class="container flexy">
-  <%= simple_form_for @student, url: managers_students_path, html: {class: 'form-horizontal'} do |form| %>
+  <%= simple_form_for @student, url: managers_students_path, html: {class: 'form-horizontal', data: { controller: "medical-treatment", action: "submit->medical-treatment#validateForm" }} do |form| %>
   <div class="row form-container">
       <div class="col-6">
         <%= form.input :last_name, label: "Nom de famille", required: true %>
         <%= form.input :email, required: true %>
-        <%= form.input :date_of_birth, as: :date, label: "Date de naissance", start_year: Date.today.year - 30, end_year: Date.today.year, required: true, input_html: { value: '' }, default: nil, include_blank: true %>
+        <%= form.input :date_of_birth, as: :date, label: "Date de naissance", start_year: Date.today.year - 25, end_year: Date.today.year, required: true, input_html: { value: '' }, default: nil, include_blank: true %>
         <%= form.input :address, label: "Adresse" %>
         <%= form.input :city, label: "Ville" %>
         <%= form.input :academy2_id, label: "Académie 2 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true %>
+        <%= form.input :has_medical_treatment, label: "L'enfant suit-il un traitement médical ?", as: :radio_buttons, collection: [['Oui', true], ['Non', false]], input_html: { data: { medical_treatment_target: "hasMedicalTreatment", action: "change->medical-treatment#toggleDescriptionRequirement" } } %>
+        <div class="d-none" data-medical-treatment-target="descriptionContainer">
+          <%= form.input :medical_treatment_description, label: "Description du traitement médical", as: :text, input_html: { data: { medical_treatment_target: "description" } } %>
+        </div>
       </div>
       <div class="col-6">
         <%= form.input :first_name, label: "Prénom", required: true %>
@@ -23,15 +27,7 @@
         <%= form.input :zipcode, label: "Code Postal" %>
         <%= form.input :academy1_id, label: "Académie 1", collection: @academies, label_method: :name, value_method: :id, required: true %>
         <%= form.input :academy3_id, label: "Académie 3 (optionnel)", collection: @academies, label_method: :name, value_method: :id, include_blank: true %>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md-6">
-          <%= form.input :has_consent_for_photos, 
-                      label: "Droit à l'image", 
-                      as: :radio_buttons, 
-                      collection: [["Oui", true], ["Non", false]], 
-                      checked: true %>
-        </div>
+        <%= form.input :has_consent_for_photos, label: "Droit à l'image ?", as: :radio_buttons, collection: [["Oui", true], ["Non", false]], checked: true %>
       </div>
       <div class="flexy">
         <%= form.button :submit, "Valider", class: "btn-add-student btn-add-student-small btn-no-hover" %>

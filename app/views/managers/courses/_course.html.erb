@@ -19,7 +19,11 @@
           <% if academy.banished %>
             <p>NB ÉLÈVES EXCLUS : <strong><%= banished_students.count %></strong></p>
           <% end %>
-        <p><i class="fa-solid fa-circle-xmark fa-pink me-2 fa-smaller"></i><em>élève non cotisant</em></p>   
+          <% if @course.activity.camp %>
+            <p><i class="fa-solid fa-triangle-exclamation fa-pink no-membership-flag me-1"></i><em>Doit payer le stage</em></p>
+          <% end %>
+          <p><i class="fa-solid fa-circle-xmark fa-dark-blue no-membership-flag me-1"></i><em>Doit payer sa cotisation</em></p> 
+          <p><i class="fa-solid fa-truck-medical fa-blue medical-flag me-1"></i><em>Traitement médical</em></p>   
         </div>
         <div class="course-status">
           <% if course.status %>
@@ -27,7 +31,7 @@
             <p class="mb-0">VALIDÉ</p>
           <% else %>
             <i class="fa-solid fa-circle-xmark fa-pink fa-bigger"></i>
-            <p class="mb-0">EN ATTENTE</p>
+            <p class="mb-0 text-center">EN ATTENTE</p>
           <% end %>
         </div>
       </div>
@@ -52,7 +56,7 @@
               <% student = enrollment.student %>
               <% membership = student.memberships.find_by(start_year: @start_year) %>
               <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
-              <% name_style = school_period && school_period.paid && !camp_enrollment&.paid ? "color: #fc3535;font-weight:bold" : "" %>
+              <% should_pay_camp = school_period && school_period.paid && !camp_enrollment&.paid %>
               <tr class="equal-height-row">
                 <td class="align-middle flexy" style="width: 30%;position:relative">
                   <%= link_to managers_student_path(student), class: "flexy" do %>
@@ -67,17 +71,26 @@
                       <i class="fa-solid fa-circle-user" style="font-size:80px"></i>
                     <% end %>
                   <% end %>
-                  <% if !membership || !membership.paid  %>
-                    <i class="fa-solid fa-circle-xmark fa-pink no-membership-flag"></i>
-                  <% end %>
+
                 </td>
                 <td class="align-middle" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
                   <%= link_to managers_student_path(student), class: "full-width-course" do %>
-                    <span class="student-mr" style="<%= name_style %>"><%= student.last_name.try(&:upcase)%></span><br>
-                    <span class="student-mr" style="<%= name_style %>"><%= student.first_name%></span><br>
-                    <% if category.super_category == 'Cuisine' || category.super_category == 'Accompagnement' %>
-                      <span style="color: #ef00ff;font-weight:bold"><%= student.allergy if student.allergy != "Non" %></span>
-                    <% end %>
+                    <span class="student-mr"><%= student.last_name.try(&:upcase)%></span><br>
+                    <span class="student-mr"><%= student.first_name%></span><br>
+                    <%# if category.super_category == 'Cuisine' || category.super_category == 'Accompagnement' %>
+<!--                      <span style="color: #ef00ff;font-weight:bold"><%#= student.allergy if student.allergy != "Non" %></span>-->
+                    <%# end %>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                      <% if !membership || !membership.paid  %>
+                        <i class="fa-solid fa-circle-xmark fa-dark-blue no-membership-flag"></i>
+                      <% end %>
+                      <% if should_pay_camp %>
+                        <i class="fa-solid fa-triangle-exclamation fa-pink no-membership-flag"></i>
+                      <% end %>
+                      <% if student.has_medical_treatment %>
+                        <i class="fa-solid fa-truck-medical fa-blue medical-flag"></i>
+                      <% end %>
+                    </div>
                   <% end %>
                 </td>
                 <td class="align-middle">

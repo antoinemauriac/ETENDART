@@ -42,6 +42,8 @@ class Student < ApplicationRecord
 
   before_validation :normalize_fields, :normalize_phone_number
 
+  validates :medical_treatment_description, presence: true, if: -> { has_medical_treatment }
+
 
   ##############################################################################
   # GESTION DES INFORMATION DE L'ENFANT
@@ -159,7 +161,7 @@ class Student < ApplicationRecord
   end
 
   def full_name_separator
-    "#{last_name.upcase} - #{first_name}"
+    "#{last_name&.upcase} - #{first_name}"
   end
 
   def confirmed_camp_enrollments
@@ -317,6 +319,14 @@ class Student < ApplicationRecord
       age = now.year - birthdate.year
       age -= 1 if birthdate.strftime("%m%d").to_i > now.strftime("%m%d").to_i
       age
+    end
+  end
+
+  def french_date_of_birth
+    if date_of_birth
+      date_of_birth.strftime("%d/%m/%Y")
+    else
+      "No date of birth"
     end
   end
 

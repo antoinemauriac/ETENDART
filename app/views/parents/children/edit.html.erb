@@ -3,18 +3,13 @@
 </h4>
 
 <section class="row justify-content-center p-3">
-
-    <div class="form-inputs rounded-4 shadow bg-white col-12 col-lg-10 col-xl-8 pb-3">
-      <%= simple_form_for @child, url: parents_child_path(@child) do |f| %>
-
-
+  <div class="form-inputs rounded-4 shadow bg-white col-12 col-lg-10 col-xl-8 pb-3">
+    <%= simple_form_for @child, url: parents_child_path(@child), html: { data: { controller: "medical-treatment", action: "submit->medical-treatment#validateForm" } } do |f| %>
       <div class="container-sm p-3 mt-3">
         <h2 class="mb-3">
           Informations
         </h2>
-
         <div class="row mb-2">
-
           <div class="col-md-6">
             <%= f.input :first_name, label: "Prénom" %>
           </div>
@@ -26,11 +21,6 @@
             <%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
             end_year: 2025 %>
           </div>
-
-        </div>
-
-        <div class="row mb-2">
-
           <div class="col-md-6">
             <%= f.input :gender, label: "Genre", collection: ["Garçon", "Fille", "Autre"], include_blank: false %>
           </div>
@@ -38,52 +28,12 @@
         </div>
 
         <div class="row mb-2">
-
           <div class="col-12">
             <%= f.input :photo, as: :file %>
           </div>
-
-          <div class="col-md-6">
-            <%= f.input :siblings_count, label: "Nombre de frères et soeurs", collection: 0..10, include_blank: false %>
-          </div>
         </div>
-
-        <div class="row mb-2">
-          <div class="col-md-6">
-            <%= f.input :email, label: "Email (si l'enfant en a un)" %>
-          </div>
-
-          <div class="col-md-6">
-            <%= f.input :phone_number, label: "Numéro de téléphone (si l'enfant en a un)", as: :tel %>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <div class="col-12">
-            <%= f.input :address, label: "Adresse" %>
-          </div>
-
-          <div class="col-md-6">
-            <%= f.input :zipcode, label: "Code Postal" %>
-          </div>
-
-          <div class="col-md-6">
-            <%= f.input :city, label: "Ville" %>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <div class="col-12">
-            <%= f.input :school, label: "Etablissement Scolaire" %>
-          </div>
-        </div>
-
-
-
       </div>
-
-
-      <div class="container-sm p-3 mt-3">
+      <div class="container-sm p-3">
         <h2 class="mb-3">
           Administratif
         </h2>
@@ -91,15 +41,11 @@
         <div class="row mb-2">
 
           <div class="col-md-6">
-            <%= f.input :has_medical_treatment, label: "L'enfant suit-il un traitement médical ?", as: :radio_buttons, collection: [['Oui', true], ['Non', false]] %>
+            <%= f.input :has_medical_treatment, label: "L'enfant suit-il un traitement médical ?", as: :radio_buttons, collection: [['Oui', true], ['Non', false]], input_html: { data: { medical_treatment_target: "hasMedicalTreatment", action: "change->medical-treatment#toggleDescriptionRequirement" } } %>
           </div>
 
-          <div class="col-12">
-            <%= f.input :medical_treatment_description, label: "Description du traitement médical", as: :text %>
-          </div>
-
-          <div class="col-12">
-            <%= f.input :allergy, label: "Allergies (écrire 'aucune' si aucune allergie)", as: :text %>
+          <div class="col-12 d-none" data-medical-treatment-target="descriptionContainer">
+            <%= f.input :medical_treatment_description, label: "Description du traitement médical", as: :text, input_html: { data: { medical_treatment_target: "description" } } %>
           </div>
 
         </div>
@@ -109,28 +55,10 @@
             <%= f.input :has_consent_for_photos, label: "J'autorise la prise de photos de mon enfant", as: :radio_buttons, collection: [["J'autorise", true], ["Je n'autorise pas", false]] %>
           </div>
         </div>
-
-        <div class="row mb-2">
-          <div class="col-md-6">
-            <%= f.input :rules_signed,
-            label: "J'ai pris connaissance du <a href='#' class='text-primary' data-bs-toggle='modal' data-bs-target='#termsModal'>règlement intérieur</a>".html_safe,
-            as: :boolean,
-            checked_value: true,
-            unchecked_value: false,
-            required: true %>
-
-            <%= render 'parents/children/components/rules-modal' %>
-          </div>
-        </div>
-
       </div>
-
       <div class="text-center">
-        <%= f.button :submit, "Modifier", class: "btn btn-dark rounded-pill px-4 py-2" %>
+        <%= f.button :submit, "Valider", class: "btn btn-dark rounded-pill px-4 py-2" %>
       </div>
-
-
-      <% end %>
-    </div>
-
+    <% end %>
+  </div>
 </section>

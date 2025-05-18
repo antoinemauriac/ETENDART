@@ -9,15 +9,15 @@
     <div class="container container-big mb-4" data-controller="clickable-table">
       <div class="card-row-container">
         <div class="row pb-2 pt-2 header-row sticky-header align-items-center">
-          <div class="col flexy-row">Nom</div>
-          <div class="col flexy-row">Prénom</div>
+          <div class="col flexy-row">Élève</div>
           <% if academy.banished %>
             <div class="col flexy-row small-col">Exclu ?</div>
           <% end %>
-          <div class="col flexy-row text-wrap text-center small-col">Droit à l'image ?</div>
+          <div class="col flexy-row text-wrap text-center small-col">Cotisant ?</div>
           <% if school_period.paid %>
-            <div class="col flexy-row text-wrap text-center small-col">A payé ?</div>
+            <div class="col flexy-row text-wrap text-center small-col">Stage payé ?</div>
           <% end %>
+          <div class="col flexy-row text-wrap text-center small-col">Droit à l'image ?</div>
           <% if school_period.tshirt %>
             <div class="col flexy-row text-wrap text-center small-col">Tshirt reçu ?</div>
           <% end %>
@@ -32,6 +32,7 @@
               camp: camp,
               school_period: school_period,
               academy: academy,
+              start_year: @start_year,
               all_students_with_free_judo: all_students_with_free_judo %>
       </div>
     </div>
