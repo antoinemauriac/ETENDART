@@ -73,6 +73,10 @@ class User < ApplicationRecord
   before_validation :normalize_fields
   before_validation :normalize_phone_number
 
+  def self.only_crew_members
+    joins(:roles).where(roles: { name: ['admin', 'coach', 'manager', 'coordinator'] }).distinct
+  end
+
   def academies
     if admin?
       Academy.all
