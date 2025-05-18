@@ -1,9 +1,3 @@
-
-<%#
-  Cette vue affiche une liste des enfants enregistrés pour les parents.
-  Les parents peuvent ajouter de nouveaux enfants et accéder aux informations détaillées de chaque enfant.
-%>
-
 <h4 class="text-center bg-black parent-title py-3 fw-bold">
   Mes Enfants
 </h4>
@@ -179,6 +173,5 @@
   <% end %>
 </section>
 
-<%# Modal cart_warning %>
 <% session[:cart_warning] %>
 <%= render "parents/components/cart_warning_modal" %>

@@ -9,8 +9,7 @@
 <% end %>
 
 <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <h6 style="font-size:0.8rem"><%= link_to "Mot de passe oublié ?", new_password_path(resource_name), class:"black-link mb-2" %></h6>
-  <hr class="w-100">
+  <h6 style="font-size:0.8rem"><%= link_to "Mot de passe oublié ?", new_password_path(resource_name), class:"black-link mb-2 mt-1" %></h6>
 <% end %>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>

@@ -58,9 +58,7 @@
                     <div style="font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;color:#333333;line-height:1.5">
                       <h3>Bonjour <%= @parent.first_name %>,</h3>
 
-                      <p>Merci pour votre achat sur Etendart Academy !</p>
-
-                      <p>Voici un récapitulatif des adhésions et inscriptions aux prochains stages :</p>
+                      <p>Voici un récapitulatif de ton adhésion et inscription au prochain stage Etendart Academy !</p>
 
                       <% if @membership_cart_items.any? %>
                           <h4>COTISATION ETENDART ACADEMY</h4>
@@ -74,9 +72,9 @@
                       <% end %>
 
                       <% if @enrollments.any? %>
-                          <h4>INSCRIPTIONS AUX STAGES</h4>
+                          <h4>INSCRIPTION AU STAGE</h4>
                           <% @enrollments.each do |student_name, camps| %>
-                              <strong><p>Inscriptions pour <%= student_name %> :</p></strong>
+                              <strong><p><%= student_name %> :</p></strong>
                               <ul>
                                   <% camps.each do |camp| %>
                                       <li>
@@ -102,7 +100,7 @@
                       <%# Résumé des montants à payer %>
                       <% unpaid_camps = @enrollments.flat_map { |student_name, camps| camps.select { |camp| !camp[:paid] }.map { |camp| camp.merge(student_name: student_name) } } %>
                       <% if unpaid_camps.any? %>
-                          <h4>MONTANT RESTANT A PAYER EN CHEQUE OU ESPECE</h4>
+                            <h4>Montant restant à payer en chèque ou espèce - A régler le premier jour du stage</h4>
                           <ul>
                               <% unpaid_camps.each do |camp| %>
                                   <li>

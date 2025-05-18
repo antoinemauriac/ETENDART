@@ -34,6 +34,9 @@ application.register("coach-courses", CoachCoursesController)
 import DatePickerController from "./date_picker_controller"
 application.register("date-picker", DatePickerController)
 
+import EmailConfirmationController from "./email_confirmation_controller"
+application.register("email-confirmation", EmailConfirmationController)
+
 import EnrollmentFormController from "./enrollment_form_controller"
 application.register("enrollment-form", EnrollmentFormController)
 
@@ -72,6 +75,9 @@ application.register("import-csv", ImportCsvController)
 
 import LoadingMessageController from "./loading_message_controller"
 application.register("loading-message", LoadingMessageController)
+
+import MedicalTreatmentController from "./medical_treatment_controller"
+application.register("medical-treatment", MedicalTreatmentController)
 
 import NavbarController from "./navbar_controller"
 application.register("navbar", NavbarController)

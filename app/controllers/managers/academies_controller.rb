@@ -10,16 +10,19 @@ class Managers::AcademiesController < ApplicationController
     @today_courses = @academy.today_courses
     @tomorrow_courses = @academy.tomorrow_courses
 
-    @camp = @academy.camps.where("starts_at <= ? AND ends_at >= ?", Time.current, Time.current - 2.day).first
+    @camp = @academy.camps.where("starts_at <= ? AND ends_at >= ?", Time.current, Time.current - 2.day)&.first
 
     @today_absent_students = @academy.today_absent_students.first(5) if @camp.present?
 
-    @annual_program = @academy.annual_programs.select { |annual_program| annual_program.starts_at <= Time.current && annual_program.ends_at >= Time.current - 2.day }.first
+    @annual_program = @academy.annual_programs.select { |annual_program| annual_program.starts_at <= Time.current && annual_program.ends_at >= Time.current - 2.day }&.first
     if @annual_program.present?
       @week_absent_enrollments = @annual_program.week_absent_enrollments_sorted_by_day.first(5)
     end
 
     @old_presence_sheet = @academy.old_presence_sheet
+
+    @students_with_medical_treatment = @camp.confirmed_students.where.not(has_medical_treatment: false).where.not(medical_treatment_description: "").distinct if @camp.present?
+    @students_with_medical_treatment = @annual_program.students.where.not(has_medical_treatment: false).where.not(medical_treatment_description: "").distinct if @annual_program.present?
   end
 
   def export_absent_students_csv

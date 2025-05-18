@@ -55,8 +55,10 @@
             <p><%= @student.gender %> - <%= @student.age %> ans </p>
             <p>EMAIL : <%= @student.email %></p>
             <p>TEL : <%= @student.phone_number %></p>
-            <p>ADRESSE : <%= @student.address %></p>
-            <p>VILLE : <%= @student.city %> - <%= @student.zipcode %></p>
+            <p class="text-break">DROIT À L'IMAGE : <%= @student.has_consent_for_photos ? "Oui" : "Non" %></p>
+            <% if @student.medical_treatment_description.present? %>
+              <p>TRAITEMENT MÉDICAL : <%= @student.medical_treatment_description %></p>
+            <% end %>
           </div>
           <div class="student-photo">
             <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>

@@ -20,7 +20,7 @@ class Managers::CampsController < ApplicationController
   def students
     @camp = Camp.find(params[:id])
     authorize([:managers, @camp])
-    # @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
+    @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
     @students = @camp.confirmed_students.includes(:memberships, :camp_enrollments, :school_period_enrollments, :activity_enrollments).order(:last_name)
     # @camp_enrollments = @camp.camp_enrollments.includes(:student)
     @academy = @camp.academy

@@ -25,7 +25,9 @@ fr:
         unconfirmed_email: Email non confirmé
         unlock_token: Clé de déverrouillage
         updated_at: Date de mise à jour
+        email_confirmation: ""
     errors:
+      format: "%{message}"
       models:
         user:
           attributes:
@@ -35,6 +37,8 @@ fr:
               blank: "L'email ne peut pas être vide"
               invalid: "L'email n'est pas valide"
               taken: "Cet email est déjà utilisé"
+            email_confirmation:
+              confirmation: "L'email de confirmation ne correspond pas"
     models:
       user: Utilisateur
   devise:

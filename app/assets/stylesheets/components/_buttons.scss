@@ -410,10 +410,11 @@
 }
 
 .no-membership-flag {
-  position: absolute;
-  top: 8%;
-  right: 12%;
-  font-size: 1.4em;
+  font-size: 1.2em;
+}
+
+.medical-flag {
+  font-size: 1.1em;
 }
 
 .fa-small {
@@ -426,6 +427,14 @@
 
 .fa-pink {
   color: $pink;
+}
+
+.fa-blue {
+  color: #35b8fc;
+}
+
+.fa-dark-blue {
+  color: #2d298e;
 }
 
 .fa-test {

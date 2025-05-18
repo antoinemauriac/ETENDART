@@ -4,7 +4,7 @@
 
 <section class="row  justify-content-center bg-white rounded-4 shadow p-0 mb-3">
 
-  <%= simple_form_for @child, url: parents_children_path, html: { class: "col-12 col-sm-10 col-md-8 col-lg-6" } do |f| %>
+  <%= simple_form_for @child, url: parents_children_path, html: { class: "col-12 col-sm-10 col-md-8 col-lg-6", data: { controller: "medical-treatment", action: "submit->medical-treatment#validateForm" } } do |f| %>
 
     <div class="form-inputs">
 
@@ -21,11 +21,8 @@
            <div class="col-12 col-md-6 justify-content-center">
             <%= f.input :last_name, label: "Nom" %>
           </div>
-<!--          <div class="col-12 col-sm-10 col-lg-8 col-xl-6 justify-content-center">-->
-            <%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: 2004,
-                    end_year: 2025, include_blank: true %>
-          <!--</div>-->
-
+            <%= f.input :date_of_birth, label: "Date de naissance", as: :date, start_year: Time.current.year - 25,
+                    end_year: Time.current.year, include_blank: true %>
         </div>
 
         <div class="row mb-2">
@@ -41,43 +38,7 @@
           <div class="col-12">
             <%= f.input :photo, label: "Photo (optionnel)", as: :file %>
           </div>
-
-          <div class="col-md-6">
-            <%= f.input :siblings_count, label: "Nombre de frères et soeurs", collection: 0..10, include_blank: false %>
-          </div>
         </div>
-
-       <div class="row mb-2">
-          <div class="col-md-6">
-            <%= f.input :email, label: "Email (si l'enfant en a un)", input_html: { value: @parent.email } %>
-          </div>
-
-          <div class="col-md-6">
-            <%= f.input :phone_number, label: "Numéro de téléphone (si l'enfant en a un)", as: :tel, input_html: { value: @parent.phone_number } %>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <div class="col-12">
-            <%= f.input :address, label: "Adresse", input_html: { value: @parent.parent_profile.address } %>
-          </div>
-
-          <div class="col-md-6">
-            <%= f.input :zipcode, label: "Code Postal", input_html: { value: @parent.parent_profile.zipcode } %>
-          </div>
-
-          <div class="col-md-6">
-            <%= f.input :city, label: "Ville", input_html: { value: @parent.parent_profile.city } %>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <div class="col-12">
-            <%= f.input :school, label: "Etablissement Scolaire" %>
-          </div>
-        </div>
-
-      </div>
 
 
       <div class="py-3 my-3">
@@ -88,11 +49,11 @@
         <div class="row mb-2">
 
           <div class="col-md-6">
-            <%= f.input :has_medical_treatment, label: "L'enfant suit-il un traitement médical ?", as: :radio_buttons, collection: [['Oui', true], ['Non', false]] %>
+            <%= f.input :has_medical_treatment, label: "L'enfant suit-il un traitement médical ?", as: :radio_buttons, collection: [['Oui', true], ['Non', false]], input_html: { data: { medical_treatment_target: "hasMedicalTreatment", action: "change->medical-treatment#toggleDescriptionRequirement" } } %>
           </div>
 
-          <div class="col-12">
-            <%= f.input :medical_treatment_description, label: "Description du traitement médical", as: :text %>
+          <div class="col-12 d-none" data-medical-treatment-target="descriptionContainer">
+            <%= f.input :medical_treatment_description, label: "Description du traitement médical", as: :text, input_html: { data: { medical_treatment_target: "description" } } %>
           </div>
 
         </div>

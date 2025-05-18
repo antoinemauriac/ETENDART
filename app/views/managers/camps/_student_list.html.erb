@@ -2,14 +2,12 @@
 
   <% camp_enrollment = student.camp_enrollments.find_by(camp: camp) %>
   <% school_period_enrollment = student.school_period_enrollments.find_by(school_period: school_period) %>
+  <% membership = student.memberships.find_by(start_year: start_year) %>
   <% activities = student.student_activities(camp) %>
-  <% name_style = school_period.paid && camp_enrollment.present && !camp_enrollment.paid && !all_students_with_free_judo.include?(student) ? 'color: #fc3535;font-weight:bold' : '' %>
+  <%# name_style = school_period.paid && camp_enrollment.present && !camp_enrollment.paid && !all_students_with_free_judo.include?(student) ? 'color: #fc3535;font-weight:bold' : '' %>
   <div id="camp-enrollment-<%= camp_enrollment.id %>" class="row card-row card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student) %>">
-    <div class="col flexy-row" style="<%= name_style %>">
-      <span class="ellipsis"><%= student.last_name %></span>
-    </div>
-    <div class="col flexy-row" style="<%= name_style %>">
-      <span class="ellipsis"><%= student.first_name %></span>
+    <div class="col flexy-row">
+      <span class="ellipsis"><%= student.full_name_separator %></span>
     </div>
 
     <% if academy.banished %>
@@ -18,8 +16,12 @@
       </div>
     <% end %>
 
-    <div class="col flexy-row small-col <%= student&.has_consent_for_photos ? '' : 'non-bg' %>">
-      <span class="ellipsis"><%= student.has_consent_for_photos ? "" : "Non" %></span>
+   <div class="col flexy-row small-col">
+      <% if !membership || !membership.paid %>
+        <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
+      <% else %>
+      <i class="fa-solid fa-circle-check text-success fa-small"></i>
+      <% end %>
     </div>
 
     <% if school_period.paid %>
@@ -36,12 +38,15 @@
           <% if camp_enrollment.paid %>
             <i class="fa-solid fa-circle-check text-success fa-small"></i>
           <% else %>
-            <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+            <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
           <% end %>
         </div>
       <% end %>
     <% end %>
 
+    <div class="col flexy-row small-col <%= student&.has_consent_for_photos ? '' : 'non-bg' %>">
+      <span class="ellipsis"><%= student.has_consent_for_photos ? "" : "Non" %></span>
+    </div>
     <% if school_period.tshirt %>
       <div class="col flexy-row small-col <%= school_period_enrollment&.tshirt_delivered ? '' : 'non-bg' %>">
         <span class="ellipsis"><%= school_period_enrollment&.tshirt_delivered ? "Oui" : "Non" %></span>

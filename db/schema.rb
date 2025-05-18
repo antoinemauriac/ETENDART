@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_10_124648) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_11_135435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -568,11 +568,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_10_124648) do
     t.string "status"
     t.boolean "admin", default: false, null: false
     t.string "gender"
-    t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
-    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.string "address"
+    t.string "zipcode"
+    t.string "city"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

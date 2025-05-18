@@ -1,7 +1,6 @@
 class Parents::ChildrenController < Parents::BaseController
   before_action :set_parent
 
-  # path: parents_children_path
   def index
     @existing_children = Student.where(id: session[:existing_children]) if session[:existing_children].present?
     @children = policy_scope([:parents, Student])
@@ -13,7 +12,7 @@ class Parents::ChildrenController < Parents::BaseController
     authorize [:parents, :student], :assign_children?
     children = Student.where(id: params[:child_ids])
     if children.any?
-      children.update_all(user_id: current_user.id, email: current_user.email, address: current_user.parent_profile.address, zipcode: current_user.parent_profile.zipcode, city: current_user.parent_profile.city ) # Associe les enfants au parent avec email et adresse
+      children.update_all(user_id: current_user.id, email: current_user.email, address: current_user.parent_profile.address, zipcode: current_user.parent_profile.zipcode, city: current_user.parent_profile.city, phone_number: current_user.phone_number)
 
       flash[:notice] = "Les enfants ont été ajoutés avec succès."
     else
@@ -53,17 +52,15 @@ class Parents::ChildrenController < Parents::BaseController
       notice_message = "L'enfant a bien été retrouvé et mis à jour."
     else
       @child.username = username
-
-      # Définir un message spécifique pour un nouvel enfant créé
-      notice_message = "L'enfant a bien été ajouté."
+      notice_message = "Le profil de l'enfant a été créé."
     end
 
     @child.parent = @parent
     if @child.save
-      # @child.must_pay_membership
+      @child.update(email: @parent.email, phone_number: @parent.phone_number, address: @parent.parent_profile.address, zipcode: @parent.parent_profile.zipcode, city: @parent.parent_profile.city)
       redirect_to parents_children_path, notice: notice_message
     else
-      render :new, alert: 'Une erreur est survenue lors de la création de l\'élève.'
+      render :new, alert: "Une erreur est survenue lors de la création du profil de l'enfant."
     end
   end
 
@@ -87,9 +84,9 @@ class Parents::ChildrenController < Parents::BaseController
     @child = Student.find(params[:id])
     authorize [:parents, :student], :update?
     if @child.update(child_params)
-      redirect_to parents_child_path(@child), notice: 'L\'élève a bien été mis à jour.'
+      redirect_to parents_child_path(@child), notice: "Le profil de l'enfant a été mis à jour"
     else
-      render :edit, alert: 'Une erreur est survenue lors de la modification de l\'élève.'
+      render :edit, alert: "Une erreur est survenue lors de la mise à jour du profil de l'enfant."
     end
   end
 
@@ -101,7 +98,7 @@ class Parents::ChildrenController < Parents::BaseController
   end
 
   def child_params
-    params.require(:student).permit(:first_name, :last_name, :date_of_birth, :gender, :photo, :siblings_count, :email, :phone_number, :school, :has_medical_treatment, :medical_treatment_description, :has_consent_for_photos, :rules_signed, :address, :zipcode, :city, :allergy, academy_ids: [])
+    params.require(:student).permit(:first_name, :last_name, :date_of_birth, :gender, :photo, :email, :phone_number, :school, :has_medical_treatment, :medical_treatment_description, :has_consent_for_photos, :rules_signed, :address, :zipcode, :city, :allergy, academy_ids: [])
   end
 
 end

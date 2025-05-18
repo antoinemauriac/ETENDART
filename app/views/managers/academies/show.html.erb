@@ -72,6 +72,11 @@
     </div>
   <% end %>
 
+  <%# LES ETUDIANTS AVEC UN TRAITEMENT MEDICAL %>
+  <% if @students_with_medical_treatment.present? %>
+    <%= render "managers/academies/students_with_medical_treatment", students_with_medical_treatment: @students_with_medical_treatment %>
+  <% end %>
+
   <%# LES FEEDBACKS %>
   <% if @feedbacks.present? %>
     <%= render "managers/academies/feedbacks", feedbacks: @feedbacks %>

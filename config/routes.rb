@@ -29,9 +29,9 @@ Rails.application.routes.draw do
 
   root to: "pages#home"
   
-  devise_scope :user do
-    get '/users/confirmation_pending', to: 'users/registrations#confirmation_pending', as: :confirmation_pending
-  end
+  # devise_scope :user do
+  #   get '/users/confirmation_pending', to: 'users/registrations#confirmation_pending', as: :confirmation_pending
+  # end
 
   ################################################################################################
   # CONTROLLER LE PROFIL DE L'UTILISATEUR PARENT

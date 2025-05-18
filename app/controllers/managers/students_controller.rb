@@ -223,7 +223,7 @@ class Managers::StudentsController < ApplicationController
   private
 
   def student_params
-    params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :photo, :has_consent_for_photos)
+    params.require(:student).permit(:username, :first_name, :last_name, :email, :date_of_birth, :gender, :phone_number, :city, :zipcode, :address, :photo, :has_consent_for_photos, :has_medical_treatment, :medical_treatment_description)
   end
 
   def determine_redirect_path
