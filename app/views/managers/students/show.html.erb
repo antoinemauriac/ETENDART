@@ -165,7 +165,7 @@
 
                         <%= f.input :receiver_id,
                                     label: "Personne ayant reçu le paiement",
-                                    collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                                    collection: User.only_crew_members.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
                                     selected: current_user.id, # Si aucune valeur n'est pré-sélectionnée
                                     prompt: "Sélectionner",
                                     include_blank: true,

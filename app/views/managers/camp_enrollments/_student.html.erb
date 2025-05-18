@@ -69,7 +69,7 @@
                         input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
             <%= f.input :receiver_id,
                         label: "Personne ayant reçu le paiement",
-                        collection: User.all.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                        collection: User.only_crew_members.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
                         selected: camp_enrollment.receiver_id.present? ? camp_enrollment.receiver_id : current_user.id,
                         prompt: "Sélectionner",
                         include_blank: true,
