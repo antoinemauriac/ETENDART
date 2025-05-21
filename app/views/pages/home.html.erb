@@ -1,4 +1,3 @@
-
 <div class="pages-home">
   <%# Section avec titre et background avec image opaque avec class bootstrap %>
     <section id="hero-section" class="text-white d-flex align-content-center py-5">
@@ -99,11 +98,11 @@
                 </button>
               </li>
 
-              <li>
-                <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%= academy.id %>">
+<!--              <li>
+                <button class="rounded-pill btn text-black bg-white px-4 py-2" data-action="click->home--filter#filter" data-home--filter-target="button" data-academy-id="<%#= academy.id %>">
                   Clarisse Agbegnenou
                 </button>
-              </li>
+              </li>-->
 
             <% elsif academy.id == 43 %>
             <%# Si c'est l'academie Daniel Narcisse %>
@@ -156,8 +155,8 @@
                   </div>
                 <% end %>
 
-                <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
-                  <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%= academy.id %>" data-home--filter-target="academy">
+                <%#= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
+<!--                  <div class="row py-2 align-items-center my-1 rounded-4" style="background-color: #E8FF6E;min-height:4rem" data-academy-id="<%#= academy.id %>" data-home--filter-target="academy">
                     <div class="col-5">
                       Clarisse Agbegnenou
                     </div>
@@ -166,13 +165,13 @@
                         <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
                         <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                       </svg>
-                      <%= academy.city %>
-                    </div>
+                      <%#= academy.city %>-->
+<!--                    </div>
                     <div class="col-4">
-                      <%= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>
-                    </div>
+                      <%#= academy.next_school_periods.first.name %> <%= academy.next_school_periods.first.year %>-->
+<!--                    </div>
                   </div>
-                <% end %>
+                <%# end %>-->
 
               <% elsif academy.id == 43 %>
                 <%= link_to parents_academy_path(academy), class: "col-12 text-black px-0 text-decoration-none" do %>
@@ -516,80 +515,85 @@
     <footer class="bg-white py-5">
         <div class="row justify-content-center gap-5 gap-md-0">
 
-          <div class="col-md-2 col-6 text-center">
+          <div class="col-6 col-md-2 text-center mb-3 mb-md-0">
             <%= image_tag "home/logos/LOGO_EA_MINI_NOIR.png", class: "w-50" %>
           </div>
 
           <div class="col-md-10">
-            <div class="row gap-3 gap-md-0">
-
-              <div class="col-md-3">
-                <ul>
-                  <li>
-                    <strong>
-                      <%= link_to "APPROCHE", "#notre-approche", class: "text-decoration-underline" %>
-                    </strong>
-                  </li>
-                  <li>
-                    <strong>
-                      <%= link_to "PROGRAMMATION", "#programmation", class: "text-decoration-underline" %>
-                    </strong>
-                  </li>
-                  <li>
-                    <strong>
-                      <%= link_to "IMPACT", "#impact", class: "text-decoration-underline" %>
-                    </strong>
-                  </li>
-                </ul>
+            <div class="row gap-3 gap-md-0 justify-content-center">
+              <div class="col-md-3 gap-4">
+                <h6 class="mb-4">
+                  <%= link_to "APPROCHE", "#notre-approche" %>
+                </h6>
+                <h6 class="mb-4">
+                  <%= link_to "PROGRAMMATION", "#programmation" %>
+                </h6>
+                <h6 class="mb-4">
+                  <%= link_to "IMPACT", "#impact" %>
+                </h6>
+                <h6 class="mb-4">
+                  <%= link_to "ADHERER", "#adherer" %>
+                </h6>
+                <h6 class="mb-4">
+                  <%= link_to "FAIRE UN DON", "https://www.helloasso.com/associations/etendart/formulaires/1", target: "_blank" %>
+                </h6>
+                <h6 class="mb-4">
+                  <%= link_to "CONNEXION", new_user_session_path %>
+                </h6>
+                <h6 class="mb-4">
+                  CONTACT
+                </h6>
+                <p><%= mail_to "etendart@weareetendart.org" %></p>
+                <p><%= link_to "6 rue des Bateliers", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank" %></p>
+                <p><%= link_to "92110 Clichy", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank" %></p>                   
               </div>
 
-              <div class="col-md-3">
-                <ul>
-                  <li>
-                    <strong>
-                      <%= link_to "ADHERER", "#adherer", class: "text-decoration-underline" %>
-                    </strong>
-                  </li>
-                  <li>
-                    <strong>
-                      <%= link_to "FAIRE UN DON", "https://www.helloasso.com/associations/etendart/formulaires/1", class: "text-decoration-underline", target:"_blank" %>
-                    </strong>
-                  </li>
-                  <li>
-                    <strong>
-                      <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
-                    </strong>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="col-md-3">
-                <ul>
-                  <li>
-                    <strong>
-                      <%= link_to "CONTACT", "#contact", class: "text-decoration-underline" %>
-                    </strong>
-                  </li>
-                  <li>
-                    <p>
-                      <%= mail_to "etendart@weareetendart.org" %>
-                      <br>
-                      <%= link_to "6 rue des Bateliers", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
-                      <br>
-                      <%= link_to "92110 Clichy", "https://www.google.com/maps/place/6+Rue+des+Bateliers,+92110+Clichy", target: "_blank", class: "text-decoration-underline" %>
-                    </p>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="col-md-3">
-                <ul>
-                  <li>
-                    <strong>
-                      <%= link_to "ILS NOUS SOUTIENNENT", "#soutien", class: "text-decoration-underline" %>
-                    </strong>
-                  </li>
-                </ul>
+              <div class="col-md-7">
+                <h6>ILS NOUS SOUTIENNENT</h6>
+                <div class="row justify-content-left align-items-center gap-0 gap-md-2">
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/nike.png", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-4 mb-3 text-center">
+                    <%= image_tag "footer/lacoste.png", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/ans.jpg", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/berger.png", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/bnp.png", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/clichy.svg.png", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/grasse.png", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/impact.avif", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/kellanova.jpg", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/levallois.svg.png", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/lidl.svg.webp", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/troyes.svg", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/vinci.jpg", class: "img-fluid footer-logo" %>
+                  </div>
+                  <div class="col-4 col-md-2 mb-3 text-center">
+                    <%= image_tag "footer/angers.svg.png", class: "img-fluid footer-logo" %>
+                  </div>
+                </div>
               </div>
 
             </div>
