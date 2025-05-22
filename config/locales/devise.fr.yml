@@ -39,6 +39,11 @@ fr:
               taken: "Cet email est déjà utilisé"
             email_confirmation:
               confirmation: "L'email de confirmation ne correspond pas"
+        student:
+          attributes:
+            username:
+              invalid: "Cet enfant existe déjà"
+              taken: "Cet enfant existe déjà"
     models:
       user: Utilisateur
   devise:

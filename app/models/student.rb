@@ -7,6 +7,7 @@ class Student < ApplicationRecord
     }
 
   validates :username, :first_name, :last_name, :date_of_birth, :gender, presence: true
+  validates :username, uniqueness: { case_sensitive: false }
 
   DEFAULT_AVATAR = "xkhgd88iqzlk5ctay2hu.png"
 
