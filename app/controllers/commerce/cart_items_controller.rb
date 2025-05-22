@@ -45,7 +45,7 @@ class Commerce::CartItemsController < ApplicationController
       end
     end
 
-    redirect_to commerce_cart_path, alert: "L'inscription au stage a été annulée"
+    redirect_to commerce_cart_path, notice: "L'inscription au stage a été annulée"
   end
 
   private

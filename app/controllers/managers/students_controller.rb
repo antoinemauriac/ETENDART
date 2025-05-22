@@ -97,18 +97,19 @@ class Managers::StudentsController < ApplicationController
   def create
     student = Student.new(student_params)
     authorize([:managers, student], policy_class: Managers::StudentPolicy)
+    @academy = Academy.find(params[:student][:academy1_id]) if params[:student][:academy1_id].present?
     student.academies << Academy.find(params[:student][:academy1_id])
     student.academies << Academy.find(params[:student][:academy2_id]) if params[:student][:academy2_id].present?
     student.academies << Academy.find(params[:student][:academy3_id]) if params[:student][:academy3_id].present?
     excel_serial_date = (student.date_of_birth - Date.new(1899, 12, 30)).to_i
     username = "#{student.first_name.downcase}#{student.last_name.downcase}#{excel_serial_date}"
-    student.update(username: username)
+    student.username = username
     if student.save
       redirect_to managers_student_path(student)
       flash[:notice] = "Élève ajouté"
     else
-      flash[:error] = "Une erreur est survenue"
-      render :new, status: :unprocessable_entity
+      flash[:alert] = student.errors.full_messages.join(", ")
+      redirect_to new_managers_student_path(academy: @academy.id)
     end
   end
 
