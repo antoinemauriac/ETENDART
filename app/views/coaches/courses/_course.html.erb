@@ -56,14 +56,11 @@
               <% should_pay_camp = school_period && school_period.paid && !camp_enrollment&.paid %>
 
               <tr class="equal-height-row">
-                <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: course, membership: membership }%>
+                <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: course, membership: membership, origin: "coach_course" }%>
                 <td class="align-middle" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
                   <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id), class: "full-width-course" do %>
                     <span class="student-mr"><%= student.last_name.try(&:upcase)%></span><br>
                     <span class="student-mr"><%= student.first_name %></span><br>
-                    <%# if category.super_category == 'Cuisine' || category.super_category == 'Accompagnement' %>
-<!--                      <span style="color: #ef00ff;font-weight:bold"><%#= student.allergy if student.allergy != "Non" %></span>-->
-                    <%# end %>
                     <div class="d-flex align-items-center gap-2 mt-2">
                       <% if !membership || !membership.paid  %>
                         <i class="fa-solid fa-circle-xmark fa-dark-blue no-membership-flag"></i>

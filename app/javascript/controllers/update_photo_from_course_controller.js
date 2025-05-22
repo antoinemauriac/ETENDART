@@ -9,11 +9,6 @@ export default class extends Controller {
     courseId: Number
   };
 
-  connect() {
-    console.log(this.studentIdValue);
-
-  }
-
   submit(event) {
     this.spinnerTarget.classList.remove("d-none");
     this.labelTarget.classList.add("d-none");

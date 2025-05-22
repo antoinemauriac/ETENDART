@@ -3,8 +3,14 @@
   data-update-photo-from-course-target="studentPhoto"
   data-update-photo-from-course-course-id-value="<%= course.id %>"
   data-update-photo-from-course-student-id-value="<%= student.id %>">
+  <% if current_user.coach? %>
+    <% destination =  coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id) %>
+  <% else %>
+    <% destination =  managers_student_path(student) %>
+  <% end %>
+
   <% if student.photo.attached? %>
-    <%= link_to coaches_student_profile_path(student, origin: coaches_course_path(course), course_id: course.id), class: "flexy" do %>
+    <%= link_to destination, class: "flexy" do %>
       <%= cl_image_tag student.photo_or_default,
               class: "avatar-small",
               crop: "thumb",
@@ -18,7 +24,7 @@
         data-action="change->update-photo-from-course#submit"
         data-update-photo-from-course-target="input"
         accept="image/*" capture="environment"
-        data-origin="course"
+        data-origin="<%= origin %>"
         style="display:none;cursor:pointer;">
       <label for="photo_<%= student.id %>"
         data-update-photo-from-course-target="label">
