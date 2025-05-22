@@ -13,29 +13,26 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def new
   #   super
   # end
+  # def new
+  #   build_resource
+  #   super
+  # end
 
   # POST /resource
   def create
-    recaptcha_token = params[:recaptcha_token]
-    recaptcha_response = verify_recaptcha_v3(recaptcha_token)
-
-    if recaptcha_response && recaptcha_response['success'] && recaptcha_response['score'] > 0.2
-      super
-      if resource.persisted?
-        resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
-        Commerce::Cart.create!(parent: resource, status: 'pending', total_price: 0)
-        resource.save
+    if verify_recaptcha
+      super do |resource|
+        if resource.persisted?
+          resource.roles << Role.find_by(name: "parent") if resource.roles.empty?
+          Commerce::Cart.create!(parent: resource, status: 'pending', total_price: 0)
+          resource.save
+        end
       end
     else
-      flash[:alert] = "Échec de la vérification reCAPTCHA. Veuillez réessayer."
-      clean_up_passwords(resource)
-      set_minimum_password_length
-      redirect_to new_user_registration_path and return
+      flash.now[:alert] = "Échec de la vérification reCAPTCHA. Veuillez réessayer."
+      build_resource
+      render :new, status: :unprocessable_entity
     end
-  rescue ArgumentError => e
-    Rails.logger.error("Registration error: \\#{e.message}")
-    flash[:alert] = "Une erreur inattendue s'est produite. Veuillez réessayer."
-    redirect_to new_user_registration_path
   end
 
   # def confirmation_pending
