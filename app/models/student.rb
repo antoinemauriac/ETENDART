@@ -165,6 +165,10 @@ class Student < ApplicationRecord
     "#{last_name&.upcase} - #{first_name}"
   end
 
+  def full_address
+    "#{address}, #{zipcode} - #{city}"
+  end
+
   def confirmed_camp_enrollments
     camp_enrollments.confirmed
   end

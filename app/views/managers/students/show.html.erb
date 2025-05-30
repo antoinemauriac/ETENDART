@@ -52,13 +52,14 @@
               <% end %>
               </p>
             </strong>
-            <p><%= @student.gender %> - <%= @student.age %> ans </p>
+            <p><%= @student.gender %> - <%= @student.french_date_of_birth %> - <%= @student.age %> ans </p>
             <p>EMAIL : <%= @student.email %></p>
             <p>TEL : <%= @student.phone_number %></p>
             <p class="text-break">DROIT À L'IMAGE : <%= @student.has_consent_for_photos ? "Oui" : "Non" %></p>
             <% if @student.medical_treatment_description.present? %>
               <p>TRAITEMENT MÉDICAL : <%= @student.medical_treatment_description %></p>
             <% end %>
+            <p>ADRESSE : <%= @student.full_address %></p>
           </div>
           <div class="student-photo">
             <%= render partial: "coaches/student_profiles/student_photo", locals: { student: @student, origin: "manager_student_profile" }%>

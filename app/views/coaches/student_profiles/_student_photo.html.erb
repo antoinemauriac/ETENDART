@@ -19,14 +19,14 @@
                   gravity: "face",
                   width: 300,
                   height: 300 %>
-            <div class="change-photo" id="change-photo-coach">
+            <div class="change-photo" id="change-photo-coach" style="cursor: pointer;">
               <%= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>
               <p style="margin:0;font-size:12px">Modifier</p>
             </div>
         <% else %>
-          <div class="flexy student-photo-profile">
+            <div class="flexy student-photo-profile" style="cursor: pointer;">
             <%= image_tag('camera-yellow.svg', style: "width:80px", alt: 'description de l\'image') %>
-          </div>
+            </div>
         <% end %>
     </label>
     <div class="loader-container">
