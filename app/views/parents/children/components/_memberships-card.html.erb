@@ -17,7 +17,7 @@
       <td><%= "#{membership.amount} €" %></td>
 
       <% if membership.paid? %>
-        <td class="d-none d-md-table-cell"><%= membership.payment_date.strftime("%d/%m/%Y") %></td>
+        <td class="d-none d-md-table-cell"><%= membership&.payment_date&.strftime("%d/%m/%Y") %></td>
       <% else %>
         <td class="d-none d-md-table-cell"></td>
       <% end %>
@@ -33,6 +33,3 @@
     <% end %>
   </tbody>
 </table>
-
-
-<%# render "parents/children/components/memberships-card", locals: { memberships: @memberships } %>

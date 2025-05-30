@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_11_135435) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_24_095448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -422,18 +422,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_135435) do
     t.index ["manager_id"], name: "index_old_camp_deposits_on_manager_id"
   end
 
-  create_table "orders", force: :cascade do |t|
-    t.string "status", default: "paid", null: false
-    t.decimal "total_price", null: false
-    t.string "stripe_payment_intent_id", null: false
-    t.bigint "user_id", null: false
-    t.bigint "cart_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cart_id"], name: "index_orders_on_cart_id"
-    t.index ["user_id"], name: "index_orders_on_user_id"
-  end
-
   create_table "parent_profiles", force: :cascade do |t|
     t.string "gender"
     t.string "relationship_to_child"
@@ -631,8 +619,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_11_135435) do
   add_foreign_key "memberships", "users", column: "receiver_id"
   add_foreign_key "old_camp_deposits", "camps"
   add_foreign_key "old_camp_deposits", "users", column: "manager_id"
-  add_foreign_key "orders", "carts"
-  add_foreign_key "orders", "users"
   add_foreign_key "parent_profiles", "users"
   add_foreign_key "program_periods", "annual_programs"
   add_foreign_key "school_period_enrollments", "school_periods"
