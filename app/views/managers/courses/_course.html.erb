@@ -58,21 +58,7 @@
               <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
               <% should_pay_camp = school_period && school_period.paid && !camp_enrollment&.paid %>
               <tr class="equal-height-row">
-                <td class="align-middle flexy" style="width: 30%;position:relative">
-                  <%= link_to managers_student_path(student), class: "flexy" do %>
-                    <% if student.photo.key? %>
-                      <%= cl_image_tag student.photo.key,
-                        class: "avatar-small",
-                        crop: "thumb",
-                        gravity: "face",
-                        width: 300,
-                        height: 300 %>
-                    <% else %>
-                      <i class="fa-solid fa-circle-user" style="font-size:80px"></i>
-                    <% end %>
-                  <% end %>
-
-                </td>
+                <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: course, membership: membership, origin: "manager_course" }%>
                 <td class="align-middle" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
                   <%= link_to managers_student_path(student), class: "full-width-course" do %>
                     <span class="student-mr"><%= student.last_name.try(&:upcase)%></span><br>

@@ -2,7 +2,7 @@
 
 <div class="special-container">
   <div class="row justify-content-center align-items-center student-info-container">
-    <%= render partial: "coaches/student_profiles/student_photo", locals: { student: @student }%>
+    <%= render partial: "coaches/student_profiles/student_photo", locals: { student: @student, origin: "coach_student_profile" }%>
     <div class="col-7 coach-student-info">
       <p class="text-break">NOM : <strong><%= @student.last_name.try(:upcase) %></strong></p>
       <p class="text-break">PRÉNOM : <strong><%= @student.first_name.try(:upcase) %></strong></p>

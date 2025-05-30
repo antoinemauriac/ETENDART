@@ -175,7 +175,7 @@ class Managers::StudentsController < ApplicationController
       format.json { render json: { imageUrl: url_for(@student.photo) } }
       format.text do
         partial = choose_partial_based_on_origin
-        render partial: partial, locals: { student: @student, course: @course }, formats: [:html]
+        render partial: partial, locals: { student: @student, course: @course, origin: @origin }, formats: [:html]
       end
     end
   end
@@ -189,13 +189,12 @@ class Managers::StudentsController < ApplicationController
       students = Student.all.order(:last_name)
       filename = "eleves_toute_academie.csv"
     end
-    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     authorize([:managers, @students], policy_class: Managers::StudentPolicy)
     respond_to do |format|
       format.csv do
 
         csv_data = CSV.generate(col_sep: ';', encoding: 'UTF-8') do |csv|
-          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville", "Membre ?", "Dernier cours", "Sport Principal", "Academie du dernier cours"]
+          csv << ["Nom", "Prénom", "Genre", "Date de naissance", "Age", "Telephone", "Email", "Adresse", "Code postal", "Ville", "Cotisant ?", "Dernier cours", "Sport Principal", "Academie du dernier cours"]
 
           students.each do |student|
             csv << [
@@ -208,7 +207,7 @@ class Managers::StudentsController < ApplicationController
               student.address,
               student.zipcode,
               student.city,
-              student.memberships.where(start_year: start_year)&.first&.paid ? "Oui" : "Non",
+              student.current_membership&.paid ? "Oui" : "Non",
               student.last_attended_course_date ? l(student.last_attended_course_date, format: :date) : '',
               student.predominant_sport,
               student.main_academy&.name
@@ -228,19 +227,18 @@ class Managers::StudentsController < ApplicationController
   end
 
   def determine_redirect_path
-    if @origin == 'manager'
+    if @origin == 'manager_student_profile'
       managers_student_path(@student)
-    else
+    elsif @origin == 'coach_student_profile'
       coaches_student_profile_path(@student, precedent: @origin)
     end
   end
 
   def choose_partial_based_on_origin
-    case @origin
-    when 'course'
-      'coaches/courses/student_photo' # Chemin vers votre partial pour les managers
-    when 'student_profile'
-      'coaches/student_profiles/student_photo'  # Chemin par défaut ou pour les coaches
+    if @origin == 'manager_course' || @origin == 'coach_course'
+      'coaches/courses/student_photo'
+    elsif @origin == 'coach_student_profile' || @origin == 'manager_student_profile'
+      'coaches/student_profiles/student_photo'
     end
   end
 

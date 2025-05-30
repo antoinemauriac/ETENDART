@@ -38,7 +38,7 @@
             <i class="fa-solid fa-user-pen"></i>
           <% end %>
         </div>
-        <div class="content-info content-info-show-student">
+        <div class="content-info content-info-show-student flex-row">
           <div class="student-info">
             <p>NOM : <strong><%= @student.last_name.try(:upcase) %></strong></p>
             <p>PRÉNOM : <strong><%= @student.first_name %></strong></p>
@@ -52,27 +52,17 @@
               <% end %>
               </p>
             </strong>
-            <p><%= @student.gender %> - <%= @student.age %> ans </p>
+            <p><%= @student.gender %> - <%= @student.french_date_of_birth %> - <%= @student.age %> ans </p>
             <p>EMAIL : <%= @student.email %></p>
             <p>TEL : <%= @student.phone_number %></p>
             <p class="text-break">DROIT À L'IMAGE : <%= @student.has_consent_for_photos ? "Oui" : "Non" %></p>
             <% if @student.medical_treatment_description.present? %>
               <p>TRAITEMENT MÉDICAL : <%= @student.medical_treatment_description %></p>
             <% end %>
+            <p>ADRESSE : <%= @student.full_address %></p>
           </div>
           <div class="student-photo">
-            <div class="loader-photo d-none" data-upload-photo-target="spinner"></div>
-            <% if @student.photo.key? %>
-              <%= cl_image_tag @student.photo_or_default,
-                      data: { upload_photo_target: "photo" },
-                      class: "avatar-medium",
-                      crop: "thumb",
-                      gravity: "face",
-                      width: 300,
-                      height: 300 %>
-            <% else %>
-              <i class="fa-solid fa-circle-user" style="font-size: 7.5rem"></i>
-            <% end %>
+            <%= render partial: "coaches/student_profiles/student_photo", locals: { student: @student, origin: "manager_student_profile" }%>
           </div>
         </div>
       </div>

@@ -5,28 +5,28 @@
     <input type="file" id="photo_<%= @student.id %>"
             data-action="change->update-photo-from-course#submit"
             data-update-photo-from-course-target="input"
-            data-origin="student_profile"
+            data-origin="<%= origin %>"
             accept="image/*" capture="environment"
             style="display:none;cursor:pointer;">
     <label for="photo_<%= student.id %>"
            data-update-photo-from-course-target="label"
            style="position:relative">
         <% if @student.photo.attached? %>
-              <%= cl_image_tag student.photo.key,
-                 data: { upload_photo_target: "photo" },
-                 class: "avatar",
-                 crop: "thumb",
-                 gravity: "face",
-                 width: 300,
-                 height: 300 %>
-          <div class="change-photo" id="change-photo-coach">
-            <%= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>
-            <p style="margin:0;font-size:12px">Modifier</p>
-          </div>
+            <%= cl_image_tag student.photo.key,
+                  data: { upload_photo_target: "photo" },
+                  class: "avatar",
+                  crop: "thumb",
+                  gravity: "face",
+                  width: 300,
+                  height: 300 %>
+            <div class="change-photo" id="change-photo-coach" style="cursor: pointer;">
+              <%= image_tag('camera-black.svg', style: "width:20px", alt: 'description de l\'image') %>
+              <p style="margin:0;font-size:12px">Modifier</p>
+            </div>
         <% else %>
-          <div class="flexy student-photo-profile">
+            <div class="flexy student-photo-profile" style="cursor: pointer;">
             <%= image_tag('camera-yellow.svg', style: "width:80px", alt: 'description de l\'image') %>
-          </div>
+            </div>
         <% end %>
     </label>
     <div class="loader-container">

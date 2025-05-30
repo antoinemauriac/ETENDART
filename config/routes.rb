@@ -11,14 +11,15 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  authenticated :user, ->(user) { user.admin? } do
-    root to: "managers/dashboards#index_for_admin", as: :admin_root
-  end
-
+  
   authenticated :user, ->(user) { user.manager? || user.coordinator? } do
     root to: "managers/dashboards#index", as: :manager_root
   end
-
+  
+  authenticated :user, ->(user) { user.admin? } do
+    root to: "managers/dashboards#index_for_admin", as: :admin_root
+  end
+  
   authenticated :user, ->(user) { user.coach? } do
     root to: "coaches/dashboards#index", as: :coach_root
   end
