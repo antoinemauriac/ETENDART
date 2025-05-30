@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
       parents_profile_path      # Permettre la création du profil
     ]
     unless allowed_paths.include?(request.path)
-      flash[:alert] = "Vous devez compléter votre profil pour pouvoir continuer."
+      flash[:notice] = "Vous devez compléter votre profil pour pouvoir continuer."
       redirect_to new_parents_profile_path
     end
   end

@@ -6,8 +6,8 @@
   <% else %>
     <td class="align-middle"></td>
   <% end %>
-  <% if membership.payment_method %>
-    <td class="align-middle"><%= membership.payment_method  %></td>
+  <% if membership.paid %>
+    <td class="align-middle"><%= membership&.payment_method  %></td>
   <% else %>
     <td class="align-middle">
       <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#membership<%=membership.id%>Modal">

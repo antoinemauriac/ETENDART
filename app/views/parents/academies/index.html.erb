@@ -5,7 +5,7 @@
   <% @academies.each do |city, academies| %>
     <div class="row align-items-center">
       <div class="col-12 col-md-4 text-center d-flex justify-content-center">
-        <h1 class="mb-0"><em><%= city.upcase %></em></h1>
+        <h1 class="mb-0"><em><%= city&.upcase %></em></h1>
         <i class="fa-solid fa-location-dot ms-3 fs-2"></i>
       </div>
 
