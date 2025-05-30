@@ -78,12 +78,12 @@ class User < ApplicationRecord
   end
 
   def academies
-    if admin?
-      Academy.all
-    elsif manager?
+    if manager?
       academies_as_manager
     elsif coordinator?
       academies_as_coordinator
+    elsif admin?
+      Academy.all
     end
   end
 
