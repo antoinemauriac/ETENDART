@@ -38,10 +38,6 @@
                 </div>
               </div>
             </div>
-            <div class="mt-3">
-              <%= form.label :price, "Si oui, prix (€) :" %>
-              <%= form.number_field :price, class: "form-control", value: "", data: { school_period_price_target: "price" } %>
-            </div>
             <div class="mt-3 d-flex gap-3">
               <%= form.label :tshirt, "Distribution de T-shirt ?" %>
               <div>
@@ -72,7 +68,7 @@
         <th>Académie</th>
         <th>Stage</th>
         <th>Année</th>
-        <th>Prix / semaine</th>
+        <th>Payant ?</th>
         <th>Élèves inscrits</th>
         <th>Supprimer</th>
       </tr>
@@ -83,7 +79,7 @@
         <td><%= period.academy.name %></td>
         <td><%= period.name %></td>
         <td><%= period.year %></td>
-        <td><%= period.paid ? "#{period.price}€" : "Gratuit" %></td>
+        <td><%= period.paid ? "Payant" : "Gratuit" %></td>
         <td><%= period.students_count %></td>
         <td>
         <% if period.can_import? %>

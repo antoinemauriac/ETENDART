@@ -18,7 +18,7 @@
   <div class="navbar-collapse" data-navbar-target="navbarCollapse">
     <ul class="nav navbar-nav">
       <% if user_signed_in? %>
-        <% if current_user.coach? || current_user.manager? || current_user.coordinator? || current_user.admin? %>      
+        <% if current_user.coach? || current_user.manager? || current_user.coordinator? || current_user.admin? %>
           <li class="nav-item nav-item-manager active">
             <h6 class="mb-0"><%= link_to "ACCUEIL", "/", class: "nav-link pt-3 pb-2" %></h6>
           </li>
@@ -172,7 +172,7 @@
           <h6 class="mb-0"><%= link_to "APPROCHE", "/#approche", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
-          <h6 class="mb-0"><%= link_to "PROGRAMMATION", "/#programmation", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
+          <h6 class="mb-0"><%= link_to "STAGES", "/#programmation", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
           <h6 class="mb-0"><%= link_to "IMPACT", "/#impact", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>

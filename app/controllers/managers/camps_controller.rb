@@ -35,7 +35,7 @@ class Managers::CampsController < ApplicationController
     if camp.valid?
       # creer un produit stripe au nom du camp et de la periode scolaire et de l'academie
       product = Stripe::Product.create(name: "#{camp.name} - #{camp.school_period.name} - #{camp.school_period.year} - #{camp.school_period.academy.name}")
-      price = Stripe::Price.create(product: product.id, unit_amount: camp.school_period.price * 100, currency: 'eur')
+      price = Stripe::Price.create(product: product.id, unit_amount: camp.price * 100, currency: 'eur')
       camp.stripe_price_id = price.id
     end
     if camp.save
@@ -143,6 +143,6 @@ class Managers::CampsController < ApplicationController
   end
 
   def camp_params
-    params.require(:camp).permit(:name, :starts_at, :ends_at, :capacity, :waitlist_capacity)
+    params.require(:camp).permit(:name, :starts_at, :ends_at, :capacity, :waitlist_capacity, :price)
   end
 end

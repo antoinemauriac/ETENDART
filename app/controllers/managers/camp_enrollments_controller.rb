@@ -3,7 +3,7 @@ class Managers::CampEnrollmentsController < ApplicationController
     @camp_enrollment = CampEnrollment.find(params[:id])
     authorize([:managers, @camp_enrollment])
 
-    if @camp_enrollment.paid && @camp_enrollment.camp.school_period.price > 0
+    if @camp_enrollment.paid && @camp_enrollment.camp.price > 0
       @cannot_remove = true
       flash.now[:alert] = "Impossible de supprimer une inscription déjà payée"
     else
@@ -13,7 +13,7 @@ class Managers::CampEnrollmentsController < ApplicationController
 
       if @camp_enrollment.destroy
         student.activity_enrollments.where(activity: camp.activities).destroy_all
-        student.course_enrollments.where(course: camp.courses).destroy_all  
+        student.course_enrollments.where(course: camp.courses).destroy_all
         manage_membership(student, camp)
         camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
         if camp_enrollments.empty?

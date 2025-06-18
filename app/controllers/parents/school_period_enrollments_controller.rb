@@ -12,7 +12,10 @@ class Parents::SchoolPeriodEnrollmentsController < Parents::BaseController
     end
     @selected_student = params[:student_id].present? ? Student.find(params[:student_id]) : @students&.first
     enrolled_camps = @selected_student.camp_enrollments.where(camp: @school_period.camps)
-    @camps = @school_period.camps_with_activities.where.not(id: enrolled_camps.pluck(:camp_id)).order(:starts_at)
+    @camps = @school_period.camps_with_activities
+                           .where.not(id: enrolled_camps.pluck(:camp_id))
+                           .not_full
+                           .order(:starts_at)
   end
 
   def create
@@ -50,9 +53,9 @@ class Parents::SchoolPeriodEnrollmentsController < Parents::BaseController
           cart_id: current_user.pending_cart.id,
           student_id: camp_enrollment.student.id,
           product: camp_enrollment,
-          price: camp_enrollment.school_period.price,
+          price: camp_enrollment.camp.price,
           stripe_price_id: camp_enrollment.stripe_price_id,
-          payment_method: camp_enrollment.school_period.price == 0 ? "offert" : "Carte bancaire",
+          payment_method: camp_enrollment.camp.price == 0 ? "offert" : "Carte bancaire",
           name: "Inscription #{camp_enrollment.camp.academy.name} - #{camp_enrollment.school_period.name} - #{camp_enrollment.camp.name} - #{camp_enrollment.student.full_name}"
         )
       end
@@ -107,7 +110,10 @@ class Parents::SchoolPeriodEnrollmentsController < Parents::BaseController
     @students = current_user.children
 
     enrolled_camps = @selected_student.camp_enrollments.where(camp: @school_period.camps)
-    @camps = @school_period.camps_with_activities.where.not(id: enrolled_camps.pluck(:camp_id)).order(:starts_at)
+    @camps = @school_period.camps_with_activities
+                           .where.not(id: enrolled_camps.pluck(:camp_id))
+                           .not_full
+                           .order(:starts_at)
     render :new
   end
 

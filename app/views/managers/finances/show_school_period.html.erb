@@ -20,7 +20,7 @@
                 <th>N'ayant pas payé (présents)</th>
               <% end %>
               <th>Ayant payé (absents)</th>
-              <% if !@school_period.camps.first.new && (current_user.manager? || current_user.coordinator?) %>
+              <% if !@school_period&.camps&.first&.new && (current_user.manager? || current_user.coordinator?) %>
                 <th></th>
               <% end %>
             </tr>
@@ -36,14 +36,14 @@
                     <% deposit_amount =
                         camp.camp_deposits.sum(:cash_amount) +
                         camp.camp_deposits.sum(:cheque_amount) +
-                        camp.camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * @price %>
+                        camp.camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * camp.price %>
                   <% else %>
                     <% deposit_amount = camp.old_camp_deposits.sum(:amount) %>
                   <% end %>
                   <td><%= replace_zero_with_dash(deposit_amount) %></td>
                   <td style="<%= (camp.total_received_revenue - deposit_amount) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(camp.total_received_revenue - deposit_amount) %></td>
                   <td style="<%= (expected_revenue - camp.total_received_revenue) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(expected_revenue - camp.total_received_revenue) %></td>
-                  <td><%= replace_zero_with_dash(camp.school_period.price) %></td>
+                  <td><%= replace_zero_with_dash(camp.price) %></td>
                   <td><%= replace_zero_with_dash(camp.show_count, false) %></td>
                   <td><%= replace_zero_with_dash(camp.paid_students_count, false) %></td>
                   <% if camp.school_period.free_judo == true %>
@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <% if !@school_period.camps.first.new %>
+    <% if !@school_period&.camps&.first&.new %>
       <div class="col-lg-12 col-sm-12 mb-4 mt-4">
         <div class="yellow-title mb-0">DERNIERS DÉPÔTS</div>
         <div class="content-info">

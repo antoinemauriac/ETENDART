@@ -2,7 +2,7 @@
   <td class="align-middle"><%= camp_enrollment.camp.academy.name %></td>
   <td class="align-middle"><%= "#{camp_enrollment.camp.school_period.name} - #{camp_enrollment.camp.school_period.year}" %></td>
   <td class="align-middle"><%= camp_enrollment.camp.name %></td>
-  <td class="align-middle"><%= "#{camp_enrollment.camp.school_period.price} €" %></td>
+  <td class="align-middle"><%= "#{camp_enrollment.camp.price} €" %></td>
   <% if camp_enrollment.paid %>
     <% if camp_enrollment.payment_date %>
       <td class="align-middle"><%= l(camp_enrollment.payment_date, formats: :default) %></td>

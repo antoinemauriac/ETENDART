@@ -12,7 +12,7 @@
               <th>Déposé par les coachs</th>
               <th>En attente de dépôt</th>
               <th>En attente de paiement élève</th>
-              <th>Prix du stage</th>
+              <th>Payant ?</th>
               <th>Nb élèves présents</th>
               <th>Ayant payé (présents)</th>
               <% if academy == Academy.find_by(name: "Djokovic") %>
@@ -27,7 +27,7 @@
             <% academy.school_periods.includes(:camps).where(paid: true, new: true).order(created_at: :desc).each do |school_period| %>
               <% expected_revenue = school_period.expected_revenue %>
               <% received_revenue = school_period.received_revenue %>
-              <% if !school_period.camps.first.new %>
+              <% if !school_period.camps&.first&.new %>
                 <% total_deposit = school_period.total_old_camp_deposits %>
               <% else %>
                 <% total_deposit = school_period.total_deposit %>
@@ -41,7 +41,7 @@
                 <td><%= replace_zero_with_dash(total_deposit) %></td>
                 <td style="<%= (received_revenue - total_deposit) != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(received_revenue - total_deposit) %></td>
                 <td style="<%= expected_revenue - received_revenue != 0 ? 'color:red;' : '' %>"><%= replace_zero_with_dash(expected_revenue - received_revenue) %></td>
-                <td><%= school_period.price %>€</td>
+                <td><%= school_period.paid ? "oui" : "non" %></td>
                 <td><%= attended_camp_enrollments.count %></td>
                 <td><%= attended_camp_enrollments.paid.count%></td>
                 <% if school_period.free_judo == true %>

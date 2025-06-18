@@ -11,9 +11,9 @@
 
         <div class="row bg-white py-3 p-2 justify-content-center align-items-stretch rounded-bottom-4">
 
-          <% if school_period.camps.any? %>
+          <% if school_period.camps_with_activities.not_full.any? %>
             <div class="row row-cols-1 row-cols-sm-2 justify-content-center gap-3">
-              <% school_period.camps_with_activities.order(:starts_at).each do |camp| %>
+              <% school_period.camps_with_activities.not_full.order(:starts_at).each do |camp| %>
                 <div class="col-12 col-sm-5 p-4 rounded-4 parent-bg shadow-sm">
                   <%= link_to new_parents_academy_school_period_school_period_enrollment_path(@academy, school_period), class: "text-decoration-none text-dark" do %>
                     <div class="h-100 d-flex flex-column">
@@ -24,7 +24,7 @@
                         Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %>
                       </p>
                       <p class="d-block mb-2 text-center text-sm-start">
-                        <%= camp.school_period.format_price %>
+                        <%= camp.format_price %>
                       </p>
                       <div class="text-center text-sm-start">
                         <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>

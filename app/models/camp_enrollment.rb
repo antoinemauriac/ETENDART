@@ -22,26 +22,11 @@ class CampEnrollment < ApplicationRecord
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
 
-  # quand le parent inscrit son enfant à une activité, il l'inscrit également au stage et il doit le payer par carte si il a choisi cette option
-  # after_create :create_cart_item
-  # after_create :create_school_period_enrollment
-
-  # after_destroy :destroy_school_period_enrollment
-
   def camp_starts_at
     camp.starts_at
   end
 
-  def create_cart_item
-      cart_item = Commerce::CartItem.new(
-        cart_id: student.parent.pending_cart.id,
-        student_id: student.id,
-        product: self,
-        price: school_period.price,
-        stripe_price_id: stripe_price_id)
-      raise "Erreur lors de la création du cart_item" unless cart_item.save
-      cart_item.save!
-  end
+
 
   def paid!
     self.update!(paid: true, payment_date: Date.current)
