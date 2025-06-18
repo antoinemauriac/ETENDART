@@ -2,6 +2,9 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :home ]
 
   def home
-    @academies = Academy.includes(:school_periods).new_format.reject { |academy| academy.next_school_periods.empty? }
+    @school_periods = SchoolPeriod.with_future_camps
+    @academies = Academy.new_format.joins(:school_periods)
+                        .where(school_periods: { id: @school_periods.pluck(:id) })
+                        .distinct
   end
 end

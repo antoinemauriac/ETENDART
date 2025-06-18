@@ -1,6 +1,8 @@
 <h1 class="bg-black parent-title text-center fs-4 py-3 fw-bold mb-3">
   PROCHAINS STAGES
 </h1>
+
+<% if @academies.present? %>
 <div class="container mt-5 mb-5">
   <% @academies.each do |city, academies| %>
     <div class="row align-items-center">
@@ -74,3 +76,12 @@
     <hr class="w-full">
   <% end %>
 </div>
+<% else %>
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-12 text-center">
+      <h5 class="text-muted">Aucun stage ouvert à l'inscription pour le moment</h5>
+    </div>
+  </div>
+</div>
+<% end %>

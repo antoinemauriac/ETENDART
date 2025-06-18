@@ -28,11 +28,15 @@ class Camp < ApplicationRecord
   validate :starts_at_must_be_before_ends_at
   validates :name, uniqueness: { scope: [:school_period_id], message: "Une semaine avec le même nom existe déjà pour ce stage" }
 
+  # Scopes pour les camps pleins/non pleins
+  scope :full, -> { where("capacity <= (SELECT COUNT(*) FROM camp_enrollments WHERE camp_enrollments.camp_id = camps.id AND camp_enrollments.confirmed = true)") }
+  scope :not_full, -> { where("capacity > (SELECT COUNT(*) FROM camp_enrollments WHERE camp_enrollments.camp_id = camps.id AND camp_enrollments.confirmed = true)") }
+
   ###############################################################################
   # Pour la waitlist d'un camp
   ###############################################################################
   #
-  
+
   def format_starts_at_ends_at
     if starts_at && ends_at
       "Du #{starts_at.strftime('%d/%m/%Y')} au #{ends_at.strftime('%d/%m/%Y')}"
@@ -42,11 +46,23 @@ class Camp < ApplicationRecord
   end
 
   def full?
-    camp_enrollments.count >= capacity
+    camp_enrollments.confirmed.count >= capacity
   end
 
   def full_name
     "#{academy.name}-#{school_period.full_name_short}-#{name}"
+  end
+
+  def format_price
+    if school_period.paid
+      if price == 0
+        "Gratuit"
+      else
+        "#{price}€"
+      end
+    else
+      "Gratuit"
+    end
   end
 
   def waitlist_full?
@@ -60,7 +76,6 @@ class Camp < ApplicationRecord
   def camp_enrollments_waitlist
     camp_enrollments.where(on_waitlist: true).sort_by(&:created_at)
   end
-
 
   ###############################################################################
   # Pour la recherche de camps
@@ -284,12 +299,12 @@ class Camp < ApplicationRecord
       (camp_enrollments.attended.where.not(student_id: present_students_with_free_judo_ids).count +
         unattend_paid_count -
         paid_enrollments) *
-        school_period.price
+        price
     else
       (camp_enrollments.attended.count +
         unattend_paid_count -
         paid_enrollments) *
-        school_period.price
+        price
     end
   end
 
@@ -308,17 +323,17 @@ class Camp < ApplicationRecord
   end
 
   def present_received_revenue
-    camp_enrollments.attended.paid.count * school_period.price
+    camp_enrollments.attended.paid.count * price
   end
 
   def absent_received_revenue
-    camp_enrollments.unattended.paid.count * school_period.price
+    camp_enrollments.unattended.paid.count * price
   end
 
   def total_received_revenue
     camp_enrollments.paid
                     .where("payment_method IS NULL OR payment_method != ?", "offert")
-                    .count * school_period.price
+                    .count * price
   end
 
   def paid_students_count

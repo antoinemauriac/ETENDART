@@ -251,9 +251,9 @@ class SchoolPeriod < ApplicationRecord
   end
 
   def total_deposit
-    camp_deposits.sum(:cash_amount) + 
-    camp_deposits.sum(:cheque_amount) + 
-    camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * price 
+    camp_deposits.sum(:cash_amount) +
+    camp_deposits.sum(:cheque_amount) +
+    camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * price
   end
 
   def paid_students_count
@@ -276,6 +276,7 @@ class SchoolPeriod < ApplicationRecord
     joins(:camps)
       .where('camps.starts_at > ?', Date.today)
       .joins(camps: :activities)
+      .where(camps: { id: Camp.not_full.pluck(:id) })
       .group('school_periods.id')
       .having('COUNT(activities.id) >= 2')
       .includes(:academy)

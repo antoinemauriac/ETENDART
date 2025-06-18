@@ -10,12 +10,12 @@ RailsAdmin.config do |config|
   config.current_user_method(&:current_user)
 
   config.authorize_with do
-    unless current_user&.email&.in?(["mauriac.antoine@gmail.com", "adamlamouri@1344.fr"])
+    unless current_user&.email&.in?(["mauriac.antoine@gmail.com"])
       flash[:alert] = 'Sorry, no admin access for you.'
       redirect_to main_app.root_path
     end
   end
-  
+
 
 
   ## == Devise ==
@@ -38,7 +38,7 @@ RailsAdmin.config do |config|
   ## == Gravatar integration ==
   ## To disable Gravatar integration in Navigation Bar set to false
   # config.show_gravatar = true
-  
+
 
   config.actions do
     dashboard                     # mandatory

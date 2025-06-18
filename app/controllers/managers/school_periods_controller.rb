@@ -66,7 +66,7 @@ class Managers::SchoolPeriodsController < ApplicationController
   private
 
   def school_period_params
-    params.require(:school_period).permit(:name, :year, :paid, :price, :tshirt)
+    params.require(:school_period).permit(:name, :year, :paid, :tshirt)
   end
 
   def season_to_int(season)

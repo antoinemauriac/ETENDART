@@ -11,7 +11,7 @@
             <p class="red-text">ABSENTS : <strong><%= missing_students_count %></strong></p>
           <% end %>
           <% if school_period && school_period.paid %>
-            <p>PRIX DU STAGE : <strong><%= school_period.price %>€</strong></p>
+            <p>PRIX DU STAGE : <strong><%= camp.price %>€</strong></p>
           <% end %>
           <% if academy.banished %>
             <p>EXCLUS : <strong><%= banished_students.count %></strong></p>
@@ -19,8 +19,8 @@
           <% if @course.activity.camp %>
             <p><i class="fa-solid fa-triangle-exclamation fa-pink no-membership-flag me-1"></i><em>Doit payer le stage</em></p>
           <% end %>
-          <p><i class="fa-solid fa-circle-xmark fa-dark-blue no-membership-flag me-1"></i><em>Doit payer sa cotisation</em></p> 
-          <p><i class="fa-solid fa-truck-medical fa-blue medical-flag me-1"></i><em>Traitement médical</em></p>         
+          <p><i class="fa-solid fa-circle-xmark fa-dark-blue no-membership-flag me-1"></i><em>Doit payer sa cotisation</em></p>
+          <p><i class="fa-solid fa-truck-medical fa-blue medical-flag me-1"></i><em>Traitement médical</em></p>
         </div>
         <div class="course-status">
           <% if course.status %>

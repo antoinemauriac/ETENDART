@@ -36,7 +36,7 @@
           <td class="align-middle"><%= @school_period.academy.name %></td>
           <td class="align-middle"><%= @school_period.name %></td>
           <td class="align-middle"><%= camp.name %></td>
-          <td class="align-middle"><%= @school_period.paid ? "#{@school_period.price}€" : "Gratuit" %></td>
+          <td class="align-middle"><%= @school_period.paid ? "#{camp.price}€" : "Gratuit" %></td>
           <td class="align-middle"><%= l(camp.starts_at, format: :date) %></td>
           <td class="align-middle"><%= l(camp.ends_at, format: :date) %></td>
           <td class="align-middle"><%= camp.capacity %></td>
@@ -76,6 +76,10 @@
       <%= form.date_field :ends_at, class: "form-control", required: true %>
       <%= form.label :capacity, "Nombre de places :" %>
       <%= form.number_field :capacity, class: "form-control", required: true %>
+      <% if @school_period.paid %>
+        <%= form.label :price, "Prix (€) :" %>
+        <%= form.number_field :price, class: "form-control", value: nil, required: true %>
+      <% end %>
 
       <div class="flex-btn mt-3">
         <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>

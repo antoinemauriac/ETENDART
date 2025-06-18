@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_24_095448) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_30_132455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -243,6 +243,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_24_095448) do
     t.string "stripe_price_id"
     t.integer "capacity"
     t.integer "waitlist_capacity", default: 5
+    t.integer "price", default: 0, null: false
     t.index ["school_period_id"], name: "index_camps_on_school_period_id"
   end
 

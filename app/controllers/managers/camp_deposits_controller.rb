@@ -6,7 +6,7 @@ class Managers::CampDepositsController < ApplicationController
 
     camp = Camp.find(params[:camp_deposit][:camp_id])
     depositor = User.find(params[:camp_deposit][:depositor_id])
-    price = camp.school_period.price
+    price = camp.price
 
     cash_deposit = depositor.camp_deposits_as_depositor.where(camp: camp).sum(:cash_amount)
     cash_received = camp.camp_enrollments.paid.where(payment_method: 'cash', receiver: depositor).count * price
