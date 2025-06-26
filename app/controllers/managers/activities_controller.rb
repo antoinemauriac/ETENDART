@@ -250,16 +250,31 @@ class Managers::ActivitiesController < ApplicationController
 
   def validate_courses
     no_error = true
-    Activity::DAYS.each do |day|
-      start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
-      end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
 
-      next unless start_time && end_time
+    # Récupérer les jours cochés (ceux qui ne sont pas "0")
+    checked_days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
 
-      if start_time >= end_time
+    checked_days.each do |day|
+      start_time_str = params[:activity][:days]["start_time_#{day}"]
+      end_time_str = params[:activity][:days]["end_time_#{day}"]
+
+      next unless start_time_str && end_time_str
+
+      begin
+        start_time = Time.parse(start_time_str)
+        end_time = Time.parse(end_time_str)
+
+        if start_time >= end_time
+          no_error = false
+          break
+        end
+      rescue ArgumentError
+        # En cas d'erreur de parsing, on considère que c'est invalide
         no_error = false
+        break
       end
     end
+
     no_error
   end
 

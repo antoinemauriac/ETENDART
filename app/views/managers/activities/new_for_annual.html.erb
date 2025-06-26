@@ -8,13 +8,31 @@
 <div class="yellow-title">NOUVELLE ACTIVITÉ</div>
 
 <div class="flexy container">
-  <div class="form-container form-min-width">
-    <%= simple_form_for @activity, url: create_for_annual_managers_activity_path(annual_program: @annual_program), method: :post, data: { controller: 'activity-form' } do |f| %>
+  <div class="form-container form-min-width" data-controller="annual-activity-form" data-annual-activity-form-academy-id-value="<%= @academy.id %>">
+    <%= simple_form_for @activity, url: create_for_annual_managers_activity_path(annual_program: @annual_program), method: :post, data: { action: "submit->annual-activity-form#validateForm" } do |f| %>
       <%= f.input :name, label: "Nom", input_html: { class: "activity-input" } %>
-      <%= f.input :category_id, as: :select, collection: Category.all.order(:name), label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { activity_form_target: "category", academy_id: @academy.id, action: 'change->activity-form#onCategoryChange' }, class: "activity-input" } %>
-      <div class="d-none" data-activity-form-target="subform">
-        <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select", activity_form_target: "coach" } } %>
-        <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select", activity_form_target: "coach" } } %>
+      <%= f.hidden_field :age_restricted, value: false if @academy.name == "Éole" %>
+
+        <div class="mb-3">
+          <%= f.label :age_restricted, "Activité concernée par une tranche d'âge ?", class: "form-label" %>
+          <div>
+            <%= f.radio_button :age_restricted, true, class: "activity-input", checked: @activity.age_restricted == true, required: true, data: { action: 'change->annual-activity-form#addRanges' } %>
+            <%= f.label :age_restricted_true, "Oui" %>
+
+            <%= f.radio_button :age_restricted, false, class: "activity-input", checked: @activity.age_restricted == false, required: true, data: { action: 'change->annual-activity-form#removeRanges' } %>
+            <%= f.label :age_restricted_false, "Non" %>
+          </div>
+        </div>
+
+      <div data-annual-activity-form-target="ageRanges">
+
+      </div>
+
+      <%= f.input :category_id, as: :select, collection: Category.all.order(:name), label: "Categorie", label_method: :name, value_method: :id, input_html: { data: { annual_activity_form_target: "category", action: 'change->annual-activity-form#onCategoryChange' }, class: "activity-input" } %>
+
+      <div class="d-none" data-annual-activity-form-target="subform">
+        <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select", annual_activity_form_target: "coach" } } %>
+        <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select", annual_activity_form_target: "coach" } } %>
       </div>
 
       <%= f.input :location_id, as: :select, collection: @locations, label: "Adresse", required: true, input_html: { class: "activity-input" }  %>
@@ -24,8 +42,11 @@
         <%= activity_period.input :start_time, as: :time, label: 'Heure de début', input_html: { class: 'activity-input' }, minute_step: 15 %>
         <%= activity_period.input :end_time, as: :time, label: 'Heure de fin', input_html: { class: 'activity-input' }, minute_step: 15 %>
       <% end %>
+
+      <div data-annual-activity-form-target="errorMessage" class="alert alert-danger d-none" role="alert"></div>
+
       <div class="flexy">
-        <%= f.submit "Valider", class: "btn-add-student" %>
+        <%= f.submit "Valider", class: "btn-add-student", data: { annual_activity_form_target: "submitButton" } %>
       </div>
     <% end %>
   </div>

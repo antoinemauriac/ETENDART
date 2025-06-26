@@ -16,9 +16,9 @@ class Managers::CoursesController < ApplicationController
 
     @academy = course.academy
     @activity = course.activity
-    @school_period = course.school_period if course.school_period
-    @camp = course.camp if course.camp
-    @annual_program = @activity.annual_program if @activity.annual_program
+    @school_period = course.school_period
+    @annual_program = course.annual_program
+    @camp = course.camp
     @category = course.category
     @activity = course.activity
     @start_year = course.starts_at.month >= 9 ? course.starts_at.year : course.starts_at.year - 1
@@ -50,8 +50,9 @@ class Managers::CoursesController < ApplicationController
     @activity = course.activity
     @academy = @activity.academy
     @category = @activity.category
-    @camp = @activity.camp if @activity.camp
-    @school_period = @camp.school_period if @camp
+    @camp = @activity.camp
+    @school_period = @camp&.school_period
+    @annual_program = @activity&.annual_program
 
     enrollments_params = permitted_enrollments_params.to_h
 
@@ -73,9 +74,9 @@ class Managers::CoursesController < ApplicationController
     end
 
     @enrollments = @course.course_enrollments
-                         .includes(student: [:photo_attachment, :camp_enrollments])
-                         .joins(:student)
-                         .order('students.last_name ASC')
+                          .includes(student: [:photo_attachment, :camp_enrollments])
+                          .joins(:student)
+                          .order('students.last_name ASC')
     @start_year = @course.starts_at.month >= 9 ? @course.starts_at.year : @course.starts_at.year - 1
 
     @present_students_count = @course.course_enrollments.where(present: true).count
@@ -96,7 +97,6 @@ class Managers::CoursesController < ApplicationController
   def unban_student
     camp = Camp.find(params[:camp_id])
     student = Student.find(params[:student_id])
-    activities = student.activities.where(camp: camp)
 
     camp_enrollment.update(banished: false, banishment_day: nil, number_of_absences: 0)
 
@@ -138,30 +138,6 @@ class Managers::CoursesController < ApplicationController
       student.update(number_of_tshirts: student.number_of_tshirts - 1)
     end
   end
-
-  # def redirection(course, params, message, style)
-  #   if params[:redirect_to] == 'manager'
-  #     flash[style.to_sym] = message
-  #     redirect_to managers_course_path(course)
-  #   else
-  #     flash[style.to_sym] = message
-  #     redirect_to coaches_course_path(course)
-  #   end
-  # end
-  # def redirection(course, params, message, style)
-  #   flash[style.to_sym] = message
-
-  #   respond_to do |format|
-  #     format.turbo_stream
-  #     format.html do
-  #       if params[:redirect_to] == 'manager'
-  #         redirect_to managers_course_path(course)
-  #       else
-  #         redirect_to coaches_course_path(course)
-  #       end
-  #     end
-  #   end
-  # end
 
   def correct_activity_path(activity)
     if activity.camp

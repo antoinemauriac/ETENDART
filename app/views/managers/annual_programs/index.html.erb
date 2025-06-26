@@ -12,6 +12,7 @@
         <th>Académie</th>
         <th>Année</th>
         <th>Nb Élèves inscrits</th>
+        <th>Prix</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -21,6 +22,7 @@
         <td><%= annual_program.academy.name %></td>
         <td><%= annual_program.name %></td>
         <td><%= annual_program.annual_program_enrollments.count %></td>
+        <td><%= annual_program.format_price %></td>
         <td>
         <% if !annual_program.started? %>
           <%= link_to managers_annual_program_path(annual_program), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce programme ?" } do %>

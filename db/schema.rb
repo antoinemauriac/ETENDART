@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_30_132455) do
+ActiveRecord::Schema[7.0].define(version: 2025_06_21_095009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -129,7 +129,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_30_132455) do
     t.datetime "updated_at", null: false
     t.boolean "present", default: false
     t.boolean "image_consent", default: true
+    t.boolean "paid", default: false
+    t.date "payment_date"
+    t.string "payment_method"
+    t.bigint "receiver_id"
     t.index ["annual_program_id"], name: "index_annual_program_enrollments_on_annual_program_id"
+    t.index ["receiver_id"], name: "index_annual_program_enrollments_on_receiver_id"
     t.index ["student_id"], name: "index_annual_program_enrollments_on_student_id"
   end
 
@@ -168,6 +173,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_30_132455) do
     t.date "starts_at"
     t.date "ends_at"
     t.boolean "new", default: true
+    t.boolean "paid", default: true
+    t.integer "price", default: 0
     t.index ["academy_id"], name: "index_annual_programs_on_academy_id"
   end
 
@@ -583,6 +590,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_30_132455) do
   add_foreign_key "activity_stats", "activities"
   add_foreign_key "annual_program_enrollments", "annual_programs"
   add_foreign_key "annual_program_enrollments", "students"
+  add_foreign_key "annual_program_enrollments", "users", column: "receiver_id"
   add_foreign_key "annual_program_stats", "annual_programs"
   add_foreign_key "annual_programs", "academies"
   add_foreign_key "camp_deposits", "camps"

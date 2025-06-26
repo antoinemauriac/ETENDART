@@ -16,9 +16,7 @@
     <table class="table table-striped table-responsive table-center form-container">
       <thead>
         <tr>
-          <th>Académie</th>
-          <th>Stage</th>
-          <th>Semaine</th>
+          <th>Nom</th>
           <th>Prix</th>
           <th>Début</th>
           <th>Fin</th>
@@ -26,6 +24,7 @@
           <th>Élèves inscrits</th>
           <th>Places dispo</th>
           <% if current_user.manager? %>
+            <th>Modifier</th>
             <th>Supprimer</th>
           <% end %>
         </tr>
@@ -33,9 +32,7 @@
       <tbody>
         <% @camps.each do |camp| %>
         <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_camp_path(camp) %>">
-          <td class="align-middle"><%= @school_period.academy.name %></td>
-          <td class="align-middle"><%= @school_period.name %></td>
-          <td class="align-middle"><%= camp.name %></td>
+          <td class="align-middle"><%= camp.full_name_separator %></td>
           <td class="align-middle"><%= @school_period.paid ? "#{camp.price}€" : "Gratuit" %></td>
           <td class="align-middle"><%= l(camp.starts_at, format: :date) %></td>
           <td class="align-middle"><%= l(camp.ends_at, format: :date) %></td>
@@ -43,7 +40,13 @@
           <td class="align-middle"><%= camp.students_count %></td>
           <td class="align-middle"><%= camp.capacity - camp.students_count %></td>
           <% if current_user.manager? %>
-            <% if camp.can_import? &&  %>
+
+            <td class="align-middle">
+              <button type="button fa-edit" class="btn p-0" data-bs-toggle="modal" data-bs-target="#editCapacityModal<%= camp.id %>" style="background: none; border: none;">
+                <i class="fas fa-edit" style="cursor: pointer;"></i>
+              </button>
+            </td>
+            <% if camp.can_delete?  %>
               <td class="align-middle">
                 <%= link_to managers_camp_path(camp), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette semaine ?" } do %>
                   <i class="fas fa-trash trash"></i>
@@ -57,34 +60,115 @@
         <% end %>
       </tbody>
     </table>
+
+    <!-- Modals pour modifier la capacité -->
+    <% @camps.each do |camp| %>
+      <div class="modal fade" id="editCapacityModal<%= camp.id %>" tabindex="-1" aria-labelledby="editCapacityModalLabel<%= camp.id %>" aria-hidden="true" data-controller="close-modal">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:80%;padding:0px">
+            <div class="modal-header modal-header-deposit">
+              <h5 class="modal-title" id="editCapacityModalLabel<%= camp.id %>">Modifier la capacité</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <%= simple_form_for camp, url: managers_camp_path(camp), data: { action: "submit->close-modal#closeModal" }, method: :patch do |f| %>
+              <div class="modal-body" style="text-align:left;">
+                <p><strong>Période :</strong> <%= @school_period.name %> - <%= @school_period.year %></p>
+                <p><strong>Semaine :</strong> <%= camp.name %></p>
+                <p><strong>Élèves inscrits :</strong> <%= camp.students_count %></p>
+
+                <%= f.input :capacity,
+                            label: "Nouvelle capacité",
+                            input_html: {
+                              value: camp.capacity,
+                              class: "form-control mb-3",
+                              required: true,
+                              min: camp.students_count
+                            },
+                            hint: "La capacité ne peut pas être inférieure au nombre d'élèves déjà inscrits (#{camp.students_count})" %>
+              </div>
+              <div class="modal-footer d-flex justify-content-around">
+                <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   <% else %>
     <div class="flexy mb-4 mt-4">Aucune semaine pour le moment.</div>
   <% end %>
 </div>
 
 <% if current_user.manager? %>
-  <div class="flexy" data-controller="hidden-forms">
-    <button class="btn-add-student btn-flex btn-large mt-1" data-action="click->hidden-forms#displayCampForm">
+  <div class="flexy">
+    <button type="button" class="btn-add-student btn-flex btn-large mt-1" data-bs-toggle="modal" data-bs-target="#newCampModal">
       <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE SEMAINE<i class="fa-solid fa-square-plus fa-square-bigger"></i>
     </button>
-    <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, class: "hidden-form form-container-hidden", data: { hidden_forms_target: "campForm" } ) do |form| %>
-      <%= form.label :name, "Nom :" %>
-      <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: true }, { class: "form-select", required: true } %>
-      <%= form.label :starts_at, "Date de début :" %>
-      <%= form.date_field :starts_at, class: "form-control", required: true %>
-      <%= form.label :ends_at, "Date de fin :" %>
-      <%= form.date_field :ends_at, class: "form-control", required: true %>
-      <%= form.label :capacity, "Nombre de places :" %>
-      <%= form.number_field :capacity, class: "form-control", required: true %>
-      <% if @school_period.paid %>
-        <%= form.label :price, "Prix (€) :" %>
-        <%= form.number_field :price, class: "form-control", value: nil, required: true %>
-      <% end %>
+  </div>
 
-      <div class="flex-btn mt-3">
-        <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
-        <button class="btn-add-student btn-add-student-small btn-add-student-grey" data-action="click->hidden-forms#displayCampForm" type="button">Annuler</button>
+  <!-- Modal pour nouvelle semaine -->
+  <div class="modal fade" id="newCampModal" tabindex="-1" aria-labelledby="newCampModalLabel" aria-hidden="true" data-controller="close-modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="width:95%;padding:0px">
+        <div class="modal-header modal-header-deposit">
+          <h5 class="modal-title" id="newCampModalLabel">Nouvelle Semaine - <%= @school_period.name %> <%= @school_period.year %></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, data: { action: "submit->close-modal#closeModal" }) do |form| %>
+          <div class="modal-body">
+            <div class="camp-form-container">
+              <div class="name-container mb-4">
+                <h6 class="schedule-title mb-3">Nom</h6>
+                <div class="form-input-container">
+                  <label class="form-input-label">Nom de la semaine</label>
+                  <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: "Sélectionner une semaine" }, { class: "activity-input", required: true } %>
+                </div>
+              </div>
+
+              <div class="capacity-container mb-4">
+                <h6 class="schedule-title mb-3">Capacité</h6>
+                <div class="form-input-container">
+                  <label class="form-input-label">Nombre de places</label>
+                  <%= form.number_field :capacity, class: "activity-input", required: true, min: 1 %>
+                </div>
+              </div>
+
+              <div class="dates-container mb-4">
+                <h6 class="schedule-title mb-3">Dates</h6>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="date-input-container">
+                      <label class="date-label">Date de début</label>
+                      <%= form.date_field :starts_at, class: "activity-input date-input", required: true %>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="date-input-container">
+                      <label class="date-label">Date de fin</label>
+                      <%= form.date_field :ends_at, class: "activity-input date-input", required: true %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <% if @school_period.paid %>
+                <div class="pricing-container mb-4">
+                  <h6 class="schedule-title mb-3">Tarification</h6>
+                  <div class="price-input-container">
+                    <label class="price-label">Prix (€)</label>
+                    <%= form.number_field :price, class: "activity-input price-input", value: nil, required: true, min: 0, step: 0.01 %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-around">
+            <%= form.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+            <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 <% end %>

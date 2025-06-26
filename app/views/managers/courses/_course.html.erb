@@ -19,8 +19,10 @@
           <% if academy.banished %>
             <p>NB ÉLÈVES EXCLUS : <strong><%= banished_students.count %></strong></p>
           <% end %>
-          <% if @course.activity.camp %>
+          <% if camp && camp.price > 0 %>
             <p><i class="fa-solid fa-triangle-exclamation fa-pink no-membership-flag me-1"></i><em>Doit payer le stage</em></p>
+          <% elsif annual_program && annual_program.paid && annual_program.price > 0 %>
+            <p><i class="fa-solid fa-triangle-exclamation fa-pink no-membership-flag me-1"></i><em>Doit payer le programme</em></p>
           <% end %>
           <p><i class="fa-solid fa-circle-xmark fa-dark-blue no-membership-flag me-1"></i><em>Doit payer sa cotisation</em></p>
           <p><i class="fa-solid fa-truck-medical fa-blue medical-flag me-1"></i><em>Traitement médical</em></p>
@@ -55,22 +57,24 @@
             <% enrollments.each do |enrollment| %>
               <% student = enrollment.student %>
               <% membership = student.memberships.find_by(start_year: @start_year) %>
-              <% camp_enrollment = student.camp_enrollments.find { |ce| ce.camp_id == camp&.id } %>
+              <% camp_enrollment = student.camp_enrollments.find_by(camp_id: camp&.id) %>
               <% should_pay_camp = school_period && school_period.paid && !camp_enrollment&.paid %>
+              <% annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program_id: annual_program&.id) %>
+              <% should_pay_annual_program = annual_program && annual_program.paid && annual_program.price > 0 && !annual_program_enrollment&.paid %>
               <tr class="equal-height-row">
                 <%= render partial: "coaches/courses/student_photo", locals: { student: student, course: course, membership: membership, origin: "manager_course" }%>
                 <td class="align-middle" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis;">
                   <%= link_to managers_student_path(student), class: "full-width-course" do %>
                     <span class="student-mr"><%= student.last_name.try(&:upcase)%></span><br>
                     <span class="student-mr"><%= student.first_name%></span><br>
-                    <%# if category.super_category == 'Cuisine' || category.super_category == 'Accompagnement' %>
-<!--                      <span style="color: #ef00ff;font-weight:bold"><%#= student.allergy if student.allergy != "Non" %></span>-->
-                    <%# end %>
                     <div class="d-flex align-items-center gap-2 mt-2">
                       <% if !membership || !membership.paid  %>
                         <i class="fa-solid fa-circle-xmark fa-dark-blue no-membership-flag"></i>
                       <% end %>
                       <% if should_pay_camp %>
+                        <i class="fa-solid fa-triangle-exclamation fa-pink no-membership-flag"></i>
+                      <% end %>
+                      <% if should_pay_annual_program %>
                         <i class="fa-solid fa-triangle-exclamation fa-pink no-membership-flag"></i>
                       <% end %>
                       <% if student.has_medical_treatment %>

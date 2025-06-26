@@ -1,0 +1,101 @@
+<%= turbo_frame_tag "selected_content" do %>
+  <% if annual_program_enrollments.any? %>
+    <div class="container container-big mb-4" data-controller="clickable-table">
+      <div class="card-row-container">
+        <div class="row pb-2 pt-2 header-row align-items-center">
+          <div class="col-2 flexy-row">Nom</div>
+          <div class="col-2 flexy-row">Prénom</div>
+          <div class="col-2 flexy-row">Programme</div>
+          <div class="col-1 flexy-row small-col">Prix</div>
+          <div class="col-1 flexy-row medium-col text-wrap text-center">Date du paiement</div>
+          <div class="col-1 flexy-row medium-col text-wrap text-center">Mode de paiement</div>
+          <div class="col-2 flexy-row">Reçu par</div>
+          <div class="col-1 flexy-row small-col">Payé ?</div>
+        </div>
+        <% annual_program_enrollments.each do |annual_program_enrollment| %>
+          <div id="annual_program_enrollment_<%= annual_program_enrollment.id %>">
+            <% student = annual_program_enrollment.student %>
+            <% name_style = annual_program_enrollment.present && !annual_program_enrollment.paid ? 'color: #fc3535;font-weight:bold' : '' %>
+            <div id="target-<%=annual_program_enrollment.id%>" class="row card-row card-row-higher card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(annual_program_enrollment.student) %>">
+              <div class="col-2 flexy-row">
+                <span class="ellipsis" style="<%= name_style %>"><%= student.last_name %></span>
+              </div>
+              <div class="col-2 flexy-row">
+                <span class="ellipsis" style="<%= name_style %>"><%= student.first_name %></span>
+              </div>
+              <div class="col-2 flexy-row">
+                <span class="ellipsis" style="<%= name_style %>"><%= "#{annual_program_enrollment.annual_program.academy.name}-#{annual_program_enrollment.annual_program.name}" %></span>
+              </div>
+              <div class="col-1 flexy-row small-col">
+                <span class="ellipsis" style="<%= name_style %>"><%= annual_program_enrollment.annual_program.price %>€</span>
+              </div>
+              <% if annual_program_enrollment.paid %>
+                <div class="col-1 flexy-row">
+                  <span class="ellipsis"><%= annual_program_enrollment.payment_date ? l(annual_program_enrollment.payment_date, formats: :default) : '' %></span>
+                </div>
+                <div class="col-1 flexy-row">
+                  <span class="ellipsis"><%= annual_program_enrollment.payment_method %></span>
+                </div>
+                <div class="col-2 flexy-row">
+                  <span class="ellipsis"><%= annual_program_enrollment.receiver&.full_name %></span>
+                </div>
+                <div class="col-1 flexy-row small-col">
+                  <i class="fa-solid fa-circle-check text-success fa-small"></i>
+                </div>
+              <% elsif annual_program_enrollment.present || (!annual_program_enrollment.present && annual_program_enrollment.annual_program.ends_at >= Date.current) %>
+                <div class="col-4 flexy-row">
+                  <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#annualProgramEnrollment<%=annual_program_enrollment.id%>Modal">
+                    <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+                  </button>
+                </div>
+                <div class="col-1 flexy-row small-col">
+                  <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+                </div>
+              <% elsif !annual_program_enrollment.present && annual_program_enrollment.annual_program.ends_at < Date.current %>
+                <div class="col-5 flexy-row">
+                  <span class="ellipsis">Absent du programme</span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <!-- Modal -->
+          <div class="modal fade" id="annualProgramEnrollment<%= annual_program_enrollment.id %>Modal" tabindex="-1" aria-labelledby="annualProgramEnrollment<%= annual_program_enrollment.id %>ModalLabel" aria-hidden="true" data-controller="close-modal">
+            <div class="modal-dialog">
+              <div class="modal-content" style="width:80%;padding:0px">
+                <div class="modal-header modal-header-deposit">
+                  <h5 class="modal-title"><%= "Programme #{annual_program_enrollment.annual_program.academy.name}-#{annual_program_enrollment.annual_program.name}" %><br><%= annual_program_enrollment.student.full_name %></h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <%= simple_form_for annual_program_enrollment, url: managers_annual_program_enrollment_path(annual_program_enrollment), data: { controller: "payment-method", action: "submit->close-modal#closeModal" }, method: :patch do |f| %>
+                  <div class="modal-body">
+                    <%= f.hidden_field :source, value: "list" %>
+                    <%= f.input :payment_method,
+                                label: "Moyen de paiement",
+                                required: true,
+                                collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                                prompt: "Sélectionner",
+                                input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
+                    <%= f.input :receiver_id,
+                                label: "Personne ayant reçu le paiement",
+                                collection: User.only_crew_members.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                                selected: annual_program_enrollment.receiver_id.present? ? annual_program_enrollment.receiver_id : current_user.id,
+                                prompt: "Sélectionner",
+                                include_blank: true,
+                                input_html: { data: { payment_method_target: "receiver" } } %>
+                  </div>
+                  <div class="modal-footer d-flex justify-content-around">
+                    <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                    <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="flexy mb-4 mt-4">Aucun paiement à gérer pour le moment.</div>
+  <% end %>
+  <%= render "shared/flashes" %>
+<% end %>

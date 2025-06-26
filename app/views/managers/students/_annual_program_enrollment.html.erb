@@ -1,0 +1,64 @@
+<tr id="annual_program_enrollment_<%= annual_program_enrollment.id %>">
+  <td class="align-middle"><%= annual_program_enrollment.annual_program.academy.name %></td>
+  <td class="align-middle"><%= annual_program_enrollment.annual_program.name %></td>
+  <td class="align-middle"><%= "#{annual_program_enrollment.annual_program.price} €" %></td>
+  <% if annual_program_enrollment.paid %>
+    <% if annual_program_enrollment.payment_date %>
+      <td class="align-middle"><%= l(annual_program_enrollment.payment_date, formats: :default) %></td>
+    <% else %>
+      <td class="align-middle"></td>
+    <% end %>
+    <td class="align-middle"><%= annual_program_enrollment&.payment_method %></td>
+  <% else %>
+    <td colspan="2" class="align-middle text-center">
+      <div style="display: flex; justify-content: center;">
+        <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#annualProgramEnrollment<%=annual_program_enrollment.id%>Modal">
+          <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+        </button>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="annualProgramEnrollment<%=annual_program_enrollment.id%>Modal" tabindex="-1" aria-labelledby="annualProgramEnrollment<%=annual_program_enrollment.id%>ModalLabel" aria-hidden="true" data-controller="close-modal">
+        <div class="modal-dialog">
+          <div class="modal-content" style="width:80%;padding:0px">
+            <div class="modal-header modal-header-deposit">
+              <h5 class="modal-title" id="annualProgramEnrollment<%=annual_program_enrollment.id%>ModalLabel">Paiement <%= annual_program_enrollment.annual_program.name %></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <%= simple_form_for annual_program_enrollment, url: managers_annual_program_enrollment_path(annual_program_enrollment), data: { action: "submit->close-modal#closeModal", controller: "payment-method" }, method: :patch do |f| %>
+              <div class="modal-body" style="text-align:left;">
+                <%= f.hidden_field :origin, value: params[:origin] %>
+
+                <%= f.input :payment_method,
+                            label: "Moyen de paiement",
+                            required: true,
+                            collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                            prompt: "Sélectionner",
+                            input_html: { class: "form-select mb-3", data: { action: "change->payment-method#toggleReceiverRequired" } } %>
+
+                <%= f.input :receiver_id,
+                            label: "Personne ayant reçu le paiement",
+                            collection: User.only_crew_members.order(:last_name).map { |user| [user.full_name_reverse, user.id] },
+                            selected: current_user.id,
+                            prompt: "Sélectionner",
+                            include_blank: true,
+                            input_html: { class: "form-select mb-3", data: { payment_method_target: "receiver" }} %>
+              </div>
+              <div class="modal-footer d-flex justify-content-around">
+                <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+                <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </td>
+  <% end %>
+  <td class="align-middle"><%= annual_program_enrollment&.receiver&.full_name %></td>
+  <td class="align-middle text-center" id="target-<%= annual_program_enrollment.id %>">
+    <% if annual_program_enrollment.paid %>
+      <i class="fa-solid fa-circle-check text-success fa-small"></i>
+    <% else %>
+      <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+    <% end %>
+  </td>
+</tr>

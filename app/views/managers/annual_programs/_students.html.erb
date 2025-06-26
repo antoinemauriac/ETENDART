@@ -1,0 +1,88 @@
+<%= turbo_frame_tag "selected_content" do %>
+  <% if students.any? %>
+    <div class="flexy mt-3 mb-3 d-flex flex-row">
+      <%= link_to export_annual_students_managers_annual_program_path(annual_program, format: :csv), class: 'btn-etendart-square btn-download mt-0' do %>
+        LES ÉLÈVES<i class="fa-solid fa-download"></i>
+      <% end %>
+      <%= link_to export_past_enrollments_managers_annual_program_path(annual_program, format: :csv), class: "btn-etendart-square btn-download mt-0" do %>
+        LES ABSENCES<i class="fa-solid fa-download"></i>
+      <% end %>
+    </div>
+
+    <div class="container container-big mb-4" data-controller="clickable-table">
+      <div class="card-row-container">
+        <div class="row pb-2 pt-2 header-row sticky-header align-items-center">
+          <div class="col flexy-row">Élève</div>
+          <div class="col flexy-row text-wrap text-center small-col">Cotisant ?</div>
+          <% if annual_program.paid %>
+            <div class="col flexy-row text-wrap text-center small-col">Programme payé ?</div>
+          <% end %>
+          <div class="col flexy-row text-wrap text-center small-col">Droit à l'image ?</div>
+          <div class="col flexy-row small-col">Age</div>
+          <div class="col flexy-row">Activité 1</div>
+          <div class="col flexy-row">Activité 2</div>
+          <div class="col flexy-row small-col">Suppr</div>
+        </div>
+        <% students.each do |student| %>
+          <% annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: annual_program) %>
+          <% activities = student.student_activities_annual(annual_program) %>
+          <div id="annual-program-enrollment-<%= annual_program_enrollment.id %>" class="row card-row card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student) %>">
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= student.full_name_separator %></span>
+            </div>
+
+            <% membership = student.memberships.find_by(start_year: start_year) %>
+            <div class="col flexy-row small-col">
+              <% if membership && membership.paid %>
+                <i class="fa-solid fa-circle-check text-success fa-small"></i>
+              <% else %>
+                <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
+              <% end %>
+            </div>
+
+            <% if annual_program.paid %>
+              <div class="col flexy-row small-col">
+                <% if annual_program_enrollment.paid %>
+                  <i class="fa-solid fa-circle-check text-success fa-small"></i>
+                <% else %>
+                  <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
+                <% end %>
+              </div>
+            <% end %>
+
+            <div class="col flexy-row small-col <%= annual_program_enrollment.image_consent ? '' : 'non-bg' %>">
+              <span class="ellipsis"><%= annual_program_enrollment.image_consent ? "" : "Non" %></span>
+            </div>
+
+            <div class="col flexy-row small-col">
+              <span class="ellipsis"><%= student.age %> ans</span>
+            </div>
+
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= activities.first&.name %></span>
+            </div>
+
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= activities.second&.name %></span>
+            </div>
+
+            <div class="col flexy-row small-col">
+              <% if annual_program.paid && annual_program_enrollment.paid %>
+                <!-- Ne pas afficher le bouton supprimer si déjà payé -->
+              <% else %>
+                <span class="ellipsis">
+                  <%= link_to managers_annual_program_enrollment_path(annual_program_enrollment), data: { turbo_frame: "top", turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cet élève du programme ?" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="flexy mb-4 mt-4">Aucun élève inscrit pour le moment.</div>
+  <% end %>
+  <%= render "shared/flashes" %>
+<% end %>

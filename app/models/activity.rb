@@ -151,10 +151,24 @@ class Activity < ApplicationRecord
 
   def can_delete?
     return true unless camp || annual_program
+
     if camp && camp.starts_at
       camp.starts_at > Date.today && activity_enrollments.confirmed.empty?
     elsif annual_program && annual_program.program_periods.first
-      annual_program.program_periods.first.start_date > Date.today
+      # Pour les programmes annuels, vérifier:
+      # 1. Que le programme n'a pas encore commencé
+      # 2. Qu'il n'y a pas d'étudiants inscrits ET ayant payé le programme
+      program_not_started = annual_program.program_periods.first.start_date > Date.today
+
+      if annual_program.paid
+        # Si le programme est payant, vérifier qu'aucun étudiant inscrit à cette activité n'a payé
+        students_with_payment = students.joins(:annual_program_enrollments)
+                                      .where(annual_program_enrollments: { annual_program: annual_program, paid: true })
+        program_not_started && students_with_payment.empty?
+      else
+        # Si le programme est gratuit, vérifier seulement qu'il n'y a pas d'étudiants inscrits
+        program_not_started && activity_enrollments.confirmed.empty?
+      end
     else
       true
     end
@@ -164,15 +178,15 @@ class Activity < ApplicationRecord
 
   def age_range_valid?
     return unless age_restricted
-  
+
     if min_age.nil?
       errors.add(:min_age, "doit être renseigné")
     end
-  
+
     if max_age.nil?
       errors.add(:max_age, "doit être renseigné")
     end
-  
+
     if min_age.present? && max_age.present? && min_age > max_age
       errors.add(:base, "L'âge minimum ne peut pas être supérieur à l'âge maximum.")
     end

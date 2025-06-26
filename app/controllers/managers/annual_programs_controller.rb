@@ -59,13 +59,44 @@ class Managers::AnnualProgramsController < ApplicationController
     @students = @annual_program.students.order(:last_name)
   end
 
+  def activities
+    @annual_program = AnnualProgram.find(params[:id])
+    @academy = @annual_program.academy
+    authorize [:managers, @annual_program]
+    @activities = @annual_program.active_sorted_activities
+    render partial: "managers/annual_programs/activities", locals: { activities: @activities, annual_program: @annual_program, academy: @academy }
+  end
+
+  def students
+    @annual_program = AnnualProgram.find(params[:id])
+    @academy = @annual_program.academy
+    authorize [:managers, @annual_program]
+    @students = @annual_program.students.order(:last_name)
+    @start_year = @annual_program.starts_at.year
+    render partial: "managers/annual_programs/students", locals: { students: @students, annual_program: @annual_program, academy: @academy, start_year: @start_year }
+  end
+
+  def payments
+    @annual_program = AnnualProgram.find(params[:id])
+    @academy = @annual_program.academy
+    authorize [:managers, @annual_program]
+
+    if @annual_program.paid
+      @annual_program_enrollments = @annual_program.annual_program_enrollments.includes(:student, :receiver).order('students.last_name ASC')
+    else
+      @annual_program_enrollments = []
+    end
+
+    render partial: "managers/annual_programs/payments", locals: { annual_program_enrollments: @annual_program_enrollments, annual_program: @annual_program }
+  end
+
   def destroy
     annual_program = AnnualProgram.find(params[:id])
     academy = annual_program.academy
     authorize [:managers, annual_program]
     annual_program.destroy
     redirect_to managers_annual_programs_path(academy: academy)
-    flash[:notice] = "Activité supprimée"
+    flash[:notice] = "Programme supprimé"
   end
 
   def export_past_enrollments
@@ -127,6 +158,6 @@ class Managers::AnnualProgramsController < ApplicationController
   private
 
   def annual_program_params
-    params.require(:annual_program).permit(program_periods_attributes: [:id, :start_date, :end_date, :_destroy])
+    params.require(:annual_program).permit(:paid, :price, program_periods_attributes: [:id, :start_date, :end_date, :_destroy])
   end
 end

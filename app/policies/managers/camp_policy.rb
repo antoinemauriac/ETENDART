@@ -24,6 +24,10 @@ class Managers::CampPolicy < ApplicationPolicy
     user.manager?
   end
 
+  def update?
+    user.manager?
+  end
+
   def export_students_csv?
     authorized?
   end

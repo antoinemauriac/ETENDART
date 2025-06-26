@@ -53,6 +53,10 @@ class Camp < ApplicationRecord
     "#{academy.name}-#{school_period.full_name_short}-#{name}"
   end
 
+  def full_name_separator
+    "#{academy.name}-#{school_period.full_name_separator}-#{name}"
+  end
+
   def format_price
     if school_period.paid
       if price == 0
@@ -219,6 +223,14 @@ class Camp < ApplicationRecord
     else
       true
     end
+  end
+
+  def has_paid_enrollments?
+    camp_enrollments.where(paid: true).any?
+  end
+
+  def can_delete?
+    !has_paid_enrollments?
   end
 
   def started?

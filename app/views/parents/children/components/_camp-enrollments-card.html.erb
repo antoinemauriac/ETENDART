@@ -18,7 +18,7 @@
       <td class="align-middle d-table-cell d-md-none"><%= school_period.full_name_short %>-<%= camp_enrollment.camp.short_name %></td>
       <td class="align-middle d-none d-md-table-cell"><%= school_period.name %> <%= school_period.year %> </td>
       <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.camp.name %></td>
-      <td class="align-middle"><%= "#{camp_enrollment.camp.price} €" %></td>
+      <td class="align-middle"><%= "#{camp_enrollment.camp.format_price}" %></td>
 
       <% if school_period.paid %>
         <% if camp_enrollment.paid? %>

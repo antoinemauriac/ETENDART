@@ -39,45 +39,67 @@
 
       <%= f.input :location_id, as: :select, collection: @locations, label: "Adresse", input_html: { class: "activity-input" }  %>
 
-      <ul>
-        <li>
-          <%= f.simple_fields_for :days do |day_form| %>
-            <div class="row align-items-center">
-              <div class="col-4">
-                <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, "Lundi".to_s %>
-                <%= day_form.label :day_of_week, "Lundi".to_s %>
-              </div>
-              <div class="col-4">
-              <%= day_form.time_field :start_time_Lundi, data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' }, class: "form-control" %>
-              </div>
-              <div class="col-4">
-                <%= day_form.time_field :end_time_Lundi, data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "form-control" %>
-              </div>
-            </div>
-          <% end %>
-        </li>
-
-        <% (Activity::DAYS - ["Lundi"]).each do |day| %>
-          <li>
+      <div class="schedule-container mb-4">
+        <h6 class="schedule-title mb-3">Horaires</h6>
+        <div class="schedule-days">
+          <div class="schedule-day">
             <%= f.simple_fields_for :days do |day_form| %>
-              <div class="row align-items-center">
+              <div class="row align-items-center schedule-row">
                 <div class="col-4">
-                  <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, day.to_s %>
-                  <%= day_form.label :day_of_week, day.to_s %>
+                  <div class="day-checkbox">
+                    <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, "Lundi".to_s %>
+                    <%= day_form.label :day_of_week, "Lundi".to_s, class: "day-label" %>
+                  </div>
                 </div>
                 <div class="col-4">
-                  <%= day_form.time_field :"start_time_#{day}", data: { activity_form_target: 'startTime' }, class: "form-control" %>
+                  <div class="time-input-container">
+                    <label class="time-label">Début</label>
+                    <%= day_form.time_field :start_time_Lundi, data: { activity_form_target: 'mondayStartTime', action: 'change->activity-form#onMondayStartTimeInputChange' }, class: "activity-input time-input" %>
+                  </div>
                 </div>
                 <div class="col-4">
-                  <%= day_form.time_field :"end_time_#{day}", data: { activity_form_target: 'endTime' }, class: "form-control" %>
+                  <div class="time-input-container">
+                    <label class="time-label">Fin</label>
+                    <%= day_form.time_field :end_time_Lundi, data: { activity_form_target: 'mondayEndTime', action: 'change->activity-form#onMondayEndTimeInputChange' }, class: "activity-input time-input" %>
+                  </div>
                 </div>
               </div>
             <% end %>
-          </li>
-        <% end %>
-      </ul>
+          </div>
+
+          <% (Activity::DAYS - ["Lundi"]).each do |day| %>
+            <div class="schedule-day">
+              <%= f.simple_fields_for :days do |day_form| %>
+                <div class="row align-items-center schedule-row">
+                  <div class="col-4">
+                    <div class="day-checkbox">
+                      <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, day.to_s %>
+                      <%= day_form.label :day_of_week, day.to_s, class: "day-label" %>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="time-input-container">
+                      <label class="time-label">Début</label>
+                      <%= day_form.time_field :"start_time_#{day}", data: { activity_form_target: 'startTime' }, class: "activity-input time-input" %>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="time-input-container">
+                      <label class="time-label">Fin</label>
+                      <%= day_form.time_field :"end_time_#{day}", data: { activity_form_target: 'endTime' }, class: "activity-input time-input" %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div data-activity-form-target="errorMessage" class="alert alert-danger d-none" role="alert"></div>
+
       <div class="flexy">
-        <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+        <%= f.submit "Valider", class: "btn-add-student btn-add-student-small", data: { activity_form_target: "submitButton" } %>
       </div>
     <% end %>
   </div>

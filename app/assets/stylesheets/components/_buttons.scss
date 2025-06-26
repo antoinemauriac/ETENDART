@@ -198,6 +198,19 @@
   color: black!important;
 }
 
+.btn-disabled {
+  background-color: rgb(150, 150, 150) !important;
+  color: rgb(100, 100, 100) !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.btn-disabled:hover {
+  background-color: rgb(150, 150, 150) !important;
+  color: rgb(100, 100, 100) !important;
+  transform: none !important;
+}
+
 .btn-presence {
   margin: 0em 1em 1em 1em!important;
 }
@@ -398,6 +411,14 @@
 }
 
 .fa-trash:hover {
+  color: $pink;
+}
+
+.fa-edit {
+  color: black;
+}
+
+.fa-edit:hover {
   color: $pink;
 }
 

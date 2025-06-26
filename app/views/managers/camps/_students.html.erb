@@ -1,11 +1,11 @@
 <%= turbo_frame_tag "selected_content" do %>
-  <div class="flexy">
-    <%= link_to export_students_csv_managers_camp_path(camp, format: :csv) do %>
-      <i class="fa-solid fa-download fa-download-camp ml-0 mb-2"></i>
-    <% end %>
-  </div>
-
   <% if students.any? %>
+    <div class="flexy">
+      <%= link_to export_students_csv_managers_camp_path(camp, format: :csv) do %>
+        <i class="fa-solid fa-download fa-download-camp ml-0 mb-2"></i>
+      <% end %>
+    </div>
+
     <div class="container container-big mb-4" data-controller="clickable-table">
       <div class="card-row-container">
         <div class="row pb-2 pt-2 header-row sticky-header align-items-center">
@@ -36,6 +36,8 @@
               all_students_with_free_judo: all_students_with_free_judo %>
       </div>
     </div>
+  <% else %>
+    <div class="flexy mb-4 mt-4">Aucun élève inscrit pour le moment.</div>
   <% end %>
   <%= render "shared/flashes" %>
 <% end %>

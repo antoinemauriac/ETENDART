@@ -37,6 +37,10 @@ class SchoolPeriod < ApplicationRecord
     "#{name}#{year.to_s.last(2)}"
   end
 
+  def full_name_separator
+    "#{name}-#{year.to_s.last(2)}"
+  end
+
   def format_price
     if paid
       if price == 0

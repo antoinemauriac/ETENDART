@@ -45,117 +45,11 @@ class Student < ApplicationRecord
 
   validates :medical_treatment_description, presence: true, if: -> { has_medical_treatment }
 
-
-  ##############################################################################
-  # GESTION DES INFORMATION DE L'ENFANT
-  ##############################################################################
-
-  def any_lack_of_infos?
-    address.blank? || zipcode.blank? || city.blank? || has_medical_treatment.nil? || has_consent_for_photos.nil? || rules_signed.nil? || (has_medical_treatment && medical_treatment_description.blank?) || school.blank?
-  end
-
-
-  ##############################################################################
-
-
-  ##############################################################################
-  # GESTION DES ENFANTS AVEC ET SANS PARENT
-  ##############################################################################
-
-  # Tous les students avec parent
-  def self.with_parent
-    where.not(parent: nil)
-  end
-
-  # Tous les students sans parent
-  def self.no_parent
-    where(parent_id: nil)
-  end
-
-  ##############################################################################
-
-
-  ##############################################################################
-  # GESTION DES ENROLLMENTS
-  ##############################################################################
-
-  # VRAI si il est enrollé dans une school_period
-  def is_enrolled_in_school_period?(school_period)
-    return true if school_period_enrollments.find_by(school_period_id: school_period.id)
-  end
-
-  # VRAI si il est enrollé dans un camp
-  def is_enrolled_in_camp?(camp)
-    return true if camp_enrollments.find_by(camp_id: camp.id)
-  end
-
-  # VRAI si il est enrollé dans un autre camp de la même school_period
-  def is_enrolled_in_other_camps?(camp)
-    school_period = camp.school_period
-    school_period.camps.where.not(id: camp.id).each do |c|
-      return true if is_enrolled_in_camp?(c)
-    end
-    return false
-  end
-
-  # VRAI si il a payé un camp
-  def has_paid_camp?(camp)
-    return true if camp_enrollments.find_by(camp_id: camp.id, paid: true)
-  end
-
-  # renvoie VRAI si l'étudiant est inscrit à une activité précise
-  def is_enrolled_in_activity?(activity)
-    activity_enrollments.exists?(activity_id: activity.id)
-  end
-
-  # VRAI si il est dans une autre activité du même camp
-  def is_enrolled_in_other_activities?(activity)
-    camp = activity.camp
-    camp.activities.where.not(id: activity.id).each do |act|
-      return true if is_enrolled_in_activity?(act)
-    end
-    return false
-  end
-
-
-
-  ##############################################################################
-
-
-  ##############################################################################
-  # GESTION DES COTISATIONS POUR UN ENFANT
-  ##############################################################################
-
-  # la cotisation
-  def membership?(start_year)
-    return memberships.find_by(start_year: start_year).present?
-  end
-
   # return la cotisation de cette année, payée ou non.
   def current_membership
     start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
     return memberships.find_by(start_year: start_year)
   end
-
-  # la cotisation n'est pas payée
-  def membership_not_paid?
-    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
-    return memberships.find_by(start_year: start_year, paid: false).present?
-  end
-
-  # les étudiants qui obtiennent un parent créent automatiquement un cart_item avec le membership s'il n'est pas adhérent
-  def must_pay_membership
-    # est ce qu'il y a une adhésion pour l'année en cours ?
-    start_year = Date.current.month >= 9 ? Date.current.year : Date.current.year - 1
-    if membership_not_paid? || memberships.find_by(start_year: start_year).nil?
-      membership = self.memberships.find_or_create_by(start_year: start_year, amount: Membership::PRICE, stripe_price_id: ENV["STRIPE_MEMBERSHIP_ID"])
-      cart = self.parent.pending_cart
-      cart_name = "Adhésion #{membership.start_year}/#{membership.start_year + 1} - #{self.first_name} #{self.last_name}"
-      cart.cart_items.create!(product: membership, price: 15.00, student: self, stripe_price_id: ENV["STRIPE_MEMBERSHIP_ID"], name: cart_name)
-    end
-  end
-
-  ##############################################################################
 
   def full_name
     "#{first_name} #{last_name}"
@@ -275,6 +169,10 @@ class Student < ApplicationRecord
 
   def student_activities(camp)
     activities.where(camp: camp).order(name: :desc)
+  end
+
+  def student_activities_annual(annual_program)
+    activities.where(annual_program: annual_program).order(name: :desc)
   end
 
   def present_during_activity?(activity, course)
@@ -464,6 +362,13 @@ class Student < ApplicationRecord
     unattended_camps = fetch_unattended_upcoming_camps(free_judo_camp_ids)
 
     attended_camps.or(unattended_camps).order('camps.starts_at DESC')
+  end
+
+  def payable_annual_program_enrollments
+    annual_program_enrollments.joins(:annual_program)
+                              .where(annual_programs: { paid: true })
+                              .includes(annual_program: :academy)
+                              .order('annual_programs.starts_at DESC')
   end
 
   private

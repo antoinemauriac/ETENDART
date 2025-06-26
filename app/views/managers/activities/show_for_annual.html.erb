@@ -8,25 +8,66 @@
 </div>
 
 <div class="yellow-title"><%= @activity.name.upcase %></div>
-<div class="row justify-content-center align-items-stretch">
-  <div class="col-8">
+
+<div class="row justify-content-center">
+  <div class="col-10">
     <%= render "managers/activities/next_courses", courses: @courses %>
   </div>
-  <div class="col-4">
-    <div class="header-info">MODIFIER COACH OU HORAIRE</div>
-    <div class="form-container form-container-activity">
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-10">
+    <div class="header-info">MODIFIER</div>
+    <div class="form-container form-container-activity" data-controller="activity-form">
       <%= simple_form_for @activity, url: managers_activity_path(@activity), method: :patch do |f| %>
 
-      <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select" } } %>
-      <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches.reject { |coach| coach == @coach }, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" }, selected: @coaches.reject { |coach| coach == @coach } } %>
-      <%= f.simple_fields_for :day_attributes do |activity_period| %>
-        <%= activity_period.input :day, as: :select, collection: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'], label: 'Jour', selected: @last_course_day, input_html: { class: 'activity-input' } %>
-        <%= activity_period.input :start_time, as: :time, label: 'Heure de début', selected: @last_course_start_time, input_html: { class: 'activity-input' }, minute_step: 15 %>
-        <%= activity_period.input :end_time, as: :time, label: 'Heure de fin', selected: @last_course_end_time, input_html: { class: 'activity-input' }, minute_step: 15 %>
-      <% end %>
-      <div class="flexy">
-        <%= f.button :submit, "Valider", class: "btn-add-student btn-no-hover" %>
-      </div>
+        <div class="row">
+          <div class="col-4">
+            <h6 class="mb-3">Coachs</h6>
+            <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select" } } %>
+            <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches.reject { |coach| coach == @coach }, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" }, selected: @coaches.reject { |coach| coach == @coach } } %>
+          </div>
+
+
+          <div class="col-4">
+            <% unless @academy.name == "Éole" %>
+              <h6 class="mb-3">Restrictions d'âge</h6>
+              <div class="mb-3">
+                <%= f.label :age_restricted, "Activité concernée par une tranche d'âge ?", class: "form-label" %>
+                <div>
+                  <%= f.radio_button :age_restricted, true, class: "activity-input", checked: @activity.age_restricted == true, data: { action: 'change->activity-form#addRanges' } %>
+                  <%= f.label :age_restricted_true, "Oui" %>
+
+                  <%= f.radio_button :age_restricted, false, class: "activity-input", checked: @activity.age_restricted == false, data: { action: 'change->activity-form#removeRanges' } %>
+                  <%= f.label :age_restricted_false, "Non" %>
+                </div>
+              </div>
+
+              <div data-activity-form-target="ageRanges">
+                <% if @activity.age_restricted %>
+                  <div class="mb-3" data-age-fields>
+                    <%= f.input :min_age, label: "Age minimum", input_html: { class: "form-control activity-input", min: 0, required: @activity.age_restricted } %>
+                    <%= f.input :max_age, label: "Age maximum", input_html: { class: "form-control activity-input", min: 0, required: @activity.age_restricted } %>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <%= f.hidden_field :age_restricted, value: false %>
+            <% end %>
+          </div>
+          <div class="col-4">
+            <h6 class="mb-3">Horaires</h6>
+            <%= f.simple_fields_for :day_attributes do |activity_period| %>
+              <%= activity_period.input :day, as: :select, collection: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'], label: 'Jour', selected: @last_course_day, input_html: { class: 'activity-input' } %>
+              <%= activity_period.input :start_time, as: :time, label: 'Heure de début', selected: @last_course_start_time, input_html: { class: 'activity-input' }, minute_step: 15 %>
+              <%= activity_period.input :end_time, as: :time, label: 'Heure de fin', selected: @last_course_end_time, input_html: { class: 'activity-input' }, minute_step: 15 %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="flexy mt-3">
+          <%= f.button :submit, "Valider", class: "btn-add-student btn-no-hover" %>
+        </div>
       <% end %>
     </div>
   </div>

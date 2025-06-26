@@ -198,6 +198,30 @@
         </div>
       </div>
 
+      <div class="col-lg-11 col-sm-12 mt-3">
+        <div class="header-info"> PAIEMENT PROGRAMMES ANNUELS </div>
+        <div class="content-info content-info-show-student">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Académie</th>
+                <th>Programme</th>
+                <th>Montant</th>
+                <th>Date du paiement</th>
+                <th>Mode de paiement</th>
+                <th>Reçu par</th>
+                <th class="text-center">Payé ?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @annual_program_enrollments.each do |annual_program_enrollment| %>
+                <%= render "managers/students/annual_program_enrollment", annual_program_enrollment: annual_program_enrollment, student: @student %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="col-11 mt-3 mb-4">
         <div class="header-info">FEEDBACKS</div>
         <div class="content-info content-info-show-student">

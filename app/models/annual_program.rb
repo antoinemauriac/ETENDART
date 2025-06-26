@@ -19,6 +19,7 @@ class AnnualProgram < ApplicationRecord
   accepts_nested_attributes_for :program_periods, reject_if: :all_blank, allow_destroy: true
   validate :validate_program_periods
 
+  before_save :set_default_price
 
   DAY_TO_WDAY = {
     "Dimanche" => 0,
@@ -264,6 +265,18 @@ class AnnualProgram < ApplicationRecord
     end
   end
 
+  def format_price
+    if paid
+      if price == 0
+        "Gratuit"
+      else
+        "#{price}€"
+      end
+    else
+      "Gratuit"
+    end
+  end
+
   private
 
   def validate_program_periods
@@ -272,5 +285,9 @@ class AnnualProgram < ApplicationRecord
         errors.add(:base, "Période #{program_periods.index(period) + 1} : la date de début doit être antérieure à la date de fin.")
       end
     end
+  end
+
+  def set_default_price
+    self.price = 0 if paid == false
   end
 end

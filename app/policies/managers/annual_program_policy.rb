@@ -7,6 +7,18 @@ class Managers::AnnualProgramPolicy < ApplicationPolicy
     authorized?
   end
 
+  def activities?
+    authorized?
+  end
+
+  def students?
+    authorized?
+  end
+
+  def payments?
+    authorized?
+  end
+
   def new?
     authorized?
   end

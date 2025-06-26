@@ -14,8 +14,10 @@
       </div>
     <% end %>
 
+    <% membership = student.memberships.find_by(start_year: start_year) %>
+
     <div class="col flexy-row small-col">
-      <% if student.current_membership && student.current_membership.paid %>
+      <% if membership && membership.paid %>
         <i class="fa-solid fa-circle-check text-success fa-small"></i>
       <% else %>
         <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>

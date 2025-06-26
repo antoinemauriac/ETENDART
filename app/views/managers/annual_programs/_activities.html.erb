@@ -1,0 +1,87 @@
+<%= turbo_frame_tag "selected_content" do %>
+  <div class="container container-big" data-controller="clickable-table">
+    <% if activities.any? %>
+      <div class="card-row-container">
+        <div class="row pb-2 pt-2 header-row align-items-center">
+          <div class="col flexy-row">Activité</div>
+          <div class="col flexy-row">Jour</div>
+          <div class="col flexy-row">Début</div>
+          <div class="col flexy-row">Fin</div>
+          <div class="col large-col flexy-row">Coach Référent</div>
+          <div class="col small-col flexy-row">Age Min</div>
+          <div class="col small-col flexy-row">Age Max</div>
+          <div class="col small-col flexy-row">Inscrits</div>
+          <% if current_user.manager? %>
+            <div class="col small-col flexy-row">Supp</div>
+          <% end %>
+        </div>
+        <% activities.each do |activity| %>
+          <div id="activity-<%= activity.id %>" class="row card-row card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activity_path(activity) %>">
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= activity.name %></span>
+            </div>
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= l(activity.courses.last.starts_at, format: :day_name) if activity.courses.any? %></span>
+            </div>
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= l(activity.courses.last.starts_at, format: :hour_min) if activity.courses.any? %></span>
+            </div>
+            <div class="col flexy-row">
+              <span class="ellipsis"><%= l(activity.courses.last.ends_at, format: :hour_min) if activity.courses.any? %></span>
+            </div>
+            <div class="col large-col flexy-row">
+              <span class="ellipsis"><%= activity.coach.try(:full_name_short) || "" %></span>
+            </div>
+            <div class="col small-col flexy-row">
+              <span class="ellipsis"><%= activity.age_restricted && activity.min_age ? "#{activity.min_age} ans" : "-" %></span>
+            </div>
+            <div class="col small-col flexy-row">
+              <span class="ellipsis"><%= activity.age_restricted && activity.max_age ? "#{activity.max_age} ans" : "-" %></span>
+            </div>
+            <div class="col small-col flexy-row">
+              <span class="ellipsis"><%= activity.students.count %></span>
+            </div>
+            <% if current_user.manager? %>
+              <% if activity.can_delete? %>
+                <div class="col small-col flexy-row">
+                  <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
+                    <i class="fas fa-trash trash"></i>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="col small-col flexy-row"></div>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="flexy mb-4 mt-4">Aucune activité pour le moment.</div>
+    <% end %>
+    <% if current_user.manager? %>
+      <div class="flexy">
+        <%= link_to new_for_annual_managers_activity_path(annual_program: annual_program), data: { turbo_frame: "_top" }, class: "btn-add-student btn-large btn-flex mt-3" do %>
+          <i class="fa-solid fa-square-plus fa-square-bigger"></i>AJOUTER UNE ACTIVITÉ<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if false %>
+      <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
+      <div class="flexy" data-controller="import-csv">
+        <div class="loader d-none" data-import-csv-target="spinner"></div>
+        <div class="container flexy">
+          <div class="form-container">
+            <%= simple_form_for(annual_program.academy, url: import_managers_import_annual_students_path(annual_program: annual_program), method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
+              <%= form.input :annual_program_id, as: :hidden, input_html: { value: annual_program.id } %>
+              <div class="form-group">
+                <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
+              </div>
+              <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

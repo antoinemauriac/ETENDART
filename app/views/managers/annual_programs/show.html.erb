@@ -6,112 +6,36 @@
   <div class="header-nav-item active"><%= @annual_program.name %></div>
 </div>
 
-<div class="yellow-title">LES ACTIVITÉS</div>
-
-<div class="container flexy">
-  <div class="d-flex" style="min-width:450px;justify-content:space-around"">
-    <%= link_to new_for_annual_managers_activity_path(annual_program: @annual_program), class: 'btn-add-student btn-flex mt-0' do %>
-      <i class="fa-solid fa-square-plus fa-square-bigger"></i> AJOUTER <i class="fa-solid fa-square-plus fa-square-bigger"></i>
-    <% end %>
-    <% if @annual_program.new %>
-      <%= link_to "BILAN", statistics_managers_annual_program_path(@annual_program), class: "btn-add-student mt-0" %>
-    <% end %>
-  </div>
-
-  <table class="table table-striped table-responsive table-center form-container" data-controller="clickable-table">
-    <thead>
-      <tr>
-        <th>Activité</th>
-        <th>Jour</th>
-        <th>Début</th>
-        <th>Fin</th>
-        <th>Catégorie</th>
-        <th>Lieu</th>
-        <th>Coach Référent</th>
-        <th>Nb inscrits</th>
-        <th><i class="fas fa-trash trash"></i></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @activities.each do |activity| %>
-        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= show_for_annual_managers_activity_path(activity) %>">
-          <td><%= activity.name %></td>
-          <td><%= l(activity.courses.last.starts_at, format: :day_name ) %></td>
-          <td><%= l(activity.courses.last.starts_at, format: :hour_min ) %></td>
-          <td><%= l(activity.courses.last.ends_at, format: :hour_min ) %></td>
-          <td><%= activity.category.name %></td>
-          <td><%= activity.location.name %></td>
-          <td><%= activity.coach.try(:full_name) || "" %></td>
-          <td><%= activity.students.count %></td>
-
-          <% if activity.can_delete? %>
-            <td>
-              <%= link_to managers_activity_path(activity), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette activité ?" } do %>
-                <i class="fas fa-trash trash"></i>
-              <% end %>
-            </td>
-          <% else %>
-            <td></td>
-          <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-
-<% if @annual_program.can_import? %>
-  <div class="yellow-title mb-3 mt-3">IMPORT CSV</div>
-  <div class="flexy" data-controller="import-csv">
-    <div class="loader d-none" data-import-csv-target="spinner"></div>
-    <div class="container flexy">
-      <div class="form-container">
-        <%= simple_form_for(@annual_program.academy, url: import_managers_import_annual_students_path(annual_program: @annual_program), method: :post, data: { action: "change->import-csv#handleFileSelect" }) do |form| %>
-          <%= form.input :annual_program_id, as: :hidden, input_html: { value: @annual_program.id } %>
-          <div class="form-group">
-            <%= form.input :csv_file, as: :file, label: false, input_html: { accept: '.csv', data: { import_csv_target: "csvFileInput" }, class: "form-control-file" } %>
-          </div>
-          <%= form.submit 'Importer', disabled: true, data: { import_csv_target: "importButton", action: "click->import-csv#showSpinner" }, class: "btn btn-primary" %>
-        <% end %>
-      </div>
-    </div>
+<% if @annual_program.new %>
+  <div class="flexy mt-2 mb-2">
+    <%= link_to "BILAN", statistics_managers_annual_program_path(@annual_program), class: "btn-add-student mt-2" %>
   </div>
 <% end %>
 
+<div data-controller="loading-message">
+  <div class="flexy-wrap mt-2 mb-2 gap-4" data-controller="selected-button" >
+    <%= link_to "LES ACTIVITÉS",
+                activities_managers_annual_program_path(@annual_program),
+                data: { turbo_frame: "selected_content",
+                        selected_button_target: "button",
+                        action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                class: "btn-selection btn-fill selected" %>
+    <%= link_to "LES ÉLÈVES",
+                students_managers_annual_program_path(@annual_program),
+                data: { turbo_frame: "selected_content",
+                        selected_button_target: "button",
+                        action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                class: "btn-selection btn-fill" %>
+    <% if @annual_program.paid %>
+      <%= link_to "LES PAIEMENTS",
+                  payments_managers_annual_program_path(@annual_program),
+                  data: { turbo_frame: "selected_content",
+                          selected_button_target: "button",
+                          action: "click->selected-button#toggleButtons click->loading-message#showLoading" },
+                  class: "btn-selection btn-fill" %>
+    <% end %>
+  </div>
 
-<div class="yellow-title mt-3 mb-3 d-flex flex-row">
-  <%= link_to export_annual_students_managers_annual_program_path(format: :csv), class: 'btn-etendart-square btn-download mt-0' do %>
-    LES ÉLÈVES<i class="fa-solid fa-download"></i>
+  <%= turbo_frame_tag "selected_content", src: activities_managers_annual_program_path(@annual_program), data: { loading_message_target: "turboFrame" } do %>
   <% end %>
-  <%= link_to export_past_enrollments_managers_annual_program_path(format: :csv), class: "btn-etendart-square btn-download mt-0" do %>
-    LES ABSENCES<i class="fa-solid fa-download"></i>
-  <% end %>
-</div>
-
-<div class="container" data-controller="clickable-table">
-  <table class="table table-striped table-responsive table-center form-container">
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Droit à l'image</th>
-        <th>Age</th>
-        <th>Téléphone</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @students.each do |student| %>
-        <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(student) %>">
-          <td class="align-middle"><%= student.last_name %></td>
-          <td class="align-middle"><%= student.first_name %></td>
-          <td class="align-middle <%= student.annual_program_enrollments.find_by(annual_program: @annual_program).image_consent ? '' : 'non-bg' %>">
-            <%= student.annual_program_enrollments.find_by(annual_program: @annual_program).image_consent ? "" : "Non" %>
-          </td>
-          <td class="align-middle"><%= student.age %> ans</td>
-          <td class="align-middle"><%= student.phone_number %></td>
-          <td class="align-middle"><%= student.email %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
 </div>
