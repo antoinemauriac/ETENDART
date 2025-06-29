@@ -12,6 +12,7 @@ class AnnualProgramEnrollment < ApplicationRecord
   scope :unattended, -> { where(present: false) }
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
+  scope :confirmed, -> { where(confirmed: true) }
 
   def paid!
     self.update!(paid: true, payment_date: Date.current)

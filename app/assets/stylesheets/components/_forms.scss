@@ -1,4 +1,3 @@
-
 .form-container {
   min-width: 300px;
   background-color: white;
@@ -82,8 +81,95 @@
   min-width: 500px;
 }
 
-.tom-select {
-  padding: 0px!important;
+.ts-control {
+  background-color: #f8f9fa!important;
+  border: none!important;
+
+  .item {
+    font-size: 1rem;
+    background-color: white;
+  }
+}
+
+// Styles globaux pour tous les inputs (basés sur .activity-input)
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+input[type="url"],
+textarea {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    background-color: white;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    outline: 0;
+  }
+
+  &:hover {
+    border-color: #adb5bd;
+  }
+}
+
+// Styles spécifiques pour les selects
+.form-select,
+select {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  color: #495057;
+
+  &:focus {
+    background-color: white;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    outline: 0;
+  }
+
+  &:hover {
+    border-color: #adb5bd;
+  }
+
+  // Assurer que le texte reste visible après les mises à jour AJAX
+  option {
+    background-color: white;
+    color: #495057;
+  }
+}
+
+// Override spécifique pour academy-select pour maintenir son style noir
+.academy-select {
+  background-color: black !important;
+  color: white !important;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: black !important;
+    color: $yellow !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: none;
+    background-color: black !important;
+    color: white !important;
+  }
+
+  option {
+    background-color: black;
+    color: white;
+  }
 }
 
 .activity-input {
@@ -129,13 +215,13 @@
 
   &:focus {
     background-color: white;
-    border-color: #ffd700;
+    border-color: $yellow;
     box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
     color: #212529;
   }
 
   &:hover {
-    border-color: #ffd700;
+    border-color: $yellow;
     background-color: #fffef7;
   }
 
@@ -153,30 +239,6 @@
 }
 
 .schedule-container {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-  .schedule-title {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    text-align: center;
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 3px;
-      background: linear-gradient(90deg, #ffd700, #ffed4e);
-      border-radius: 2px;
-    }
-  }
 
   .schedule-days {
     display: flex;
@@ -185,14 +247,14 @@
   }
 
   .schedule-day {
-    background: white;
+    background: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     padding: 1rem;
     transition: all 0.2s ease;
 
     &:hover {
-      border-color: #ffd700;
+      border-color: $yellow;
       box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
     }
   }
@@ -205,10 +267,12 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    cursor: pointer;
 
     input[type="checkbox"] {
       transform: scale(1.2);
-      accent-color: #ffd700;
+      accent-color: $yellow;
+      cursor: pointer;
     }
 
     .day-label {
@@ -217,6 +281,7 @@
       margin: 0;
       cursor: pointer;
       user-select: none;
+      flex: 1;
     }
   }
 
@@ -224,6 +289,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+
+    .time-input {
+      background-color: white;
+    }
 
     .time-label {
       font-size: 0.85rem;
@@ -248,35 +317,8 @@
      }
    }
 
-   .name-container, .capacity-container, .dates-container, .pricing-container {
-     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-     border: 1px solid #e9ecef;
-     border-radius: 10px;
-     padding: 1.25rem;
-     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-     .schedule-title {
-       color: #495057;
-       font-weight: 600;
-       font-size: 1rem;
-       margin-bottom: 1rem;
-       text-align: center;
-       position: relative;
-
-       &::after {
-         content: '';
-         position: absolute;
-         bottom: -6px;
-         left: 50%;
-         transform: translateX(-50%);
-         width: 40px;
-         height: 2px;
-         background: linear-gradient(90deg, #ffd700, #ffed4e);
-         border-radius: 2px;
-       }
-     }
-
-            .form-input-container, .date-input-container, .price-input-container {
+   .name-container {
+      .form-input-container, .date-input-container, .price-input-container {
          display: flex;
          flex-direction: column;
          gap: 0.4rem;
@@ -284,7 +326,6 @@
          .form-input-label, .date-label, .price-label {
            font-size: 0.875rem;
            font-weight: 500;
-           color: #6c757d;
            margin: 0;
            text-transform: uppercase;
            letter-spacing: 0.3px;
@@ -299,7 +340,7 @@
 
      &:focus {
        background-color: white;
-       border-color: #ffd700;
+       border-color: $yellow;
        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
      }
 
@@ -334,14 +375,6 @@
      }
    }
  }
-
-.ts-control {
-  border: none!important;
-}
-
-.ts-dropdown {
-  font-size: 14px!important;
-}
 
 
 

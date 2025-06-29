@@ -39,7 +39,7 @@
               <span class="ellipsis"><%= activity.age_restricted && activity.max_age ? "#{activity.max_age} ans" : "-" %></span>
             </div>
             <div class="col small-col flexy-row">
-              <span class="ellipsis"><%= activity.students.count %></span>
+              <span class="ellipsis"><%= activity.confirmed_students_count %></span>
             </div>
             <% if current_user.manager? %>
               <% if activity.can_delete? %>

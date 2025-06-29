@@ -14,7 +14,7 @@
             <div class="col flexy-row small-col">Exclu ?</div>
           <% end %>
           <div class="col flexy-row text-wrap text-center small-col">Cotisant ?</div>
-          <% if school_period.paid %>
+          <% if school_period.paid && camp.price > 0 %>
             <div class="col flexy-row text-wrap text-center small-col">Stage payé ?</div>
           <% end %>
           <div class="col flexy-row text-wrap text-center small-col">Droit à l'image ?</div>

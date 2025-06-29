@@ -40,13 +40,13 @@
       <%= f.input :location_id, as: :select, collection: @locations, label: "Adresse", input_html: { class: "activity-input" }  %>
 
       <div class="schedule-container mb-4">
-        <h6 class="schedule-title mb-3">Horaires</h6>
+        <label class="form-label">Jours et horaires</label>
         <div class="schedule-days">
           <div class="schedule-day">
             <%= f.simple_fields_for :days do |day_form| %>
               <div class="row align-items-center schedule-row">
                 <div class="col-4">
-                  <div class="day-checkbox">
+                  <div class="day-checkbox" onclick="event.target.tagName !== 'INPUT' && this.querySelector('input[type=checkbox]').click();">
                     <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, "Lundi".to_s %>
                     <%= day_form.label :day_of_week, "Lundi".to_s, class: "day-label" %>
                   </div>
@@ -72,7 +72,7 @@
               <%= f.simple_fields_for :days do |day_form| %>
                 <div class="row align-items-center schedule-row">
                   <div class="col-4">
-                    <div class="day-checkbox">
+                    <div class="day-checkbox" onclick="event.target.tagName !== 'INPUT' && this.querySelector('input[type=checkbox]').click();">
                       <%= day_form.check_box :day_of_week, { multiple: true, checked: true }, day.to_s %>
                       <%= day_form.label :day_of_week, day.to_s, class: "day-label" %>
                     </div>

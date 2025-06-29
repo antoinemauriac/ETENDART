@@ -41,6 +41,7 @@ class Parents::SchoolPeriodEnrollmentsController < Parents::BaseController
 
       activity_params = params[:camp_id][camp_id]
       next unless activity_params.present?
+
       sport_activity = Activity.find(activity_params[:sport_activity_id])
       eveil_activity = Activity.find(activity_params[:eveil_activity_id])
       student.activities << sport_activity unless student.activities.include?(sport_activity)

@@ -19,33 +19,29 @@
     <div class="header-info">MODIFIER</div>
     <div class="form-container form-container-activity" data-controller="activity-form">
       <%= simple_form_for @activity, url: managers_activity_path(@activity, redirect_to: "camp" ), method: :patch do |f| %>
-
+      <%= f.input :name, label: "Nom", input_html: { class: "form-control activity-input" } %>
       <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select" } } %>
       <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches.reject { |coach| coach == @coach }, label_method: :full_name, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" },  selected: @coaches.reject { |coach| coach == @coach } } %>
 
-      <% unless @academy.name == "Éole" %>
-        <div class="mb-3">
-          <%= f.label :age_restricted, "Activité concernée par une tranche d'âge ?", class: "form-label" %>
-          <div>
-            <%= f.radio_button :age_restricted, true, class: "activity-input", checked: @activity.age_restricted == true, data: { action: 'change->activity-form#addRanges' } %>
-            <%= f.label :age_restricted_true, "Oui" %>
+      <div class="mb-3">
+        <%= f.label :age_restricted, "Activité concernée par une tranche d'âge ?", class: "form-label" %>
+        <div>
+          <%= f.radio_button :age_restricted, true, class: "activity-input", checked: @activity.age_restricted == true, data: { action: 'change->activity-form#addRanges' } %>
+          <%= f.label :age_restricted_true, "Oui" %>
 
-            <%= f.radio_button :age_restricted, false, class: "activity-input", checked: @activity.age_restricted == false, data: { action: 'change->activity-form#removeRanges' } %>
-            <%= f.label :age_restricted_false, "Non" %>
+          <%= f.radio_button :age_restricted, false, class: "activity-input", checked: @activity.age_restricted == false, data: { action: 'change->activity-form#removeRanges' } %>
+          <%= f.label :age_restricted_false, "Non" %>
+        </div>
+      </div>
+
+      <div data-activity-form-target="ageRanges">
+        <% if @activity.age_restricted %>
+          <div class="mb-3" data-age-fields>
+            <%= f.input :min_age, label: "Age minimum", input_html: { class: "form-control activity-input", min: 0, required: @activity.age_restricted } %>
+            <%= f.input :max_age, label: "Age maximum", input_html: { class: "form-control activity-input", min: 0, required: @activity.age_restricted } %>
           </div>
-        </div>
-
-        <div data-activity-form-target="ageRanges">
-          <% if @activity.age_restricted %>
-            <div class="mb-3" data-age-fields>
-              <%= f.input :min_age, label: "Age minimum", input_html: { class: "form-control activity-input", min: 0, required: @activity.age_restricted } %>
-              <%= f.input :max_age, label: "Age maximum", input_html: { class: "form-control activity-input", min: 0, required: @activity.age_restricted } %>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <%= f.hidden_field :age_restricted, value: false %>
-      <% end %>
+        <% end %>
+      </div>
 
       <div class="flexy">
         <%= f.button :submit, "Valider", class: "btn btn-etendart-yellow" %>
@@ -53,5 +49,7 @@
       <% end %>
     </div>
   </div>
+  <div class="col-12 mb-4">
+    <%= render "managers/activities/students_list", students: @students %>
+  </div>
 </div>
-<%= render "managers/activities/students_list", students: @students %>

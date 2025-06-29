@@ -77,6 +77,10 @@ class Student < ApplicationRecord
     activity_enrollments.confirmed
   end
 
+  def confirmed_annual_program_enrollments
+    annual_program_enrollments.confirmed
+  end
+
   def courses_sorted
     courses.order(starts_at: :asc)
   end
@@ -256,6 +260,7 @@ class Student < ApplicationRecord
 
   def next_annual_activities
     activities.joins(:annual_program)
+              .where(activity_enrollments: { confirmed: true })
               .where('annual_programs.ends_at >= ?', Date.current)
   end
 
@@ -365,10 +370,11 @@ class Student < ApplicationRecord
   end
 
   def payable_annual_program_enrollments
-    annual_program_enrollments.joins(:annual_program)
+    annual_program_enrollments.confirmed
+                              .joins(:annual_program)
                               .where(annual_programs: { paid: true })
                               .includes(annual_program: :academy)
-                              .order('annual_programs.starts_at DESC')
+                              .order('annual_programs.starts_at ASC')
   end
 
   private

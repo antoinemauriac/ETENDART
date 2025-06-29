@@ -10,20 +10,22 @@
 <div class="yellow-title"><%= @activity.name.upcase %></div>
 
 <div class="row justify-content-center">
-  <div class="col-10">
+  <div class="col-11">
     <%= render "managers/activities/next_courses", courses: @courses %>
   </div>
 </div>
 
 <div class="row justify-content-center">
-  <div class="col-10">
+  <div class="col-11">
     <div class="header-info">MODIFIER</div>
     <div class="form-container form-container-activity" data-controller="activity-form">
       <%= simple_form_for @activity, url: managers_activity_path(@activity), method: :patch do |f| %>
 
-        <div class="row">
+        <div class="row g-5">
           <div class="col-4">
-            <h6 class="mb-3">Coachs</h6>
+            <h6 class="mb-3">Nom</h6>
+            <%= f.input :name, label: "Nom", input_html: { class: "form-control activity-input" } %>
+            <h6 class="mt-5">Coachs</h6>
             <%= f.input :coach_id, as: :select, label: "Coach Principal", collection: @coaches, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", data: { controller: "tom-select" } } %>
             <%= f.input :coach_ids, as: :select, label: "Autres coachs", collection: @coaches.reject { |coach| coach == @coach }, label_method: :full_name, value_method: :id, input_html: { class: "tom-select", multiple: true, data: { controller: "tom-select" }, selected: @coaches.reject { |coach| coach == @coach } } %>
           </div>
@@ -71,6 +73,7 @@
       <% end %>
     </div>
   </div>
+  <div class="col-11 mb-4">
+    <%= render "managers/activities/students_list", students: @students %>
+  </div>
 </div>
-
-<%= render "managers/activities/students_list", students: @students %>

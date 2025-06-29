@@ -7,6 +7,10 @@ class Managers::AnnualProgramPolicy < ApplicationPolicy
     authorized?
   end
 
+  def update?
+    authorized?
+  end
+
   def activities?
     authorized?
   end

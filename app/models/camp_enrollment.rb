@@ -29,17 +29,6 @@ class CampEnrollment < ApplicationRecord
     self.update!(paid: true, payment_date: Date.current)
   end
 
-  def create_school_period_enrollment
-    student.school_periods << school_period unless student.school_periods.include?(school_period)
-  end
-
-  def destroy_school_period_enrollment
-    camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
-    if camp_enrollments.empty?
-      student.school_period_enrollments.find_by(school_period: school_period).destroy
-    end
-  end
-
   private
 
   def receiver_presence_for_specific_payment_methods

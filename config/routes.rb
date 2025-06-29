@@ -142,7 +142,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :annual_programs, only: %i[show index new create destroy] do
+    resources :annual_programs, only: %i[show index new create destroy update] do
       member do
         get :activities
         get :students

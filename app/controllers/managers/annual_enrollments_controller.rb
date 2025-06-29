@@ -3,7 +3,7 @@ class Managers::AnnualEnrollmentsController < ApplicationController
     @student = Student.find(params[:student_id])
     authorize([:managers, @student], policy_class: Managers::AnnualEnrollmentPolicy)
     activity = Activity.find(params[:activity])
-    if @student.activities.include?(activity)
+    if @student.confirmed_activity_enrollments.exists?(activity: activity)
       flash.now[:alert] = "L'élève est déjà inscrit à cette activité"
 
       respond_to do |format|
@@ -15,22 +15,21 @@ class Managers::AnnualEnrollmentsController < ApplicationController
       @student.academies << academy unless @student.academies.include?(academy)
 
       annual_program = AnnualProgram.find(params[:annual_program])
-      @student.annual_programs << annual_program unless @student.annual_programs.include?(annual_program)
+      image_consent = params[:has_consent_for_photos]
+      unless @student.confirmed_annual_program_enrollments.exists?(annual_program:)
+        AnnualProgramEnrollment.create(student: @student, annual_program:, confirmed: true, image_consent:)
+      end
 
-      image_consent = params[:image_consent]
-      annual_program_enrollment = @student.annual_program_enrollments.find_by(annual_program: annual_program)
-      annual_program_enrollment.update(image_consent: image_consent)
-
-      ActivityEnrollment.create(student: @student, activity: activity, confirmed: true)
+      ActivityEnrollment.create(student: @student, activity:, confirmed: true)
       @student.courses << activity.next_courses
 
       start_year = annual_program.starts_at.year
-      membership = @student.memberships.find_by(start_year: start_year)
+      membership = @student.memberships.find_by(start_year:)
       if membership.nil?
-        @student.memberships.create(amount: Membership::PRICE, start_year: start_year, academy: academy)
+        @student.memberships.create(amount: Membership::PRICE, start_year:, academy:)
       end
       flash.now[:notice] = "Inscription validée"
-      @activity_enrollment = @student.activity_enrollments.find_by(activity: activity)
+      @activity_enrollment = @student.activity_enrollments.find_by(activity:)
       @courses = activity.next_courses
       respond_to do |format|
         format.turbo_stream

@@ -85,6 +85,18 @@
                               min: camp.students_count
                             },
                             hint: "La capacité ne peut pas être inférieure au nombre d'élèves déjà inscrits (#{camp.students_count})" %>
+
+                <% if @school_period.paid %>
+                  <%= f.input :price,
+                              label: "Prix (€)",
+                              input_html: {
+                                value: camp.price,
+                                class: "form-control mb-3",
+                                required: true,
+                                min: 0,
+                                step: 0.01
+                              } %>
+                <% end %>
               </div>
               <div class="modal-footer d-flex justify-content-around">
                 <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
@@ -109,8 +121,8 @@
 
   <!-- Modal pour nouvelle semaine -->
   <div class="modal fade" id="newCampModal" tabindex="-1" aria-labelledby="newCampModalLabel" aria-hidden="true" data-controller="close-modal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" style="width:95%;padding:0px">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="width:100%;padding:0px;margin:0 auto">
         <div class="modal-header modal-header-deposit">
           <h5 class="modal-title" id="newCampModalLabel">Nouvelle Semaine - <%= @school_period.name %> <%= @school_period.year %></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -118,49 +130,39 @@
         <%= form_with(model: @camp, url: managers_camps_path(school_period: @school_period), method: :post, data: { action: "submit->close-modal#closeModal" }) do |form| %>
           <div class="modal-body">
             <div class="camp-form-container">
-              <div class="name-container mb-4">
-                <h6 class="schedule-title mb-3">Nom</h6>
-                <div class="form-input-container">
+              <div class="name-container">
+                <div class="form-input-container mb-3">
                   <label class="form-input-label">Nom de la semaine</label>
-                  <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: "Sélectionner une semaine" }, { class: "activity-input", required: true } %>
+                  <%= form.select :name, ["semaine1", "semaine2", "semaine3", "semaine4", "semaine5", "semaine6"], { include_blank: "" }, { class: "activity-input", required: true } %>
                 </div>
-              </div>
 
-              <div class="capacity-container mb-4">
-                <h6 class="schedule-title mb-3">Capacité</h6>
-                <div class="form-input-container">
+                <div class="form-input-container mb-3">
                   <label class="form-input-label">Nombre de places</label>
                   <%= form.number_field :capacity, class: "activity-input", required: true, min: 1 %>
                 </div>
-              </div>
 
-              <div class="dates-container mb-4">
-                <h6 class="schedule-title mb-3">Dates</h6>
-                <div class="row g-3">
+                <div class="row g-3 mb-3">
                   <div class="col-md-6">
                     <div class="date-input-container">
                       <label class="date-label">Date de début</label>
-                      <%= form.date_field :starts_at, class: "activity-input date-input", required: true %>
+                      <%= form.text_field :starts_at, class: "activity-input date-input", required: true, data: { controller: "date-picker" }, placeholder: "Sélectionner une date" %>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="date-input-container">
                       <label class="date-label">Date de fin</label>
-                      <%= form.date_field :ends_at, class: "activity-input date-input", required: true %>
+                      <%= form.text_field :ends_at, class: "activity-input date-input", required: true, data: { controller: "date-picker" }, placeholder: "Sélectionner une date" %>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <% if @school_period.paid %>
-                <div class="pricing-container mb-4">
-                  <h6 class="schedule-title mb-3">Tarification</h6>
+                <% if @school_period.paid %>
                   <div class="price-input-container">
                     <label class="price-label">Prix (€)</label>
                     <%= form.number_field :price, class: "activity-input price-input", value: nil, required: true, min: 0, step: 0.01 %>
                   </div>
-                </div>
-              <% end %>
+                <% end %>
+              </div>
             </div>
           </div>
           <div class="modal-footer d-flex justify-content-around">

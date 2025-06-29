@@ -167,6 +167,6 @@ class Managers::CampsController < ApplicationController
   end
 
   def camp_update_params
-    params.require(:camp).permit(:capacity)
+    params.require(:camp).permit(:capacity, :price)
   end
 end

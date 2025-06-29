@@ -18,6 +18,8 @@ class AnnualProgram < ApplicationRecord
 
   accepts_nested_attributes_for :program_periods, reject_if: :all_blank, allow_destroy: true
   validate :validate_program_periods
+  validate :validate_capacity
+  validates :capacity, presence: true
 
   before_save :set_default_price
 
@@ -121,7 +123,22 @@ class AnnualProgram < ApplicationRecord
   end
 
   def students_count
-    students.count
+    annual_program_enrollments.confirmed.count
+  end
+
+  def confirmed_students
+    students.joins(:annual_program_enrollments).where(annual_program_enrollments: { confirmed: true }).distinct
+  end
+
+  def available_capacity
+    return nil unless capacity&.positive?
+
+    capacity - students_count
+  end
+
+  def capacity_full?
+    return false unless capacity && capacity > 0
+    students_count >= capacity
   end
 
   def show_students
@@ -289,5 +306,13 @@ class AnnualProgram < ApplicationRecord
 
   def set_default_price
     self.price = 0 if paid == false
+  end
+
+  def validate_capacity
+    return if capacity.nil? || capacity.zero?
+
+    if capacity < students_count
+      errors.add(:capacity, "ne peut pas être inférieure au nombre d'élèves déjà inscrits (#{students_count})")
+    end
   end
 end

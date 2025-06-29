@@ -24,7 +24,7 @@
       <% end %>
     </div>
 
-    <% if school_period.paid %>
+    <% if school_period.paid && camp.price > 0 %>
       <% if all_students_with_free_judo.include?(student) %>
         <div class="col flexy-row small-col">
           <% if camp_enrollment.paid %>
@@ -44,8 +44,12 @@
       <% end %>
     <% end %>
 
-    <div class="col flexy-row small-col <%= student&.has_consent_for_photos ? '' : 'non-bg' %>">
-      <span class="ellipsis"><%= student.has_consent_for_photos ? "" : "Non" %></span>
+    <div class="col flexy-row small-col">
+      <% if student.has_consent_for_photos %>
+        <i class="fa-solid fa-circle-check text-success fa-small"></i>
+      <% else %>
+        <i class="fa-solid fa-circle-xmark fa-pink fa-small"></i>
+      <% end %>
     </div>
     <% if school_period.tshirt %>
       <div class="col flexy-row small-col <%= school_period_enrollment&.tshirt_delivered ? '' : 'non-bg' %>">
@@ -67,8 +71,11 @@
 
     <div class="col flexy-row small-col">
       <span class="ellipsis">
-        <%= link_to managers_camp_enrollment_path(camp_enrollment), data: { turbo_frame: "top", turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cet élève de la semaine ?" } do %>
-          <i class="fas fa-trash trash"></i>
+        <% can_delete = !school_period.paid || !camp_enrollment.paid || camp.price == 0 %>
+        <% if can_delete %>
+          <%= link_to managers_camp_enrollment_path(camp_enrollment), data: { turbo_frame: "top", turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer cet élève de la semaine ?" } do %>
+            <i class="fas fa-trash trash"></i>
+          <% end %>
         <% end %>
       </span>
     </div>
