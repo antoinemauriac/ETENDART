@@ -10,11 +10,17 @@ application.register("activity-form", ActivityFormController)
 import AddressAutocompleteController from "./address_autocomplete_controller"
 application.register("address-autocomplete", AddressAutocompleteController)
 
+import AnnualActivityFormController from "./annual_activity_form_controller"
+application.register("annual-activity-form", AnnualActivityFormController)
+
 import AnnualCoursesController from "./annual_courses_controller"
 application.register("annual-courses", AnnualCoursesController)
 
 import AnnualEnrollmentsFormController from "./annual_enrollments_form_controller"
 application.register("annual-enrollments-form", AnnualEnrollmentsFormController)
+
+import AnnualProgramPriceController from "./annual_program_price_controller"
+application.register("annual-program-price", AnnualProgramPriceController)
 
 import CampCoursesController from "./camp_courses_controller"
 application.register("camp-courses", CampCoursesController)

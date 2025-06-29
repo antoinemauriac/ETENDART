@@ -90,7 +90,7 @@
         <tr>
           <% activity_stat = activity.activity_stat %>
           <td><%= activity.name %></td>
-          <td><%= l(activity.courses.first.starts_at, format: :day_name ) %></td>
+          <td><%= activity.courses.any? ? l(activity.courses.first.starts_at, format: :day_name) : "" %></td>
           <td><%= activity_stat.enrolled_students_count%></td>
           <td><%= activity_stat.students_count%></td>
           <td><%= activity_stat.number_of_boy%></td>

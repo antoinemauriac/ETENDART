@@ -1,0 +1,57 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<%= turbo_stream.replace "annual_program_enrollment_#{@annual_program_enrollment.id}" do %>
+  <% if params[:annual_program_enrollment][:source] == "list" %>
+    <!-- Partial pour la liste des paiements (onglet payments) -->
+    <div id="annual_program_enrollment_<%= @annual_program_enrollment.id %>">
+      <% student = @annual_program_enrollment.student %>
+      <% name_style = @annual_program_enrollment.present && !@annual_program_enrollment.paid ? 'color: #fc3535;font-weight:bold' : '' %>
+      <div id="target-<%=@annual_program_enrollment.id%>" class="row card-row card-row-higher card-row-no-transform clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_student_path(@annual_program_enrollment.student) %>">
+        <div class="col-2 flexy-row">
+          <span class="ellipsis" style="<%= name_style %>"><%= student.last_name %></span>
+        </div>
+        <div class="col-2 flexy-row">
+          <span class="ellipsis" style="<%= name_style %>"><%= student.first_name %></span>
+        </div>
+        <div class="col-2 flexy-row">
+          <span class="ellipsis" style="<%= name_style %>"><%= "#{@annual_program_enrollment.annual_program.academy.name}-#{@annual_program_enrollment.annual_program.name}" %></span>
+        </div>
+        <div class="col-1 flexy-row small-col">
+          <span class="ellipsis" style="<%= name_style %>"><%= @annual_program_enrollment.annual_program.price %>€</span>
+        </div>
+        <% if @annual_program_enrollment.paid %>
+          <div class="col-1 flexy-row">
+            <span class="ellipsis"><%= @annual_program_enrollment.payment_date ? l(@annual_program_enrollment.payment_date, formats: :default) : '' %></span>
+          </div>
+          <div class="col-1 flexy-row">
+            <span class="ellipsis"><%= @annual_program_enrollment.payment_method %></span>
+          </div>
+          <div class="col-2 flexy-row">
+            <span class="ellipsis"><%= @annual_program_enrollment.receiver&.full_name %></span>
+          </div>
+          <div class="col-1 flexy-row small-col">
+            <i class="fa-solid fa-circle-check text-success fa-small"></i>
+          </div>
+        <% elsif @annual_program_enrollment.present || (!@annual_program_enrollment.present && @annual_program_enrollment.annual_program.ends_at >= Date.current) %>
+          <div class="col-4 flexy-row">
+            <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#annualProgramEnrollment<%=@annual_program_enrollment.id%>Modal">
+              <i class="fa-solid fa-square-plus fa-square-bigger"></i>PAYER<i class="fa-solid fa-square-plus fa-square-bigger"></i>
+            </button>
+          </div>
+          <div class="col-1 flexy-row small-col">
+            <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+          </div>
+        <% elsif !@annual_program_enrollment.present && @annual_program_enrollment.annual_program.ends_at < Date.current %>
+          <div class="col-5 flexy-row">
+            <span class="ellipsis">Absent du programme</span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <!-- Partial pour la fiche élève -->
+    <%= render "managers/students/annual_program_enrollment", annual_program_enrollment: @annual_program_enrollment, student: @student %>
+  <% end %>
+<% end %>

@@ -10,7 +10,7 @@
       <span class="ellipsis" style="<%= name_style %>"><%= student.first_name %></span>
     </div>
     <div class="col-2 flexy-row">
-      <span class="ellipsis" style="<%= name_style %>" ><%= "#{camp_enrollment.camp.academy.name }-#{camp_enrollment.camp.school_period.name}-#{camp_enrollment.camp.name}" %></span>
+      <span class="ellipsis" style="<%= name_style %>" ><%= "#{camp.school_period.name}-#{camp.school_period.year}-#{camp_enrollment.camp.name}" %></span>
     </div>
     <div class="col-1 flexy-row small-col">
       <span class="ellipsis" style="<%= name_style %>"><%= camp_enrollment.camp.price %>€</span>

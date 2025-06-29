@@ -82,7 +82,7 @@
         <td><%= period.paid ? "Payant" : "Gratuit" %></td>
         <td><%= period.students_count %></td>
         <td>
-        <% if period.can_import? %>
+        <% if period.can_delete? %>
           <%= link_to managers_school_period_path(period), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce stage ?" } do %>
             <i class="fas fa-trash trash"></i>
           <% end %>

@@ -90,7 +90,6 @@ class Managers::ActivitiesController < ApplicationController
     @academy = @activity.academy
     @camp = @activity.camp
     @school_period = @camp.school_period
-    # @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
     @students = @activity.confirmed_students
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     @courses = @activity.courses.sort_by(&:starts_at)
@@ -108,8 +107,7 @@ class Managers::ActivitiesController < ApplicationController
     @last_course_day = AnnualProgram::DAY_EN_TO_FR[@last_course.starts_at.strftime('%A')] if @last_course
     @last_course_start_time = @last_course.starts_at.to_time if @last_course
     @last_course_end_time = @last_course.ends_at.to_time if @last_course
-    # @students = @activity.students_with_next_activity_enrollments.sort_by(&:last_name)
-    @students = @activity.students.sort_by(&:last_name)
+    @students = @activity.confirmed_students.sort_by(&:last_name)
     authorize([:managers, @activity], policy_class: Managers::ActivityPolicy)
     if @activity.next_courses.size >= 5
       @courses = @activity.next_courses.sort_by(&:starts_at).first(5)
@@ -250,16 +248,31 @@ class Managers::ActivitiesController < ApplicationController
 
   def validate_courses
     no_error = true
-    Activity::DAYS.each do |day|
-      start_time = Time.parse(params[:activity][:days]["start_time_#{day}"])
-      end_time = Time.parse(params[:activity][:days]["end_time_#{day}"])
 
-      next unless start_time && end_time
+    # Récupérer les jours cochés (ceux qui ne sont pas "0")
+    checked_days = params[:activity][:days][:day_of_week].reject { |day| day == "0" }
 
-      if start_time >= end_time
+    checked_days.each do |day|
+      start_time_str = params[:activity][:days]["start_time_#{day}"]
+      end_time_str = params[:activity][:days]["end_time_#{day}"]
+
+      next unless start_time_str && end_time_str
+
+      begin
+        start_time = Time.parse(start_time_str)
+        end_time = Time.parse(end_time_str)
+
+        if start_time >= end_time
+          no_error = false
+          break
+        end
+      rescue ArgumentError
+        # En cas d'erreur de parsing, on considère que c'est invalide
         no_error = false
+        break
       end
     end
+
     no_error
   end
 

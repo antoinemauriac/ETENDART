@@ -19,6 +19,7 @@ class Coaches::CoursesController < ApplicationController
     @academy = course.academy
     @camp = course.camp
     @school_period = course.school_period
+    @annual_program = course.annual_program
     @category = course.category
     @activity = course.activity
     @start_year = course.starts_at.month >= 9 ? course.starts_at.year : course.starts_at.year - 1

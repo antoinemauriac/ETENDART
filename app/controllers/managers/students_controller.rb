@@ -62,6 +62,7 @@ class Managers::StudentsController < ApplicationController
     @membership = @student.memberships.find_by(start_year: @start_year)
     @memberships = @student.memberships.includes(:receiver).order(start_year: :desc)
     @camp_enrollments = @student.payable_camp_enrollments.includes(:camp, :receiver)
+    @annual_program_enrollments = @student.payable_annual_program_enrollments.includes(:annual_program, :receiver)
     @camp_enrollment = @camp_enrollments.last
   end
 

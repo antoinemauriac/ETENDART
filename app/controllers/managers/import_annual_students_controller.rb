@@ -42,7 +42,13 @@ class Managers::ImportAnnualStudentsController < ApplicationController
           end
 
           student.academies << academy unless student.academies.include?(academy)
-          AnnualProgramEnrollment.create(student: student, annual_program: annual_program, image_consent: row['droitimage'] == 'oui' ? true : false)
+
+          # Utilisation de find_or_create_by pour éviter les doublons même après le destroy_all
+          image_consent = row['droitimage'] == 'oui'
+          student.annual_program_enrollments.find_or_create_by(annual_program: annual_program) do |enrollment|
+            enrollment.image_consent = image_consent
+            enrollment.confirmed = true
+          end
 
           (1..3).each do |i|
             activity_name = row["activite_#{i}"]

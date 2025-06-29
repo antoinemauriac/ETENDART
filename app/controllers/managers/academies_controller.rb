@@ -21,8 +21,12 @@ class Managers::AcademiesController < ApplicationController
 
     @old_presence_sheet = @academy.old_presence_sheet
 
-    @students_with_medical_treatment = @camp.confirmed_students.where.not(has_medical_treatment: false).where.not(medical_treatment_description: "").distinct if @camp.present?
-    @students_with_medical_treatment = @annual_program.students.where.not(has_medical_treatment: false).where.not(medical_treatment_description: "").distinct if @annual_program.present?
+    @students_with_medical_treatment = Student.where(id: [
+                                       @camp&.confirmed_students,
+                                       @annual_program&.students
+                                     ].compact.flatten.map(&:id))
+                                     .where.not(has_medical_treatment: false, medical_treatment_description: "")
+                                     .distinct
   end
 
   def export_absent_students_csv
@@ -89,5 +93,4 @@ class Managers::AcademiesController < ApplicationController
   def academy_params
     params.require(:academy).permit(:name)
   end
-
 end

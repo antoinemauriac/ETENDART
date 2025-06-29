@@ -4,9 +4,8 @@
       <div class="card-row-container">
         <div class="row pb-2 pt-2 header-row align-items-center">
           <div class="col flexy-row">Activité</div>
-          <div class="col large-col flexy-row">Catégorie</div>
           <div class="col flexy-row">Lieu</div>
-          <div class="col large-col flexy-row">Coach Référent</div>
+          <div class="col flexy-row">Coach Référent</div>
           <div class="col small-col flexy-row">Age min</div>
           <div class="col small-col flexy-row">Age max</div>
           <div class="col small-col flexy-row">Inscrits</div>
@@ -19,20 +18,17 @@
             <div class="col flexy-row">
               <span class="ellipsis"><%= activity.name %></span>
             </div>
-            <div class="col large-col flexy-row">
-              <span class="ellipsis"><%= activity.category.name %></span>
-            </div>
             <div class="col flexy-row">
               <span class="ellipsis"><%= activity.location.name %></span>
             </div>
-            <div class="col large-col flexy-row">
+            <div class="col flexy-row">
               <span class="ellipsis"><%= activity.coach.try(:full_name_short) || "" %></span>
             </div>
             <div class="col small-col flexy-row">
-              <span class="ellipsis"><%= activity.age_restricted ? "#{activity.min_age} ans" : "" %></span>
+              <span class="ellipsis"><%= activity.age_restricted && activity.min_age ? "#{activity.min_age} ans" : "-" %></span>
             </div>
             <div class="col small-col flexy-row">
-              <span class="ellipsis"><%= activity.age_restricted ? "#{activity.max_age} ans" : "" %></span>
+              <span class="ellipsis"><%= activity.age_restricted && activity.max_age ? "#{activity.max_age} ans" : "-" %></span>
             </div>
             <div class="col small-col flexy-row">
               <span class="ellipsis"><%= activity.confirmed_students_count %></span>

@@ -11,15 +11,15 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  
+
   authenticated :user, ->(user) { user.manager? || user.coordinator? } do
     root to: "managers/dashboards#index", as: :manager_root
   end
-  
+
   authenticated :user, ->(user) { user.admin? } do
     root to: "managers/dashboards#index_for_admin", as: :admin_root
   end
-  
+
   authenticated :user, ->(user) { user.coach? } do
     root to: "coaches/dashboards#index", as: :coach_root
   end
@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   end
 
   root to: "pages#home"
-  
+
   # devise_scope :user do
   #   get '/users/confirmation_pending', to: 'users/registrations#confirmation_pending', as: :confirmation_pending
   # end
@@ -132,7 +132,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :camps, only: %i[index new create show destroy] do
+    resources :camps, only: %i[index new create show destroy update] do
       member do
         get :activities
         get :students
@@ -142,8 +142,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :annual_programs, only: %i[show index new create destroy] do
+    resources :annual_programs, only: %i[show index new create destroy update] do
       member do
+        get :activities
+        get :students
+        get :payments
         get :statistics
         get :export_past_enrollments
         get :export_annual_students
@@ -180,6 +183,7 @@ Rails.application.routes.draw do
     resources :feedbacks, only: %i[create destroy]
     resources :activity_enrollments, only: %i[destroy]
     resources :camp_enrollments, only: %i[index destroy update]
+    resources :annual_program_enrollments, only: %i[update destroy]
     resources :categories, only: %i[index create edit update destroy]
     resources :enrollments, only: %i[new create]
     resources :locations, only: %i[create show index edit update]

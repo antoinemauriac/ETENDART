@@ -11,8 +11,12 @@
       <tr>
         <th>Académie</th>
         <th>Année</th>
+        <th>Prix</th>
+        <th>Capacité</th>
         <th>Nb Élèves inscrits</th>
-        <th>Action</th>
+        <th>Places dispo</th>
+        <th>Modifier</th>
+        <th>Supprimer</th>
       </tr>
     </thead>
     <tbody>
@@ -20,18 +24,71 @@
       <tr class="clickable-tr" data-clickable-table-target="clickable" data-url="<%= managers_annual_program_path(annual_program) %>">
         <td><%= annual_program.academy.name %></td>
         <td><%= annual_program.name %></td>
-        <td><%= annual_program.annual_program_enrollments.count %></td>
-        <td>
-        <% if !annual_program.started? %>
-          <%= link_to managers_annual_program_path(annual_program), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce programme ?" } do %>
-            <i class="fas fa-trash trash"></i>
+        <td><%= annual_program.format_price %></td>
+        <td><%= annual_program.capacity || "-" %></td>
+        <td><%= annual_program.students_count %></td>
+        <td><%= annual_program.available_capacity || "-" %></td>
+        <td class="align-middle">
+          <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#editAnnualProgramModal<%= annual_program.id %>" style="background: none; border: none;">
+            <i class="fas fa-edit" style="cursor: pointer;"></i>
+          </button>
+        </td>
+        <td class="align-middle">
+          <% if !annual_program.started? %>
+            <%= link_to managers_annual_program_path(annual_program), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce programme ?" } do %>
+              <i class="fas fa-trash trash"></i>
+            <% end %>
           <% end %>
-        <% end %>
         </td>
       </tr>
       <% end %>
     </tbody>
   </table>
+
+  <!-- Modals pour modifier les annual programs -->
+  <% @annual_programs.each do |annual_program| %>
+    <div class="modal fade" id="editAnnualProgramModal<%= annual_program.id %>" tabindex="-1" aria-labelledby="editAnnualProgramModalLabel<%= annual_program.id %>" aria-hidden="true" data-controller="close-modal">
+      <div class="modal-dialog">
+        <div class="modal-content" style="width:80%;padding:0px">
+          <div class="modal-header modal-header-deposit">
+            <h5 class="modal-title" id="editAnnualProgramModalLabel<%= annual_program.id %>">Modifier le programme</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <%= simple_form_for annual_program, url: managers_annual_program_path(annual_program), data: { action: "submit->close-modal#closeModal" }, method: :patch do |f| %>
+            <div class="modal-body" style="text-align:left;">
+              <p><strong>Académie :</strong> <%= annual_program.academy.name %></p>
+              <p><strong>Programme :</strong> <%= annual_program.name %></p>
+              <p><strong>Élèves inscrits :</strong> <%= annual_program.students_count %></p>
+
+              <%= f.input :capacity,
+                          label: "Nouvelle capacité",
+                          input_html: {
+                            value: annual_program.capacity,
+                            class: "form-control mb-3",
+                            required: true,
+                            min: annual_program.students_count
+                          },
+                          hint: "La capacité ne peut pas être inférieure au nombre d'élèves déjà inscrits (#{annual_program.students_count})" %>
+
+              <%= f.input :price,
+                          label: "Prix (€)",
+                          input_html: {
+                            value: annual_program.price,
+                            class: "form-control mb-3",
+                            required: true,
+                            min: 0,
+                            step: 0.01
+                          } %>
+            </div>
+            <div class="modal-footer d-flex justify-content-around">
+              <%= f.submit "Valider", class: "btn-add-student btn-add-student-small" %>
+              <button type="button" class="btn-add-student btn-add-student-small btn-add-student-grey" data-bs-dismiss="modal">Annuler</button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
   <div class="flexy">
     <%= link_to new_managers_annual_program_path(academy: @academy), class: "btn-add-student btn-flex" do %>

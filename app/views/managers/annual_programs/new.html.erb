@@ -5,10 +5,11 @@
   <div class="header-nav-item active">NOUVEAU PROGRAMME</div>
 </div>
 <div class="yellow-title">NOUVEAU PROGRAMME ANNUEL</div>
-<div class="container">
-  <div class="flexy">
-    <%= form_with model: @annual_program, url: managers_annual_programs_path(academy: @academy), html: { style: 'width: 100%;' } do |f| %>
 
+<%= form_with model: @annual_program, url: managers_annual_programs_path(academy: @academy), data: { controller: "annual-program-price" } do |f| %>
+
+  <div class="row justify-content-center">
+    <div class="col-11">
       <div class="program-periods">
         <% @default_program_periods.each_with_index do |default_period, index| %>
           <div>
@@ -16,19 +17,56 @@
             <div class="period-content">
               <%= f.fields_for :program_periods, default_period do |program_period| %>
                 <%= program_period.label :start_date, 'Du' %>
-                <%= program_period.date_field :start_date, class: "form-control" %>
+                <%= program_period.date_field :start_date, class: "form-control", data: { controller: "date-picker" } %>
 
                 <%= program_period.label :end_date, 'Au (inclus)' %>
-                <%= program_period.date_field :end_date, class: "form-control" %>
+                <%= program_period.date_field :end_date, class: "form-control", data: { controller: "date-picker" } %>
               <% end %>
             </div>
           </div>
         <% end %>
       </div>
-
-      <div class="flexy mt-3">
-        <%= f.submit 'VALIDER', class: 'btn-add-student', data: { turbo_confirm: 'Avez-vous bien vérifié les dates de chaque période ?' } %>
-      </div>
-    <% end %>
+    </div>
   </div>
-</div>
+
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <div class="content-info mt-4" style="border-radius: 8px">
+        <div class="mb-3">
+          <%= f.label :capacity, "Nombre de places", class: 'form-label' %>
+          <%= f.number_field :capacity, class: "form-control", min: 1, required: true, placeholder: "Indiquez le nombre de places disponibles" %>
+        </div>
+        <div class="mb-4">
+          <label class="form-label mb-3">Le programme est-il payant ?</label>
+          <div class="d-flex gap-4">
+            <div class="form-check">
+              <%= f.radio_button :paid, true,
+                  data: { action: "change->annual-program-price#togglePriceRequired", annual_program_price_target: "paidTrue" },
+                  class: "form-check-input" %>
+              <%= f.label :paid, "Oui", value: true, class: "form-check-label" %>
+            </div>
+            <div class="form-check">
+              <%= f.radio_button :paid, false,
+                  data: { action: "change->annual-program-price#togglePriceRequired", annual_program_price_target: "paidFalse" },
+                  class: "form-check-input" %>
+              <%= f.label :paid, "Non", value: false, class: "form-check-label" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3" data-annual-program-price-target="price" style="display: block;">
+          <%= f.label :price, "Prix du programme (€)", class: 'form-label' %>
+          <div class="input-group">
+            <%= f.number_field :price, class: "form-control", value: nil, min: 0, placeholder: "Indiquez le prix" %>
+            <span class="input-group-text">€</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boutons d'action -->
+  <div class="flexy mt-4">
+    <%= f.submit 'VALIDER', class: 'btn-add-student', data: { turbo_confirm: 'Avez-vous bien vérifié les dates de chaque période ?' } %>
+  </div>
+<% end %>

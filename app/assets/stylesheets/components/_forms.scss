@@ -1,4 +1,3 @@
-
 .form-container {
   min-width: 300px;
   background-color: white;
@@ -28,6 +27,34 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  .form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-select, .form-control {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus {
+      background-color: white;
+      border-color: #86b7fe;
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    &:hover {
+      border-color: #adb5bd;
+    }
+  }
+
+  h6 {
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.5rem;
+  }
 }
 
 .edit-container {
@@ -38,11 +65,6 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   margin-top: 12px;
 }
-
-// .add-padding {
-//   padding: 20px;
-//   margin: 12px 0px;
-// }
 
 .form-no-shadow {
   box-shadow: none;
@@ -59,21 +81,300 @@
   min-width: 500px;
 }
 
-.tom-select {
-  padding: 0px!important;
+.ts-control {
+  background-color: #f8f9fa!important;
+  border: none!important;
+
+  .item {
+    font-size: 1rem;
+    background-color: white;
+  }
+}
+
+// Styles globaux pour tous les inputs (basés sur .activity-input)
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+input[type="url"],
+textarea {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    background-color: white;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    outline: 0;
+  }
+
+  &:hover {
+    border-color: #adb5bd;
+  }
+}
+
+// Styles spécifiques pour les selects
+.form-select,
+select {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  color: #495057;
+
+  &:focus {
+    background-color: white;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    outline: 0;
+  }
+
+  &:hover {
+    border-color: #adb5bd;
+  }
+
+  // Assurer que le texte reste visible après les mises à jour AJAX
+  option {
+    background-color: white;
+    color: #495057;
+  }
+}
+
+// Override spécifique pour academy-select pour maintenir son style noir
+.academy-select {
+  background-color: black !important;
+  color: white !important;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: black !important;
+    color: $yellow !important;
+  }
+
+  &:focus {
+    outline: none;
+    border: none;
+    background-color: black !important;
+    color: white !important;
+  }
+
+  option {
+    background-color: black;
+    color: white;
+  }
 }
 
 .activity-input {
-  background-color: white;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    background-color: white;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    outline: 0;
+  }
+
+  &:hover {
+    border-color: #adb5bd;
+  }
 }
 
-.ts-control {
-  border: none!important;
+.time-input {
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #495057;
+  min-width: 120px;
+  position: relative;
+
+  &::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+  }
+
+  &:focus {
+    background-color: white;
+    border-color: $yellow;
+    box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+    color: #212529;
+  }
+
+  &:hover {
+    border-color: $yellow;
+    background-color: #fffef7;
+  }
+
+  // Style pour les navigateurs qui supportent les pseudo-éléments
+  &::before {
+    content: "🕐";
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 14px;
+    opacity: 0.6;
+  }
 }
 
-.ts-dropdown {
-  font-size: 14px!important;
-}
+.schedule-container {
+
+  .schedule-days {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .schedule-day {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $yellow;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
+    }
+  }
+
+  .schedule-row {
+    margin: 0;
+  }
+
+  .day-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: $yellow;
+      cursor: pointer;
+    }
+
+    .day-label {
+      font-weight: 500;
+      color: #495057;
+      margin: 0;
+      cursor: pointer;
+      user-select: none;
+      flex: 1;
+    }
+  }
+
+  .time-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .time-input {
+      background-color: white;
+    }
+
+    .time-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #6c757d;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+         }
+   }
+ }
+
+ .camp-form-container {
+   .form-group-styled {
+     margin-bottom: 1.5rem;
+
+     .form-label-styled {
+       font-weight: 600;
+       color: #495057;
+       margin-bottom: 0.5rem;
+       font-size: 1rem;
+     }
+   }
+
+   .name-container {
+      .form-input-container, .date-input-container, .price-input-container {
+         display: flex;
+         flex-direction: column;
+         gap: 0.4rem;
+
+         .form-input-label, .date-label, .price-label {
+           font-size: 0.875rem;
+           font-weight: 500;
+           margin: 0;
+           text-transform: uppercase;
+           letter-spacing: 0.3px;
+         }
+       }
+   }
+
+   .date-input, .price-input {
+     font-weight: 500;
+     text-align: center;
+     color: #495057;
+
+     &:focus {
+       background-color: white;
+       border-color: $yellow;
+       box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+     }
+
+     &:hover {
+       border-color: #ffd700;
+       background-color: #fffef7;
+     }
+   }
+
+   .price-input {
+     &::before {
+       content: "€";
+       position: absolute;
+       right: 12px;
+       top: 50%;
+       transform: translateY(-50%);
+       pointer-events: none;
+       font-weight: 600;
+       color: #6c757d;
+     }
+   }
+
+   // Responsive design pour mobiles
+   @media (max-width: 768px) {
+     .dates-container, .pricing-container {
+       margin-top: 1rem !important;
+       padding: 1rem !important;
+     }
+
+     .row.g-3 {
+       --bs-gutter-x: 1rem;
+     }
+   }
+ }
 
 
 

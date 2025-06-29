@@ -32,10 +32,6 @@ class Camp < ApplicationRecord
   scope :full, -> { where("capacity <= (SELECT COUNT(*) FROM camp_enrollments WHERE camp_enrollments.camp_id = camps.id AND camp_enrollments.confirmed = true)") }
   scope :not_full, -> { where("capacity > (SELECT COUNT(*) FROM camp_enrollments WHERE camp_enrollments.camp_id = camps.id AND camp_enrollments.confirmed = true)") }
 
-  ###############################################################################
-  # Pour la waitlist d'un camp
-  ###############################################################################
-  #
 
   def format_starts_at_ends_at
     if starts_at && ends_at
@@ -53,6 +49,10 @@ class Camp < ApplicationRecord
     "#{academy.name}-#{school_period.full_name_short}-#{name}"
   end
 
+  def full_name_separator
+    "#{academy.name}-#{school_period.full_name_separator}-#{name}"
+  end
+
   def format_price
     if school_period.paid
       if price == 0
@@ -64,89 +64,6 @@ class Camp < ApplicationRecord
       "Gratuit"
     end
   end
-
-  def waitlist_full?
-    camp_enrollments.where(on_waitlist: true).count >= waitlist_capacity
-  end
-
-  def camp_enrollments_validated
-    camp_enrollments.where(on_waitlist: false).sort_by(&:created_at)
-  end
-
-  def camp_enrollments_waitlist
-    camp_enrollments.where(on_waitlist: true).sort_by(&:created_at)
-  end
-
-  ###############################################################################
-  # Pour la recherche de camps
-  ###############################################################################
-
-  # les camps qui n'ont pas encore commencé
-  def self.next_camps
-    where("starts_at > ?", Date.today)
-  end
-
-  # les camps qui ont commencé
-  def self.current_camps
-    where("starts_at <= ? AND ends_at >= ?", Date.today, Date.today)
-  end
-
-  # les camps qui sont terminés
-  def self.past_camps
-    where("ends_at < ?", Date.today)
-  end
-
-  # les camps qui n'ont pas encore commencé ou qui sont en cours
-  def self.current_or_next_camps
-    where("ends_at >= ?", Date.today)
-  end
-
-  # les camps qui ont commencé ou qui sont terminés
-  def self.current_or_next_camps_by_academy(academy)
-    joins(:school_period).where("school_periods.academy_id = ?", academy.id).where("ends_at >= ?", Date.today)
-  end
-
-  # les camps qui sont terminés
-  def self.past_camps_by_academy(academy)
-    joins(:school_period).where("school_periods.academy_id = ?", academy.id).where("ends_at < ?", Date.today)
-  end
-
-  # les camps qui n'ont pas encore commencé ou qui sont en cours
-  def self.current_or_next_camps_by_coach(coach)
-    joins(:coach_camps).where("coach_camps.coach_id = ?", coach.id).where("ends_at >= ?", Date.today)
-  end
-
-  # les camps qui sont terminés
-  def self.past_camps_by_coach(coach)
-    joins(:coach_camps).where("coach_camps.coach_id = ?", coach.id).where("ends_at < ?", Date.today)
-  end
-
-  # les camps qui n'ont pas encore commencé ou qui sont en cours
-  def self.current_or_next_camps_by_student(student)
-    joins(:camp_enrollments).where("camp_enrollments.student_id = ?", student.id).where("ends_at >= ?", Date.today)
-  end
-
-  # les camps qui sont terminés
-  def self.past_camps_by_student(student)
-    joins(:camp_enrollments).where("camp_enrollments.student_id = ?", student.id).where("ends_at < ?", Date.today)
-  end
-
-  # les camps qui n'ont pas encore commencé ou qui sont en cours
-  def self.current_or_next_camps_by_parent(parent)
-    joins(:camp_enrollments).where("camp_enrollments.student_id IN (?)", parent.children.pluck(:id)).where("ends_at >= ?", Date.today)
-  end
-
-  # les camps qui sont terminés
-  def self.past_camps_by_parent(parent)
-    joins(:camp_enrollments).where("camp_enrollments.student_id IN (?)", parent.children.pluck(:id)).where("ends_at < ?", Date.today)
-  end
-
-  # les camps qui n'ont pas encore commencé ou qui sont en cours
-  def self.current_or_next_camps_by_academy_and_coach(academy, coach)
-    joins(:school_period).joins(:coach_camps).where("school_periods.academy_id = ?", academy.id).where("coach_camps.coach_id = ?", coach.id).where("ends_at >= ?", Date.today)
-  end
-
-  ###################################################################################
 
   def short_name
     name.split("").first + name.split("").last
@@ -219,6 +136,14 @@ class Camp < ApplicationRecord
     else
       true
     end
+  end
+
+  def has_paid_enrollments?
+    camp_enrollments.where(paid: true).any?
+  end
+
+  def can_delete?
+    !has_paid_enrollments?
   end
 
   def started?

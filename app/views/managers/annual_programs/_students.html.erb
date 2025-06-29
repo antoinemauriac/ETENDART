@@ -1,8 +1,11 @@
 <%= turbo_frame_tag "selected_content" do %>
   <% if students.any? %>
-    <div class="flexy">
-      <%= link_to export_students_csv_managers_camp_path(camp, format: :csv) do %>
-        <i class="fa-solid fa-download fa-download-camp ml-0 mb-2"></i>
+    <div class="flexy mt-3 mb-3 d-flex flex-row">
+      <%= link_to export_annual_students_managers_annual_program_path(annual_program, format: :csv), class: 'btn-etendart-square btn-download mt-0' do %>
+        LES ÉLÈVES<i class="fa-solid fa-download"></i>
+      <% end %>
+      <%= link_to export_past_enrollments_managers_annual_program_path(annual_program, format: :csv), class: "btn-etendart-square btn-download mt-0" do %>
+        LES ABSENCES<i class="fa-solid fa-download"></i>
       <% end %>
     </div>
 
@@ -10,30 +13,20 @@
       <div class="card-row-container">
         <div class="row pb-2 pt-2 header-row sticky-header align-items-center">
           <div class="col flexy-row">Élève</div>
-          <% if academy.banished %>
-            <div class="col flexy-row small-col">Exclu ?</div>
-          <% end %>
           <div class="col flexy-row text-wrap text-center small-col">Cotisant ?</div>
-          <% if school_period.paid && camp.price > 0 %>
-            <div class="col flexy-row text-wrap text-center small-col">Stage payé ?</div>
+          <% if annual_program.paid %>
+            <div class="col flexy-row text-wrap text-center small-col">Programme payé ?</div>
           <% end %>
           <div class="col flexy-row text-wrap text-center small-col">Droit à l'image ?</div>
-          <% if school_period.tshirt %>
-            <div class="col flexy-row text-wrap text-center small-col">Tshirt reçu ?</div>
-          <% end %>
           <div class="col flexy-row small-col">Age</div>
           <div class="col flexy-row">Activité 1</div>
           <div class="col flexy-row">Activité 2</div>
           <div class="col flexy-row small-col">Suppr</div>
         </div>
-        <% all_students_with_free_judo = camp.all_students_with_free_judo %>
-        <%= render "managers/camps/student_list",
+        <%= render "managers/annual_programs/student_list",
               students: students,
-              camp: camp,
-              school_period: school_period,
-              academy: academy,
-              start_year: @start_year,
-              all_students_with_free_judo: all_students_with_free_judo %>
+              annual_program: annual_program,
+              start_year: start_year %>
       </div>
     </div>
   <% else %>

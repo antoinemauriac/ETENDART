@@ -6,6 +6,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
     student = @activity_enrollment.student
     activity = @activity_enrollment.activity
     camp_enrollment = student.camp_enrollments.find_by(camp: activity.camp)
+    annual_program_enrollment = student.annual_program_enrollments.find_by(annual_program: activity.annual_program)
 
     @activity_enrollment.destroy
     @next_course_enrollments = student.course_enrollments.where(course: activity.next_courses)
@@ -47,8 +48,8 @@ class Managers::ActivityEnrollmentsController < ApplicationController
       annual_program = activity.annual_program
       student_annual_courses = student.courses.joins(:activity).where("activities.annual_program_id = ?", annual_program.id)
 
-      if student_annual_courses.empty?
-        student.annual_program_enrollments.find_by(annual_program: annual_program).destroy
+      if student_annual_courses.empty? && annual_program_enrollment.paid == false
+        student.annual_program_enrollments.find_by(annual_program:).destroy
       end
       manage_membership(student, nil, annual_program)
 
@@ -74,7 +75,7 @@ class Managers::ActivityEnrollmentsController < ApplicationController
     end
     courses_during_civil_year = student.courses.where('starts_at >= ? AND starts_at <= ?', Date.new(start_year, 4, 7), Date.new(start_year + 1, 8, 31))
     membership = student.memberships.find_by(start_year: start_year)
-    if courses_during_civil_year.empty? && membership && membership.paid == false
+    if courses_during_civil_year.empty? && membership && !membership.paid
       membership&.destroy
     end
   end

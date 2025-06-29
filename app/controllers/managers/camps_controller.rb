@@ -22,7 +22,6 @@ class Managers::CampsController < ApplicationController
     authorize([:managers, @camp])
     @start_year = @camp.starts_at.month >= 9 ? @camp.starts_at.year : @camp.starts_at.year - 1
     @students = @camp.confirmed_students.includes(:memberships, :camp_enrollments, :school_period_enrollments, :activity_enrollments).order(:last_name)
-    # @camp_enrollments = @camp.camp_enrollments.includes(:student)
     @academy = @camp.academy
     @school_period = @camp.school_period
     render partial: "managers/camps/students", locals: { students: @students, camp: @camp, academy: @academy, school_period: @school_period }
@@ -52,6 +51,15 @@ class Managers::CampsController < ApplicationController
   def destroy
     camp = Camp.find(params[:id])
     authorize([:managers, camp])
+
+    # Vérifier s'il y a des inscriptions payées
+    paid_enrollments = camp.camp_enrollments.where(paid: true)
+    if paid_enrollments.any?
+      flash[:alert] = "Impossible de supprimer cette semaine : #{paid_enrollments.count} élève(s) ont déjà payé leur inscription."
+      redirect_to managers_school_period_path(camp.school_period)
+      return
+    end
+
     school_period_enrollments = SchoolPeriodEnrollment.where(school_period: camp.school_period)
     school_period_enrollments.each do |school_period_enrollment|
       camps = school_period_enrollment.student.camps.where(school_period: camp.school_period)
@@ -60,6 +68,18 @@ class Managers::CampsController < ApplicationController
     camp.destroy
     redirect_to managers_school_period_path(camp.school_period)
     flash[:notice] = "Semaine supprimée"
+  end
+
+  def update
+    @camp = Camp.find(params[:id])
+    authorize([:managers, @camp])
+
+    if @camp.update(camp_update_params)
+      flash[:notice] = "Capacité mise à jour avec succès"
+    else
+      flash[:alert] = "Erreur : " + @camp.errors.full_messages.join(", ")
+    end
+    redirect_to managers_school_period_path(@camp.school_period)
   end
 
   def export_students_csv
@@ -144,5 +164,9 @@ class Managers::CampsController < ApplicationController
 
   def camp_params
     params.require(:camp).permit(:name, :starts_at, :ends_at, :capacity, :waitlist_capacity, :price)
+  end
+
+  def camp_update_params
+    params.require(:camp).permit(:capacity, :price)
   end
 end

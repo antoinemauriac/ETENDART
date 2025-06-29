@@ -16,8 +16,21 @@ class Membership < ApplicationRecord
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
 
-  # after_update :get_payment_date, if: -> { saved_change_to_paid? && paid }
+  after_save :generate_offered_membership, if: -> { saved_change_to_paid? && paid && payment_method != "offert" }
 
+  def generate_offered_membership
+    return unless Date.current.between?(Date.new(Date.current.year, 5, 15), Date.new(Date.current.year, 8, 31))
+
+    Membership.create!(
+      student:,
+      start_year: start_year + 1,
+      paid: true,
+      amount: PRICE,
+      payment_method: "offert",
+      payment_date: Date.current,
+      receiver: User.find(94)
+    )
+  end
   # MÉTHODE QUI RENVOIE LES MEMBERSHIPS A PRIORI NON EXIGIBLES
   def self.with_all_course_enrollments_present_false
     joins(student: { course_enrollments: :course })

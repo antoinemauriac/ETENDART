@@ -28,13 +28,16 @@ class SchoolPeriod < ApplicationRecord
   before_validation :normalize_name
   before_save :set_default_price
 
-
   def full_name
     "#{name} - #{year}"
   end
 
   def full_name_short
     "#{name}#{year.to_s.last(2)}"
+  end
+
+  def full_name_separator
+    "#{name}-#{year.to_s.last(2)}"
   end
 
   def format_price
@@ -194,6 +197,10 @@ class SchoolPeriod < ApplicationRecord
            .count
   end
 
+  def can_delete?
+    students_count.zero?
+  end
+
   def can_import?
     if starts_at
       starts_at > Date.current
@@ -210,10 +217,6 @@ class SchoolPeriod < ApplicationRecord
     camps.sum(&:new_students_count)
   end
 
-  # def expected_revenue
-  #   camps.sum(&:expected_revenue)
-  # end
-  #
   def present_students_with_free_judo_ids
     camps.map(&:present_students_with_free_judo_ids).flatten
   end
@@ -232,12 +235,6 @@ class SchoolPeriod < ApplicationRecord
                     .count * price
   end
 
-  # def total_received_revenue
-  #   camp_enrollments.paid
-  #                   .where("payment_method IS NULL OR payment_method != ?", "offert")
-  #                   .count * price
-  # end
-
   def missing_revenue
     expected_revenue - received_revenue
   end
@@ -252,8 +249,8 @@ class SchoolPeriod < ApplicationRecord
 
   def total_deposit
     camp_deposits.sum(:cash_amount) +
-    camp_deposits.sum(:cheque_amount) +
-    camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * price
+      camp_deposits.sum(:cheque_amount) +
+      camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * price
   end
 
   def paid_students_count
@@ -263,10 +260,6 @@ class SchoolPeriod < ApplicationRecord
   def unpaid_students_count
     camp_enrollments.attended.unpaid.count
   end
-
-  # def missing_clarisse_revenue
-  #   camps.sum(&:missing_clarisse_revenue)
-  # end
 
   def present_students_with_free_judo_count
     camps.sum(&:present_students_with_free_judo_count)

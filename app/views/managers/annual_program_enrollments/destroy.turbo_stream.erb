@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "flash-messages" do %>
+  <%= render "shared/flashes" %>
+<% end %>
+
+<% unless @cannot_remove %>
+  <%= turbo_stream.remove "annual-program-enrollment-#{@annual_program_enrollment.id}" %>
+<% end %>

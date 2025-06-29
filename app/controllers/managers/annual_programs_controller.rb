@@ -55,8 +55,48 @@ class Managers::AnnualProgramsController < ApplicationController
     @annual_program = AnnualProgram.find(params[:id])
     @academy = @annual_program.academy
     authorize [:managers, @annual_program]
+  end
+
+  def update
+    @annual_program = AnnualProgram.find(params[:id])
+    authorize [:managers, @annual_program]
+
+    if @annual_program.update(annual_program_params)
+      redirect_to managers_annual_programs_path(academy: @annual_program.academy), notice: 'Le programme a été modifié avec succès.'
+    else
+      redirect_to managers_annual_programs_path(academy: @annual_program.academy), alert: 'Erreur lors de la modification du programme.'
+    end
+  end
+
+  def activities
+    @annual_program = AnnualProgram.find(params[:id])
+    @academy = @annual_program.academy
+    authorize [:managers, @annual_program]
     @activities = @annual_program.active_sorted_activities
-    @students = @annual_program.students.order(:last_name)
+    render partial: "managers/annual_programs/activities", locals: { activities: @activities, annual_program: @annual_program, academy: @academy }
+  end
+
+  def students
+    @annual_program = AnnualProgram.find(params[:id])
+    @academy = @annual_program.academy
+    authorize [:managers, @annual_program]
+    @students = @annual_program.confirmed_students.order(:last_name)
+    @start_year = @annual_program.starts_at.year
+    render partial: "managers/annual_programs/students", locals: { students: @students, annual_program: @annual_program, academy: @academy, start_year: @start_year }
+  end
+
+  def payments
+    @annual_program = AnnualProgram.find(params[:id])
+    @academy = @annual_program.academy
+    authorize [:managers, @annual_program]
+
+    if @annual_program.paid
+      @annual_program_enrollments = @annual_program.annual_program_enrollments.confirmed.includes(:student, :receiver).order('students.last_name ASC')
+    else
+      @annual_program_enrollments = []
+    end
+
+    render partial: "managers/annual_programs/payments", locals: { annual_program_enrollments: @annual_program_enrollments, annual_program: @annual_program }
   end
 
   def destroy
@@ -65,7 +105,7 @@ class Managers::AnnualProgramsController < ApplicationController
     authorize [:managers, annual_program]
     annual_program.destroy
     redirect_to managers_annual_programs_path(academy: academy)
-    flash[:notice] = "Activité supprimée"
+    flash[:notice] = "Programme supprimé"
   end
 
   def export_past_enrollments
@@ -127,6 +167,6 @@ class Managers::AnnualProgramsController < ApplicationController
   private
 
   def annual_program_params
-    params.require(:annual_program).permit(program_periods_attributes: [:id, :start_date, :end_date, :_destroy])
+    params.require(:annual_program).permit(:paid, :price, :capacity, program_periods_attributes: [:id, :start_date, :end_date, :_destroy])
   end
 end
