@@ -7,7 +7,7 @@
 </div>
 <div class="yellow-title">NOUVELLE ACTIVITÉ</div>
 
-<div class="flexy container">
+<div class="flexy container mb-4">
   <div class="form-container form-min-width" data-controller="annual-activity-form" data-annual-activity-form-academy-id-value="<%= @academy.id %>">
     <%= simple_form_for @activity, url: create_for_annual_managers_activity_path(annual_program: @annual_program), method: :post, data: { action: "submit->annual-activity-form#validateForm" } do |f| %>
       <%= f.input :name, label: "Nom", input_html: { class: "activity-input" } %>

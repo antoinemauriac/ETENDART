@@ -35,16 +35,21 @@ class Commerce::CheckoutController < ApplicationController
     return redirect_to root_path, alert: 'Ce panier ne vous appartient pas.' unless @cart&.parent == @parent
     return redirect_to root_path, notice: 'Le panier a déjà été payé.' if @cart.paid?
 
-    finalize_cart!(@cart)
+    ActiveRecord::Base.transaction do
+      finalize_cart!(@cart)
 
-    @academy = @cart.cart_items.find_by(product_type: 'CampEnrollment')&.product&.camp&.academy
-    @camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
-    @membership_cart_items = @cart.cart_items.where(product_type: 'Membership')
-    @enrollments = Commerce::CartItem.group_by_student(@camp_enrollment_cart_items)
+      @academy = @cart.cart_items.find_by(product_type: 'CampEnrollment')&.product&.camp&.academy ||
+                 @cart.cart_items.find_by(product_type: 'AnnualProgramEnrollment')&.product&.annual_program&.academy
+      @camp_enrollment_cart_items = @cart.cart_items.where(product_type: 'CampEnrollment')
+      @annual_program_enrollment_cart_items = @cart.cart_items.where(product_type: 'AnnualProgramEnrollment')
+      @membership_cart_items = @cart.cart_items.where(product_type: 'Membership')
+      @enrollments = Commerce::CartItem.group_by_student(@camp_enrollment_cart_items)
+      @annual_enrollments = Commerce::CartItem.group_by_student(@annual_program_enrollment_cart_items)
 
-    CheckoutMailer.payment_summary(@parent, @enrollments, @membership_cart_items, @academy).deliver_now
+      CheckoutMailer.payment_summary(@parent, @enrollments, @annual_enrollments, @membership_cart_items, @academy).deliver_now
 
-    Commerce::Cart.create!(parent: @parent, status: 'pending', total_price: 0) unless @parent.pending_cart
+      Commerce::Cart.create!(parent: @parent, status: 'pending', total_price: 0) unless @parent.pending_cart
+    end
   end
 
   def cancel
@@ -74,14 +79,19 @@ class Commerce::CheckoutController < ApplicationController
   def finalize_cart!(cart)
     cart.paid!
     cart.cart_items.where(payment_method: 'Carte bancaire').each do |item|
-      item.paid!
-      item.product.update!(payment_method: 'virement') if item.product_type == 'CampEnrollment'
+      item.product.update!(payment_method: 'virement', paid: true, payment_date: Date.current)
     end
 
     cart.cart_items.where(product_type: 'CampEnrollment').each do |item|
       item.product.update!(confirmed: true)
       item.product.update!(paid: true, payment_date: Date.current, payment_method: 'offert') if item.product.camp.price == 0
       confirm_activity_enrollments_for(item.product)
+    end
+
+    cart.cart_items.where(product_type: 'AnnualProgramEnrollment').each do |item|
+      item.product.update!(confirmed: true)
+      item.product.update!(paid: true, payment_date: Date.current, payment_method: 'offert') if item.product.annual_program.price == 0
+      confirm_annual_program_enrollments_for(item.product)
     end
   end
 
@@ -90,6 +100,18 @@ class Commerce::CheckoutController < ApplicationController
     camp_enrollment.camp.activities.each do |activity|
       activity_enrollment = student.activity_enrollments.find_by(activity: activity)
       next unless activity_enrollment
+
+      activity_enrollment.update!(confirmed: true)
+      student.courses << activity.next_courses
+    end
+  end
+
+  def confirm_annual_program_enrollments_for(annual_program_enrollment)
+    student = annual_program_enrollment.student
+    annual_program_enrollment.annual_program.activities.each do |activity|
+      activity_enrollment = student.activity_enrollments.find_by(activity: activity)
+      next unless activity_enrollment
+
       activity_enrollment.update!(confirmed: true)
       student.courses << activity.next_courses
     end

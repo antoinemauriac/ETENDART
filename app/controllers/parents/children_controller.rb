@@ -71,7 +71,8 @@ class Parents::ChildrenController < Parents::BaseController
     @membership = @child.memberships.find_by(start_year: @start_year)
     @memberships = @child.memberships.order(start_year: :desc)
     @camp_enrollments = @child.payable_camp_enrollments.includes(:camp).order('camps.starts_at DESC')
-    @camp_enrollment = @camp_enrollments.last
+    @annual_program_enrollments = @child.annual_program_enrollments.includes(:annual_program).order('annual_programs.starts_at DESC')
+    # @camp_enrollment = @camp_enrollments.last
 
   end
 

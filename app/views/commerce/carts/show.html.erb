@@ -46,7 +46,7 @@
         </div>
 
         <div class="col-4 col-md-3 align-items-center justify-content-end d-flex">
-          <%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €
+          <%= number_with_precision(cart_item.price, precision: 0, delimiter: ' ') %> €
         </div>
       </div>
 
@@ -65,14 +65,14 @@
         <% if cart_item.payment_method == 'offert' %>
            Gratuit
         <% else %>
-          <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item), data: { controller: "form--auto-submit" } do |f| %>
-          <%= f.select :payment_method, options_for_select([['Carte Bancaire', 'Carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash']], cart_item.payment_method), { }, { class: 'form-select', data: { action: "change->form--auto-submit#submit" } } %>
+          <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item), data: { controller: "form--auto-submit" }, html: { style: 'width: 100%;' } do |f| %>
+            <%= f.select :payment_method, options_for_select([['Carte Bancaire', 'Carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash']], cart_item.payment_method), { }, { class: 'form-select', data: { action: "change->form--auto-submit#submit" } } %>
           <% end %>
         <% end %>
       </div>
 
-      <div class="col-3 col-md-3 justify-content-md-end align-items-center d-flex p-2 order-2 order-md-3">
-        <%= number_with_precision(cart_item.price, precision: 2, delimiter: ',') %> €
+      <div class="col-3 col-md-3 justify-content-end align-items-center d-flex p-2 order-2 order-md-3">
+        <%= number_with_precision(cart_item.price, precision: 0, delimiter: ' ') %> €
       </div>
 
       <div class="col-4 col-md-2 justify-content-end justify-content-md-end align-items-center d-flex p-2 order-4">
@@ -83,19 +83,53 @@
 
       </div>
 
-      <% if cart_item != @camp_enrollment_cart_items.last %>
+      <hr class="border-secondary-subtle">
+
+    <% end %>
+
+    <% @annual_program_enrollment_cart_items.each do |cart_item| %>
+      <div class="row align-items-center">
+      <div class="col-9 col-md-4 align-items-center d-flex d-md-block justify-content-start justify-content-md-center p-2 order-1">
+        <%= cart_item.name %>
+      </div>
+
+      <div class="col-8 col-md-3 align-items-center d-flex d-md-block justify-content-md-center p-2 order-3 order-md-2">
+        <% if cart_item.payment_method == 'offert' %>
+           Gratuit
+        <% else %>
+          <%= simple_form_for cart_item, url: commerce_cart_item_path(cart_item), data: { controller: "form--auto-submit" }, html: { style: 'width: 100%;' } do |f| %>
+            <%= f.select :payment_method, options_for_select([['Carte Bancaire', 'Carte bancaire'], ['Chèque', 'cheque'], ['Espèces', 'cash'], ['Pass', 'pass']], cart_item.payment_method), { }, { class: 'form-select', data: { action: "change->form--auto-submit#submit" } } %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="col-3 col-md-3 justify-content-end align-items-center d-flex p-2 order-2 order-md-3">
+        <%= number_with_precision(cart_item.price, precision: 0, delimiter: ' ') %> €
+      </div>
+
+      <div class="col-4 col-md-2 justify-content-end justify-content-md-end align-items-center d-flex p-2 order-4">
+        <%= link_to commerce_cart_item_path(cart_item), data: { turbo_method: :delete, turbo_confirm: 'Êtes-vous sûr de vouloir supprimer ce produit de votre panier ?' } do %>
+         <i class="fa-solid fa-circle-xmark fa-black fa-small"></i>
+        <% end %>
+      </div>
+
+      </div>
+
+      <% if cart_item != @annual_program_enrollment_cart_items.last %>
         <hr class="border-secondary-subtle">
       <% else %>
         <hr class="border-secondary">
       <% end %>
     <% end %>
 
+
+
     <div class="row">
       <div class="col-8 col-md-10 text-md-end">
         A régler par carte bancaire:
       </div>
       <div class="col-4 col-md-2 text-end">
-        <%= number_with_precision(@total_cb, precision: 2, delimiter: ',') %> €
+        <%= number_with_precision(@total_cb, precision: 0, delimiter: ' ') %> €
       </div>
       <hr class="border-secondary mt-4 mb-4">
 
@@ -103,19 +137,18 @@
         A régler le jour du stage:
       </div>
       <div class="col-4 col-md-2 text-end">
-        <%= number_with_precision(@total_other, precision: 2, delimiter: ',') %> €
+        <%= number_with_precision(@total_other, precision: 0, delimiter: ' ') %> €
       </div>
       <hr class="border-secondary mt-4 mb-4">
       <div class="col-8 col-md-10 text-md-end">
         <strong>Total:</strong>
       </div>
       <div class="col-4 col-md-2 text-end">
-       <strong><%= number_with_precision(@cart.total_price, precision: 2, delimiter: ',') %> €</strong>
+       <strong><%= number_with_precision(@cart.total_price, precision: 0, delimiter: ' ') %> €</strong>
       </div>
     </div>
 
     <div class="text-center my-3 mt-4">
-
       <% if @total_cb > 0 %>
         <%= link_to 'Finaliser le paiement', commerce_new_checkout_path, data: { turbo: "false", disable_with: "Traitement en cours..." }, class: 'btn btn-dark rounded-3 px-4 py-2' %>
 
@@ -130,10 +163,15 @@
   </section>
 
 <% else %>
-  <div class="container mt-5">
-    <h6 class="text-center">Votre panier est actuellement vide.</h6>
-    <h6 class="text-center mb-0 mt-4">
-       <%= link_to 'Nouvelle inscription stage', parents_academies_path, class: "col-12 col-lg-6 btn rounded-4 px-4 py-3  mb-3 border btn-parent" %>
-    </h6>
+  <div class="row justify-content-center mt-3">
+    <div class="col-12 col-md-6 mt-3 mt-md-0 row justify-content-center align-items-center flex-column">
+      <h6 class="text-center">Votre panier est actuellement vide.</h6>
+      <h6 class="text-center mb-0 mt-3">
+        <%= link_to 'Inscription Stage', parents_academies_path, class: "col-12 col-lg-6 btn rounded-4 px-4 py-3  mb-3 border btn-parent" %>
+      </h6>
+      <h6 class="text-center mb-0 mb-3">
+        <%= link_to 'Inscription Programme Annuel', parents_annual_programs_path, class: "col-12 col-lg-6 btn rounded-4 px-4 py-3 border btn-parent" %>
+      </h6>
+    </div>
   </div>
 <% end %>

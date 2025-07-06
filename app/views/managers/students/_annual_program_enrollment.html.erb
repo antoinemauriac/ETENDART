@@ -8,7 +8,7 @@
     <% else %>
       <td class="align-middle"></td>
     <% end %>
-    <td class="align-middle"><%= annual_program_enrollment&.payment_method %></td>
+    <td class="align-middle"><%= human_payment_method(annual_program_enrollment&.payment_method) %></td>
   <% else %>
     <td colspan="2" class="align-middle text-center">
       <div style="display: flex; justify-content: center;">

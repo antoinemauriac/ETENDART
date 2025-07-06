@@ -9,7 +9,7 @@
     <% else %>
       <td class="align-middle"></td>
     <% end %>
-    <td class="align-middle"><%= camp_enrollment&.payment_method %></td>
+    <td class="align-middle"><%= human_payment_method(camp_enrollment&.payment_method) %></td>
   <% else %>
     <td colspan="2" class="align-middle text-center">
       <div style="display: flex; justify-content: center;">
@@ -31,7 +31,7 @@
                 <%= f.input :payment_method,
                             label: "Moyen de paiement",
                             required: true,
-                            collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                            collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert'], ['Financé', 'financed']],
                             prompt: "Sélectionner",
                             input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
 

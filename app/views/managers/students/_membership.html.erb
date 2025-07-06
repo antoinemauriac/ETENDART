@@ -7,7 +7,7 @@
     <td class="align-middle"></td>
   <% end %>
   <% if membership.paid %>
-    <td class="align-middle"><%= membership&.payment_method  %></td>
+    <td class="align-middle"><%= human_payment_method(membership&.payment_method) %></td>
   <% else %>
     <td class="align-middle">
       <button type="button" class="btn-add-student btn-add-pink" data-bs-toggle="modal" data-bs-target="#membership<%=membership.id%>Modal">
@@ -27,7 +27,7 @@
                   <%= f.input :payment_method,
                               label: "Moyen de paiement",
                               required: true,
-                              collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                              collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert'], ['Financé', 'financed']],
                               prompt: "Sélectionner",
                               input_html: { data: { action: "change->payment-method#toggleReceiverRequired" } } %>
                   <%= f.input :receiver_id,

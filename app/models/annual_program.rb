@@ -16,6 +16,9 @@ class AnnualProgram < ApplicationRecord
 
   has_one :annual_program_stat, dependent: :destroy
 
+  scope :not_full, -> { where("capacity > (SELECT COUNT(*) FROM annual_program_enrollments WHERE annual_program_enrollments.annual_program_id = annual_programs.id AND annual_program_enrollments.confirmed = true)") }
+  scope :full, -> { where("capacity <= (SELECT COUNT(*) FROM annual_program_enrollments WHERE annual_program_enrollments.annual_program_id = annual_programs.id AND annual_program_enrollments.confirmed = true)") }
+
   accepts_nested_attributes_for :program_periods, reject_if: :all_blank, allow_destroy: true
   validate :validate_program_periods
   validate :validate_capacity
@@ -79,6 +82,10 @@ class AnnualProgram < ApplicationRecord
 
   def name
     "#{starts_at.year} - #{starts_at.year + 1}"
+  end
+
+  def short_name
+    "#{starts_at.year}/#{starts_at.year + 1}"
   end
 
   def find_all_specific_days(day_name)

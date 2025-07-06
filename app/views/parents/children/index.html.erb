@@ -4,7 +4,6 @@
 
 <% if @existing_children %>
   <section class="container my-5">
-      <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" data-controller="form--children--modal" data-form--children--modal-target="modal">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -28,7 +27,6 @@
         </div>
       </div>
       <%= simple_form_for :assign_children, url: assign_children_parents_children_path, method: :post, html: { data: { controller: "form--children--select-check" } } do |f| %>
-
         <ul class="px-1 row g-3 justify-content-center flex-column align-items-center">
           <% @existing_children.each do |child| %>
 
@@ -102,54 +100,56 @@
 
 <section class="container">
   <% if @parent.children.any? %>
-
     <div class="row g-3 justify-content-center mb-3">
       <% @parent.children.each do |child| %>
         <div class="col-12 col-md-6">
           <%= link_to parents_child_path(child) do %>
           <section class="card rounded-4 bg-white p-3 h-100 border-0">
             <section class="row g-3">
-            <div class="col-3">
-              <div class="ratio ratio-1x1">
-              <% if child.photo.key %>
-                      <%= cl_image_tag child.photo_or_default,
-                        data: { upload_photo_target: "photo" },
-                        crop: "thumb",
-                        class: "avatar-small-parent",
-                        gravity: "face",
-                        width: 300,
-                        height: 300 %>
-              <% else %>
-                <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
-              <% end %>
-              </div>
-            </div>
-            <div class="col-9">
-              <h2 class="card-title fs-6 p-2 bg-black text-white text-center rounded-4">
-              <%= child.first_name %> <%= child.last_name.upcase %>
-              </h2>
-              <ul class="card-text">
-              <li class="p-1">
-                <%= child.age %> ans
-              </li>
-              <li class="p-1 d-flex align-items-center">
-                COTISANT <%= @start_year %>-<%= @start_year + 1 %>
-                <% if child&.current_membership&.paid %>
-                <i class="fa-solid fa-circle-check text-success fa-small ms-2"></i>
+              <div class="col-3">
+                <div class="ratio ratio-1x1">
+                <% if child.photo.key %>
+                        <%= cl_image_tag child.photo_or_default,
+                          data: { upload_photo_target: "photo" },
+                          crop: "thumb",
+                          class: "avatar-small-parent",
+                          gravity: "face",
+                          width: 300,
+                          height: 300 %>
                 <% else %>
-                <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small ms-2"></i>
+                  <%= image_tag 'defaultvalue/profile-photo.png', class: "img-fluid rounded-circle object-fit-cover border" %>
                 <% end %>
-              </li>
-              </ul>
-            </div>
+                </div>
+              </div>
+              <div class="col-9">
+                <h2 class="card-title fs-6 p-2 bg-black text-white text-center rounded-4">
+                <%= child.first_name %> <%= child.last_name.upcase %>
+                </h2>
+                <ul class="card-text">
+                <li class="p-1">
+                  <%= child.age %> ans
+                </li>
+                <li class="p-1 d-flex align-items-center">
+                  COTISANT <%= @start_year %>-<%= @start_year + 1 %>
+                  <% if child&.current_membership&.paid %>
+                    <i class="fa-solid fa-circle-check text-success fa-small ms-2"></i>
+                  <% else %>
+                    <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small ms-2"></i>
+                  <% end %>
+                </li>
+                </ul>
+              </div>
             </section>
           </section>
           <% end %>
         </div>
       <% end %>
-      <div class="col-12 col-md-6 mt-3 mt-md-0 row justify-content-center align-items-center flex-column">
+      <div class="col-12 col-md-8 mt-3 mt-md-0 row justify-content-center align-items-center flex-column">
           <h6 class="text-center mb-0 mt-3">
-            <%= link_to 'Inscrire aux stages', parents_academies_path, class: "col-12 col-lg-6 btn rounded-4 px-4 py-3  mb-3 border btn-parent" %>
+            <%= link_to 'Inscription Stage', parents_academies_path, class: "col-12 col-lg-6 btn rounded-4 px-4 py-3  mb-3 border btn-parent" %>
+          </h6>
+          <h6 class="text-center mb-0 mb-3">
+            <%= link_to 'Inscription Programme Annuel', parents_annual_programs_path, class: "col-12 col-lg-6 btn rounded-4 px-4 py-3 border btn-parent" %>
           </h6>
           <h6 class="text-center mb-0">
             <%= link_to 'Ajouter un enfant', new_parents_child_path, class: "col-12 col-lg-6 btn btn-dark rounded-4 px-4 py-3" %>

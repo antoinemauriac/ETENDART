@@ -11,8 +11,6 @@ class Managers::AnnualProgramEnrollmentsController < ApplicationController
       annual_program = @annual_program_enrollment.annual_program
 
       if @annual_program_enrollment.destroy
-        student.activity_enrollments.where(activity: annual_program.activities).destroy_all
-        student.course_enrollments.where(course: annual_program.courses).destroy_all
         manage_membership(student, annual_program)
         flash.now[:notice] = "Élève retiré du programme"
       else

@@ -1,0 +1,191 @@
+<%= simple_form_for annual_program_enrollment, url: parents_annual_program_annual_program_enrollments_path(annual_program) do |f| %>
+  <section class="row" data-controller="form--enrollment--annual-program-error-submit">
+    <%# hidden field contenant le selected_student %>
+    <%= f.hidden_field :student_id, value: student.id %>
+    <%= f.hidden_field :annual_program_id, value: annual_program.id %>
+
+    <% if annual_programs.any? %>
+      <div class="col-12 my-3" style="padding-left: 0;">
+        <p style="padding-left: 0;"><em>*Choisir une activité sport et une activité éveil</em></p>
+
+        <section class="row" id="annual_program_<%= annual_program.id %>" data-controller="form--enrollment--annual-program">
+          <div class="row" style="padding-left: 0;">
+            <div class="col-12 col-sm-6" style="padding-left: 0;">
+              <h6 style="font-size: 0.9rem" class="form-label d-block mb-2 fw-bold mt-0">SPORT</h6>
+              <% sport_activities = activities.joins(:category).where(categories: { super_category: "Sport" }) %>
+              <% selected_sport_activities = sport_activities.select { |activity| !activity.age_restricted || activity.min_age <= student.age && activity.max_age >= student.age } %>
+              <% selected_sport_activities.each_with_index do |activity, index| %>
+                <div class="form-check d-flex align-items-center justify-content-start" style="padding-left: 0;">
+                  <% if selected_sport_activities.count == 1 %>
+                    <%= check_box_tag "annual_program_enrollment[sport_activity_id]",
+                        activity.id,
+                        true,
+                        id: "sport_activity_#{activity.id}",
+                        class: "me-3 me-sm-2",
+                        style: "transform: scale(1.2);",
+                        data: {
+                          form__enrollment__annual_program_target: "sportActivities",
+                          form__enrollment__annual_program_error_submit_target: "sportActivity",
+                          action: "change->form--enrollment--annual-program-error-submit#validateForm"
+                        } %>
+                    <%= label_tag "sport_activity_#{activity.id}", "#{activity.name} (#{l(activity.courses.first.starts_at, format: '%A')} #{activity.hour_range})" %>
+                  <% else %>
+                    <%= check_box_tag "annual_program_enrollment[sport_activity_id]",
+                        activity.id,
+                        false,
+                        id: "sport_activity_#{activity.id}",
+                        class: "me-3 me-sm-2",
+                        style: "transform: scale(1.2);",
+                        data: {
+                          form__enrollment__annual_program_target: "sportActivities",
+                          form__enrollment__annual_program_error_submit_target: "sportActivity",
+                          action: "change->form--enrollment--annual-program-error-submit#validateForm"
+                        } %>
+                    <%= label_tag "sport_activity_#{activity.id}", "#{activity.name} (#{l(activity.courses.first.starts_at, format: '%A')} #{activity.hour_range})" %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+
+            <div class="col-12 col-md-6" style="padding-left: 0;">
+              <h6 class="form-label d-block mb-2 fw-bold mt-md-0 mt-3">ÉVEIL</h6>
+              <% eveil_activities = activities.joins(:category).where(categories: { super_category: ["Eveil", "Cuisine"] }) %>
+              <% selected_eveil_activities = eveil_activities.select { |activity| !activity.age_restricted || activity.min_age <= student.age && activity.max_age >= student.age } %>
+              <% selected_eveil_activities.each_with_index do |activity, index| %>
+                <div class="form-check d-flex align-items-center justify-content-start" style="padding-left: 0;">
+                  <% if selected_eveil_activities.count == 1 %>
+                    <%= check_box_tag "annual_program_enrollment[eveil_activity_id]",
+                        activity.id,
+                        true,
+                        id: "eveil_activity_#{activity.id}",
+                        class: "me-3 me-sm-2",
+                        style: "transform: scale(1.2);",
+                        data: {
+                          form__enrollment__annual_program_target: "eveilActivities",
+                          form__enrollment__annual_program_error_submit_target: "eveilActivity",
+                          action: "change->form--enrollment--annual-program-error-submit#validateForm"
+                        } %>
+                    <%= label_tag "eveil_activity_#{activity.id}", "#{activity.name} (#{l(activity.courses.first.starts_at, format: '%A')} #{activity.hour_range})" %>
+                  <% else %>
+                    <%= check_box_tag "annual_program_enrollment[eveil_activity_id]",
+                        activity.id,
+                        false,
+                        id: "eveil_activity_#{activity.id}",
+                        class: "me-3 me-sm-2",
+                        style: "transform: scale(1.2);",
+                        data: {
+                          form__enrollment__annual_program_target: "eveilActivities",
+                          form__enrollment__annual_program_error_submit_target: "eveilActivity",
+                          action: "change->form--enrollment--annual-program-error-submit#validateForm"
+                        } %>
+                    <%= label_tag "eveil_activity_#{activity.id}", "#{activity.name} (#{l(activity.courses.first.starts_at, format: '%A')} #{activity.hour_range})" %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+
+            <% soutien_activities = activities.joins(:category).where(categories: { super_category: "Soutien Scolaire" }) %>
+            <% selected_soutien_activities = soutien_activities.select { |activity| !activity.age_restricted || activity.min_age <= student.age && activity.max_age >= student.age } %>
+
+            <% if selected_soutien_activities.any? %>
+              <div class="col-12" style="padding-left: 0; margin-top: 20px;">
+              <p style="padding-left: 0;"><em>*Voulez-vous participer au soutien scolaire ?</em></p>
+                <h6 class="form-label d-block mb-2 fw-bold mt-0">SOUTIEN SCOLAIRE</h6>
+                <% activity = selected_soutien_activities.first %>
+                  <div class="form-check d-flex align-items-center justify-content-start" style="padding-left: 0;">
+                    <%= radio_button_tag "annual_program_enrollment[soutien_activity_id]",
+                        activity.id,
+                        false,
+                        id: "soutien_activity_#{activity.id}",
+                        class: "me-3 me-sm-2",
+                        style: "transform: scale(1.2);",
+                        data: {
+                          form__enrollment__annual_program_target: "soutienActivities",
+                          form__enrollment__annual_program_error_submit_target: "soutienActivity",
+                          action: "change->form--enrollment--annual-program-error-submit#validateForm"
+                        } %>
+                    <%= label_tag "soutien_activity_#{activity.id}", "Oui - (#{l(activity.courses.first.starts_at, format: '%A')} #{activity.hour_range})" %>
+                  </div>
+
+                  <div class="form-check d-flex align-items-center justify-content-start" style="padding-left: 0;">
+                    <%= radio_button_tag "annual_program_enrollment[soutien_activity_id]",
+                        "",
+                        false,
+                        id: "soutien_activity_none",
+                        class: "me-3 me-sm-2",
+                        style: "transform: scale(1.2);",
+                        data: {
+                          form__enrollment__annual_program_target: "soutienActivities",
+                          form__enrollment__annual_program_error_submit_target: "soutienActivity",
+                          action: "change->form--enrollment--annual-program-error-submit#validateForm"
+                        } %>
+                    <%= label_tag "soutien_activity_none", "Non" %>
+                  </div>
+              </div>
+            <% end %>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-12 text-center">
+        <div class="text-danger mb-2 d-none" data-form--enrollment--annual-program-error-submit-target="errorMessage">
+          Veuillez sélectionner une activité sport et une activité éveil
+        </div>
+        <% if students.count <= 1 %>
+          <h6 class="text-center mb-0 mt-3">
+            <%= f.submit "Valider",
+                class: "col-12 col-md-6 col-lg-4 btn btn-dark rounded-4 px-4 py-3 mt-3 mb-3 border",
+                role: "button",
+                data: { form__enrollment__annual_program_error_submit_target: "submitButton" } %>
+          </h6>
+        <% else %>
+          <h6 class="text-center mb-0 mt-3">
+            <button type="button"
+                    class="col-12 col-md-6 col-lg-4 btn btn-dark rounded-4 px-4 py-3 mt-3 mb-3 border"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                    data-form--enrollment--annual-program-error-submit-target="submitButton"
+                    disabled>
+              Valider
+            </button>
+          </h6>
+
+          <!-- Modal -->
+          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Souhaitez-vous inscrire un autre enfant ?</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <section class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="w-100 w-md-75">
+                      <%= f.submit "Inscrire un autre enfant",
+                      class: "btn btn-dark rounded-4 px-4 py-2 mb-4 w-100",
+                      name: "another_child",
+                      data_bs_dismiss: "modal" %>
+                    </div>
+                    <div class="w-100 w-md-75">
+                      <%= f.submit "Passer au règlement",
+                      class: "btn btn-dark parent-title white-hover rounded-4 px-4 py-2 w-100",
+                      name: "another_child",
+                      data_bs_dismiss: "modal" %>
+                    </div>
+                    </section>
+                </div>
+                <div class="modal-footer"></div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="col-12 text-center mt-4">
+        <p class="text-danger">
+          <%= student.full_name %> est déjà inscrit à ce programme annuel.
+        </p>
+      </div>
+    <% end %>
+  </section>
+<% end %>

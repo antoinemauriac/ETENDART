@@ -21,13 +21,13 @@ class Managers::ImportStudentsController < ApplicationController
       school_period.school_period_enrollments.each do |school_period_enrollment|
         camps = school_period_enrollment.student.camps.where(school_period: school_period)
         if camps == [camp] || camps.empty?
-          school_period_enrollment.destroy
+          school_period_enrollment&.destroy
         end
       end
 
-      camp.camp_enrollments.where(paid: false).destroy_all
-      ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id).destroy_all
-      CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id).destroy_all
+      camp.camp_enrollments.where(paid: false)&.destroy_all
+      ActivityEnrollment.joins(:activity).where('activities.camp_id = ?', camp.id)&.destroy_all
+      CourseEnrollment.joins(course: :activity).where('activities.camp_id = ?', camp.id)&.destroy_all
 
       # Step 2: Process each student record from the CSV file
       students.each do |student|
@@ -107,7 +107,7 @@ class Managers::ImportStudentsController < ApplicationController
           end
           if Membership::PAYMENT_METHODS.compact.include?(row['cotisation']) && membership.paid == false
             membership.update(paid: true, payment_method: row['cotisation'], payment_date: Date.current, receiver_id: current_user.id)
-            if membership.payment_method == 'virement'
+            if ['virement', 'hello_asso', 'pass'].include?(membership.payment_method)
               membership.update(receiver_id: nil)
             end
           end

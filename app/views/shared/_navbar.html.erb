@@ -42,24 +42,6 @@
                       <%= link_to "ÉLÈVES", index_for_admin_managers_students_path, class: "nav-link nav-link-small nav-academy" %>
                     </span>
                   </div>
-                 <!-- <div class="dropdown-sub">
-                    <span class="full-width-link">
-                      <div class="nav-link nav-link-small nav-academy">FINANCE</div>
-                    </span>
-                    <div class="sub-content">
-                      <%#= link_to "COTISATION", membership_finances_overview_managers_finances_path %>-->
-                      <%#= link_to "STAGES", managers_finances_path %>
-<!--                    </div>
-                  </div>
-                  <div class="dropdown-sub">
-                    <span class="full-width-link">
-                      <div class="nav-link nav-link-small nav-academy">BILAN</div>
-                    </span>
-                    <div class="sub-content">
-                      <%#= link_to "STAGES", index_for_admin_managers_school_periods_path %>-->
-                      <%#= link_to "PROGRAMMES", index_for_admin_managers_annual_programs_path %>
-<!--                    </div>
-                  </div>-->
               </div>
             </div>
           <% end %>
@@ -134,6 +116,13 @@
               <% end %>
             </h6>
           </li>
+          <li class="nav-item">
+            <h6 class="mb-0">
+              <%= link_to parents_annual_programs_path, class: "nav-link pt-3 pb-2" do %>
+                PROGRAMME ANNUEL <i class="fa-solid fa-calendar-alt ms-2"></i>
+              <% end %>
+            </h6>
+          </li>
           <li class="nav-item d-flex align-items-center">
             <h6 class="mb-0">
               <%= link_to commerce_cart_path, class: "nav-link pt-3 pb-2" do %>
@@ -173,6 +162,9 @@
         </li>
         <li class="nav-item">
           <h6 class="mb-0"><%= link_to "STAGES", "/#programmation", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
+        </li>
+        <li class="nav-item">
+          <h6 class="mb-0"><%= link_to "PROGRAMME ANNUEL", "/#programme-annuel", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>
         </li>
         <li class="nav-item">
           <h6 class="mb-0"><%= link_to "IMPACT", "/#impact", class: "nav-link pt-3 pb-2", data: { action: "click->navbar#closeMenu" } %></h6>

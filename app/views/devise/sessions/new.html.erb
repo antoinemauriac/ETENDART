@@ -3,6 +3,7 @@
     <h2 class="bg-black p-2 rounded-4 text-white text-center mb-4">Connexion</h2>
 
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: :false }) do |f| %>
+      <h6 class="mb-4" style="font-size:0.75rem">J'ai déjà un compte</h6>
       <div class="form-inputs">
         <%= f.input :email,
                     required: false,

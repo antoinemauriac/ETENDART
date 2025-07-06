@@ -17,6 +17,6 @@ class Parents::AcademyPolicy < ApplicationPolicy
   end
 
   def show?
-    record.new_format
+    true
   end
 end

@@ -7,8 +7,8 @@ class CampEnrollment < ApplicationRecord
 
   has_one :cart_item, as: :product, class_name: 'Commerce::CartItem', dependent: :destroy
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
-  validates :payment_method, inclusion: { in: Membership::PAYMENT_METHODS }
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "financed", nil].freeze
+  validates :payment_method, inclusion: { in: PAYMENT_METHODS }
   validate :receiver_presence_for_specific_payment_methods
 
   scope :attended, -> { where(present: true) }
@@ -20,6 +20,8 @@ class CampEnrollment < ApplicationRecord
 
   scope :paid, -> { where(paid: true) }
   scope :unpaid, -> { where(paid: false) }
+
+  after_destroy :destroy_activity_enrollments
 
   def camp_starts_at
     camp.starts_at
@@ -34,6 +36,15 @@ class CampEnrollment < ApplicationRecord
   def receiver_presence_for_specific_payment_methods
     if ["cash", "cheque"].include?(payment_method) && receiver_id.blank?
       errors.add(:base, "Pour le paiement en espèces, chèque ou offert, vous devez préciser la personne ayant reçu le paiement.")
+    end
+  end
+
+  def destroy_activity_enrollments
+    school_period = camp.school_period
+    student.activity_enrollments.where(activity: camp.activities)&.destroy_all
+    camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
+    if camp_enrollments.empty?
+      student.school_period_enrollments.find_by(school_period: school_period)&.destroy
     end
   end
 end

@@ -23,7 +23,7 @@
       <% if school_period.paid %>
         <% if camp_enrollment.paid? %>
           <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment&.payment_date&.strftime("%d/%m/%Y") %></td>
-          <td class="align-middle d-none d-md-table-cell"><%= camp_enrollment.payment_method %></td>
+          <td class="align-middle d-none d-md-table-cell"><%= human_payment_method(camp_enrollment.payment_method) %></td>
         <% else %>
           <td colspan="2" class="align-middle text-center d-none d-md-table-cell">
               A payer pendant le stage

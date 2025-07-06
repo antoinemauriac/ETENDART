@@ -25,3 +25,12 @@
       <%= render "parents/children/components/camp-enrollments-card", camp_enrollments: @camp_enrollments %>
     </div>
 </section>
+
+<section class="container my-3 shadow p-0 rounded-4 bg-white">
+  <h4 class="text-center p-3 bg-black text-white rounded-top-4">
+    Programmes annuels
+  </h4>
+  <div class="bg-white rounded-bottom-4 p-3">
+    <%= render "parents/children/components/annual-programs-card", annual_program_enrollments: @annual_program_enrollments %>
+  </div>
+</section>
