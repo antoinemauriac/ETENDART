@@ -6,7 +6,7 @@ class AnnualProgramEnrollment < ApplicationRecord
 
   has_one :cart_item, as: :product, class_name: 'Commerce::CartItem', dependent: :destroy
 
-  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", nil].freeze
+  PAYMENT_METHODS = ["cash", "cheque", "hello_asso", "pass", "virement", "offert", "financed", nil].freeze
   validates :payment_method, inclusion: { in: PAYMENT_METHODS }
   validate :receiver_presence_for_specific_payment_methods
 

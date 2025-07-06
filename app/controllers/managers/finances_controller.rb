@@ -111,7 +111,7 @@ class Managers::FinancesController < ApplicationController
     @school_period = @camp.school_period
     @price = @camp.price
     @academy = @camp.academy
-    @camp_enrollments = @camp.camp_enrollments
+    @camp_enrollments = @camp.camp_enrollments.confirmed
     # GLOBAL
     show_students = @camp.show_students
     @paid_camp_enrollments = @camp_enrollments.paid
