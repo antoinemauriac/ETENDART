@@ -1,4 +1,6 @@
 class Parents::AcademiesController < Parents::BaseController
+  skip_before_action :authenticate_user!, only: [:index, :show]
+
   def index
     @academies = policy_scope([:parents, Academy])
     @school_periods = SchoolPeriod.with_future_camps

@@ -9,16 +9,9 @@ class Managers::CampEnrollmentsController < ApplicationController
     else
       student = @camp_enrollment.student
       camp = @camp_enrollment.camp
-      school_period = camp.school_period
 
       if @camp_enrollment.destroy
-        student.activity_enrollments.where(activity: camp.activities).destroy_all
-        student.course_enrollments.where(course: camp.courses).destroy_all
         manage_membership(student, camp)
-        camp_enrollments = student.camp_enrollments.where(camp: school_period.camps)
-        if camp_enrollments.empty?
-          student.school_period_enrollments.find_by(school_period: school_period).destroy
-        end
         flash.now[:notice] = "Élève retiré de la semaine"
       else
         flash.now[:alert] = "Erreur lors de la suppression"

@@ -97,10 +97,37 @@
                           <% end %>
                       <% end %>
 
+                      <% if @annual_enrollments.any? %>
+                          <h4>INSCRIPTION AU PROGRAMME ANNUEL</h4>
+                          <% @annual_enrollments.each do |student_name, programs| %>
+                              <strong><p><%= student_name %> :</p></strong>
+                              <ul>
+                                  <% programs.each do |program| %>
+                                      <li>
+                                          <span class="program-name">
+                                              <strong><%= program[:program_name] %></strong> - <%= program[:program_dates] %> - <%= program[:program_price].to_i %> €
+                                              <% unless program[:paid] %>
+                                                  <span class="payment-notice">(À payer au premier jour du programme)</span>
+                                              <% end %>
+                                          </span>
+                                          <ul>
+                                              <% program[:activities].each do |activity| %>
+                                                  <li>
+                                                      Activité <%= activity[:category] %> : <%= activity[:name] %> (<%= activity[:hour_range] %>) - <%= activity[:location] %>
+                                                  </li>
+                                              <% end %>
+                                          </ul>
+                                      </li>
+                                  <% end %>
+                              </ul>
+                          <% end %>
+                      <% end %>
+
                       <%# Résumé des montants à payer %>
                       <% unpaid_camps = @enrollments.flat_map { |student_name, camps| camps.select { |camp| !camp[:paid] }.map { |camp| camp.merge(student_name: student_name) } } %>
-                      <% if unpaid_camps.any? %>
-                            <h4>Montant restant à payer en chèque ou espèce - A régler le premier jour du stage</h4>
+                      <% unpaid_programs = @annual_enrollments.flat_map { |student_name, programs| programs.select { |program| !program[:paid] }.map { |program| program.merge(student_name: student_name) } } %>
+                      <% if unpaid_camps.any? || unpaid_programs.any? %>
+                            <h4>Montant restant à payer en chèque ou espèce - A régler le premier jour du stage/programme</h4>
                           <ul>
                               <% unpaid_camps.each do |camp| %>
                                   <li>
@@ -108,8 +135,14 @@
                                       <%= camp[:camp_price].to_i %> €
                                   </li>
                               <% end %>
+                              <% unpaid_programs.each do |program| %>
+                                  <li>
+                                      <%= program[:student_name] %> - Programme Annuel <%= program[:program_name] %> -
+                                      <%= program[:program_price].to_i %> €
+                                  </li>
+                              <% end %>
                           </ul>
-                          <p class="total">Total restant à payer : <%= unpaid_camps.sum { |camp| camp[:camp_price].to_i } %> €</p>
+                          <p class="total">Total restant à payer : <%= (unpaid_camps.sum { |camp| camp[:camp_price].to_i } + unpaid_programs.sum { |program| program[:program_price].to_i }) %> €</p>
                       <% end %>
                     </div>
 

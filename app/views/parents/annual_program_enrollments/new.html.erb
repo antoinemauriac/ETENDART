@@ -1,0 +1,29 @@
+<h1 class="bg-black parent-title text-center fs-4 py-3 px-2 fw-bold">
+  <%= @academy.name.upcase %> - PROGRAMME ANNUEL <%= @annual_program.starts_at.year %> - <%= @annual_program.ends_at.year %>
+</h1>
+
+<main class="row p-0 p-sm-3 mx-auto justify-content-center ">
+  <section class="col-12 col-sm-10 col-md-8 col-xl-6 bg-white p-3 rounded-4">
+    <section id="student-form" class="row">
+      <div class="">
+        <%= form_with url: filter_annual_programs_parents_annual_program_annual_program_enrollments_path(@annual_program), method: :get, data: { controller: "form--auto-submit" }, class: "form-inline" do |f| %>
+        <div class="form-group">
+            <%= f.label :student_id, "Sélectionner un enfant", class: "mb-3 fst-italic" %>
+          <%= f.select :student_id, options_from_collection_for_select(@students, :id, :full_name, @selected_student.id), {}, class: "form-control", data: { action: "change->form--auto-submit#submit" } %>
+        </div>
+        <% end %>
+      </div>
+    </section>
+
+    <section id="enrollment_form" class="row">
+      <%= render 'form_annual_program',
+        annual_program: @annual_program,
+        academy: @academy,
+        annual_program_enrollment: @annual_program_enrollment,
+        student: @selected_student,
+        activities: @activities,
+        students: @students,
+        annual_programs: @annual_programs %>
+    </section>
+  </section>
+</main>

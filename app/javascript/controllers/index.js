@@ -70,6 +70,12 @@ application.register("form--enrollment--camp", Form__Enrollment__CampController)
 import Form__Enrollment__CampErrorSubmitController from "./form/enrollment/camp_error_submit_controller"
 application.register("form--enrollment--camp-error-submit", Form__Enrollment__CampErrorSubmitController)
 
+import Form__Enrollment__AnnualProgramController from "./form/enrollment/annual_program_controller"
+application.register("form--enrollment--annual-program", Form__Enrollment__AnnualProgramController)
+
+import Form__Enrollment__AnnualProgramErrorSubmitController from "./form/enrollment/annual_program_error_submit_controller"
+application.register("form--enrollment--annual-program-error-submit", Form__Enrollment__AnnualProgramErrorSubmitController)
+
 import HiddenFormsController from "./hidden_forms_controller"
 application.register("hidden-forms", HiddenFormsController)
 

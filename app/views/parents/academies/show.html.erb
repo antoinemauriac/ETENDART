@@ -7,7 +7,7 @@
   <div class="col-12 col-lg-6">
     <% @school_periods.each do |school_period| %>
       <div class="mb-3">
-        <h4 class="fw-bold mb-0 p-3 bg-black rounded-top-4 text-center text-white"><%= school_period.name.upcase %> - <%= school_period.year %></h4>
+        <h4 class="fw-bold mb-0 p-3 bg-black rounded-top-4 text-center text-white">Stage <%= school_period.name.upcase %> - <%= school_period.year %></h4>
 
         <div class="row bg-white py-3 p-2 justify-content-center align-items-stretch rounded-bottom-4">
 
@@ -24,11 +24,11 @@
                         Du <%= l(camp.starts_at, format: :birthday) %> au <%= l(camp.ends_at, format: :birthday) %>
                       </p>
                       <p class="d-block mb-2 text-center text-sm-start">
-                        <%= camp.format_price %>
+                        Tarif : <%= camp.format_price %>
                       </p>
-                      <div class="text-center text-sm-start">
-                        <i class="fa-solid fa-people-group"></i> <%= camp.students_count %> / <%= camp.capacity %>
-                      </div>
+                      <p class="d-block mb-2 text-center text-sm-start">
+                        Places restantes : <%= camp.capacity - camp.students_count %>
+                      </p>
 
                       <% if camp.activities.any? %>
                         <ul class="mt-3 text-center text-sm-start flex-grow-1">
@@ -67,7 +67,7 @@
     <% end %>
   </div>
 
-  <div class="col-12 col-lg-4">
+  <div class="col-12 col-lg-4 mt-4 mt-lg-0">
     <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center">
       LIEUX
     </h4>

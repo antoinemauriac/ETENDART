@@ -82,6 +82,10 @@ class Activity < ApplicationRecord
     courses.where("starts_at > ?", Time.current).order(:starts_at)
   end
 
+  def past_courses
+    courses.where("starts_at < ?", Time.current).order(:starts_at)
+  end
+
   def banished_students
     students.joins(camp_enrollments: { camp: :activities })
             .where(camp_enrollments: { banished: true }, activities: { id: id })

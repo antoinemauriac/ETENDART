@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_06_28_071418) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_04_083700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -134,6 +134,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_28_071418) do
     t.string "payment_method"
     t.bigint "receiver_id"
     t.boolean "confirmed", default: false
+    t.string "stripe_price_id"
     t.index ["annual_program_id"], name: "index_annual_program_enrollments_on_annual_program_id"
     t.index ["receiver_id"], name: "index_annual_program_enrollments_on_receiver_id"
     t.index ["student_id", "annual_program_id"], name: "index_annual_program_enrollments_on_student_and_program", unique: true
@@ -178,6 +179,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_28_071418) do
     t.boolean "paid", default: true
     t.integer "price", default: 0
     t.integer "capacity"
+    t.string "stripe_price_id"
     t.index ["academy_id"], name: "index_annual_programs_on_academy_id"
   end
 

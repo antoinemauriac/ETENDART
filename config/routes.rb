@@ -54,6 +54,14 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :annual_programs, only: %i[index show] do
+      resources :annual_program_enrollments, only: %i[new create] do
+        collection do
+          get :filter_annual_programs
+        end
+      end
+    end
   end
   ################################################################################################
 

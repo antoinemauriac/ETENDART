@@ -18,29 +18,35 @@ class Managers::FinancesController < ApplicationController
 
     # COTISATIONS PAYÉES MAIS NON EXIGIBLES (ÉLÈVES AYANT PAYÉ MAIS N'AYANT PARTICPÉ À AUCUN COURS PENDANT L'ANNÉE SCOLAIRE)
     current_year_not_expected_memberships = all_not_expected_memberships.paid.where(start_year: @start_year)
-    current_year_not_expected_memberships_count = current_year_not_expected_memberships.paid.where.not(payment_method: 'offert').count
-    current_year_not_expected_revenue = current_year_not_expected_memberships.paid.where.not(payment_method: 'offert').sum(:amount)
+    current_year_not_expected_memberships_count = current_year_not_expected_memberships.paid.where.not(payment_method: ['offert', 'financed', 'offert_next_year']).count
+    current_year_not_expected_revenue = current_year_not_expected_memberships.paid.where.not(payment_method: ['offert', 'financed', 'offert_next_year']).sum(:amount)
 
     # EXIGIBLES
     current_year_expected_memberships = all_expected_memberships.where(start_year: @start_year)
 
     # PAYÉES EXIGIBLES + PAYÉS MAIS NON EXIGIBLES
-    @current_year_memberships_count = current_year_expected_memberships.where("payment_method IS NULL OR payment_method != ?", 'offert').count +
+    @current_year_memberships_count = current_year_expected_memberships.where("payment_method IS NULL OR payment_method NOT IN (?)", ['offert', 'financed', 'offert_next_year']).count +
     current_year_not_expected_memberships_count
 
-    @current_year_revenue = current_year_expected_memberships.where("payment_method IS NULL OR payment_method != ?", 'offert').sum(:amount) + current_year_not_expected_revenue
+    @current_year_revenue = current_year_expected_memberships.where("payment_method IS NULL OR payment_method NOT IN (?)", ['offert', 'financed', 'offert_next_year']).sum(:amount) + current_year_not_expected_revenue
 
     # TOUTES LES COTISATIONS DE L'ANNÉE SCOLAIRE PAYEES OU NON
     @current_year_memberships = all_memberships.where(start_year: @start_year)
 
     # COTISATIONS OFFERTES
-    @current_year_offered_memberships_count = current_year_expected_memberships.where(payment_method: 'offert').count +
-    current_year_not_expected_memberships.where(payment_method: 'offert').count
-    @current_year_offered_revenue = current_year_expected_memberships.where(payment_method: 'offert').sum(:amount) +
-    current_year_not_expected_memberships.where(payment_method: 'offert').sum(:amount)
+    @current_year_offered_memberships_count = current_year_expected_memberships.where(payment_method: ['offert', 'offert_next_year']).count +
+    current_year_not_expected_memberships.where(payment_method: ['offert', 'offert_next_year']).count
+    @current_year_offered_revenue = current_year_expected_memberships.where(payment_method: ['offert', 'offert_next_year']).sum(:amount) +
+    current_year_not_expected_memberships.where(payment_method: ['offert', 'offert_next_year']).sum(:amount)
+
+    # COTISATIONS FINANCÉES
+    @current_year_financed_memberships_count = current_year_expected_memberships.where(payment_method: ['financed']).count +
+    current_year_not_expected_memberships.where(payment_method: ['financed']).count
+    @current_year_financed_revenue = current_year_expected_memberships.where(payment_method: ['financed']).sum(:amount) +
+    current_year_not_expected_memberships.where(payment_method: ['financed']).sum(:amount)
 
     # COTISATIONS PAYÉES (HORS OFFERTS)
-    current_year_paid_memberships_excluding_offered = current_year_expected_memberships.paid.where.not(payment_method: 'offert')
+    current_year_paid_memberships_excluding_offered = current_year_expected_memberships.paid.where.not(payment_method: ['offert', 'financed', 'offert_next_year'])
     @current_year_paid_memberships_count = current_year_paid_memberships_excluding_offered.count + current_year_not_expected_memberships_count
     @current_year_received_revenue = current_year_paid_memberships_excluding_offered.sum(:amount) + current_year_not_expected_revenue
 
@@ -49,7 +55,7 @@ class Managers::FinancesController < ApplicationController
     @current_year_missing_revenue = current_year_expected_memberships.unpaid.sum(:amount)
 
     # REVENU TOTAL PAR UTILISATEUR SUR L'ANNÉE SCOLAIRE (HORS OFFERTS)
-    revenue_by_user = all_memberships.paid.where.not(payment_method: ['offert', 'hello_asso', 'pass', 'virement']).where(start_year: @start_year).group(:receiver_id).sum(:amount)
+    revenue_by_user = all_memberships.paid.where.not(payment_method: ['offert', 'hello_asso', 'pass', 'virement', 'financed', 'offert_next_year']).where(start_year: @start_year).group(:receiver_id).sum(:amount)
     @revenue_by_user = revenue_by_user.sort_by { |_, total_received| -total_received }.to_h
 
     # RÉPARTITION PAR MOYEN DE PAIEMENT PAR UTILISATEUR

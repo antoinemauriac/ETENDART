@@ -219,31 +219,31 @@ class Camp < ApplicationRecord
 
   def expected_revenue
     unattend_paid_count = camp_enrollments.unattended.paid.count
-    paid_enrollments = camp_enrollments.paid.where(payment_method: "offert").count
+    offered_enrollments = camp_enrollments.paid.where(payment_method: ["offert", "financed"]).count
     if self.school_period.free_judo == true
       (camp_enrollments.attended.where.not(student_id: present_students_with_free_judo_ids).count +
         unattend_paid_count -
-        paid_enrollments) *
+        offered_enrollments) *
         price
     else
       (camp_enrollments.attended.count +
         unattend_paid_count -
-        paid_enrollments) *
+        offered_enrollments) *
         price
     end
   end
 
   def expected_count_revenue
     unattend_paid_count = camp_enrollments.unattended.paid.count
-    paid_enrollments_count = camp_enrollments.paid.where(payment_method: "offert").count
+    offered_enrollments_count = camp_enrollments.paid.where(payment_method: ["offert", "financed"]).count
     if self.school_period.free_judo == true
       camp_enrollments.attended.where.not(student_id: present_students_with_free_judo_ids).count +
         unattend_paid_count -
-        paid_enrollments_count
+        offered_enrollments_count
     else
       camp_enrollments.attended.count +
-        unattend_paid_count-
-        paid_enrollments_count
+        unattend_paid_count -
+        offered_enrollments_count
     end
   end
 

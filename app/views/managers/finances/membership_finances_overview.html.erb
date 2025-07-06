@@ -11,6 +11,7 @@
             <th>Payé par les élèves</th>
             <th>En attente de paiement élève</th>
             <th>Offert</th>
+            <th>Financé</th>
             <th>Montant déposé par les coachs</th>
             <th>Montant en attente de dépôt</th>
           </tr>
@@ -22,6 +23,7 @@
             <td><%= replace_zero_with_dash(@current_year_paid_memberships_count, false) %></td>
             <td style="color:red"><%= replace_zero_with_dash(@current_year_unpaid_memberships_count, false) %></td>
             <td><%= replace_zero_with_dash(@current_year_offered_memberships_count, false) %></td>
+            <td><%= replace_zero_with_dash(@current_year_financed_memberships_count, false) %></td>
             <td></td>
             <td></td>
           </tr>
@@ -31,6 +33,7 @@
             <td><%= replace_zero_with_dash(@current_year_received_revenue) %></td>
             <td style="color:red"><%= replace_zero_with_dash(@current_year_missing_revenue) %></td>
             <td><%= replace_zero_with_dash(@current_year_offered_revenue) %></td>
+            <td><%= replace_zero_with_dash(@current_year_financed_revenue) %></td>
             <td><%= replace_zero_with_dash(@current_year_deposited_revenue) %></td>
             <td style="color:red"><%= replace_zero_with_dash(@current_year_received_revenue - @current_year_deposited_revenue) %></td>
           </tr>
@@ -46,12 +49,9 @@
         <thead>
           <tr>
             <th>Total Reçu</th>
-            <th>Cash</th>
-            <th>Chèque</th>
-            <th>Hello Asso</th>
-            <th>Pass</th>
-            <th>Virement</th>
-            <th>Offert</th>
+            <% Membership::PAYMENT_METHODS.compact.each do |method| %>
+              <th><%= human_payment_method(method) %></th>
+            <% end %>
           </tr>
         </thead>
         <tbody>

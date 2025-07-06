@@ -1,0 +1,38 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th class="align-middle">Académie</th>
+      <th class="align-middle">Programme</th>
+      <th class="align-middle d-none d-md-table-cell">Année</th>
+      <th class="align-middle">Montant</th>
+      <th class="align-middle d-none d-md-table-cell">Date du paiement</th>
+      <th class="align-middle d-none d-md-table-cell">Mode de paiement</th>
+      <th class="align-middle text-center">Payé ?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% annual_program_enrollments.each do |enrollment| %>
+      <tr>
+        <td class="align-middle"><%= enrollment.annual_program.academy.name %></td>
+        <td class="align-middle"><%= enrollment.annual_program.short_name %></td>
+        <td class="align-middle d-none d-md-table-cell"><%= enrollment.annual_program.starts_at.year %> - <%= enrollment.annual_program.ends_at.year %></td>
+        <td class="align-middle"><%= enrollment.annual_program.price > 0 ? "#{number_with_precision(enrollment.annual_program.price, precision: 0, delimiter: ' ')}€" : "Gratuit" %></td>
+        <% if enrollment.paid? %>
+          <td class="align-middle d-none d-md-table-cell"><%= enrollment&.payment_date&.strftime("%d/%m/%Y") %></td>
+          <td class="align-middle d-none d-md-table-cell"><%= human_payment_method(enrollment.payment_method) %></td>
+        <% else %>
+          <td colspan="2" class="align-middle text-center d-none d-md-table-cell">
+            À payer
+          </td>
+        <% end %>
+        <td class="align-middle text-center">
+          <% if enrollment.paid? %>
+            <i class="fa-solid fa-circle-check text-success fa-small"></i>
+          <% else %>
+            <i class="fa-solid fa-circle-xmark fa-pink fa-big fa-small"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

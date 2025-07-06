@@ -1,0 +1,86 @@
+<h1 class="bg-black text-center fs-4 py-3 px-2 fw-bold parent-title">
+  <%= @academy.name.upcase %> - PROGRAMME ANNUEL <%= @annual_program.starts_at.year %> - <%= @annual_program.ends_at.year %>
+</h1>
+
+<div class="row justify-content-center mt-3">
+  <%= link_to new_parents_annual_program_annual_program_enrollment_path(@annual_program), class: "px-0" do %>
+    <div class="col-12 col-lg-6">
+      <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center">
+        LE PROGRAMME
+      </h4>
+      <div class="row bg-white p-3 justify-content-center rounded-bottom-4">
+        <div class="p-3 p-md-4 rounded-4 parent-bg shadow-sm">
+          <div class="d-flex align-items-center">
+            <h6 class="me-2 mb-0" style="white-space: nowrap;">Dates :</h6>
+            <p class="mb-0" style="white-space: nowrap;">
+              <%= l(@annual_program.starts_at, format: "%d/%m/%Y") %> au <%= l(@annual_program.ends_at, format: "%d/%m/%Y") %>
+            </p>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <h6 class="me-2 mb-0">Tarif :</h6>
+            <p class="mb-0">
+              <%= @annual_program.price > 0 ? "#{@annual_program.price}€" : "Gratuit" %>
+            </p>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <h6 class="me-2 mb-0" style="white-space: nowrap;">Places restantes :</h6>
+            <p class="mb-0">
+              <%= @annual_program.capacity - @annual_program.students_count %>
+            </p>
+          </div>
+        </div>
+        <div class="mt-3 p-4 rounded-4 parent-bg shadow-sm">
+          <h6 class="mb-4 text-start text-md-center">Activités proposées</h6>
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-4 p-0">
+              <h6 class="text-start text-md-center mb-2">Sport</h6>
+              <ul class="list-unstyled">
+                <% sport_categories = @annual_program.activities.joins(:category).where(categories: { super_category: 'Sport' }).map { |a| a.category.name }.uniq %>
+                <% sport_categories.each do |cat_name| %>
+                  <li class="text-start text-md-center mb-1"><%= cat_name %></li>
+                <% end %>
+              </ul>
+            </div>
+            <div class="col-12 col-md-4 p-0">
+              <h6 class="text-start text-md-center mb-2">Éveil</h6>
+              <ul class="list-unstyled">
+                <% eveil_categories = @annual_program.activities.joins(:category).where(categories: { super_category: ['Eveil', 'Cuisine'] }).map { |a| a.category.name }.uniq %>
+                <% eveil_categories.each do |cat_name| %>
+                  <li class="text-start text-md-center mb-1"><%= cat_name %></li>
+                <% end %>
+              </ul>
+            </div>
+            <div class="col-12 col-md-4 p-0">
+              <h6 class="text-start text-md-center mb-2">Scolaire</h6>
+              <ul class="list-unstyled">
+                <% soutien_categories = @annual_program.activities.joins(:category).where(categories: { super_category: 'Soutien Scolaire' }).map { |a| a.category.name }.uniq %>
+                <% soutien_categories.each do |cat_name| %>
+                  <li class="text-start text-md-center mb-1"><%= cat_name %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 text-center mt-3">
+          <h6 class="text-center mb-0 mt-3">
+            <%= link_to "INSCRIPTION", new_parents_annual_program_annual_program_enrollment_path(@annual_program), class: "col-12 col-lg-6 btn btn-dark rounded-4 px-4 py-3  mb-3 border" %>
+          </h6>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="col-12 col-lg-4 mt-4 mt-lg-0">
+    <h4 class="fw-bold mb-0 p-3 bg-black text-white rounded-top-4 text-center">
+      LIEUX
+    </h4>
+    <ul class="row bg-white p-3 justify-content-center rounded-bottom-4">
+      <% @academy.locations.each do |location| %>
+        <li>
+          <h6><%= location.name %></h6>
+          <p><%= location.address %></p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

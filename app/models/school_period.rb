@@ -231,7 +231,7 @@ class SchoolPeriod < ApplicationRecord
 
   def received_revenue
     camp_enrollments.paid
-                    .where("payment_method IS NULL OR payment_method != ?", "offert")
+                    .where("payment_method IS NULL OR payment_method NOT IN (?)", ["offert", "financed"])
                     .count * price
   end
 
@@ -250,7 +250,7 @@ class SchoolPeriod < ApplicationRecord
   def total_deposit
     camp_deposits.sum(:cash_amount) +
       camp_deposits.sum(:cheque_amount) +
-      camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert"]).count * price
+      camp_enrollments.paid.where.not(payment_method: ["cash", "cheque", "offert", "financed"]).count * price
   end
 
   def paid_students_count

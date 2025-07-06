@@ -43,6 +43,10 @@ class Managers::AnnualProgramsController < ApplicationController
     annual_program.annual_program_stat = AnnualProgramStat.create(annual_program: annual_program)
     authorize [:managers, annual_program]
 
+    product = Stripe::Product.create(name: "#{annual_program.name} - #{annual_program.academy.name}")
+    price = Stripe::Price.create(product: product.id, unit_amount: annual_program.price * 100, currency: 'eur')
+    annual_program.stripe_price_id = price.id
+
     if annual_program.save
       redirect_to managers_annual_program_path(annual_program), notice: 'Le programme annuel a été créé avec succès.'
     else
