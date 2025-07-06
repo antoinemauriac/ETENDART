@@ -31,7 +31,7 @@
                 <%= f.input :payment_method,
                             label: "Moyen de paiement",
                             required: true,
-                            collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert']],
+                            collection: [['Chèque', 'cheque'], ['Espèces', 'cash'], ['Hello Asso', 'hello_asso'], ['Pass', 'pass'], ['Virement', 'virement'], ['Offert', 'offert'], ['Financé', 'financed']],
                             prompt: "Sélectionner",
                             input_html: { class: "form-select mb-3", data: { action: "change->payment-method#toggleReceiverRequired" } } %>
 
