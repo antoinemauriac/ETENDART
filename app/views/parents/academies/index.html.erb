@@ -3,85 +3,63 @@
 </h1>
 
 <% if @academies.present? %>
-<div class="container mt-5 mb-5">
-  <% @academies.each do |city, academies| %>
-    <div class="row align-items-center">
-      <div class="col-12 col-md-4 text-center d-flex justify-content-center">
-        <h1 class="mb-0"><em><%= city&.upcase %></em></h1>
-        <i class="fa-solid fa-location-dot ms-3 fs-2"></i>
-      </div>
-
-      <div class="col-12 col-md-8 col-lg-6 d-flex flex-column align-items-center row">
-        <% academies.each do |academy| %>
-
-          <%# Si c'est l'academie Djokovic %>
-          <%# Afficher Djokovic et Clarrisse mais renvoyer vers la meme academie djokovic %>
-          <% if academy.id == 38 %>
-            <div class="">
-              <%= link_to parents_academy_path(academy) do %>
-                <div class="card-academy card-academy-parent"
-                    style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
-                  <h6 class="mb-0">NOVAK DJOKOVIC</h6>
-                </div>
-              <% end %>
-            </div>
-
-<!--            <div class="">-->
-              <%#= link_to parents_academy_path(academy) do %>
-<!--              <div class="card-academy card-academy-parent"
-                style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%#= asset_path('clarisse2.png') %>')">
-                <h6 class="mb-0">CLARISSE AGBEGNENOU</h6>
+  <div class="container mt-5 mb-5">
+    <% @academies.each do |city, academies| %>
+      <div class="row align-items-center">
+        <div class="col-12 col-md-4 text-center d-flex justify-content-center">
+          <h1 class="mb-0"><em><%= city&.upcase %></em></h1>
+          <i class="fa-solid fa-location-dot ms-3 fs-2"></i>
+        </div>
+        <div class="col-12 col-md-8 col-lg-6 d-flex flex-column align-items-center row">
+          <% academies.each do |academy| %>
+            <% if academy.id == 38 %>
+              <div class="">
+                <%= link_to parents_academy_path(academy) do %>
+                  <div class="card-academy card-academy-parent"
+                      style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
+                    <h6 class="mb-0">NOVAK DJOKOVIC</h6>
+                  </div>
+                <% end %>
               </div>
-              <%# end %>-->
-<!--            </div>
--->
-
-          <%# Si c'est l'academie Daniel Narcisse %>
-          <%# Afficher Daniel Narcisse et Rai mais renvoyer vers la meme academie Daniel Narcisse %>
-          <% elsif academy.id == 43 %>
-            <div class="">
-              <%= link_to parents_academy_path(academy) do %>
-                <div class="card-academy card-academy-parent"
-                    style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
-                  <h6 class="mb-0">DANIEL NARCISSE</h6>
-                </div>
-              <% end %>
-            </div>
-
-            <div class="">
-              <%= link_to parents_academy_path(academy) do %>
-                <div class="card-academy card-academy-parent"
-                    style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('rai.png') %>')">
-                  <h6 class="mb-0">RAI</h6>
-                </div>
-              <% end %>
-            </div>
-
-
-          <% else %>
-            <div class="">
-              <%= link_to parents_academy_path(academy) do %>
-                <div class="card-academy card-academy-parent"
-                    style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
-                  <h6 class="mb-0"><%= academy.name.upcase %></h6>
-                </div>
-              <% end %>
-            </div>
+            <% elsif academy.id == 43 %>
+              <div class="">
+                <%= link_to parents_academy_path(academy) do %>
+                  <div class="card-academy card-academy-parent"
+                      style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
+                    <h6 class="mb-0">DANIEL NARCISSE</h6>
+                  </div>
+                <% end %>
+              </div>
+              <div class="">
+                <%= link_to parents_academy_path(academy) do %>
+                  <div class="card-academy card-academy-parent"
+                      style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= asset_path('rai.png') %>')">
+                    <h6 class="mb-0">RAI</h6>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="">
+                <%= link_to parents_academy_path(academy) do %>
+                  <div class="card-academy card-academy-parent"
+                      style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<%= display_academy_image(academy) %>')">
+                    <h6 class="mb-0"><%= academy.name.upcase %></h6>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
-
-        <% end %>
-
+        </div>
       </div>
-    </div>
-    <hr class="w-full">
-  <% end %>
-</div>
+      <hr class="w-full">
+    <% end %>
+  </div>
 <% else %>
-<div class="container mt-5 mb-5">
-  <div class="row justify-content-center">
-    <div class="col-12 text-center">
-      <h5 class="text-muted">Aucun stage ouvert à l'inscription pour le moment</h5>
+  <div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+      <div class="col-12 text-center">
+        <h5 class="text-muted">Aucun stage ouvert à l'inscription pour le moment</h5>
+      </div>
     </div>
   </div>
-</div>
 <% end %>

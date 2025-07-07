@@ -267,7 +267,7 @@ class SchoolPeriod < ApplicationRecord
 
   def self.with_future_camps
     joins(:camps)
-      .where('camps.starts_at > ?', Date.today)
+      .where('camps.starts_at >= ?', Date.today)
       .joins(camps: :activities)
       .where(camps: { id: Camp.not_full.pluck(:id) })
       .group('school_periods.id')
@@ -277,7 +277,7 @@ class SchoolPeriod < ApplicationRecord
 
   def camps_with_activities
     camps.joins(:activities)
-         .where('camps.starts_at > ?', Date.current)
+         .where('camps.starts_at >= ?', Date.current)
          .group('camps.id')
          .having('COUNT(activities.id) >= 2')
   end

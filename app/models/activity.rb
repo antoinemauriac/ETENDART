@@ -68,6 +68,7 @@ class Activity < ApplicationRecord
   def academy
     return camp.academy if camp
     return annual_program.academy if annual_program
+
     nil
   end
 
