@@ -20,9 +20,11 @@ class Membership < ApplicationRecord
 
   def generate_offered_membership
     return unless Date.current.between?(Date.new(Date.current.year, 5, 15), Date.new(Date.current.year, 8, 31))
+
     next_year_membership = student.memberships.find_by(start_year: start_year + 1)
     return if next_year_membership && next_year_membership.paid == true
     return if start_year == Date.current.year
+
     if next_year_membership
       next_year_membership.update!(
         paid: true,
